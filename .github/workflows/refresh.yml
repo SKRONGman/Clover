@@ -4,6 +4,8 @@
 # Times are UTC. Central time is UTC-5 (CDT) / UTC-6 (CST).
 #   Full refresh (ratings + lines): daily 11:00 UTC = 6am CDT
 #   Lines only: every hour Thu-Sun, 15:00-05:00 UTC = 10am-midnight CDT
+#   Alt lines (DraftKings alternate spreads/totals via the-odds-api.com,
+#   spends ODDS_KEY credits, ~2 per game): Thursdays 15:10 UTC = 10:10am CDT
 # Change the cron lines below to adjust. You can also run it any time from
 # the Actions tab -> "Refresh lines" -> "Run workflow".
 
@@ -13,12 +15,13 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "full or lines"
+        description: "full, lines, or alt (lines + DraftKings alternate lines)"
         default: "lines"
   schedule:
     - cron: "0 11 * * *"                 # full refresh daily, 6am CDT
     - cron: "5 15-23 * * 4,5,6,0"        # lines hourly Thu-Sun daytime CDT
     - cron: "5 0-5 * * 5,6,0,1"          # ...continuing to midnight CDT (next day UTC)
+    - cron: "10 15 * * 4"                # alt lines, Thursday 10:10am CDT
 
 permissions:
   contents: write
@@ -46,6 +49,8 @@ jobs:
             echo "mode=${{ github.event.inputs.mode }}" >> $GITHUB_OUTPUT
           elif [ "${{ github.event.schedule }}" = "0 11 * * *" ]; then
             echo "mode=full" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.schedule }}" = "10 15 * * 4" ]; then
+            echo "mode=alt" >> $GITHUB_OUTPUT
           else
             echo "mode=lines" >> $GITHUB_OUTPUT
           fi
@@ -53,9 +58,12 @@ jobs:
       - name: Run refresh.py
         env:
           CFBD_KEY: ${{ secrets.CFBD_KEY }}
+          ODDS_KEY: ${{ secrets.ODDS_KEY }}
         run: |
           if [ "${{ steps.mode.outputs.mode }}" = "full" ] || [ ! -f ratings.json ]; then
             python refresh.py
+          elif [ "${{ steps.mode.outputs.mode }}" = "alt" ]; then
+            python refresh.py --lines-only --alt-lines
           else
             python refresh.py --lines-only
           fi

@@ -14,6 +14,7 @@ SETUP (once):
 WEEKLY:
     python refresh.py                      # full: ratings + upcoming games + lines
     python refresh.py --lines-only         # fast (~3 API calls): just the slate and lines
+    python refresh.py --lines-only --alt-lines   # + DraftKings alternate lines (weekly; spends ODDS_KEY credits)
     (on GitHub this runs itself on a schedule; see .github/workflows/refresh.yml)
 
 FIRST RUN - do this one first:
@@ -60,6 +61,15 @@ OUT_JS = "ratings.js"      # same numbers, loadable by index.html when opened lo
 # auto-fill. Underdog isn't in the feed; DraftKings tracks it closest.
 DAYS_AHEAD = 8
 BOOKS = ["DraftKings", "ESPN Bet", "Bovada"]     # in order of preference
+
+# Alternate lines (every spread/total rung DraftKings offers) come from
+# the-odds-api.com. Free tier = 500 credits/month; each game costs 2 credits
+# (2 markets x 1 bookmaker), so a weekly pull of ~50 games is ~100 credits.
+# Key lives in the ODDS_KEY secret. --alt-lines is the only thing that spends it.
+ODDS_BASE = "https://api.the-odds-api.com/v4"
+ODDS_SPORT = "americanfootball_ncaaf"
+ODDS_BOOK = "draftkings"
+ODDS_MIN_REMAINING = 40        # stop pulling when this few credits are left
 
 
 # ----------------------------------------------------------------------
@@ -389,10 +399,112 @@ def pull_team_art(season):
     return out
 
 
-def write_upcoming(R):
+def odds_get(path, **params):
+    k = os.environ.get("ODDS_KEY", "").strip()
+    if not k:
+        sys.exit("ODDS_KEY is not set (repository secret).")
+    params["apiKey"] = k
+    r = requests.get(ODDS_BASE + path, params=params, timeout=30)
+    if r.status_code != 200:
+        print(f"  odds api {path} -> {r.status_code}: {r.text[:200]}")
+        return None, None
+    return r.json(), int(r.headers.get("x-requests-remaining", "0") or 0)
+
+
+def team_match(cfbd_name, odds_name):
+    """CFBD says 'Florida State'; the odds feed says 'Florida State Seminoles'."""
+    if not cfbd_name or not odds_name:
+        return False
+    a, b = cfbd_name.lower(), odds_name.lower()
+    if b == a:
+        return True
+    if not b.startswith(a + " "):
+        return False
+    rest = b[len(a) + 1:]
+    # 'Miami' must not match 'Miami (OH) RedHawks'
+    return not (rest.startswith("(") and "(" not in a)
+
+
+def pull_alt_lines(up):
+    """Attach DraftKings alternate spreads/totals to each upcoming game that
+    has a line. Games keep whatever they already had if a pull fails."""
+    events, remaining = odds_get(f"/sports/{ODDS_SPORT}/events")     # this call is free
+    if events is None:
+        return
+    print(f"  odds api: {len(events)} events listed, {remaining} credits left")
+    # Match each odds-feed event to ONE of our games: same kickoff (±6h) and
+    # both team names match. 'Texas' also prefix-matches 'Texas A&M Aggies',
+    # so when several games fit, the longest name wins.
+    lined = [g for g in up if g["spread"] is not None and g["total"] is not None]
+    event_for = {}
+    for e in events:
+        et = parse_dt(e.get("commence_time", "") or "")
+        if et is None:
+            continue
+        best, best_len = None, -1
+        for g in lined:
+            kick = parse_dt(g["start"])
+            if kick is None or abs((et - kick).total_seconds()) > 6 * 3600:
+                continue
+            if team_match(g["home"], e.get("home_team")) and team_match(g["away"], e.get("away_team")):
+                L = len(g["home"]) + len(g["away"])
+                if L > best_len:
+                    best, best_len = g, L
+        if best is not None and best_len > event_for.get(best["id"], (None, -1))[1]:
+            event_for[best["id"]] = (e, best_len)
+    pulled = skipped = 0
+    for g in lined:
+        ev = event_for.get(g["id"], (None, 0))[0]
+        if ev is None:
+            skipped += 1
+            continue
+        if remaining is not None and remaining < ODDS_MIN_REMAINING:
+            print(f"  stopping: only {remaining} credits left")
+            break
+        data, remaining = odds_get(f"/sports/{ODDS_SPORT}/events/{ev['id']}/odds",
+                                   bookmakers=ODDS_BOOK,
+                                   markets="alternate_spreads,alternate_totals",
+                                   oddsFormat="american")
+        if not data:
+            continue
+        alt = {"book": ODDS_BOOK, "asof": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+               "spreads": {"home": [], "away": []}, "totals": {"over": [], "under": []}}
+        for bk in data.get("bookmakers", []):
+            for m in bk.get("markets", []):
+                for o in m.get("outcomes", []):
+                    pt, price = o.get("point"), o.get("price")
+                    if pt is None or price is None:
+                        continue
+                    if m["key"] == "alternate_spreads":
+                        side = "home" if team_match(g["home"], o.get("name")) else "away" if team_match(g["away"], o.get("name")) else None
+                        if side:
+                            alt["spreads"][side].append([float(pt), int(price)])
+                    elif m["key"] == "alternate_totals":
+                        side = "over" if o.get("name") == "Over" else "under" if o.get("name") == "Under" else None
+                        if side:
+                            alt["totals"][side].append([float(pt), int(price)])
+        for d in (alt["spreads"], alt["totals"]):
+            for k in d:
+                d[k].sort()
+        if any(alt["spreads"].values()) or any(alt["totals"].values()):
+            g["alt"] = alt
+            pulled += 1
+    print(f"  alt lines: {pulled} games pulled, {skipped} not matched in the odds feed, {remaining} credits left")
+
+
+def write_upcoming(R, alt_lines=False):
     """Refresh the slate + lines, project each game, write both output files."""
     print("Pulling upcoming games and lines…")
     up = pull_upcoming(SEASON)
+    # alt lines are pulled weekly; every other refresh keeps the last copy
+    old = {g["id"]: g.get("alt") for g in R.get("upcoming", []) if g.get("alt")}
+    for g in up:
+        if g["id"] in old:
+            g["alt"] = old[g["id"]]
+    if alt_lines:
+        print("Pulling DraftKings alternate lines…")
+        pull_alt_lines(up)
+    R["alt_generated"] = max([g["alt"]["asof"] for g in up if g.get("alt")], default=None)
     art = cached(f"teams_{SEASON}", lambda: pull_team_art(SEASON))
     R["logos"] = {}
     R["colors"] = {}
@@ -452,6 +564,8 @@ def main():
                      help="print raw API field names and exit")
     ap_.add_argument("--lines-only", action="store_true",
                      help="keep existing ratings, refresh only upcoming games + lines (~3 API calls)")
+    ap_.add_argument("--alt-lines", action="store_true",
+                     help="also pull DraftKings alternate lines from the-odds-api.com (~2 credits per game)")
     args = ap_.parse_args()
     if args.check:
         check()
@@ -462,7 +576,7 @@ def main():
             sys.exit(f"{OUT} not found - run a full refresh first.")
         with open(OUT) as f:
             R = json.load(f)
-        write_upcoming(R)
+        write_upcoming(R, alt_lines=args.alt_lines)
         return
 
     print(f"Pulling {PRIOR_SEASON}… (cached after the first run)")
@@ -512,7 +626,7 @@ def main():
     }
 
     R["accuracy"] = backtest(pg, R)
-    write_upcoming(R)
+    write_upcoming(R, alt_lines=args.alt_lines)
 
     a = R["accuracy"]
     print(f"\nWrote {OUT} and {OUT_JS} — {len(R['teams'])} teams")

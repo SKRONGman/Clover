@@ -296,6 +296,7 @@ function gameLabel(g){
   const mins=Math.round((Date.now()-lg)/60000);
   const ago = mins<60 ? `${mins} min ago` : mins<2880 ? `${Math.round(mins/60)} hr ago` : `${Math.round(mins/1440)} days ago`;
   tag.textContent=`Lines as of ${lg.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago}) · ${GAMES.length} upcoming games · ratings ${gen.toLocaleDateString()}`;
+  if(R.alt_generated){ const ad=new Date(R.alt_generated); tag.textContent+=` · DK alt lines ${ad.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})}`; }
   if(days>8||!GAMES.length||mins>360) tag.classList.add("stale");
   if(!GAMES.length) tag.textContent+=" — run refresh.py to load this week's slate";
 })();
@@ -338,6 +339,23 @@ function grade(ev){
 
 /* ============ odds math ============ */
 const toDec = a => a > 0 ? 1 + a/100 : 1 + 100/Math.abs(a);
+/* ============ DraftKings alternate lines (from refresh.py --alt-lines) ============ */
+/* What DK actually pays for a moved line, and DK's own chance for it once their
+   cut is removed (both sides of the same number, scaled to add up to 100%).
+   Returns null when DK doesn't list that exact number. */
+const amToP = a => a < 0 ? -a/(-a+100) : 100/(a+100);
+function dkQuote(G, type, line){
+  const A=G&&G.alt; if(!A||line==null) return null;
+  const find=(arr,pt)=>{const r=(arr||[]).find(x=>Math.abs(x[0]-pt)<1e-9);return r?r[1]:null;};
+  let mine=null, other=null;
+  if(type==="over"){ mine=find(A.totals.over,line); other=find(A.totals.under,line); }
+  else if(type==="under"){ mine=find(A.totals.under,line); other=find(A.totals.over,line); }
+  else if(type==="homeSp"){ mine=find(A.spreads.home,line); other=find(A.spreads.away,-line); }
+  else if(type==="awaySp"){ mine=find(A.spreads.away,line); other=find(A.spreads.home,-line); }
+  if(mine===null) return null;
+  const pa=amToP(mine), fair = other===null ? null : pa/(pa+amToP(other));
+  return {price:mine, am:(mine>0?"+":"")+mine, dec:toDec(mine), fair};
+}
 const decToAm = d => d <= 1 ? "—" : (d >= 2 ? "+" + Math.round((d-1)*100) : "" + Math.round(-100/(d-1)));
 const probToAm = p => (p<=0||p>=1) ? "—" : decToAm(1/p);
 const kelly = (p,d) => Math.max(((d-1)*p - (1-p))/(d-1), 0);
@@ -588,6 +606,7 @@ document.getElementById("run").onclick=()=>{
         l.p=p;
         l.el.querySelector(".legprob").innerHTML =
           `<b>${(p*100).toFixed(0)}%</b> chance this one hits` +
+          (q=>q?` · DraftKings pays $${q.dec.toFixed(2)} for this line${q.fair!==null?` (their chance: ${(q.fair*100).toFixed(0)}%)`:""}`:"")(dkQuote(GAMES[l.gi], l.type, l.type==="awaySp"?-l.line:l.line)) +
           (l.mult!==1 ? ` · fair multiplier ${(0.5/p).toFixed(2)}x, app gives ${l.mult}x` : "") +
           (pushes[k]/N>0.005 && l.type!=="homeML" && l.type!=="awayML" ? ` · could land exactly on the number (${(pushes[k]/N*100).toFixed(0)}%) — use a half-point` : "");
       });
@@ -726,14 +745,15 @@ function ladder(){
   const fmt=v=>(t==="homeSp"||t==="awaySp")?((v>0?"+":"")+v):v;
   out.innerHTML=`<div class="slip"><h2>${side} — every line</h2>
     <div style="overflow-x:auto"><table class="ladder">
-      <tr><th>Line</th><th>True chance</th><th>Fair payout on $1</th><th></th></tr>
+      <tr><th>Line</th><th>True chance</th><th>Fair payout on $1</th><th>DK pays</th><th>DK's chance</th><th></th></tr>
       ${rows.map((r,i)=>`<tr class="${r.k===0?"base":""}" data-i="${i}">
         <td>${fmt(r.L)}${r.k===0?" <span style='color:var(--muted);font-weight:400'>(market)</span>":""}</td>
         <td class="p">${(r.p*100).toFixed(0)}%</td>
         <td>$${(1/r.p).toFixed(2)}</td>
+        ${(q=>q?`<td>$${q.dec.toFixed(2)}<span style="color:var(--muted);font-size:12px"> ${q.am}</span></td><td class="p" style="color:var(--muted)">${q.fair===null?"—":(q.fair*100).toFixed(0)+"%"}</td>`:`<td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td>`)(dkQuote(G,t,r.L))}
         <td><input class="mult hidden" type="number"><span class="g hidden"></span><button class="ghost use" type="button">Use</button></td></tr>`).join("")}
     </table></div>
-    <p class="mathNote" style="color:var(--muted)">"Fair payout" is what a $1 bet on that line deserves to pay if it hits. Compare it to what your app offers for the same move. Whole-number lines can push — prefer the half-point.</p>
+    <p class="mathNote" style="color:var(--muted)">"Fair payout" is what a $1 bet on that line deserves to pay if it hits, by our sim. "DK pays" is what DraftKings actually pays for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole-number lines can push — prefer the half-point.${G.alt?"":" <b>No DraftKings alternate lines loaded for this game yet</b> — they load Thursdays."}</p>
     <div class="actions hidden"><button class="ghost" id="copyLog">Copy pricing log (${pricingLog().length} rows)</button></div>
   </div>`;
   out.querySelectorAll("tr[data-i]").forEach(tr=>{
@@ -1000,6 +1020,7 @@ function paintSlip(d,s,i){
           <span class="val${l.line!==l.base?" moved":""}">${l.market==="Spread"?fmtSp(l.line):l.line}</span>
           <button type="button" data-nudge="0.5" data-b="${bi}" data-l="${li}" aria-label="raise">+</button>
           ${l.line!==l.base?`<span style="font-size:12px;color:var(--muted)">market ${l.market==="Spread"?fmtSp(l.base):l.base}</span>`:""}
+          ${(q=>q?`<span style="font-size:12px;color:var(--muted)">· DK ${q.am}${q.fair!==null?` (${(q.fair*100).toFixed(0)}%)`:""}</span>`:"")(dkQuote(G,l.type,l.line))}
         </div>`;
       h+=`<div class="leg">${tile}<div><div class="pick">${l.label}</div><div class="who">${who}</div>${nudge}</div>
           <div class="pct">${pct(l.p)}<small>this pick</small></div></div>`;
