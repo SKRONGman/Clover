@@ -369,10 +369,42 @@ def backtest(games, R):
     }
 
 
+def pull_team_art(season):
+    """Logo + primary color per school, from CFBD /teams (one call, then cached
+    on disk). Logos are ESPN CDN URLs; the page shows initials if one is missing."""
+    out = {}
+    try:
+        teams = get("/teams", year=season)
+    except requests.HTTPError as e:
+        print(f"  team logos unavailable ({e.response.status_code}) — page will show initials")
+        return out
+    for t in teams:
+        name = pick(t, "school")
+        logos = pick(t, "logos", default=[]) or []
+        if not name:
+            continue
+        out[name] = {"logo": logos[0] if logos else None,
+                     "color": pick(t, "color"),
+                     "alt": pick(t, "alt_color", "alternateColor")}
+    return out
+
+
 def write_upcoming(R):
     """Refresh the slate + lines, project each game, write both output files."""
     print("Pulling upcoming games and lines…")
     up = pull_upcoming(SEASON)
+    art = cached(f"teams_{SEASON}", lambda: pull_team_art(SEASON))
+    R["logos"] = {}
+    R["colors"] = {}
+    for g in up:
+        for team in (g["home"], g["away"]):
+            a = art.get(team)
+            if not a:
+                continue
+            if a.get("logo"):
+                R["logos"][team] = a["logo"]
+            if a.get("color"):
+                R["colors"][team] = a["color"]
     for g in up:
         hp, ap = project(g["home"], g["away"], R)
         if g["neutral"]:                                # take the home edge back out
