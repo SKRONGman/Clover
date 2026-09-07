@@ -1,0 +1,19 @@
+{
+ "ran": "2026-09-07T22:41:39+00:00",
+ "calls": [
+  {
+   "path": "/sports/americanfootball_ncaaf/odds",
+   "status": 401,
+   "cost": null,
+   "used": null,
+   "remaining": null,
+   "error": "{\"message\":\"API key is not valid. Get an API key at https://the-odds-api.com\",\"error_code\":\"INVALID_KEY\",\"details_url\":\"https://the-odds-api.com/liveapi/guides/v4/api-error-codes.html#invalid-key\"}\n"
+  }
+ ],
+ "game_lines": {
+  "games": 0,
+  "bookmakers": [],
+  "underdog_games_with_game_lines": 0,
+  "underdog_markets": []
+ }
+}
