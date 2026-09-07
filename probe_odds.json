@@ -1,19 +1,531 @@
 {
- "ran": "2026-09-07T22:41:39+00:00",
+ "ran": "2026-09-07T22:56:47+00:00",
  "calls": [
   {
    "path": "/sports/americanfootball_ncaaf/odds",
-   "status": 401,
-   "cost": null,
-   "used": null,
-   "remaining": null,
-   "error": "{\"message\":\"API key is not valid. Get an API key at https://the-odds-api.com\",\"error_code\":\"INVALID_KEY\",\"details_url\":\"https://the-odds-api.com/liveapi/guides/v4/api-error-codes.html#invalid-key\"}\n"
+   "status": 200,
+   "cost": "6",
+   "used": "6",
+   "remaining": "494"
+  },
+  {
+   "path": "/sports/americanfootball_ncaaf/events/a570687d47661da4982cfd885cdb4a44/odds",
+   "status": 200,
+   "cost": "4",
+   "used": "10",
+   "remaining": "490"
+  },
+  {
+   "path": "/sports/americanfootball_ncaaf/events/a570687d47661da4982cfd885cdb4a44/odds",
+   "status": 200,
+   "cost": "3",
+   "used": "13",
+   "remaining": "487"
   }
  ],
  "game_lines": {
-  "games": 0,
-  "bookmakers": [],
+  "games": 81,
+  "bookmakers": [
+   "betmgm",
+   "betonlineag",
+   "betrivers",
+   "betus",
+   "bovada",
+   "draftkings",
+   "fanduel",
+   "lowvig",
+   "mybookieag"
+  ],
   "underdog_games_with_game_lines": 0,
   "underdog_markets": []
+ },
+ "sample_game": {
+  "id": "a570687d47661da4982cfd885cdb4a44",
+  "away": "SMU Mustangs",
+  "home": "Florida State Seminoles",
+  "kick": "2026-09-07T23:30:00Z"
+ },
+ "sample_lines": {
+  "draftkings": {
+   "h2h": [
+    [
+     "Florida State Seminoles",
+     null,
+     124
+    ],
+    [
+     "SMU Mustangs",
+     null,
+     -148
+    ]
+   ],
+   "spreads": [
+    [
+     "Florida State Seminoles",
+     3.0,
+     -120
+    ],
+    [
+     "SMU Mustangs",
+     -3.0,
+     100
+    ]
+   ],
+   "totals": [
+    [
+     "Over",
+     54.5,
+     -112
+    ],
+    [
+     "Under",
+     54.5,
+     -108
+    ]
+   ]
+  },
+  "fanduel": {
+   "h2h": [
+    [
+     "Florida State Seminoles",
+     null,
+     120
+    ],
+    [
+     "SMU Mustangs",
+     null,
+     -144
+    ]
+   ],
+   "spreads": [
+    [
+     "Florida State Seminoles",
+     2.5,
+     -102
+    ],
+    [
+     "SMU Mustangs",
+     -2.5,
+     -120
+    ]
+   ],
+   "totals": [
+    [
+     "Over",
+     54.5,
+     -115
+    ],
+    [
+     "Under",
+     54.5,
+     -105
+    ]
+   ]
+  }
+ },
+ "alternate_lines": {
+  "draftkings": {
+   "alternate_spreads": {
+    "rungs": 84,
+    "sample": [
+     [
+      "Florida State Seminoles",
+      24.5,
+      -10000
+     ],
+     [
+      "Florida State Seminoles",
+      23.5,
+      -5700
+     ],
+     [
+      "Florida State Seminoles",
+      22.5,
+      -4300
+     ],
+     [
+      "Florida State Seminoles",
+      21.5,
+      -3300
+     ],
+     [
+      "Florida State Seminoles",
+      20.5,
+      -2200
+     ],
+     [
+      "Florida State Seminoles",
+      19.5,
+      -1740
+     ]
+    ]
+   },
+   "alternate_totals": {
+    "rungs": 84,
+    "sample": [
+     [
+      "Over",
+      34.5,
+      -1880
+     ],
+     [
+      "Over",
+      35.5,
+      -1600
+     ],
+     [
+      "Over",
+      36.5,
+      -1360
+     ],
+     [
+      "Over",
+      37.5,
+      -1000
+     ],
+     [
+      "Over",
+      38.5,
+      -840
+     ],
+     [
+      "Over",
+      39.5,
+      -750
+     ]
+    ]
+   }
+  },
+  "betmgm": {
+   "alternate_spreads": {
+    "rungs": 58,
+    "sample": [
+     [
+      "Florida State Seminoles",
+      -2.0,
+      145
+     ],
+     [
+      "Florida State Seminoles",
+      2.5,
+      -108
+     ],
+     [
+      "Florida State Seminoles",
+      3.5,
+      -140
+     ],
+     [
+      "Florida State Seminoles",
+      3.0,
+      -118
+     ],
+     [
+      "Florida State Seminoles",
+      4.5,
+      -160
+     ],
+     [
+      "Florida State Seminoles",
+      5.0,
+      -165
+     ]
+    ]
+   },
+   "alternate_totals": {
+    "rungs": 58,
+    "sample": [
+     [
+      "Over",
+      53.5,
+      -135
+     ],
+     [
+      "Over",
+      52.5,
+      -145
+     ],
+     [
+      "Over",
+      54.5,
+      -112
+     ],
+     [
+      "Over",
+      51.5,
+      -160
+     ],
+     [
+      "Over",
+      50.5,
+      -190
+     ],
+     [
+      "Over",
+      55.5,
+      -102
+     ]
+    ]
+   }
+  },
+  "bovada": {
+   "alternate_spreads": {
+    "rungs": 16,
+    "sample": [
+     [
+      "Florida State Seminoles",
+      1.0,
+      115
+     ],
+     [
+      "Florida State Seminoles",
+      1.5,
+      105
+     ],
+     [
+      "Florida State Seminoles",
+      2.0,
+      105
+     ],
+     [
+      "Florida State Seminoles",
+      2.5,
+      -105
+     ],
+     [
+      "Florida State Seminoles",
+      3.5,
+      -145
+     ],
+     [
+      "Florida State Seminoles",
+      4.0,
+      -160
+     ]
+    ]
+   },
+   "alternate_totals": {
+    "rungs": 12,
+    "sample": [
+     [
+      "Over",
+      53.5,
+      -135
+     ],
+     [
+      "Over",
+      54.0,
+      -125
+     ],
+     [
+      "Over",
+      54.5,
+      -120
+     ],
+     [
+      "Over",
+      55.5,
+      100
+     ],
+     [
+      "Over",
+      56.0,
+      105
+     ],
+     [
+      "Over",
+      56.5,
+      110
+     ]
+    ]
+   }
+  },
+  "fanduel": {
+   "alternate_spreads": {
+    "rungs": 102,
+    "sample": [
+     [
+      "Florida State Seminoles",
+      -22.5,
+      1200
+     ],
+     [
+      "Florida State Seminoles",
+      -21.5,
+      1100
+     ],
+     [
+      "Florida State Seminoles",
+      -20.5,
+      1000
+     ],
+     [
+      "Florida State Seminoles",
+      -19.5,
+      900
+     ],
+     [
+      "Florida State Seminoles",
+      -18.5,
+      870
+     ],
+     [
+      "Florida State Seminoles",
+      -17.5,
+      800
+     ]
+    ]
+   },
+   "alternate_totals": {
+    "rungs": 122,
+    "sample": [
+     [
+      "Over",
+      23.5,
+      -50000
+     ],
+     [
+      "Over",
+      24.5,
+      -20000
+     ],
+     [
+      "Over",
+      25.5,
+      -20000
+     ],
+     [
+      "Over",
+      26.5,
+      -10000
+     ],
+     [
+      "Over",
+      27.5,
+      -7000
+     ],
+     [
+      "Over",
+      28.5,
+      -7000
+     ]
+    ]
+   }
+  }
+ },
+ "player_props": {
+  "prizepicks": {
+   "player_pass_yds": {
+    "picks": 4,
+    "sample": [
+     [
+      "Kevin Jennings",
+      "Over",
+      268.5,
+      -137
+     ],
+     [
+      "Kevin Jennings",
+      "Under",
+      268.5,
+      -137
+     ],
+     [
+      "Ashton Daniels",
+      "Over",
+      205.5,
+      -137
+     ],
+     [
+      "Ashton Daniels",
+      "Under",
+      205.5,
+      -137
+     ]
+    ]
+   },
+   "player_reception_yds": {
+    "picks": 20,
+    "sample": [
+     [
+      "Duce Robinson",
+      "Over",
+      69.5,
+      -137
+     ],
+     [
+      "Duce Robinson",
+      "Under",
+      69.5,
+      -137
+     ],
+     [
+      "Yamir Knight",
+      "Over",
+      58.5,
+      -137
+     ],
+     [
+      "Yamir Knight",
+      "Under",
+      58.5,
+      -137
+     ],
+     [
+      "Micahi Danzy",
+      "Over",
+      40.5,
+      -137
+     ],
+     [
+      "Micahi Danzy",
+      "Under",
+      40.5,
+      -137
+     ]
+    ]
+   },
+   "player_rush_yds": {
+    "picks": 10,
+    "sample": [
+     [
+      "Kendrick Raphael",
+      "Over",
+      61.5,
+      -137
+     ],
+     [
+      "Kendrick Raphael",
+      "Under",
+      61.5,
+      -137
+     ],
+     [
+      "Ousmane Kromah",
+      "Over",
+      60.5,
+      -137
+     ],
+     [
+      "Ousmane Kromah",
+      "Under",
+      60.5,
+      -137
+     ],
+     [
+      "Samuel Singleton Jr.",
+      "Over",
+      35.5,
+      -137
+     ],
+     [
+      "Samuel Singleton Jr.",
+      "Under",
+      35.5,
+      -137
+     ]
+    ]
+   }
+  }
  }
 }
