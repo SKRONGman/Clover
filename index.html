@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Card — CFB probability model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --field:#14312A;      /* deep turf green, the base */
+  --chalk:#F2F0E9;      /* yard-line white */
+  --slip:#FFFFFF;       /* betting slip paper */
+  --ink:#101815;
+  --muted:#6B7A74;
+  --line:#D8D5CC;
+  --good:#1C7C4A;       /* +EV */
+  --bad:#A32F2F;        /* -EV */
+  --flag:#E8B93C;       /* penalty-flag yellow, used once */
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--field); color:var(--ink);
+  font-family:Barlow,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.5;
+}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 64px}
+
+/* ---------- scoreboard hero ---------- */
+header{color:var(--chalk);padding:8px 0 22px}
+h1{
+  font-family:"Barlow Condensed",Barlow,sans-serif;
+  font-weight:700;font-size:40px;line-height:.95;margin:0;letter-spacing:.01em;
+}
+header p{margin:8px 0 0;color:#A9BDB4;font-size:15px;max-width:52ch}
+.ratingsTag{display:inline-block;margin-top:10px;font-size:13px;color:#A9BDB4;
+  border:1px solid #26463D;border-radius:3px;padding:3px 8px}
+.ratingsTag.stale{border-color:var(--flag);color:var(--flag)}
+
+.board{
+  background:#0E241F;border:1px solid #26463D;border-radius:4px;
+  padding:18px 18px 16px;margin-top:18px;color:var(--chalk);
+}
+.board .big{
+  font-family:"Barlow Condensed",sans-serif;font-weight:700;
+  font-size:64px;line-height:.9;letter-spacing:-.01em;
+}
+.board .sub{color:#A9BDB4;font-size:14px;margin-top:2px}
+.board .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:16px;
+  border-top:1px solid #26463D;padding-top:14px}
+.board .grid div span{display:block;color:#A9BDB4;font-size:13px}
+.board .grid div strong{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:24px}
+.verdict{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:22px;margin-top:14px}
+.verdict.pos{color:#7ED9A2}
+.verdict.neg{color:#F2A0A0}
+.verdict.mid{color:#E8D9A0}
+.why{color:#A9BDB4;font-size:15px;margin-top:6px;line-height:1.45}
+.math{margin-top:14px;border-top:1px solid #26463D;padding-top:10px}
+.math summary{cursor:pointer;color:#A9BDB4;font-size:14px;list-style:none}
+.math summary::before{content:"▸ ";}
+.math[open] summary::before{content:"▾ ";}
+.math .grid{margin-top:8px;border-top:0;padding-top:0}
+.mathNote{color:#A9BDB4;font-size:13px;margin:10px 0 0;line-height:1.4}
+.payoutTag{padding:9px 10px;border:1px solid var(--line);border-radius:3px;background:#F7F6F2;font-size:16px;
+  font-family:"Barlow Condensed",sans-serif;font-weight:600}
+
+/* ---------- slips ---------- */
+.slip{background:var(--slip);border-radius:4px;padding:16px;margin-top:14px;
+  border-left:4px solid var(--field)}
+.slip h2{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:600;
+  margin:0 0 12px;display:flex;justify-content:space-between;align-items:baseline}
+.slip h2 button{font-size:13px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row.three{grid-template-columns:1fr 1fr 1fr}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:3px}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:3px;
+  font-family:inherit;font-size:16px;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--field);outline-offset:1px;border-color:var(--field)}
+input.auto{background:#F3F7F4}          /* filled by the model, still editable */
+.field{margin-bottom:10px}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin:-2px 0 10px}
+.check input{width:auto;margin:0}
+.legprob{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);
+  font-size:14px;color:var(--muted);min-height:20px}
+.legprob b{font-family:"Barlow Condensed",sans-serif;font-size:19px;color:var(--ink)}
+.proj{font-size:13px;color:var(--muted);margin:-4px 0 10px}
+.adv{margin:0 0 6px}
+.adv summary{font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:8px}
+
+button{font-family:inherit;font-weight:500;cursor:pointer;border-radius:3px;
+  border:1px solid transparent;padding:11px 16px;font-size:15px}
+.primary{background:var(--flag);color:#3A2E06;width:100%;font-weight:600;font-size:17px;
+  font-family:"Barlow Condensed",sans-serif;letter-spacing:.02em;padding:14px}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 12px}
+.ghost.light{border-color:#3A5D53;color:#A9BDB4}
+.actions{display:flex;gap:10px;margin-top:14px}
+.actions button{flex:1}
+
+.note{color:#A9BDB4;font-size:14px;margin-top:16px;line-height:1.45}
+.warn{background:#FFF6DC;border-left:4px solid var(--flag);padding:10px 12px;
+  font-size:14px;margin-top:10px;border-radius:0 3px 3px 0}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}
+th,td{text-align:right;padding:6px 4px;border-bottom:1px solid #26463D;color:var(--chalk)}
+th{color:#A9BDB4;font-weight:500;font-size:13px}
+td:first-child,th:first-child{text-align:left}
+.hidden{display:none}
+.tabs{display:flex;gap:6px;margin-bottom:4px}
+.tab{flex:1;background:transparent;border:1px solid #26463D;color:#A9BDB4;padding:10px;
+  font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:17px;letter-spacing:.02em}
+.tab.on{background:var(--flag);color:#3A2E06;border-color:var(--flag)}
+.chips{display:flex;gap:6px}
+.chip{flex:1;background:transparent;border:1px solid #26463D;color:var(--chalk);padding:8px 0;font-size:16px}
+.chip.on{background:var(--chalk);color:var(--ink);border-color:var(--chalk)}
+.hotRow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:center}
+.hotRow:last-child{border-bottom:0}
+.hotRow .g{font-size:13px;color:var(--muted)}
+.hotRow .b{font-weight:600}
+.hotRow .p{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:22px}
+.hotRow.dim{opacity:.55}
+.ladder{width:100%;border-collapse:collapse;font-size:15px}
+.ladder th{color:var(--muted);font-weight:500;font-size:12px;text-align:right;padding:4px 4px;border-bottom:1px solid var(--line)}
+.ladder td{text-align:right;padding:7px 4px;border-bottom:1px solid #EEECE6;color:var(--ink)}
+.ladder th:first-child,.ladder td:first-child{text-align:left}
+.ladder tr.base td{background:#F3F7F4;font-weight:600}
+.ladder td.p{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px}
+.ladder input{width:64px;padding:5px 6px;font-size:15px;text-align:right}
+.ladder .g{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px}
+.ladder .g.pos{color:var(--good)}.ladder .g.neg{color:var(--bad)}.ladder .g.mid{color:#8A6D00}
+.ladder button{padding:4px 8px;font-size:12px}
+.mult{width:84px !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>The Card</h1>
+  <p>Pick your games, pick your sides, hit Analyze. The Card plays each game out thousands of times and tells you if the ticket is worth it.</p>
+  <div class="ratingsTag" id="ratingsTag">No ratings file loaded — run refresh.py first</div>
+  <button class="ghost light" id="reload" type="button" style="margin:10px 0 0 6px;padding:4px 10px;font-size:13px">Refresh lines</button>
+</header>
+
+<div class="tabs">
+  <button class="tab on" data-tab="card">The Card</button>
+  <button class="tab" data-tab="mover">Line Mover</button>
+  <button class="tab" data-tab="hot">Hot Slips</button>
+</div>
+
+<div id="tabCard">
+<div class="board" id="board">
+  <div class="big" id="bigProb">—</div>
+  <div class="sub" id="bigSub">Add your picks below, then hit Analyze</div>
+  <div class="verdict" id="verdict"></div>
+  <div class="why" id="why"></div>
+  <details class="math" id="mathBox">
+    <summary>Show the math</summary>
+    <div class="grid">
+      <div><span>$1 pays</span><strong id="oBook">—</strong></div>
+      <div><span>Needs to hit</span><strong id="oBreak">—</strong></div>
+      <div><span>Fair payout for this</span><strong id="oFair">—</strong></div>
+      <div><span>Edge per $1</span><strong id="oEv">—</strong></div>
+    </div>
+    <p class="mathNote">"Needs to hit" is the win rate you'd need at that payout just to break even. If the chance is above it, you're getting the better end. Below it, Underdog is.</p>
+  </details>
+</div>
+
+<div id="legs"></div>
+
+<div class="slip">
+  <h2>The ticket</h2>
+  <div class="row">
+    <div class="field">
+      <label for="who">Whose pick</label>
+      <select id="who"><option>Danny</option><option>Jaclyn</option></select>
+    </div>
+    <div class="field">
+      <label>Payout</label>
+      <div class="payoutTag" id="payoutTag">—</div>
+    </div>
+  </div>
+  <button class="primary" id="run">Analyze</button>
+  <div class="actions">
+    <button class="ghost" id="addLeg">Add a pick</button>
+    <button class="ghost" id="copy">Copy row for the log</button>
+  </div>
+</div>
+
+<div class="slip hidden" id="stressWrap" style="background:#0E241F;border-left-color:var(--flag)">
+  <h2 style="color:var(--chalk)">How sure is this?
+    <button class="ghost light" id="stress">Check</button></h2>
+  <p style="color:#A9BDB4;font-size:14px;margin:0">The model's score projections are never exact. This re-runs the ticket with every score nudged a few points either way. If the verdict holds up, it's solid. If it flips, the ticket is closer to a coin toss than it looks.</p>
+  <div id="stressOut"></div>
+</div>
+
+<p class="note">Lines auto-fill from DraftKings, which runs close to Underdog. If Underdog shows a different number, type it in — the line box is editable.</p>
+</div><!-- /tabCard -->
+
+<div id="tabMover" class="hidden">
+  <div class="slip">
+    <h2>Move a line</h2>
+    <div class="field"><label>Game</label><select class="game" id="mvGame"><option value="">Pick a game…</option></select></div>
+    <div class="row">
+      <div class="field"><label>Bet</label><select id="mvType">
+        <option value="over">Over</option><option value="under">Under</option>
+        <option value="homeSp">Home spread</option><option value="awaySp">Away spread</option>
+      </select></div>
+      <div class="field"><label>Market line</label><input id="mvBase" type="number" step="0.5" inputmode="decimal"></div>
+    </div>
+    <div class="proj" id="mvProj"></div>
+  </div>
+  <div id="ladder"></div>
+  <p class="note"><strong style="color:var(--chalk)">How to use this.</strong> The market line is a coin flip — nobody beats it. But when you move the line in your app, the app has to guess how likely the <em>new</em> line is. Our "true chance" column is checked against ~100,000 real line moves. If your app pays more than the fair payout for a move, that move is a good deal. Tap Use to put it on the Card.</p>
+</div>
+
+<div id="tabHot" class="hidden">
+  <div class="board">
+    <div class="sub" style="margin:0 0 10px">How many picks on the slip?</div>
+    <div class="chips" id="chips"></div>
+    <div class="sub" style="margin:14px 0 10px">Which kind of bets?</div>
+    <div class="chips" id="kinds">
+      <button class="chip on" data-kind="all">All slips</button>
+      <button class="chip" data-kind="ou">Over/Under</button>
+      <button class="chip" data-kind="sp">Spreads</button>
+    </div>
+    <div id="hotStatus" class="sub" style="margin-top:12px"></div>
+  </div>
+  <div id="bestSlip"></div>
+  <div id="hotList"></div>
+  <p class="note">Ranked by the chance each pick hits, using the model's projection blended with the market line. Nothing here is a lock — a "hot" pick is 55–60%, and every extra pick multiplies the odds against you. That's why the payout has to be big.</p>
+</div>
+
+</div>
+
+<!-- ratings.js is written by refresh.py. The ?v= bit makes the browser fetch a fresh copy every time. -->
+<script>document.write('<script src="ratings.js?v=' + Date.now() + '"><\/script>');</script>
+<script>
+/* ============ ratings ============ */
+const R = window.RATINGS || null;
+const GAMES = R && R.upcoming ? R.upcoming : [];
+const DEFAULT_SD = 15.2;   // from calibrate.py --tails: sim shape verified within ~2 pts at every rung
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function gameLabel(g){
+  const d=new Date(g.start);
+  const when=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`;
+  let line="no line";
+  if(g.spread!==null&&g.spread!==undefined){
+    const fav=g.spread<0?g.home:g.away;
+    line=`${fav} ${g.spread<0?g.spread:-g.spread}`;
+    if(g.total!==null&&g.total!==undefined) line+=` · o/u ${g.total}`;
+  }
+  return `${when} · ${g.away} @ ${g.home} · ${line}`;
+}
+(function initRatings(){
+  const tag=document.getElementById("ratingsTag");
+  if(!R) return;
+  const gen=new Date(R.generated);
+  const days=Math.floor((Date.now()-gen)/86400000);
+  const lg=R.lines_generated?new Date(R.lines_generated):gen;
+  const mins=Math.round((Date.now()-lg)/60000);
+  const ago = mins<60 ? `${mins} min ago` : mins<2880 ? `${Math.round(mins/60)} hr ago` : `${Math.round(mins/1440)} days ago`;
+  tag.textContent=`Lines as of ${lg.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago}) · ${GAMES.length} upcoming games · ratings ${gen.toLocaleDateString()}`;
+  if(days>8||!GAMES.length||mins>360) tag.classList.add("stale");
+  if(!GAMES.length) tag.textContent+=" — run refresh.py to load this week's slate";
+})();
+
+/* ============ model vs market ============ */
+/* How much to trust the betting line vs the model's own projection.
+   0 = model only, 1 = line only. Totals and spreads are set separately because
+   the model is decent on totals and weak on spreads this early in the season.
+   Move both toward 0 as the season goes on and the backtest improves. */
+/* CALIBRATION RESULT 2026-09-06 (calibrate.py, 2019+2021-2025, ~5,000 lined games):
+   the model has no edge over the line at any weight below 1.0 - picks it called
+   60-70% hit ~50%. Weight 1.0 is perfectly calibrated. So: trust the line. */
+const MARKET_WEIGHT_TOTAL  = 1.0;
+const MARKET_WEIGHT_SPREAD = 1.0;
+function blended(G){
+  let tot=G.proj_home+G.proj_away, mar=G.proj_home-G.proj_away;
+  if(G.total!==null&&G.total!==undefined)   tot=tot*(1-MARKET_WEIGHT_TOTAL)+G.total*MARKET_WEIGHT_TOTAL;
+  if(G.spread!==null&&G.spread!==undefined) mar=mar*(1-MARKET_WEIGHT_SPREAD)+(-G.spread)*MARKET_WEIGHT_SPREAD;
+  return {hp:Math.max((tot+mar)/2,0), ap:Math.max((tot-mar)/2,0)};
+}
+
+/* ============ Underdog payouts ============ */
+/* Standard pick'em multipliers by number of picks. CHECK THESE AGAINST THE APP
+   and fix here if Underdog changes them. A single pick isn't a pick'em entry,
+   so it's judged against a normal -110 sportsbook line instead. */
+const PAYOUT = {2:3, 3:6, 4:10, 5:20, 6:25};
+function payoutFor(n){
+  if(n===1) return {mult:1.909, label:"single · $1 pays $1.91"};
+  if(PAYOUT[n]) return {mult:PAYOUT[n], label:`${n} picks · $1 pays $${PAYOUT[n].toFixed(2)}`};
+  return null;
+}
+/* Plain-English scale, based on edge per $1 (expected value). */
+function grade(ev){
+  if(ev>=0.15) return {word:"Great",     cls:"pos", why:"Pays well above what the odds deserve."};
+  if(ev>=0.05) return {word:"Good",      cls:"pos", why:"You're getting a little better than fair."};
+  if(ev>=-0.05)return {word:"Coin toss", cls:"mid", why:"Roughly fair. Fun money, not smart money."};
+  if(ev>=-0.20)return {word:"Bad",       cls:"neg", why:"Doesn't pay enough for how often it hits."};
+  return              {word:"Terrible",  cls:"neg", why:"Long shot that pays like a short one."};
+}
+
+/* ============ odds math ============ */
+const toDec = a => a > 0 ? 1 + a/100 : 1 + 100/Math.abs(a);
+const decToAm = d => d <= 1 ? "—" : (d >= 2 ? "+" + Math.round((d-1)*100) : "" + Math.round(-100/(d-1)));
+const probToAm = p => (p<=0||p>=1) ? "—" : decToAm(1/p);
+const kelly = (p,d) => Math.max(((d-1)*p - (1-p))/(d-1), 0);
+
+/* ============ random ============ */
+let z2=null;
+function norm(){
+  if(z2!==null){const t=z2;z2=null;return t;}
+  let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();
+  const r=Math.sqrt(-2*Math.log(u)),th=2*Math.PI*v;
+  z2=r*Math.sin(th);return r*Math.cos(th);
+}
+function gamma(k){
+  if(k<1) return gamma(k+1)*Math.pow(Math.random(),1/k);
+  const d=k-1/3,c=1/Math.sqrt(9*d);
+  for(;;){
+    let x,v;do{x=norm();v=1+c*x;}while(v<=0);
+    v=v*v*v;const u=Math.random();
+    if(u<1-0.0331*x*x*x*x) return d*v;
+    if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v))) return d*v;
+  }
+}
+
+/* ============ the football ============ */
+/* Points arrive as touchdowns and field goals, not on a smooth curve.
+   A per-game rate multiplier lets some games run hot and some cold —
+   that's the fat right tail real football has. */
+const DRIVES = 12;                     // possessions per team in a normal game
+function teamPoints(mean, disp){
+  const m = gamma(disp)/disp;          // this game's hot/cold multiplier
+  const pTd = Math.min(mean*0.70/7/DRIVES*m, 0.90);
+  const pFg = Math.min(mean*0.30/3/DRIVES*m, 0.90);
+  let pts = 0;
+  for(let i=0;i<DRIVES;i++){
+    const r = Math.random();
+    if(r < pTd){
+      const q = Math.random();
+      pts += q < 0.90 ? 7 : (q < 0.95 ? 8 : 6);
+    } else if(r < pTd + pFg){
+      pts += 3;
+    }
+  }
+  return pts;
+}
+
+function simGame(n, homeMean, awayMean, targetSd){
+  const DISPS=[400,80,40,20,12,8,5,3.5,2.5,1.8];
+  let chosen=DISPS[0], bestGap=Infinity;
+  for(const d of DISPS){                       // tune spread toward your volatility input
+    let s=0,ss=0;const probe=2500;
+    for(let i=0;i<probe;i++){
+      const t=teamPoints(homeMean,d)+teamPoints(awayMean,d);
+      s+=t;ss+=t*t;
+    }
+    const sd=Math.sqrt(ss/probe-(s/probe)**2);
+    const gap=Math.abs(sd-targetSd);
+    if(gap<bestGap){bestGap=gap;chosen=d;}
+  }
+  const home=new Float64Array(n), away=new Float64Array(n);
+  let hs=0,as=0;
+  for(let i=0;i<n;i++){
+    home[i]=teamPoints(homeMean,chosen); away[i]=teamPoints(awayMean,chosen);
+    hs+=home[i]; as+=away[i];
+  }
+  const hShift=homeMean-hs/n, aShift=awayMean-as/n;   // shift only, keeps the lumpiness
+  let ts=0,tss=0;
+  for(let i=0;i<n;i++){
+    home[i]=Math.max(0,Math.round(home[i]+hShift));   // real scores are whole numbers,
+    away[i]=Math.max(0,Math.round(away[i]+aShift));   // which is what makes pushes possible
+    const t=home[i]+away[i]; ts+=t; tss+=t*t;
+  }
+  const sd=Math.sqrt(tss/n-(ts/n)**2);
+  return {home,away,sd};
+}
+
+function legProb(leg,n,shift){
+  const {home,away,sd}=simGame(n, leg.homePts+shift/2, leg.awayPts+shift/2, leg.sd);
+  let win=0,push=0,loss=0;
+  for(let i=0;i<n;i++){
+    const total=home[i]+away[i], margin=home[i]-away[i];
+    let v;
+    if(leg.type==="over")        v = total-leg.line;
+    else if(leg.type==="under")  v = leg.line-total;
+    else if(leg.type==="homeSp") v = margin+leg.line;
+    else                         v = -margin-leg.line;
+    if(Math.abs(v)<1e-9) push++; else if(v>0) win++; else loss++;
+  }
+  return {win:win/n, push:push/n, p: win/(win+loss), sd};
+}
+
+/* ============ legs UI ============ */
+const legsEl=document.getElementById("legs");
+let count=0;
+function addLeg(pre){
+  count++;
+  const d=document.createElement("div");
+  d.className="slip"; d.dataset.leg="1";
+  const opts=GAMES.map((g,i)=>`<option value="${i}">${gameLabel(g)}</option>`).join("");
+  d.innerHTML=`
+    <h2>Pick ${count}<button class="ghost rm" type="button">Remove</button></h2>
+    <div class="field"><label>Game</label>
+      <select class="game"><option value="">${GAMES.length?"Pick a game…":"No games loaded — run refresh.py"}</option>${opts}</select></div>
+    <div class="proj"></div>
+    <div class="row">
+      <div class="field"><label>Bet</label><select class="type">
+        <option value="over">Total over</option>
+        <option value="under">Total under</option>
+        <option value="homeSp">Home spread</option>
+        <option value="awaySp">Away spread</option>
+      </select></div>
+      <div class="field"><label class="lineLabel">Line</label><input class="line" type="number" step="0.5" inputmode="decimal"></div>
+      <div class="field hidden"><label>App multiplier</label><input class="mult" type="number" step="0.01" value="1" inputmode="decimal"></div>
+    </div>
+    <details class="adv"><summary>Adjust the model's projected score</summary>
+    <div class="row three">
+      <div class="field"><label>Away points</label><input class="apts" type="number" step="0.1" inputmode="decimal"></div>
+      <div class="field"><label>Home points</label><input class="hpts" type="number" step="0.1" inputmode="decimal"></div>
+      <div class="field"><label>Volatility</label><input class="sd" type="number" step="0.5" value="${DEFAULT_SD}"></div>
+    </div></details>
+    <div class="legprob"></div>`;
+  legsEl.appendChild(d);
+  d.querySelector(".rm").onclick=()=>{d.remove();renumber();updatePayout();};
+
+  const g=c=>d.querySelector(c);
+  const game=()=>{const i=g(".game").value;return i===""?null:GAMES[+i];};
+  function fillLine(){
+    const G=game(); if(!G) return;
+    const t=g(".type").value, ln=g(".line"), lab=g(".lineLabel");
+    let v=null;
+    if(t==="over"||t==="under"){ v=G.total; lab.textContent="Total"; }
+    else if(t==="homeSp"){ v=G.spread; lab.textContent=`${G.home} spread`; }
+    else { v=G.spread===null?null:-G.spread; lab.textContent=`${G.away} spread`; }
+    ln.value = v===null||v===undefined ? "" : v;
+    ln.classList.toggle("auto", v!==null&&v!==undefined);
+    ln.placeholder = v===null||v===undefined ? "book has no line — enter Underdog's" : "";
+  }
+  function relabel(){
+    const G=game(); if(!G) return;
+    const sel=g(".type"), has=G.spread!==null&&G.spread!==undefined, hasT=G.total!==null&&G.total!==undefined;
+    const fmt=v=>(v>0?"+":"")+v;
+    sel.options[0].text = hasT ? `Over ${G.total}` : "Total over";
+    sel.options[1].text = hasT ? `Under ${G.total}` : "Total under";
+    sel.options[2].text = has ? `${G.home} ${fmt(G.spread)}` : `${G.home} spread`;
+    sel.options[3].text = has ? `${G.away} ${fmt(-G.spread)}` : `${G.away} spread`;
+  }
+  function fillGame(){
+    const G=game(); const proj=g(".proj");
+    if(!G){ proj.textContent=""; return; }
+    relabel();
+    const B=blended(G);
+    g(".hpts").value=B.hp.toFixed(1); g(".apts").value=B.ap.toFixed(1);
+    g(".hpts").classList.add("auto"); g(".apts").classList.add("auto");
+    const src=G.book?G.book:"nobody yet — enter Underdog's";
+    proj.textContent=`Expected score ${G.away} ${Math.round(B.ap)}, ${G.home} ${Math.round(B.hp)}${G.neutral?" (neutral site)":""} · line from ${src}`;
+    fillLine();
+  }
+  g(".game").addEventListener("change",fillGame);
+  if(pre){ g(".game").value=String(pre.gi); fillGame(); g(".type").value=pre.type; fillLine();
+           if(pre.line!==undefined){ g(".line").value=pre.line; g(".line").classList.remove("auto"); }
+           if(pre.mult!==undefined) g(".mult").value=pre.mult; }
+  g(".type").addEventListener("change",fillLine);
+  ["hpts","apts","line"].forEach(c=>g("."+c).addEventListener("input",e=>e.target.classList.remove("auto")));
+  g(".mult").addEventListener("input",updatePayout);
+}
+function renumber(){
+  count=0;
+  document.querySelectorAll("[data-leg] h2").forEach(h=>{
+    count++; h.childNodes[0].nodeValue="Pick "+count;
+  });
+}
+function readLegs(){
+  const out=[];
+  document.querySelectorAll("[data-leg]").forEach(d=>{
+    const g=c=>d.querySelector(c);
+    const i=g(".game").value; if(i==="") return;
+    const G=GAMES[+i];
+    const hp=parseFloat(g(".hpts").value), ap=parseFloat(g(".apts").value),
+          sd=parseFloat(g(".sd").value), type=g(".type").value;
+    let ln=parseFloat(g(".line").value);
+    if([hp,ap,ln,sd].some(isNaN)) return;
+    if(type==="awaySp") ln=-ln;            // stored as the home-team spread internally
+    const mult=parseFloat(g(".mult").value)||1;
+    out.push({el:d, gi:+i, homeTeam:G.home, awayTeam:G.away, homePts:hp, awayPts:ap, sd, type, line:ln, mult});
+  });
+  return out;
+}
+
+/* ============ run ============ */
+let last=null;
+function updatePayout(){
+  const n=document.querySelectorAll("[data-leg]").length;
+  const pay=payoutFor(n);
+  const lm=[...document.querySelectorAll("[data-leg] .mult")].reduce((a,e)=>a*(parseFloat(e.value)||1),1);
+  document.getElementById("payoutTag").textContent = pay ? (lm===1 ? pay.label : `${n} picks · $1 pays $${(pay.mult*lm).toFixed(2)}`) : `${n} picks · not on the table — edit PAYOUT in the file`;
+}
+document.getElementById("run").onclick=()=>{
+  const legs=readLegs();
+  const cards=document.querySelectorAll("[data-leg]").length;
+  if(!legs.length){
+    document.getElementById("bigSub").textContent="Pick a game and a bet first";
+    return;
+  }
+  if(legs.length!==cards){
+    const missing=[...document.querySelectorAll("[data-leg]")].map((d,i)=>legs.some(l=>l.el===d)?null:i+1).filter(Boolean);
+    document.getElementById("bigSub").textContent=`Pick ${missing.join(", ")} needs a game and a line first`;
+    return;
+  }
+  const pay=payoutFor(legs.length);
+  if(!pay){ document.getElementById("bigSub").textContent="No payout on file for that many picks"; return; }
+  const btn=document.getElementById("run");
+  btn.textContent="Analyzing…"; btn.disabled=true;
+  setTimeout(()=>{
+    /* picks from the same game are simulated TOGETHER, so correlated picks
+       (Over + favorite covering, say) get their real joint chance, not the product */
+    const N=50000, groups={};
+    legs.forEach(l=>{(groups[l.gi]=groups[l.gi]||[]).push(l);});
+    let joint=1;
+    for(const gi in groups){
+      const G=groups[gi]; const l0=G[0];
+      const {home,away}=simGame(N,l0.homePts,l0.awayPts,l0.sd);
+      let all=0; const each=G.map(()=>0), pushes=G.map(()=>0);
+      for(let i=0;i<N;i++){
+        const total=home[i]+away[i], margin=home[i]-away[i];
+        let ok=true;
+        G.forEach((l,k)=>{
+          let v;
+          if(l.type==="over") v=total-l.line; else if(l.type==="under") v=l.line-total;
+          else if(l.type==="homeSp") v=margin+l.line; else v=-margin-l.line;
+          if(Math.abs(v)<1e-9){pushes[k]++; ok=false;} else if(v>0) each[k]++; else ok=false;
+        });
+        if(ok) all++;
+      }
+      G.forEach((l,k)=>{
+        const p=each[k]/(N-pushes[k]);
+        l.p=p;
+        l.el.querySelector(".legprob").innerHTML =
+          `<b>${(p*100).toFixed(0)}%</b> chance this one hits` +
+          (l.mult!==1 ? ` · fair multiplier ${(0.5/p).toFixed(2)}x, app gives ${l.mult}x` : "") +
+          (pushes[k]/N>0.005 ? ` · could land exactly on the number (${(pushes[k]/N*100).toFixed(0)}%) — use a half-point` : "");
+      });
+      const indep=G.reduce((a,l)=>a*l.p,1), pj=all/N;
+      joint*=pj;
+      if(G.length>1) G[G.length-1].el.querySelector(".legprob").innerHTML +=
+        `<br>Same game as pick ${legs.indexOf(G[0])+1}: together ${(pj*100).toFixed(0)}% vs ${(indep*100).toFixed(0)}% if they were unrelated`;
+    }
+    const legMult=legs.reduce((a,l)=>a*l.mult,1);
+    const dec=pay.mult*legMult, be=1/dec, ev=joint*dec-1, g=grade(ev);
+
+    document.getElementById("bigProb").textContent=(joint*100).toFixed(joint<0.1?1:0)+"%";
+    document.getElementById("bigSub").textContent =
+      legs.length===1 ? "chance this pick hits" : legs.length===2 ? "chance both picks hit" : `chance all ${legs.length} picks hit`;
+    const v=document.getElementById("verdict");
+    v.className="verdict "+g.cls; v.textContent=g.word;
+    const cents=Math.round(Math.abs(ev)*100);
+    document.getElementById("why").textContent = g.why + " " +
+      `Bet $1: it pays $${dec.toFixed(2)} if it hits. On average you get back $${(joint*dec).toFixed(2)}` +
+      (ev>=0 ? ` — about ${cents}¢ ahead per $1.` : ` — about ${cents}¢ lost per $1.`);
+
+    document.getElementById("oBook").textContent = "$"+dec.toFixed(2);
+    document.getElementById("oBreak").textContent=(be*100).toFixed(1)+"%";
+    document.getElementById("oFair").textContent = joint>0 ? "$"+(1/joint).toFixed(2) : "—";
+    document.getElementById("oEv").textContent=(ev>=0?"+":"−")+cents+"¢";
+
+    document.getElementById("stressWrap").classList.remove("hidden");
+    document.getElementById("stressOut").innerHTML="";
+    last={legs,joint,dec,ev,pay};
+    btn.textContent="Analyze"; btn.disabled=false;
+  },30);
+};
+
+document.getElementById("addLeg").onclick=()=>{addLeg();updatePayout();};
+
+/* ============ stress test ============ */
+document.getElementById("stress").onclick=()=>{
+  if(!last) return;
+  const b=document.getElementById("stress");
+  b.textContent="Working…"; b.disabled=true;
+  setTimeout(()=>{
+    const grades=[];
+    for(const s of [-3,-2,-1,0,1,2,3]){
+      let j=1;
+      last.legs.forEach(l=>{ j*=legProb(l,15000,s).p; });
+      grades.push(grade(j*last.dec-1).word);
+    }
+    const base=grade(last.ev).word;
+    const same=grades.filter(w=>w===base).length;
+    const worst=["Great","Good","Coin toss","Bad","Terrible"].filter(w=>grades.includes(w)).pop();
+    const best=["Great","Good","Coin toss","Bad","Terrible"].filter(w=>grades.includes(w))[0];
+    let msg;
+    if(same===grades.length) msg=`Solid. It stays "${base}" no matter which way the scores drift.`;
+    else if(same>=5)         msg=`Mostly holds. It's "${base}" in most scenarios, ranging from "${best}" to "${worst}".`;
+    else                     msg=`Shaky. Small changes in the scores move it anywhere from "${best}" to "${worst}". Don't lean on this one.`;
+    document.getElementById("stressOut").innerHTML=`<p style="color:var(--chalk);font-size:15px;margin:12px 0 0">${msg}</p>`;
+    b.textContent="Check"; b.disabled=false;
+  },30);
+};
+
+/* ============ log row ============ */
+document.getElementById("copy").onclick=()=>{
+  if(!last){return;}
+  const who=document.getElementById("who").value;
+  const date=new Date().toISOString().slice(0,10);
+  const desc=last.legs.map(l=>{
+    const m=`${l.awayTeam} @ ${l.homeTeam}`;
+    if(l.type==="over") return `${m} o${l.line}`;
+    if(l.type==="under") return `${m} u${l.line}`;
+    if(l.type==="homeSp") return `${m} ${l.homeTeam} ${l.line>0?"+":""}${l.line}`;
+    return `${m} ${l.awayTeam} ${-l.line>0?"+":""}${-l.line}`;
+  }).join(" | ");
+  const row=[date,who,desc,last.legs.length,last.pay.label,
+    (last.joint*100).toFixed(1)+"%",grade(last.ev).word,""].join("\t");
+  navigator.clipboard.writeText(row).then(()=>{
+    const b=document.getElementById("copy");
+    b.textContent="Copied — paste in the sheet";
+    setTimeout(()=>b.textContent="Copy row for the log",2200);
+  });
+};
+
+document.getElementById("reload").onclick=()=>location.reload();
+
+/* ============ tabs ============ */
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));
+  document.getElementById("tabCard").classList.toggle("hidden",t.dataset.tab!=="card");
+  document.getElementById("tabHot").classList.toggle("hidden",t.dataset.tab!=="hot");
+  document.getElementById("tabMover").classList.toggle("hidden",t.dataset.tab!=="mover");
+  if(t.dataset.tab==="hot") hotSlips();
+});
+
+/* ============ line mover ============ */
+(function initMover(){
+  const sel=document.getElementById("mvGame");
+  GAMES.forEach((g,i)=>{const o=document.createElement("option");o.value=i;o.textContent=gameLabel(g);sel.appendChild(o);});
+  sel.onchange=()=>{mvBaseFill();ladder();};
+  document.getElementById("mvType").onchange=()=>{mvBaseFill();ladder();};
+  document.getElementById("mvBase").addEventListener("change",ladder);
+})();
+function mvGame(){const v=document.getElementById("mvGame").value;return v===""?null:GAMES[+v];}
+function mvBaseFill(){
+  const G=mvGame(); if(!G) return;
+  const t=document.getElementById("mvType").value, b=document.getElementById("mvBase");
+  let v=null;
+  if(t==="over"||t==="under") v=G.total; else if(t==="homeSp") v=G.spread; else v=G.spread===null?null:-G.spread;
+  b.value=v===null||v===undefined?"":v;
+  const B=blended(G);
+  document.getElementById("mvProj").textContent=`Expected score ${G.away} ${Math.round(B.ap)}, ${G.home} ${Math.round(B.hp)} · market line from ${G.book||"nobody — enter it"}`;
+}
+let LADDER=null;
+function ladder(){
+  const G=mvGame(); const base=parseFloat(document.getElementById("mvBase").value);
+  const out=document.getElementById("ladder");
+  if(!G||isNaN(base)){out.innerHTML="";return;}
+  const t=document.getElementById("mvType").value;
+  const B=blended(G);
+  const N=60000; const {home,away}=simGame(N,B.hp,B.ap,DEFAULT_SD);
+  const moves=[-14,-12,-10,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,10,12,14];
+  const rows=moves.map(k=>{
+    const L=base+k;               // the line as shown for THIS side
+    let win=0,push=0;
+    for(let i=0;i<N;i++){
+      const total=home[i]+away[i], margin=home[i]-away[i]; let v;
+      if(t==="over") v=total-L; else if(t==="under") v=L-total;
+      else if(t==="homeSp") v=margin+L; else v=L-margin;    // L is this side's own spread
+      if(Math.abs(v)<1e-9) push++; else if(v>0) win++;
+    }
+    const p=win/(N-push);
+    return {k,L,p,push:push/N};
+  });
+  LADDER={G,t,base,rows};
+  const side = t==="over"?`Over`:t==="under"?`Under`:t==="homeSp"?G.home:G.away;
+  const fmt=v=>(t==="homeSp"||t==="awaySp")?((v>0?"+":"")+v):v;
+  out.innerHTML=`<div class="slip"><h2>${side} — every line</h2>
+    <div style="overflow-x:auto"><table class="ladder">
+      <tr><th>Line</th><th>True chance</th><th>Fair payout on $1</th><th></th></tr>
+      ${rows.map((r,i)=>`<tr class="${r.k===0?"base":""}" data-i="${i}">
+        <td>${fmt(r.L)}${r.k===0?" <span style='color:var(--muted);font-weight:400'>(market)</span>":""}</td>
+        <td class="p">${(r.p*100).toFixed(0)}%</td>
+        <td>$${(1/r.p).toFixed(2)}</td>
+        <td><input class="mult hidden" type="number"><span class="g hidden"></span><button class="ghost use" type="button">Use</button></td></tr>`).join("")}
+    </table></div>
+    <p class="mathNote" style="color:var(--muted)">"Fair payout" is what a $1 bet on that line deserves to pay if it hits. Compare it to what your app offers for the same move. Whole-number lines can push — prefer the half-point.</p>
+    <div class="actions hidden"><button class="ghost" id="copyLog">Copy pricing log (${pricingLog().length} rows)</button></div>
+  </div>`;
+  out.querySelectorAll("tr[data-i]").forEach(tr=>{
+    const r=rows[+tr.dataset.i];
+    const inp=tr.querySelector("input"), g=tr.querySelector(".g");
+    inp.addEventListener("input",()=>{
+      const m=parseFloat(inp.value); if(isNaN(m)||m<=0){g.textContent="";g.className="g";return;}
+      const edge=m/(0.5/r.p)-1;           // how much better than fair the app is paying
+      const w=edge>=0.08?["Great","pos"]:edge>=0.03?["Good","pos"]:edge>=-0.03?["Fair","mid"]:edge>=-0.10?["Bad","neg"]:["Terrible","neg"];
+      g.textContent=`${w[0]} (${edge>=0?"+":""}${(edge*100).toFixed(0)}%)`; g.className="g "+w[1];
+      logPrice({game:`${G.away} @ ${G.home}`,kind:t,base,line:r.L,move:r.k,p:+r.p.toFixed(4),mult:m,date:new Date().toISOString().slice(0,10)});
+      document.getElementById("copyLog").textContent=`Copy pricing log (${pricingLog().length} rows)`;
+    });
+    tr.querySelector(".use").onclick=()=>{
+      const m=parseFloat(inp.value)||1;
+      const gi=GAMES.indexOf(G);
+      document.querySelectorAll("[data-leg]").forEach(d=>{ if(d.querySelector(".game").value==="") d.remove(); });
+      renumber();
+      addLeg({gi,type:t,line:r.L,mult:m}); updatePayout();
+      document.querySelector('.tab[data-tab="card"]').click(); window.scrollTo({top:0,behavior:"smooth"});
+    };
+  });
+  document.getElementById("copyLog").onclick=()=>{
+    const L=pricingLog();
+    const tsv=["date\tgame\tkind\tmarket\tline\tmove\ttrue_p\tapp_mult"].concat(L.map(r=>[r.date,r.game,r.kind,r.base,r.line,r.move,r.p,r.mult].join("\t"))).join("\n");
+    navigator.clipboard.writeText(tsv).then(()=>{const b=document.getElementById("copyLog");b.textContent="Copied";setTimeout(()=>b.textContent=`Copy pricing log (${L.length} rows)`,1800);});
+  };
+}
+/* every multiplier you type is remembered, so we can fit the app's pricing curve later */
+function pricingLog(){ try{return JSON.parse(localStorage.getItem("udPricing")||"[]");}catch(e){return [];} }
+function logPrice(row){
+  try{
+    const L=pricingLog().filter(r=>!(r.game===row.game&&r.kind===row.kind&&r.line===row.line&&r.date===row.date));
+    L.push(row); localStorage.setItem("udPricing",JSON.stringify(L.slice(-2000)));
+  }catch(e){}
+}
+
+/* ============ hot slips ============ */
+let HOT=null, hotN=3, hotKind="all";
+document.querySelectorAll("#kinds .chip").forEach(b=>b.onclick=()=>{
+  hotKind=b.dataset.kind;
+  document.querySelectorAll("#kinds .chip").forEach(x=>x.classList.toggle("on",x===b));
+  renderHot();
+});
+const kindOf=t=>(t==="over"||t==="under")?"ou":"sp";
+(function initChips(){
+  const c=document.getElementById("chips");
+  for(let n=1;n<=6;n++){
+    const b=document.createElement("button"); b.className="chip"+(n===hotN?" on":""); b.textContent=n;
+    b.onclick=()=>{hotN=n;c.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",+x.textContent===n));renderHot();};
+    c.appendChild(b);
+  }
+})();
+function hotSlips(){
+  if(HOT){renderHot();return;}
+  const st=document.getElementById("hotStatus");
+  const lined=GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.spread!==null&&x.G.spread!==undefined&&x.G.total!==null&&x.G.total!==undefined);
+  if(!lined.length){st.textContent="No games with lines yet — run refresh.py closer to game day.";return;}
+  st.textContent=`Playing out ${lined.length} games…`;
+  setTimeout(()=>{
+    const picks=[];
+    const N=20000;
+    lined.forEach(({G,gi})=>{
+      const B=blended(G);
+      const {home,away}=simGame(N,B.hp,B.ap,DEFAULT_SD);
+      const c={over:0,under:0,homeSp:0,awaySp:0,pO:0,pS:0};
+      for(let i=0;i<N;i++){
+        const t=home[i]+away[i], m=home[i]-away[i];
+        if(t>G.total)c.over++; else if(t<G.total)c.under++; else c.pO++;
+        if(m+G.spread>0)c.homeSp++; else if(m+G.spread<0)c.awaySp++; else c.pS++;
+      }
+      const fmt=v=>(v>0?"+":"")+v;
+      const nO=N-c.pO, nS=N-c.pS;
+      picks.push({gi,G,type:"over",  label:`Over ${G.total}`,             p:c.over/nO});
+      picks.push({gi,G,type:"under", label:`Under ${G.total}`,            p:c.under/nO});
+      picks.push({gi,G,type:"homeSp",label:`${G.home} ${fmt(G.spread)}`,  p:c.homeSp/nS});
+      picks.push({gi,G,type:"awaySp",label:`${G.away} ${fmt(-G.spread)}`, p:c.awaySp/nS});
+    });
+    picks.sort((a,b)=>b.p-a.p);
+    HOT=picks; st.textContent=""; renderHot();
+  },30);
+}
+function renderHot(){
+  if(!HOT) return;
+  const pool=hotKind==="all"?HOT:HOT.filter(pk=>kindOf(pk.type)===hotKind);
+  /* best slip: top N picks, one per game */
+  const used=new Set(), slip=[];
+  for(const pk of pool){ if(used.has(pk.gi)) continue; used.add(pk.gi); slip.push(pk); if(slip.length===hotN) break; }
+  const joint=slip.reduce((a,pk)=>a*pk.p,1);
+  const pay=payoutFor(hotN);
+  const ev=pay?joint*pay.mult-1:null, g=ev===null?null:grade(ev);
+  const when=G=>{const d=new Date(G.start);return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;};
+  document.getElementById("bestSlip").innerHTML=`
+    <div class="board">
+      <div class="big">${(joint*100).toFixed(joint<0.1?1:0)}%</div>
+      <div class="sub">${hotN===1?"chance this pick hits":hotN===2?"chance both picks hit":`chance all ${hotN} picks hit`} · ${pay?pay.label:"no payout on file"}</div>
+      ${g?`<div class="verdict ${g.cls}">${g.word}</div><div class="why">${g.why}</div>`:""}
+    </div>
+    <div class="slip">
+      <h2>Best ${hotN}-pick slip<button class="ghost" id="loadSlip" type="button">Load onto the Card</button></h2>
+      ${slip.map(pk=>`<div class="hotRow"><div><div class="b">${pk.label}</div><div class="g">${when(pk.G)} · ${pk.G.away} @ ${pk.G.home}</div></div><div class="p">${(pk.p*100).toFixed(0)}%</div></div>`).join("")}
+    </div>`;
+  document.getElementById("loadSlip").onclick=()=>{
+    document.getElementById("legs").innerHTML=""; count=0;
+    slip.forEach(pk=>addLeg({gi:pk.gi,type:pk.type}));
+    updatePayout();
+    document.querySelector('.tab[data-tab="card"]').click();
+    window.scrollTo({top:0,behavior:"smooth"});
+    document.getElementById("run").click();
+  };
+  const inSlip=new Set(slip.map(pk=>pk.gi+pk.type));
+  document.getElementById("hotList").innerHTML=`
+    <div class="slip"><h2>${hotKind==="all"?"Every pick":hotKind==="ou"?"Every over/under":"Every spread"}, ranked</h2>
+      ${pool.slice(0,40).map(pk=>`<div class="hotRow${inSlip.has(pk.gi+pk.type)?"":" dim"}"><div><div class="b">${pk.label}</div><div class="g">${when(pk.G)} · ${pk.G.away} @ ${pk.G.home}</div></div><div class="p">${(pk.p*100).toFixed(0)}%</div></div>`).join("")}
+    </div>`;
+}
+
+addLeg();
+updatePayout();
+</script>
+</body>
+</html>
