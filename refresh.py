@@ -411,10 +411,23 @@ def odds_get(path, **params):
     return r.json(), int(r.headers.get("x-requests-remaining", "0") or 0)
 
 
+# CFBD name -> how the odds feed spells it (only where the prefix rule fails)
+ODDS_ALIASES = {
+    "App State": "Appalachian State",
+    "Hawai'i": "Hawaii",
+    "UL Monroe": "Louisiana Monroe",
+    "UMass": "Massachusetts",
+    "USF": "South Florida",
+    "UTSA": "UTSA",
+    "San José State": "San Jose State",
+}
+
+
 def team_match(cfbd_name, odds_name):
     """CFBD says 'Florida State'; the odds feed says 'Florida State Seminoles'."""
     if not cfbd_name or not odds_name:
         return False
+    cfbd_name = ODDS_ALIASES.get(cfbd_name, cfbd_name)
     a, b = cfbd_name.lower(), odds_name.lower()
     if b == a:
         return True
