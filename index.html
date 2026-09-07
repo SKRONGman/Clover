@@ -3,925 +3,622 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Card — CFB probability model</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://cdn.collegefootballdata.com data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Clover — The Card</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --field:#14312A;      /* deep turf green, the base */
-  --chalk:#F2F0E9;      /* yard-line white */
-  --slip:#FFFFFF;       /* betting slip paper */
-  --ink:#101815;
-  --muted:#6B7A74;
-  --line:#D8D5CC;
-  --good:#1C7C4A;       /* +EV */
-  --bad:#A32F2F;        /* -EV */
-  --flag:#E8B93C;       /* penalty-flag yellow, used once */
+  --field:#14312A; --field2:#0E241F; --rule:#26463D;
+  --chalk:#F2F0E9; --chalk2:#A9BDB4;
+  --slip:#FFFFFF; --paper:#F7F6F2; --tint:#F3F7F4;
+  --ink:#101815; --muted:#6B7A74; --line:#D8D5CC;
+  --good:#1C7C4A; --bad:#A32F2F; --mid:#8A6D00; --flag:#E8B93C;
 }
 *{box-sizing:border-box}
-body{
-  margin:0; background:var(--field); color:var(--ink);
-  font-family:Barlow,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  font-size:16px; line-height:1.5;
-}
-.wrap{max-width:640px;margin:0 auto;padding:20px 16px 64px}
-
-/* ---------- scoreboard hero ---------- */
-header{color:var(--chalk);padding:8px 0 22px}
-h1{
-  font-family:"Barlow Condensed",Barlow,sans-serif;
-  font-weight:700;font-size:40px;line-height:.95;margin:0;letter-spacing:.01em;
-}
-header p{margin:8px 0 0;color:#A9BDB4;font-size:15px;max-width:52ch}
-.ratingsTag{display:inline-block;margin-top:10px;font-size:13px;color:#A9BDB4;
-  border:1px solid #26463D;border-radius:3px;padding:3px 8px}
-.ratingsTag.stale{border-color:var(--flag);color:var(--flag)}
-
-.board{
-  background:#0E241F;border:1px solid #26463D;border-radius:4px;
-  padding:18px 18px 16px;margin-top:18px;color:var(--chalk);
-}
-.board .big{
-  font-family:"Barlow Condensed",sans-serif;font-weight:700;
-  font-size:64px;line-height:.9;letter-spacing:-.01em;
-}
-.board .sub{color:#A9BDB4;font-size:14px;margin-top:2px}
-.board .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:16px;
-  border-top:1px solid #26463D;padding-top:14px}
-.board .grid div span{display:block;color:#A9BDB4;font-size:13px}
-.board .grid div strong{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:24px}
-.verdict{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:22px;margin-top:14px}
-.verdict.pos{color:#7ED9A2}
-.verdict.neg{color:#F2A0A0}
-.verdict.mid{color:#E8D9A0}
-.why{color:#A9BDB4;font-size:15px;margin-top:6px;line-height:1.45}
-.math{margin-top:14px;border-top:1px solid #26463D;padding-top:10px}
-.math summary{cursor:pointer;color:#A9BDB4;font-size:14px;list-style:none}
-.math summary::before{content:"▸ ";}
-.math[open] summary::before{content:"▾ ";}
-.math .grid{margin-top:8px;border-top:0;padding-top:0}
-.mathNote{color:#A9BDB4;font-size:13px;margin:10px 0 0;line-height:1.4}
-.payoutTag{padding:9px 10px;border:1px solid var(--line);border-radius:3px;background:#F7F6F2;font-size:16px;
-  font-family:"Barlow Condensed",sans-serif;font-weight:600}
-
-/* ---------- slips ---------- */
-.slip{background:var(--slip);border-radius:4px;padding:16px;margin-top:14px;
-  border-left:4px solid var(--field)}
-.slip h2{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:600;
-  margin:0 0 12px;display:flex;justify-content:space-between;align-items:baseline}
-.slip h2 button{font-size:13px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.row.three{grid-template-columns:1fr 1fr 1fr}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--field);color:var(--ink);
+  font-family:Barlow,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding:16px 14px 110px}
+.cond{font-family:"Barlow Condensed",Barlow,sans-serif}
+.hidden{display:none !important}
+button{font-family:inherit;font-weight:500;cursor:pointer;border-radius:4px;border:1px solid transparent;padding:10px 14px;font-size:15px;min-height:44px}
+button:disabled{cursor:default;opacity:.6}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:4px;font-family:inherit;font-size:16px;background:#fff;color:var(--ink);min-height:44px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
 label{display:block;font-size:13px;color:var(--muted);margin-bottom:3px}
-input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:3px;
-  font-family:inherit;font-size:16px;background:#fff;color:var(--ink)}
-input:focus,select:focus{outline:2px solid var(--field);outline-offset:1px;border-color:var(--field)}
-input.auto{background:#F3F7F4}          /* filled by the model, still editable */
-.field{margin-bottom:10px}
-.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin:-2px 0 10px}
-.check input{width:auto;margin:0}
-.legprob{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);
-  font-size:14px;color:var(--muted);min-height:20px}
-.legprob b{font-family:"Barlow Condensed",sans-serif;font-size:19px;color:var(--ink)}
-.proj{font-size:13px;color:var(--muted);margin:-4px 0 10px}
-.adv{margin:0 0 6px}
-.adv summary{font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:8px}
 
-button{font-family:inherit;font-weight:500;cursor:pointer;border-radius:3px;
-  border:1px solid transparent;padding:11px 16px;font-size:15px}
-.primary{background:var(--flag);color:#3A2E06;width:100%;font-weight:600;font-size:17px;
-  font-family:"Barlow Condensed",sans-serif;letter-spacing:.02em;padding:14px}
-.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 12px}
-.ghost.light{border-color:#3A5D53;color:#A9BDB4}
-.actions{display:flex;gap:10px;margin-top:14px}
+/* ---------- header + nav ---------- */
+header{color:var(--chalk);padding:4px 0 14px}
+h1{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:0}
+header p{margin:6px 0 0;color:var(--chalk2);font-size:15px;max-width:52ch}
+.tag{display:inline-block;margin-top:10px;font-size:13px;color:var(--chalk2);border:1px solid var(--rule);border-radius:3px;padding:3px 8px}
+.tag.stale{border-color:var(--flag);color:var(--flag)}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 12px;min-height:36px}
+.ghost.light{border-color:#3A5D53;color:var(--chalk2)}
+.primary{background:var(--flag);color:#3A2E06;font-weight:600;font-size:17px;font-family:"Barlow Condensed",sans-serif;letter-spacing:.02em;padding:13px 16px;width:100%}
+.tabs{display:flex;gap:6px;margin:6px 0 4px}
+.tab{flex:1;background:transparent;border:1px solid var(--rule);color:var(--chalk2);padding:10px;
+  font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;letter-spacing:.02em}
+.tab[aria-selected="true"]{background:var(--flag);color:#3A2E06;border-color:var(--flag)}
+.tab .n{display:inline-block;min-width:22px;padding:0 6px;border-radius:11px;background:rgba(0,0,0,.18);font-size:14px;margin-left:6px}
+
+/* ---------- panels ---------- */
+.slip{background:var(--slip);border-radius:6px;padding:14px;margin-top:14px;border-left:4px solid var(--field)}
+.slip h2{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:600;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.slip h2 .sub{font-family:Barlow,sans-serif;font-weight:400;font-size:13px;color:var(--muted)}
+.board{background:var(--field2);border:1px solid var(--rule);border-radius:6px;padding:16px;margin-top:14px;color:var(--chalk)}
+.board .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:64px;line-height:.9}
+.board .sub{color:var(--chalk2);font-size:14px;margin-top:4px}
+.verdict{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:24px;margin-top:12px}
+.pos{color:#7ED9A2}.neg{color:#F2A0A0}.mid{color:#E8D9A0}
+.slip .pos{color:var(--good)}.slip .neg{color:var(--bad)}.slip .mid{color:var(--mid)}
+.why{color:var(--chalk2);font-size:15px;margin-top:4px;line-height:1.45}
+.math{margin-top:12px;border-top:1px solid var(--rule);padding-top:10px}
+.math summary{cursor:pointer;color:var(--chalk2);font-size:14px;list-style:none;min-height:28px}
+.math summary::before{content:"▸ "}.math[open] summary::before{content:"▾ "}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:8px}
+.grid2 span{display:block;color:var(--chalk2);font-size:13px}
+.grid2 strong{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:24px}
+.note{color:var(--chalk2);font-size:14px;margin-top:14px;line-height:1.45}
+.note b{color:var(--chalk)}
+.small{font-size:13px;color:var(--muted)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.est{display:inline-block;font-size:12px;color:var(--mid);border:1px solid var(--mid);border-radius:3px;padding:0 6px;margin-left:6px;vertical-align:middle}
+.actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 .actions button{flex:1}
-
-.note{color:#A9BDB4;font-size:14px;margin-top:16px;line-height:1.45}
-.warn{background:#FFF6DC;border-left:4px solid var(--flag);padding:10px 12px;
-  font-size:14px;margin-top:10px;border-radius:0 3px 3px 0}
-
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}
-th,td{text-align:right;padding:6px 4px;border-bottom:1px solid #26463D;color:var(--chalk)}
-th{color:#A9BDB4;font-weight:500;font-size:13px}
-td:first-child,th:first-child{text-align:left}
-.hidden{display:none}
-.tabs{display:flex;gap:6px;margin-bottom:4px}
-.tab{flex:1;background:transparent;border:1px solid #26463D;color:#A9BDB4;padding:10px;
-  font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:17px;letter-spacing:.02em}
-.tab.on{background:var(--flag);color:#3A2E06;border-color:var(--flag)}
 .chips{display:flex;gap:6px}
-.chip{flex:1;background:transparent;border:1px solid #26463D;color:var(--chalk);padding:8px 0;font-size:16px}
-.chip.on{background:var(--chalk);color:var(--ink);border-color:var(--chalk)}
-.hotRow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:center}
-.hotRow:last-child{border-bottom:0}
-.hotRow .g{font-size:13px;color:var(--muted)}
-.hotRow .b{font-weight:600}
-.hotRow .p{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:22px}
-.hotRow.dim{opacity:.55}
-.ladder{width:100%;border-collapse:collapse;font-size:15px}
-.ladder th{color:var(--muted);font-weight:500;font-size:12px;text-align:right;padding:4px 4px;border-bottom:1px solid var(--line)}
-.ladder td{text-align:right;padding:7px 4px;border-bottom:1px solid #EEECE6;color:var(--ink)}
-.ladder th:first-child,.ladder td:first-child{text-align:left}
-.ladder tr.base td{background:#F3F7F4;font-weight:600}
-.ladder td.p{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px}
-.ladder input{width:64px;padding:5px 6px;font-size:15px;text-align:right}
-.ladder .g{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px}
-.ladder .g.pos{color:var(--good)}.ladder .g.neg{color:var(--bad)}.ladder .g.mid{color:#8A6D00}
-.ladder button{padding:4px 8px;font-size:12px}
-.mult{width:84px !important}
-/* ---------- hot slips (auto builder) ---------- */
-.hs{background:var(--slip);border-radius:6px;margin-top:14px;border-left:4px solid var(--field);overflow:hidden;cursor:pointer}
-.hs.open{cursor:default;border-left-color:var(--flag)}
-.hsHead{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
-.hsHead .rank{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--muted);
-  border:1px solid var(--line);border-radius:3px;padding:2px 7px}
-.hsHead .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:34px;line-height:1;color:var(--ink)}
-.hsHead .sub{font-size:13px;color:var(--muted);margin-top:2px}
-.hsHead .verdict{margin:0;font-size:20px}
-.hsHead .verdict.pos{color:var(--good)}.hsHead .verdict.neg{color:var(--bad)}.hsHead .verdict.mid{color:#8A6D00}
-.hsGame{padding:8px 14px 0;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.hsGame + .hsGame{border-top:1px solid var(--line);margin-top:8px;padding-top:10px}
-.leg{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:8px 14px}
-.logo{width:44px;height:44px;border-radius:50%;background:#F3F7F4;border:1px solid var(--line);
+.chip{flex:1;background:transparent;border:1px solid var(--line);color:var(--ink);padding:8px 0;font-size:17px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--field);color:var(--chalk);border-color:var(--field)}
+.warn{background:#FFF6DC;border-left:4px solid var(--flag);padding:10px 12px;font-size:14px;margin-top:10px;border-radius:0 4px 4px 0}
+.empty{color:var(--muted);font-size:15px;padding:8px 0}
+
+/* ---------- logos ---------- */
+.logo{width:44px;height:44px;border-radius:50%;background:var(--tint);border:1px solid var(--line);flex:none;
   display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--ink)}
 .logo img{width:36px;height:36px;object-fit:contain}
+.logo.sm{width:28px;height:28px;font-size:11px}.logo.sm img{width:22px;height:22px}
 .logo.duo{position:relative;background:#fff}
 .logo.duo img{position:absolute;width:26px;height:26px}
-.logo.duo img:first-child{left:3px;top:3px}
-.logo.duo img:last-child{right:3px;bottom:3px}
-.leg .pick{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:21px;line-height:1.1;color:var(--ink)}
+.logo.duo img:first-child{left:3px;top:3px}.logo.duo img:last-child{right:3px;bottom:3px}
+
+/* ---------- build your own ---------- */
+.day summary{cursor:pointer;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;padding:10px 0;border-bottom:1px solid var(--line);list-style:none;display:flex;justify-content:space-between}
+.day summary::after{content:"▸";color:var(--muted)}.day[open] summary::after{content:"▾"}
+.game{padding:12px 0;border-bottom:1px solid #EEECE6}
+.game:last-child{border-bottom:0}
+.gHead{display:flex;align-items:center;gap:8px;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px}
+.gHead .when{margin-left:auto;font-family:Barlow,sans-serif;font-weight:400;font-size:13px;color:var(--muted);white-space:nowrap}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.pick{background:#fff;border:1px solid var(--line);color:var(--ink);text-align:left;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:500}
+.pick b{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:17px;color:var(--muted)}
+.pick[aria-pressed="true"]{background:var(--field);color:var(--chalk);border-color:var(--field)}
+.pick[aria-pressed="true"] b{color:var(--chalk)}
+
+/* ---------- legs (card + hot slips) ---------- */
+.gameHead{display:flex;justify-content:space-between;gap:8px;padding:10px 0 2px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.leg{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:start;padding:8px 0}
+.leg .right{text-align:right}
+.leg .rm{display:block;margin:6px 0 0 auto;font-size:13px;min-height:32px;padding:4px 8px;border:1px solid transparent;background:transparent;color:var(--bad)}
+.leg .pickName{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:21px;line-height:1.1}
 .leg .who{font-size:13px;color:var(--muted);margin-top:2px}
-.leg .pct{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:24px;color:var(--ink);text-align:right}
-.leg .pct small{display:block;font-family:Barlow,sans-serif;font-weight:400;font-size:11px;color:var(--muted)}
-.nudge{display:none;align-items:center;gap:6px;margin-top:6px}
-.hs.open .nudge{display:flex}
-.nudge button{padding:3px 11px;font-size:16px;line-height:1;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:3px;font-weight:600}
-.nudge .val{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:17px;min-width:56px;text-align:center}
-.nudge .val.moved{color:#8A6D00}
-.together{margin:0 14px 4px 56px;padding:6px 10px;background:#F3F7F4;border-radius:3px;font-size:13px;color:var(--muted);
-  display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.leg .pct{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:26px;text-align:right;line-height:1}
+.leg .pct small{display:block;font-family:Barlow,sans-serif;font-weight:400;font-size:11px;color:var(--muted);margin-top:2px}
+.leg .dk{font-size:12px;color:var(--muted);margin-top:4px}
+.nudge{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+.nudge button{padding:0;width:44px;height:44px;font-size:20px;line-height:1;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:600}
+.nudge .val{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px;min-width:64px;height:44px;padding:0 6px;text-align:center;
+  background:var(--paper);border:1px dashed var(--muted);color:var(--ink)}
+.nudge .val.moved{color:var(--mid);border-color:var(--mid)}
+.nudge .hint{font-size:12px;color:var(--muted)}
+.together{margin:2px 0 6px;padding:6px 10px;background:var(--tint);border-radius:4px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .together b{color:var(--ink)}
-.together button{padding:3px 9px;font-size:12px;border:1px solid var(--bad);color:var(--bad);background:#fff;border-radius:3px}
-.together button.done{border-color:var(--line);color:var(--muted);background:#F7F6F2}
-.hsFoot{display:none;padding:10px 14px 14px;gap:10px}
-.hs.open .hsFoot{display:flex}
+.together button{padding:4px 9px;font-size:12px;min-height:32px;border:1px solid var(--bad);color:var(--bad);background:#fff}
+.together button.done{border-color:var(--line);color:var(--muted);background:var(--paper)}
+
+/* ---------- hot slips ---------- */
+.hs{background:var(--slip);border-radius:6px;margin-top:12px;border-left:4px solid var(--field);overflow:hidden}
+.hs.open{border-left-color:var(--flag)}
+.hsHead{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:none;border-top:0;border-right:0;border-left:0;text-align:left;border-radius:0;font:inherit;color:inherit}
+.hsHead .rank{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 7px}
+.hsHead .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:34px;line-height:1}
+.hsHead .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.hsBody{padding:0 14px 6px}
+.hs:not(.open) .hsBody .nudge,.hs:not(.open) .hsFoot{display:none}
+.hs:not(.open) .hsBody .leg{padding:6px 0}
+.hsFoot{display:flex;gap:10px;padding:8px 14px 14px}
 .hsFoot button{flex:1}
-.hsMoved{margin:4px 14px 0;font-size:13px;color:#8A6D00}
+
+/* ---------- sticky slip bar ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--chalk);border-top:3px solid var(--flag);padding:10px 14px;z-index:5;box-shadow:0 -6px 20px rgba(0,0,0,.25)}
+.bar .in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.bar .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:28px;line-height:1}
+.bar .sub{font-size:13px;color:var(--muted)}
+.bar button{margin-left:auto;width:auto;padding:10px 18px}
+
+/* ---------- line sheet ---------- */
+dialog{border:0;border-radius:10px 10px 0 0;padding:0;width:100%;max-width:640px;margin:auto auto 0;background:var(--slip);color:var(--ink);max-height:88vh}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.sheet{padding:14px}
+.sheet h2{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:600;margin:0 0 4px;display:flex;justify-content:space-between;align-items:center}
+.sheet .close{width:44px;height:44px;padding:0;border:1px solid var(--line);background:#fff;font-size:20px}
+.ladder{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+.ladder th{color:var(--muted);font-weight:500;font-size:13px;text-align:right;padding:6px 4px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+.ladder td{text-align:right;padding:0 4px;border-bottom:1px solid #EEECE6}
+.ladder th:first-child,.ladder td:first-child{text-align:left}
+.ladder tr.base td{background:var(--tint);font-weight:600}
+.ladder tr.cur td{outline:2px solid var(--flag);outline-offset:-2px}
+.ladder td.p{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px}
+.ladder button.use{width:100%;text-align:left;background:none;border:0;padding:10px 4px;font:inherit;color:inherit;border-radius:0}
+.scroll{overflow:auto;max-height:60vh}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <h1>The Card</h1>
-  <p>Pick your games, pick your sides, hit Analyze. The Card plays each game out thousands of times and tells you if the ticket is worth it. Or let Hot Slips build the slip for you.</p>
-  <div class="ratingsTag" id="ratingsTag">No ratings file loaded — run refresh.py first</div>
-  <button class="ghost light" id="reload" type="button" style="margin:10px 0 0 6px;padding:4px 10px;font-size:13px">Refresh lines</button>
+  <h1>Clover</h1>
+  <p>Tap picks onto a slip. Clover tells you the true chance the whole thing hits and whether the payout is worth it — in one word.</p>
+  <div class="tag" id="ratingsTag">Loading lines…</div>
+  <button class="ghost light" id="reload" type="button" style="margin:10px 0 0 6px">Reload</button>
 </header>
 
-<div class="tabs">
-  <button class="tab on" data-tab="card">The Card</button>
-  <button class="tab" data-tab="mover">Line Mover</button>
-  <button class="tab" data-tab="hot">Hot Slips</button>
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" id="tabSlips" aria-selected="true" aria-controls="viewSlips">Slips</button>
+  <button class="tab" role="tab" id="tabCard" aria-selected="false" aria-controls="viewCard">The Card<span class="n" id="tabCount">0</span></button>
 </div>
 
-<div id="tabCard">
-<div class="board" id="board">
-  <div class="big" id="bigProb">—</div>
-  <div class="sub" id="bigSub">Add your picks below, then hit Analyze</div>
-  <div class="verdict" id="verdict"></div>
-  <div class="why" id="why"></div>
-  <details class="math" id="mathBox">
-    <summary>Show the math</summary>
-    <div class="grid">
-      <div><span>$1 pays</span><strong id="oBook">—</strong></div>
-      <div><span>Needs to hit</span><strong id="oBreak">—</strong></div>
-      <div><span>Fair payout for this</span><strong id="oFair">—</strong></div>
-      <div><span>Edge per $1</span><strong id="oEv">—</strong></div>
-    </div>
-    <p class="mathNote">"Needs to hit" is the win rate you'd need at that payout just to break even. If the chance is above it, you're getting the better end. Below it, Underdog is.</p>
-  </details>
-</div>
-
-<div id="legs"></div>
-
-<div class="slip">
-  <h2>The ticket</h2>
-  <div class="row">
-    <div class="field">
-      <label for="who">Whose pick</label>
-      <select id="who"><option>Danny</option><option>Jaclyn</option></select>
-    </div>
-    <div class="field">
-      <label>Payout</label>
-      <div class="payoutTag" id="payoutTag">—</div>
-    </div>
-  </div>
-  <button class="primary" id="run">Analyze</button>
-  <div class="actions">
-    <button class="ghost" id="addLeg">Add a pick</button>
-    <button class="ghost" id="copy">Copy row for the log</button>
-  </div>
-</div>
-
-<div class="slip hidden" id="stressWrap" style="background:#0E241F;border-left-color:var(--flag)">
-  <h2 style="color:var(--chalk)">How sure is this?
-    <button class="ghost light" id="stress">Check</button></h2>
-  <p style="color:#A9BDB4;font-size:14px;margin:0">The model's score projections are never exact. This re-runs the ticket with every score nudged a few points either way. If the verdict holds up, it's solid. If it flips, the ticket is closer to a coin toss than it looks.</p>
-  <div id="stressOut"></div>
-</div>
-
-<p class="note">Lines auto-fill from DraftKings, which runs close to Underdog. If Underdog shows a different number, type it in — the line box is editable.</p>
-</div><!-- /tabCard -->
-
-<div id="tabMover" class="hidden">
+<!-- ================= SLIPS ================= -->
+<section id="viewSlips" role="tabpanel">
   <div class="slip">
-    <h2>Move a line</h2>
-    <div class="field"><label>Game</label><select class="game" id="mvGame"><option value="">Pick a game…</option></select></div>
-    <div class="row">
-      <div class="field"><label>Bet</label><select id="mvType">
-        <option value="over">Over</option><option value="under">Under</option>
-        <option value="homeSp">Home spread</option><option value="awaySp">Away spread</option>
-      </select></div>
-      <div class="field"><label>Market line</label><input id="mvBase" type="number" step="0.5" inputmode="decimal"></div>
-    </div>
-    <div class="proj" id="mvProj"></div>
-  </div>
-  <div id="ladder"></div>
-  <p class="note"><strong style="color:var(--chalk)">How to use this.</strong> The market line is a coin flip — nobody beats it. But when you move the line in your app, the app has to guess how likely the <em>new</em> line is. Our "true chance" column is checked against ~100,000 real line moves. If your app pays more than the fair payout for a move, that move is a good deal. Tap Use to put it on the Card.</p>
-</div>
-
-<div id="tabHot" class="hidden">
-  <div class="board">
-    <div class="sub" style="margin:0 0 10px">How many picks on the slip?</div>
-    <div class="chips" id="chips"></div>
-    <div id="hotStatus" class="sub" style="margin-top:12px"></div>
+    <h2>Hot slips <span class="sub">most likely to hit, at market lines</span></h2>
+    <label>How many picks?</label>
+    <div class="chips" id="chips" role="group" aria-label="Number of picks"></div>
+    <p class="small" id="hotStatus" style="margin:10px 0 0"></p>
   </div>
   <div id="hotOut"></div>
-  <p class="note"><strong style="color:var(--chalk)">How this works.</strong> Every game with a line gets played out 20,000 times. Hot Slips tries every combination of Winner, Spread and Over/Under picks — up to three from one game — and shows the slips most likely to hit. Same-game picks are played out together, so a favorite to win plus its own spread counts for what it really is. Tap a slip to nudge any line up or down and watch the chance update. <strong style="color:var(--chalk)">Prohibited</strong> logs a pair Underdog wouldn't let you combine — it's a notebook for now, it doesn't change the picks.</p>
-  <div class="actions" id="prohibActions" style="margin-top:6px">
+
+  <div class="slip">
+    <h2>Build your own <span class="sub">tap a pick to add it</span></h2>
+    <div id="games"></div>
+  </div>
+
+  <p class="note"><b>How this works.</b> Every game with a line is played out 20,000 times ahead of time, centered on the market line — nobody beats the line, so we don't try. Hot slips are the combinations most likely to hit, with same-game picks played out together so a favorite plus its own spread counts for what it really is. Tap any slip to nudge a line and watch the chance update. <b>Prohibited</b> logs a pair your app wouldn't let you combine — it's a notebook, it doesn't change the picks.</p>
+  <div class="actions" id="prohibActions">
     <button class="ghost light" id="prohibCopy" type="button">Copy Prohibited log (0)</button>
     <button class="ghost light" id="prohibClear" type="button">Clear log</button>
   </div>
-</div>
+</section>
+
+<!-- ================= THE CARD ================= -->
+<section id="viewCard" role="tabpanel" class="hidden">
+  <div class="board">
+    <div class="big" id="bigProb">—</div>
+    <div class="sub" id="bigSub">Add picks from the Slips tab</div>
+    <div class="verdict" id="verdict"></div>
+    <div class="why" id="why"></div>
+    <details class="math" id="mathBox">
+      <summary>Show the math</summary>
+      <div class="grid2">
+        <div><span>$1 pays</span><strong id="oBook">—</strong></div>
+        <div><span>Needs to hit</span><strong id="oBreak">—</strong></div>
+        <div><span>Fair payout for this</span><strong id="oFair">—</strong></div>
+        <div><span>Edge per $1</span><strong id="oEv">—</strong></div>
+      </div>
+      <p class="note" style="font-size:13px;margin-top:10px">"Needs to hit" is the win rate you'd need at that payout just to break even. Above it, you're getting the better end. Below it, the app is.</p>
+    </details>
+  </div>
+
+  <div class="slip">
+    <h2>Payout</h2>
+    <div class="row">
+      <div><label for="pays">Your app pays, on $1 <span class="est" id="paysEst">est.</span></label>
+        <input id="pays" type="number" step="0.01" min="1" inputmode="decimal" placeholder="e.g. 6.00"></div>
+      <div><label for="who">Whose pick</label>
+        <select id="who"><option>Danny</option><option>Jaclyn</option></select></div>
+    </div>
+    <p class="small" id="paysNote" style="margin:8px 0 0">Type what your app shows for this slip. Until you do, this is a typical pick'em payout — an estimate.</p>
+  </div>
+
+  <div class="slip">
+    <h2>Picks <button class="ghost" id="clearSlip" type="button">Clear</button></h2>
+    <div id="legs"></div>
+  </div>
+
+  <div class="board" id="stressBox">
+    <div class="sub" style="margin:0">How sure is this?</div>
+    <p id="stressOut" style="margin:6px 0 0;font-size:15px"></p>
+    <p class="note" style="font-size:13px;margin-top:8px">The line is never exact. This re-runs the slip with the total and the margin each nudged up to 3 points either way — 49 versions of the game. If the verdict holds, it's solid. If it flips, the slip is closer to a coin toss than it looks.</p>
+  </div>
+
+  <div class="actions">
+    <button class="ghost light" id="copy" type="button">Copy row for the log</button>
+    <button class="ghost light" id="backToSlips" type="button">Add more picks</button>
+  </div>
+  <p class="note">Lines auto-fill from DraftKings, which runs close to most pick'em apps. If your app shows a different number, tap the line and pick it from the list.</p>
+</section>
 
 </div>
 
-<!-- ratings.js is written by refresh.py. The ?v= bit makes the browser fetch a fresh copy every time. -->
-<script>document.write('<script src="ratings.js?v=' + Date.now() + '"><\/script>');</script>
+<div class="bar hidden" id="bar">
+  <div class="in">
+    <div><div class="big" id="barProb">—</div><div class="sub" id="barSub"></div></div>
+    <button class="primary" id="barGo" type="button">See the Card</button>
+  </div>
+</div>
+
+<dialog id="sheet" aria-label="Every line for this pick"><div class="sheet" id="sheetIn"></div></dialog>
+
 <script>
-/* ============ ratings ============ */
-const R = window.RATINGS || null;
-const GAMES = R && R.upcoming ? R.upcoming : [];
-const DEFAULT_SD = 15.2;   // from calibrate.py --tails: sim shape verified within ~2 pts at every rung
+/* ===================================================================
+   DATA — ratings.js is written by refresh.py. Every game with a line
+   carries a table of how often it ends with total T and margin M.
+   The page never simulates; it looks things up.
+   =================================================================== */
+let R=null, GAMES=[], BY_ID={}, LOGOS={}, COLORS={};
+const GRIDS={};                               // gi -> decoded table
 const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-function gameLabel(g){
-  const d=new Date(g.start);
-  const when=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`;
-  let line="no line";
-  if(g.spread!==null&&g.spread!==undefined){
-    const fav=g.spread<0?g.home:g.away;
-    line=`${fav} ${g.spread<0?g.spread:-g.spread}`;
-    if(g.total!==null&&g.total!==undefined) line+=` · o/u ${g.total}`;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function gridFor(gi){
+  if(GRIDS[gi]) return GRIDS[gi];
+  const s=GAMES[gi]&&GAMES[gi].sim; if(!s) return null;
+  const raw=atob(s.c), vals=[]; let v=0, sh=0;
+  for(let i=0;i<raw.length;i++){ const b=raw.charCodeAt(i); v|=(b&0x7f)<<sh; if(b&0x80) sh+=7; else { vals.push(v); v=0; sh=0; } }
+  const k=vals.length>>1, T=new Int16Array(k), M=new Int16Array(k), C=new Int32Array(k);
+  let idx=-1;
+  for(let j=0;j<k;j++){ idx+=vals[2*j]+1; C[j]=vals[2*j+1]; T[j]=s.t0+Math.floor(idx/s.nm); M[j]=s.m0+idx%s.nm; }
+  return GRIDS[gi]={T,M,C,k,n:s.n};
+}
+/* positive = hits, 0 = push, negative = loses. Line is always the side's OWN number. */
+function legVal(type,line,t,m){
+  switch(type){
+    case "over":   return t-line;
+    case "under":  return line-t;
+    case "homeSp": return m+line;
+    case "awaySp": return line-m;
+    case "homeML": return m;
+    default:       return -m;                 // awayML
   }
-  return `${when} · ${g.away} @ ${g.home} · ${line}`;
 }
-(function initRatings(){
-  const tag=document.getElementById("ratingsTag");
-  if(!R) return;
-  const gen=new Date(R.generated);
-  const days=Math.floor((Date.now()-gen)/86400000);
-  const lg=R.lines_generated?new Date(R.lines_generated):gen;
-  const mins=Math.round((Date.now()-lg)/60000);
-  const ago = mins<60 ? `${mins} min ago` : mins<2880 ? `${Math.round(mins/60)} hr ago` : `${Math.round(mins/1440)} days ago`;
-  tag.textContent=`Lines as of ${lg.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago}) · ${GAMES.length} upcoming games · ratings ${gen.toLocaleDateString()}`;
-  if(R.alt_generated){ const ad=new Date(R.alt_generated); tag.textContent+=` · DK alt lines ${ad.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})}`; }
-  if(days>8||!GAMES.length||mins>360) tag.classList.add("stale");
-  if(!GAMES.length) tag.textContent+=" — run refresh.py to load this week's slate";
-})();
-
-/* ============ model vs market ============ */
-/* How much to trust the betting line vs the model's own projection.
-   0 = model only, 1 = line only. Totals and spreads are set separately because
-   the model is decent on totals and weak on spreads this early in the season.
-   Move both toward 0 as the season goes on and the backtest improves. */
-/* CALIBRATION RESULT 2026-09-06 (calibrate.py, 2019+2021-2025, ~5,000 lined games):
-   the model has no edge over the line at any weight below 1.0 - picks it called
-   60-70% hit ~50%. Weight 1.0 is perfectly calibrated. So: trust the line. */
-const MARKET_WEIGHT_TOTAL  = 1.0;
-const MARKET_WEIGHT_SPREAD = 1.0;
-function blended(G){
-  let tot=G.proj_home+G.proj_away, mar=G.proj_home-G.proj_away;
-  if(G.total!==null&&G.total!==undefined)   tot=tot*(1-MARKET_WEIGHT_TOTAL)+G.total*MARKET_WEIGHT_TOTAL;
-  if(G.spread!==null&&G.spread!==undefined) mar=mar*(1-MARKET_WEIGHT_SPREAD)+(-G.spread)*MARKET_WEIGHT_SPREAD;
-  return {hp:Math.max((tot+mar)/2,0), ap:Math.max((tot-mar)/2,0)};
+/* chance every leg (all from game gi) hits together, pushes thrown out.
+   dt/dm shift the whole game by that many points (stress test). */
+function prob(gi,legs,dt=0,dm=0){
+  const g=gridFor(gi); if(!g) return null;
+  let win=0, push=0;
+  for(let j=0;j<g.k;j++){
+    const t=g.T[j]+dt, m=g.M[j]+dm; let ok=true, pu=false;
+    for(let x=0;x<legs.length;x++){ const v=legVal(legs[x].type,legs[x].line,t,m); if(v===0){pu=true;break;} if(v<0){ok=false;break;} }
+    if(pu) push+=g.C[j]; else if(ok) win+=g.C[j];
+  }
+  const d=g.n-push; return d>0 ? win/d : 0;
+}
+/* the whole slip: legs grouped by game, same-game legs looked up together */
+function slipProb(legs,dt=0,dm=0){
+  const by={}; legs.forEach(l=>{(by[l.gi]=by[l.gi]||[]).push(l);});
+  let joint=1; const groups=[];
+  for(const gi in by){ const G=by[gi], p=prob(+gi,G,dt,dm); const indep=G.reduce((a,l)=>a*prob(+gi,[l],dt,dm),1); joint*=p; groups.push({gi:+gi,legs:G,p,indep}); }
+  return {joint,groups};
 }
 
-/* ============ Underdog payouts ============ */
-/* Standard pick'em multipliers by number of picks. CHECK THESE AGAINST THE APP
-   and fix here if Underdog changes them. A single pick isn't a pick'em entry,
-   so it's judged against a normal -110 sportsbook line instead. */
-const PAYOUT = {2:3, 3:6, 4:10, 5:20, 6:25};
-function payoutFor(n){
-  if(n===1) return {mult:1.909, label:"single · $1 pays $1.91"};
-  if(PAYOUT[n]) return {mult:PAYOUT[n], label:`${n} picks · $1 pays $${PAYOUT[n].toFixed(2)}`};
-  return null;
-}
-/* Plain-English scale, based on edge per $1 (expected value). */
-function grade(ev){
-  if(ev>=0.15) return {word:"Great",     cls:"pos", why:"Pays well above what the odds deserve."};
-  if(ev>=0.05) return {word:"Good",      cls:"pos", why:"You're getting a little better than fair."};
-  if(ev>=-0.05)return {word:"Coin toss", cls:"mid", why:"Roughly fair. Fun money, not smart money."};
-  if(ev>=-0.20)return {word:"Bad",       cls:"neg", why:"Doesn't pay enough for how often it hits."};
-  return              {word:"Terrible",  cls:"neg", why:"Long shot that pays like a short one."};
-}
-
-/* ============ odds math ============ */
-const toDec = a => a > 0 ? 1 + a/100 : 1 + 100/Math.abs(a);
-/* ============ DraftKings alternate lines (from refresh.py --alt-lines) ============ */
-/* What DK actually pays for a moved line, and DK's own chance for it once their
-   cut is removed (both sides of the same number, scaled to add up to 100%).
-   Returns null when DK doesn't list that exact number. */
-const amToP = a => a < 0 ? -a/(-a+100) : 100/(a+100);
-function dkQuote(G, type, line){
+/* ---------- odds math ---------- */
+const amToP=a=>a<0?-a/(-a+100):100/(a+100);
+const toDec=a=>a>0?1+a/100:1+100/Math.abs(a);
+/* What DraftKings pays for this exact line, and their chance once the cut is removed. null if DK doesn't list it. */
+function dkQuote(G,type,line){
   const A=G&&G.alt; if(!A||line==null) return null;
   const find=(arr,pt)=>{const r=(arr||[]).find(x=>Math.abs(x[0]-pt)<1e-9);return r?r[1]:null;};
   let mine=null, other=null;
-  if(type==="over"){ mine=find(A.totals.over,line); other=find(A.totals.under,line); }
-  else if(type==="under"){ mine=find(A.totals.under,line); other=find(A.totals.over,line); }
-  else if(type==="homeSp"){ mine=find(A.spreads.home,line); other=find(A.spreads.away,-line); }
-  else if(type==="awaySp"){ mine=find(A.spreads.away,line); other=find(A.spreads.home,-line); }
+  if(type==="over"){mine=find(A.totals.over,line);other=find(A.totals.under,line);}
+  else if(type==="under"){mine=find(A.totals.under,line);other=find(A.totals.over,line);}
+  else if(type==="homeSp"){mine=find(A.spreads.home,line);other=find(A.spreads.away,-line);}
+  else if(type==="awaySp"){mine=find(A.spreads.away,line);other=find(A.spreads.home,-line);}
   if(mine===null) return null;
-  const pa=amToP(mine), fair = other===null ? null : pa/(pa+amToP(other));
-  return {price:mine, am:(mine>0?"+":"")+mine, dec:toDec(mine), fair};
+  const pa=amToP(mine), fair=other===null?null:pa/(pa+amToP(other));
+  return {am:(mine>0?"+":"")+mine, dec:toDec(mine), fair};
 }
-const decToAm = d => d <= 1 ? "—" : (d >= 2 ? "+" + Math.round((d-1)*100) : "" + Math.round(-100/(d-1)));
-const probToAm = p => (p<=0||p>=1) ? "—" : decToAm(1/p);
-const kelly = (p,d) => Math.max(((d-1)*p - (1-p))/(d-1), 0);
+/* Typical pick'em multipliers - a STAND-IN until you type the real payout. */
+const PAYOUT={1:1.909,2:3,3:6,4:10,5:20,6:25};
+function grade(ev){
+  if(ev>=0.15) return {word:"Great",cls:"pos",why:"Pays well above what the odds deserve."};
+  if(ev>=0.05) return {word:"Good",cls:"pos",why:"You're getting a little better than fair."};
+  if(ev>=-0.05)return {word:"Coin toss",cls:"mid",why:"Roughly fair. Fun money, not smart money."};
+  if(ev>=-0.20)return {word:"Bad",cls:"neg",why:"Doesn't pay enough for how often it hits."};
+  return {word:"Terrible",cls:"neg",why:"Long shot that pays like a short one."};
+}
+const ORDER=["Great","Good","Coin toss","Bad","Terrible"];
+const pct=p=>p==null?"—":p>0.995?">99%":p<0.005?"<1%":(p*100).toFixed(p<0.1?1:0)+"%";
+const fmtSp=v=>(v>0?"+":"")+v;
+const money=d=>"$"+d.toFixed(2);
 
-/* ============ random ============ */
-let z2=null;
-function norm(){
-  if(z2!==null){const t=z2;z2=null;return t;}
-  let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();
-  const r=Math.sqrt(-2*Math.log(u)),th=2*Math.PI*v;
-  z2=r*Math.sin(th);return r*Math.cos(th);
-}
-function gamma(k){
-  if(k<1) return gamma(k+1)*Math.pow(Math.random(),1/k);
-  const d=k-1/3,c=1/Math.sqrt(9*d);
-  for(;;){
-    let x,v;do{x=norm();v=1+c*x;}while(v<=0);
-    v=v*v*v;const u=Math.random();
-    if(u<1-0.0331*x*x*x*x) return d*v;
-    if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v))) return d*v;
+/* ---------- labels ---------- */
+function marketLine(G,type){ return type==="over"||type==="under"?G.total:type==="homeSp"?G.spread:type==="awaySp"?-G.spread:null; }
+function hasLine(type){ return type!=="homeML"&&type!=="awayML"; }
+function legLabel(G,l){
+  switch(l.type){
+    case "homeML": return `${G.home} to win`;
+    case "awayML": return `${G.away} to win`;
+    case "homeSp": return `${G.home} ${fmtSp(l.line)}`;
+    case "awaySp": return `${G.away} ${fmtSp(l.line)}`;
+    case "over":   return `Over ${l.line}`;
+    default:       return `Under ${l.line}`;
   }
 }
-
-/* ============ the football ============ */
-/* Points arrive as touchdowns and field goals, not on a smooth curve.
-   A per-game rate multiplier lets some games run hot and some cold —
-   that's the fat right tail real football has. */
-const DRIVES = 12;                     // possessions per team in a normal game
-function teamPoints(mean, disp){
-  const m = gamma(disp)/disp;          // this game's hot/cold multiplier
-  const pTd = Math.min(mean*0.70/7/DRIVES*m, 0.90);
-  const pFg = Math.min(mean*0.30/3/DRIVES*m, 0.90);
-  let pts = 0;
-  for(let i=0;i<DRIVES;i++){
-    const r = Math.random();
-    if(r < pTd){
-      const q = Math.random();
-      pts += q < 0.90 ? 7 : (q < 0.95 ? 8 : 6);
-    } else if(r < pTd + pFg){
-      pts += 3;
-    }
-  }
-  return pts;
-}
-
-function simGame(n, homeMean, awayMean, targetSd){
-  const DISPS=[400,80,40,20,12,8,5,3.5,2.5,1.8];
-  let chosen=DISPS[0], bestGap=Infinity;
-  for(const d of DISPS){                       // tune spread toward your volatility input
-    let s=0,ss=0;const probe=2500;
-    for(let i=0;i<probe;i++){
-      const t=teamPoints(homeMean,d)+teamPoints(awayMean,d);
-      s+=t;ss+=t*t;
-    }
-    const sd=Math.sqrt(ss/probe-(s/probe)**2);
-    const gap=Math.abs(sd-targetSd);
-    if(gap<bestGap){bestGap=gap;chosen=d;}
-  }
-  const home=new Float64Array(n), away=new Float64Array(n);
-  let hs=0,as=0;
-  for(let i=0;i<n;i++){
-    home[i]=teamPoints(homeMean,chosen); away[i]=teamPoints(awayMean,chosen);
-    hs+=home[i]; as+=away[i];
-  }
-  const hShift=homeMean-hs/n, aShift=awayMean-as/n;   // shift only, keeps the lumpiness
-  let ts=0,tss=0;
-  for(let i=0;i<n;i++){
-    home[i]=Math.max(0,Math.round(home[i]+hShift));   // real scores are whole numbers,
-    away[i]=Math.max(0,Math.round(away[i]+aShift));   // which is what makes pushes possible
-    const t=home[i]+away[i]; ts+=t; tss+=t*t;
-  }
-  const sd=Math.sqrt(tss/n-(ts/n)**2);
-  return {home,away,sd};
-}
-
-function legProb(leg,n,shift){
-  const {home,away,sd}=simGame(n, leg.homePts+shift/2, leg.awayPts+shift/2, leg.sd);
-  let win=0,push=0,loss=0;
-  for(let i=0;i<n;i++){
-    const total=home[i]+away[i], margin=home[i]-away[i];
-    let v;
-    if(leg.type==="over")        v = total-leg.line;
-    else if(leg.type==="under")  v = leg.line-total;
-    else if(leg.type==="homeSp") v = margin+leg.line;
-    else if(leg.type==="homeML") v = margin;
-    else if(leg.type==="awayML") v = -margin;
-    else                         v = -margin-leg.line;
-    if(Math.abs(v)<1e-9) push++; else if(v>0) win++; else loss++;
-  }
-  return {win:win/n, push:push/n, p: win/(win+loss), sd};
-}
-
-/* ============ legs UI ============ */
-const legsEl=document.getElementById("legs");
-let count=0;
-function addLeg(pre){
-  count++;
-  const d=document.createElement("div");
-  d.className="slip"; d.dataset.leg="1";
-  const opts=GAMES.map((g,i)=>`<option value="${i}">${gameLabel(g)}</option>`).join("");
-  d.innerHTML=`
-    <h2>Pick ${count}<button class="ghost rm" type="button">Remove</button></h2>
-    <div class="field"><label>Game</label>
-      <select class="game"><option value="">${GAMES.length?"Pick a game…":"No games loaded — run refresh.py"}</option>${opts}</select></div>
-    <div class="proj"></div>
-    <div class="row">
-      <div class="field"><label>Bet</label><select class="type">
-        <option value="over">Total over</option>
-        <option value="under">Total under</option>
-        <option value="homeSp">Home spread</option>
-        <option value="awaySp">Away spread</option>
-        <option value="homeML">Home wins</option>
-        <option value="awayML">Away wins</option>
-      </select></div>
-      <div class="field"><label class="lineLabel">Line</label><input class="line" type="number" step="0.5" inputmode="decimal"></div>
-      <div class="field hidden"><label>App multiplier</label><input class="mult" type="number" step="0.01" value="1" inputmode="decimal"></div>
-    </div>
-    <details class="adv"><summary>Adjust the model's projected score</summary>
-    <div class="row three">
-      <div class="field"><label>Away points</label><input class="apts" type="number" step="0.1" inputmode="decimal"></div>
-      <div class="field"><label>Home points</label><input class="hpts" type="number" step="0.1" inputmode="decimal"></div>
-      <div class="field"><label>Volatility</label><input class="sd" type="number" step="0.5" value="${DEFAULT_SD}"></div>
-    </div></details>
-    <div class="legprob"></div>`;
-  legsEl.appendChild(d);
-  d.querySelector(".rm").onclick=()=>{d.remove();renumber();updatePayout();};
-
-  const g=c=>d.querySelector(c);
-  const game=()=>{const i=g(".game").value;return i===""?null:GAMES[+i];};
-  function fillLine(){
-    const G=game(); if(!G) return;
-    const t=g(".type").value, ln=g(".line"), lab=g(".lineLabel");
-    let v=null;
-    if(t==="homeML"||t==="awayML"){           // a winner pick has no line
-      ln.value=""; ln.disabled=true; ln.classList.remove("auto"); ln.placeholder="no line — just win";
-      lab.textContent=`${t==="homeML"?G.home:G.away} to win`; return;
-    }
-    ln.disabled=false;
-    if(t==="over"||t==="under"){ v=G.total; lab.textContent="Total"; }
-    else if(t==="homeSp"){ v=G.spread; lab.textContent=`${G.home} spread`; }
-    else { v=G.spread===null?null:-G.spread; lab.textContent=`${G.away} spread`; }
-    ln.value = v===null||v===undefined ? "" : v;
-    ln.classList.toggle("auto", v!==null&&v!==undefined);
-    ln.placeholder = v===null||v===undefined ? "book has no line — enter Underdog's" : "";
-  }
-  function relabel(){
-    const G=game(); if(!G) return;
-    const sel=g(".type"), has=G.spread!==null&&G.spread!==undefined, hasT=G.total!==null&&G.total!==undefined;
-    const fmt=v=>(v>0?"+":"")+v;
-    sel.options[0].text = hasT ? `Over ${G.total}` : "Total over";
-    sel.options[1].text = hasT ? `Under ${G.total}` : "Total under";
-    sel.options[2].text = has ? `${G.home} ${fmt(G.spread)}` : `${G.home} spread`;
-    sel.options[3].text = has ? `${G.away} ${fmt(-G.spread)}` : `${G.away} spread`;
-    sel.options[4].text = `${G.home} to win`;
-    sel.options[5].text = `${G.away} to win`;
-  }
-  function fillGame(){
-    const G=game(); const proj=g(".proj");
-    if(!G){ proj.textContent=""; return; }
-    relabel();
-    const B=blended(G);
-    g(".hpts").value=B.hp.toFixed(1); g(".apts").value=B.ap.toFixed(1);
-    g(".hpts").classList.add("auto"); g(".apts").classList.add("auto");
-    const src=G.book?G.book:"nobody yet — enter Underdog's";
-    proj.textContent=`Expected score ${G.away} ${Math.round(B.ap)}, ${G.home} ${Math.round(B.hp)}${G.neutral?" (neutral site)":""} · line from ${src}`;
-    fillLine();
-  }
-  g(".game").addEventListener("change",fillGame);
-  if(pre){ g(".game").value=String(pre.gi); fillGame(); g(".type").value=pre.type; fillLine();
-           if(pre.line!==undefined){ g(".line").value=pre.line; g(".line").classList.remove("auto"); }
-           if(pre.mult!==undefined) g(".mult").value=pre.mult; }
-  g(".type").addEventListener("change",fillLine);
-  ["hpts","apts","line"].forEach(c=>g("."+c).addEventListener("input",e=>e.target.classList.remove("auto")));
-  g(".mult").addEventListener("input",updatePayout);
-}
-function renumber(){
-  count=0;
-  document.querySelectorAll("[data-leg] h2").forEach(h=>{
-    count++; h.childNodes[0].nodeValue="Pick "+count;
-  });
-}
-function readLegs(){
-  const out=[];
-  document.querySelectorAll("[data-leg]").forEach(d=>{
-    const g=c=>d.querySelector(c);
-    const i=g(".game").value; if(i==="") return;
-    const G=GAMES[+i];
-    const hp=parseFloat(g(".hpts").value), ap=parseFloat(g(".apts").value),
-          sd=parseFloat(g(".sd").value), type=g(".type").value;
-    let ln=parseFloat(g(".line").value);
-    if(type==="homeML"||type==="awayML") ln=0;   // winner picks have no line
-    if([hp,ap,ln,sd].some(isNaN)) return;
-    if(type==="awaySp") ln=-ln;            // stored as the home-team spread internally
-    const mult=parseFloat(g(".mult").value)||1;
-    out.push({el:d, gi:+i, homeTeam:G.home, awayTeam:G.away, homePts:hp, awayPts:ap, sd, type, line:ln, mult});
-  });
-  return out;
-}
-
-/* ============ run ============ */
-let last=null;
-function updatePayout(){
-  const n=document.querySelectorAll("[data-leg]").length;
-  const pay=payoutFor(n);
-  const lm=[...document.querySelectorAll("[data-leg] .mult")].reduce((a,e)=>a*(parseFloat(e.value)||1),1);
-  document.getElementById("payoutTag").textContent = pay ? (lm===1 ? pay.label : `${n} picks · $1 pays $${(pay.mult*lm).toFixed(2)}`) : `${n} picks · not on the table — edit PAYOUT in the file`;
-}
-document.getElementById("run").onclick=()=>{
-  const legs=readLegs();
-  const cards=document.querySelectorAll("[data-leg]").length;
-  if(!legs.length){
-    document.getElementById("bigSub").textContent="Pick a game and a bet first";
-    return;
-  }
-  if(legs.length!==cards){
-    const missing=[...document.querySelectorAll("[data-leg]")].map((d,i)=>legs.some(l=>l.el===d)?null:i+1).filter(Boolean);
-    document.getElementById("bigSub").textContent=`Pick ${missing.join(", ")} needs a game and a line first`;
-    return;
-  }
-  const pay=payoutFor(legs.length);
-  if(!pay){ document.getElementById("bigSub").textContent="No payout on file for that many picks"; return; }
-  const btn=document.getElementById("run");
-  btn.textContent="Analyzing…"; btn.disabled=true;
-  setTimeout(()=>{
-    /* picks from the same game are simulated TOGETHER, so correlated picks
-       (Over + favorite covering, say) get their real joint chance, not the product */
-    const N=50000, groups={};
-    legs.forEach(l=>{(groups[l.gi]=groups[l.gi]||[]).push(l);});
-    let joint=1;
-    for(const gi in groups){
-      const G=groups[gi]; const l0=G[0];
-      const {home,away}=simGame(N,l0.homePts,l0.awayPts,l0.sd);
-      let all=0; const each=G.map(()=>0), pushes=G.map(()=>0);
-      for(let i=0;i<N;i++){
-        const total=home[i]+away[i], margin=home[i]-away[i];
-        let ok=true;
-        G.forEach((l,k)=>{
-          let v;
-          if(l.type==="over") v=total-l.line; else if(l.type==="under") v=l.line-total;
-          else if(l.type==="homeSp") v=margin+l.line; else if(l.type==="homeML") v=margin;
-          else if(l.type==="awayML") v=-margin; else v=-margin-l.line;
-          if(Math.abs(v)<1e-9){pushes[k]++; ok=false;} else if(v>0) each[k]++; else ok=false;
-        });
-        if(ok) all++;
-      }
-      G.forEach((l,k)=>{
-        const p=each[k]/(N-pushes[k]);
-        l.p=p;
-        l.el.querySelector(".legprob").innerHTML =
-          `<b>${(p*100).toFixed(0)}%</b> chance this one hits` +
-          (q=>q?` · DraftKings pays $${q.dec.toFixed(2)} for this line${q.fair!==null?` (their chance: ${(q.fair*100).toFixed(0)}%)`:""}`:"")(dkQuote(GAMES[l.gi], l.type, l.type==="awaySp"?-l.line:l.line)) +
-          (l.mult!==1 ? ` · fair multiplier ${(0.5/p).toFixed(2)}x, app gives ${l.mult}x` : "") +
-          (pushes[k]/N>0.005 && l.type!=="homeML" && l.type!=="awayML" ? ` · could land exactly on the number (${(pushes[k]/N*100).toFixed(0)}%) — use a half-point` : "");
-      });
-      const indep=G.reduce((a,l)=>a*l.p,1), pj=all/N;
-      joint*=pj;
-      if(G.length>1) G[G.length-1].el.querySelector(".legprob").innerHTML +=
-        `<br>Same game as pick ${legs.indexOf(G[0])+1}: together ${(pj*100).toFixed(0)}% vs ${(indep*100).toFixed(0)}% if they were unrelated`;
-    }
-    const legMult=legs.reduce((a,l)=>a*l.mult,1);
-    const dec=pay.mult*legMult, be=1/dec, ev=joint*dec-1, g=grade(ev);
-
-    document.getElementById("bigProb").textContent=(joint*100).toFixed(joint<0.1?1:0)+"%";
-    document.getElementById("bigSub").textContent =
-      legs.length===1 ? "chance this pick hits" : legs.length===2 ? "chance both picks hit" : `chance all ${legs.length} picks hit`;
-    const v=document.getElementById("verdict");
-    v.className="verdict "+g.cls; v.textContent=g.word;
-    const cents=Math.round(Math.abs(ev)*100);
-    document.getElementById("why").textContent = g.why + " " +
-      `Bet $1: it pays $${dec.toFixed(2)} if it hits. On average you get back $${(joint*dec).toFixed(2)}` +
-      (ev>=0 ? ` — about ${cents}¢ ahead per $1.` : ` — about ${cents}¢ lost per $1.`);
-
-    document.getElementById("oBook").textContent = "$"+dec.toFixed(2);
-    document.getElementById("oBreak").textContent=(be*100).toFixed(1)+"%";
-    document.getElementById("oFair").textContent = joint>0 ? "$"+(1/joint).toFixed(2) : "—";
-    document.getElementById("oEv").textContent=(ev>=0?"+":"−")+cents+"¢";
-
-    document.getElementById("stressWrap").classList.remove("hidden");
-    document.getElementById("stressOut").innerHTML="";
-    last={legs,joint,dec,ev,pay};
-    btn.textContent="Analyze"; btn.disabled=false;
-  },30);
-};
-
-document.getElementById("addLeg").onclick=()=>{addLeg();updatePayout();};
-
-/* ============ stress test ============ */
-document.getElementById("stress").onclick=()=>{
-  if(!last) return;
-  const b=document.getElementById("stress");
-  b.textContent="Working…"; b.disabled=true;
-  setTimeout(()=>{
-    const grades=[];
-    for(const s of [-3,-2,-1,0,1,2,3]){
-      let j=1;
-      last.legs.forEach(l=>{ j*=legProb(l,15000,s).p; });
-      grades.push(grade(j*last.dec-1).word);
-    }
-    const base=grade(last.ev).word;
-    const same=grades.filter(w=>w===base).length;
-    const worst=["Great","Good","Coin toss","Bad","Terrible"].filter(w=>grades.includes(w)).pop();
-    const best=["Great","Good","Coin toss","Bad","Terrible"].filter(w=>grades.includes(w))[0];
-    let msg;
-    if(same===grades.length) msg=`Solid. It stays "${base}" no matter which way the scores drift.`;
-    else if(same>=5)         msg=`Mostly holds. It's "${base}" in most scenarios, ranging from "${best}" to "${worst}".`;
-    else                     msg=`Shaky. Small changes in the scores move it anywhere from "${best}" to "${worst}". Don't lean on this one.`;
-    document.getElementById("stressOut").innerHTML=`<p style="color:var(--chalk);font-size:15px;margin:12px 0 0">${msg}</p>`;
-    b.textContent="Check"; b.disabled=false;
-  },30);
-};
-
-/* ============ log row ============ */
-document.getElementById("copy").onclick=()=>{
-  if(!last){return;}
-  const who=document.getElementById("who").value;
-  const date=new Date().toISOString().slice(0,10);
-  const desc=last.legs.map(l=>{
-    const m=`${l.awayTeam} @ ${l.homeTeam}`;
-    if(l.type==="over") return `${m} o${l.line}`;
-    if(l.type==="under") return `${m} u${l.line}`;
-    if(l.type==="homeML") return `${m} ${l.homeTeam} ML`;
-    if(l.type==="awayML") return `${m} ${l.awayTeam} ML`;
-    if(l.type==="homeSp") return `${m} ${l.homeTeam} ${l.line>0?"+":""}${l.line}`;
-    return `${m} ${l.awayTeam} ${-l.line>0?"+":""}${-l.line}`;
-  }).join(" | ");
-  const row=[date,who,desc,last.legs.length,last.pay.label,
-    (last.joint*100).toFixed(1)+"%",grade(last.ev).word,""].join("\t");
-  navigator.clipboard.writeText(row).then(()=>{
-    const b=document.getElementById("copy");
-    b.textContent="Copied — paste in the sheet";
-    setTimeout(()=>b.textContent="Copy row for the log",2200);
-  });
-};
-
-document.getElementById("reload").onclick=()=>location.reload();
-
-/* ============ tabs ============ */
-document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
-  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));
-  document.getElementById("tabCard").classList.toggle("hidden",t.dataset.tab!=="card");
-  document.getElementById("tabHot").classList.toggle("hidden",t.dataset.tab!=="hot");
-  document.getElementById("tabMover").classList.toggle("hidden",t.dataset.tab!=="mover");
-  if(t.dataset.tab==="hot") hotSlips();
-});
-
-/* ============ line mover ============ */
-(function initMover(){
-  const sel=document.getElementById("mvGame");
-  GAMES.forEach((g,i)=>{const o=document.createElement("option");o.value=i;o.textContent=gameLabel(g);sel.appendChild(o);});
-  sel.onchange=()=>{mvBaseFill();ladder();};
-  document.getElementById("mvType").onchange=()=>{mvBaseFill();ladder();};
-  document.getElementById("mvBase").addEventListener("change",ladder);
-})();
-function mvGame(){const v=document.getElementById("mvGame").value;return v===""?null:GAMES[+v];}
-function mvBaseFill(){
-  const G=mvGame(); if(!G) return;
-  const t=document.getElementById("mvType").value, b=document.getElementById("mvBase");
-  let v=null;
-  if(t==="over"||t==="under") v=G.total; else if(t==="homeSp") v=G.spread; else v=G.spread===null?null:-G.spread;
-  b.value=v===null||v===undefined?"":v;
-  const B=blended(G);
-  document.getElementById("mvProj").textContent=`Expected score ${G.away} ${Math.round(B.ap)}, ${G.home} ${Math.round(B.hp)} · market line from ${G.book||"nobody — enter it"}`;
-}
-let LADDER=null;
-function ladder(){
-  const G=mvGame(); const base=parseFloat(document.getElementById("mvBase").value);
-  const out=document.getElementById("ladder");
-  if(!G||isNaN(base)){out.innerHTML="";return;}
-  const t=document.getElementById("mvType").value;
-  const B=blended(G);
-  const N=60000; const {home,away}=simGame(N,B.hp,B.ap,DEFAULT_SD);
-  const moves=[-14,-12,-10,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,10,12,14];
-  const rows=moves.map(k=>{
-    const L=base+k;               // the line as shown for THIS side
-    let win=0,push=0;
-    for(let i=0;i<N;i++){
-      const total=home[i]+away[i], margin=home[i]-away[i]; let v;
-      if(t==="over") v=total-L; else if(t==="under") v=L-total;
-      else if(t==="homeSp") v=margin+L; else v=L-margin;    // L is this side's own spread
-      if(Math.abs(v)<1e-9) push++; else if(v>0) win++;
-    }
-    const p=win/(N-push);
-    return {k,L,p,push:push/N};
-  });
-  LADDER={G,t,base,rows};
-  const side = t==="over"?`Over`:t==="under"?`Under`:t==="homeSp"?G.home:G.away;
-  const fmt=v=>(t==="homeSp"||t==="awaySp")?((v>0?"+":"")+v):v;
-  out.innerHTML=`<div class="slip"><h2>${side} — every line</h2>
-    <div style="overflow-x:auto"><table class="ladder">
-      <tr><th>Line</th><th>True chance</th><th>Fair payout on $1</th><th>DK pays</th><th>DK's chance</th><th></th></tr>
-      ${rows.map((r,i)=>`<tr class="${r.k===0?"base":""}" data-i="${i}">
-        <td>${fmt(r.L)}${r.k===0?" <span style='color:var(--muted);font-weight:400'>(market)</span>":""}</td>
-        <td class="p">${(r.p*100).toFixed(0)}%</td>
-        <td>$${(1/r.p).toFixed(2)}</td>
-        ${(q=>q?`<td>$${q.dec.toFixed(2)}<span style="color:var(--muted);font-size:12px"> ${q.am}</span></td><td class="p" style="color:var(--muted)">${q.fair===null?"—":(q.fair*100).toFixed(0)+"%"}</td>`:`<td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td>`)(dkQuote(G,t,r.L))}
-        <td><input class="mult hidden" type="number"><span class="g hidden"></span><button class="ghost use" type="button">Use</button></td></tr>`).join("")}
-    </table></div>
-    <p class="mathNote" style="color:var(--muted)">"Fair payout" is what a $1 bet on that line deserves to pay if it hits, by our sim. "DK pays" is what DraftKings actually pays for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole-number lines can push — prefer the half-point.${G.alt?"":" <b>No DraftKings alternate lines loaded for this game yet</b> — they load Thursdays."}</p>
-    <div class="actions hidden"><button class="ghost" id="copyLog">Copy pricing log (${pricingLog().length} rows)</button></div>
-  </div>`;
-  out.querySelectorAll("tr[data-i]").forEach(tr=>{
-    const r=rows[+tr.dataset.i];
-    const inp=tr.querySelector("input"), g=tr.querySelector(".g");
-    inp.addEventListener("input",()=>{
-      const m=parseFloat(inp.value); if(isNaN(m)||m<=0){g.textContent="";g.className="g";return;}
-      const edge=m/(0.5/r.p)-1;           // how much better than fair the app is paying
-      const w=edge>=0.08?["Great","pos"]:edge>=0.03?["Good","pos"]:edge>=-0.03?["Fair","mid"]:edge>=-0.10?["Bad","neg"]:["Terrible","neg"];
-      g.textContent=`${w[0]} (${edge>=0?"+":""}${(edge*100).toFixed(0)}%)`; g.className="g "+w[1];
-      logPrice({game:`${G.away} @ ${G.home}`,kind:t,base,line:r.L,move:r.k,p:+r.p.toFixed(4),mult:m,date:new Date().toISOString().slice(0,10)});
-      document.getElementById("copyLog").textContent=`Copy pricing log (${pricingLog().length} rows)`;
-    });
-    tr.querySelector(".use").onclick=()=>{
-      const m=parseFloat(inp.value)||1;
-      const gi=GAMES.indexOf(G);
-      document.querySelectorAll("[data-leg]").forEach(d=>{ if(d.querySelector(".game").value==="") d.remove(); });
-      renumber();
-      addLeg({gi,type:t,line:r.L,mult:m}); updatePayout();
-      document.querySelector('.tab[data-tab="card"]').click(); window.scrollTo({top:0,behavior:"smooth"});
-    };
-  });
-  document.getElementById("copyLog").onclick=()=>{
-    const L=pricingLog();
-    const tsv=["date\tgame\tkind\tmarket\tline\tmove\ttrue_p\tapp_mult"].concat(L.map(r=>[r.date,r.game,r.kind,r.base,r.line,r.move,r.p,r.mult].join("\t"))).join("\n");
-    navigator.clipboard.writeText(tsv).then(()=>{const b=document.getElementById("copyLog");b.textContent="Copied";setTimeout(()=>b.textContent=`Copy pricing log (${L.length} rows)`,1800);});
-  };
-}
-/* every multiplier you type is remembered, so we can fit the app's pricing curve later */
-function pricingLog(){ try{return JSON.parse(localStorage.getItem("udPricing")||"[]");}catch(e){return [];} }
-function logPrice(row){
-  try{
-    const L=pricingLog().filter(r=>!(r.game===row.game&&r.kind===row.kind&&r.line===row.line&&r.date===row.date));
-    L.push(row); localStorage.setItem("udPricing",JSON.stringify(L.slice(-2000)));
-  }catch(e){}
-}
-
-/* ============ hot slips (auto builder) ============ */
-/* Plays out every lined game once (20k times each), then searches every
-   combination of Winner / Spread / Total picks — up to three from one game —
-   for the slips most likely to hit at the MARKET lines. No payout logic in the
-   ranking: Danny manages bankroll himself. Lines can be nudged by hand after. */
-const LOGOS=(R&&R.logos)||{}, COLORS=(R&&R.colors)||{};
-const NSIM=20000, HOT_TOP=5, BEAM=400;
-let hotN=3, HOTSIM=null, HOTBLOCKS=null, HOTSLIPS=null;
-
+function legTeam(G,type){ return type==="homeML"||type==="homeSp"?G.home:type==="awayML"||type==="awaySp"?G.away:null; }
+function legWho(G,l){ const t=legTeam(G,l.type); return t===null?`${G.away} @ ${G.home}`:t===G.home?`vs ${G.away}`:`at ${G.home}`; }
+function legMarket(type){ return hasLine(type)?(type==="over"||type==="under"?"Total":"Spread"):"Winner"; }
+function legSide(type){ return type==="homeML"||type==="homeSp"?"home":type==="awayML"||type==="awaySp"?"away":type; }
+function whenShort(G){ const d=new Date(G.start); return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`; }
 function initials(t){ return t.split(/\s+/).map(w=>w[0]).join("").replace(/[^A-Za-z]/g,"").slice(0,3).toUpperCase(); }
-function logoTile(team){
+function logoTile(team,sm){
+  const d=document.createElement("div"); d.className="logo"+(sm?" sm":"");
   const u=LOGOS[team];
-  if(u) return `<div class="logo"><img src="${u}" alt="" loading="lazy" onerror="this.parentNode.textContent='${initials(team)}'"></div>`;
-  const c=COLORS[team];
-  return `<div class="logo" style="${c?`background:${c};color:#fff;border-color:${c}`:""}">${initials(team)}</div>`;
+  if(u){ const img=document.createElement("img"); img.src=u; img.alt=""; img.loading="lazy"; img.onerror=()=>{d.textContent=initials(team);}; d.appendChild(img); }
+  else { d.textContent=initials(team); const c=COLORS[team]; if(c){d.style.background=c;d.style.color="#fff";d.style.borderColor=c;} }
+  return d;
 }
 function duoTile(G){
-  const a=LOGOS[G.away], h=LOGOS[G.home];
-  if(a&&h) return `<div class="logo duo"><img src="${a}" alt="" loading="lazy"><img src="${h}" alt="" loading="lazy"></div>`;
-  return `<div class="logo">O/U</div>`;
+  const a=LOGOS[G.away], h=LOGOS[G.home], d=document.createElement("div");
+  if(a&&h){ d.className="logo duo"; [a,h].forEach(u=>{const i=document.createElement("img");i.src=u;i.alt="";i.loading="lazy";i.onerror=()=>{d.className="logo";d.textContent="O/U";};d.appendChild(i);}); }
+  else { d.className="logo"; d.textContent="O/U"; }
+  return d;
 }
-const fmtSp=v=>(v>0?"+":"")+v;
-/* the sim is verified between ~19% and ~83%; past 99% it is a guess, so say so */
-const pct=p=>p>0.995?">99%":p<0.005?"<1%":(p*100).toFixed(p<0.1?1:0)+"%";
-const whenShort=G=>{const d=new Date(G.start);return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`;};
 
-function hotPrep(){
-  if(HOTSIM) return HOTSIM;
-  HOTSIM=[];
-  GAMES.forEach((G,gi)=>{
-    if(G.spread==null||G.total==null) return;
-    const B=blended(G);
-    const {home,away}=simGame(NSIM,B.hp,B.ap,DEFAULT_SD);
-    const tot=new Int16Array(NSIM), mar=new Int16Array(NSIM);
-    for(let i=0;i<NSIM;i++){tot[i]=home[i]+away[i];mar[i]=home[i]-away[i];}
-    HOTSIM.push({gi,G,tot,mar});
+/* ===================================================================
+   STATE — one slip, shared by every screen. Legs are keyed by game id
+   (not index) so a refresh doesn't scramble them.
+   =================================================================== */
+const S={legs:[], pays:null, who:"Danny"};
+function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line})),pays:S.pays,who:S.who})); }catch(e){} }
+function loadSlip(){
+  try{
+    const s=JSON.parse(localStorage.getItem("cloverSlip")||"null"); if(!s) return;
+    S.pays=s.pays??null; S.who=s.who||"Danny";
+    S.legs=(s.legs||[]).map(l=>{ const gi=BY_ID[l.id]; return gi==null||!GAMES[gi].sim?null:{gi,type:l.type,line:l.line}; }).filter(Boolean);
+  }catch(e){}
+}
+function findLeg(gi,type){ return S.legs.findIndex(l=>l.gi===gi&&l.type===type); }
+function toggleLeg(gi,type){
+  const i=findLeg(gi,type);
+  if(i>=0) S.legs.splice(i,1);
+  else { const G=GAMES[gi]; S.legs.push({gi,type,line:hasLine(type)?marketLine(G,type):0}); }
+  render();
+}
+function setLegs(legs){ S.legs=legs.map(l=>({gi:l.gi,type:l.type,line:hasLine(l.type)?l.line:0})); render(); }
+function payoutFor(n){ return S.pays!=null&&S.pays>1 ? {dec:S.pays,est:false} : PAYOUT[n] ? {dec:PAYOUT[n],est:true} : null; }
+
+/* ===================================================================
+   RENDER
+   =================================================================== */
+let view="slips";
+function show(v){
+  view=v;
+  document.getElementById("viewSlips").classList.toggle("hidden",v!=="slips");
+  document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
+  document.getElementById("tabSlips").setAttribute("aria-selected",v==="slips");
+  document.getElementById("tabCard").setAttribute("aria-selected",v==="card");
+  document.getElementById("bar").classList.toggle("hidden",v!=="slips"||!S.legs.length);
+  window.scrollTo({top:0});
+}
+function render(){
+  saveSlip();
+  renderBar(); renderGames(); renderCard();
+  document.getElementById("tabCount").textContent=S.legs.length;
+}
+function renderBar(){
+  const bar=document.getElementById("bar"), n=S.legs.length;
+  bar.classList.toggle("hidden",view!=="slips"||!n);
+  if(!n) return;
+  const {joint}=slipProb(S.legs), pay=payoutFor(n);
+  const g=pay?grade(joint*pay.dec-1):null;
+  document.getElementById("barProb").textContent=pct(joint);
+  document.getElementById("barSub").textContent=`${n} pick${n>1?"s":""}${g?` · ${g.word}`:""}${pay&&pay.est?" (est. payout)":""}`;
+}
+
+/* ---- build your own: every lined game, grouped by day, six picks each ---- */
+function renderGames(){
+  const out=document.getElementById("games");
+  if(!out.dataset.built){
+    out.innerHTML="";
+    const lined=GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim);
+    if(!lined.length){ out.innerHTML=`<p class="empty">No games with lines yet — they load closer to game day.</p>`; return; }
+    const byDay={};
+    lined.forEach(x=>{ const d=new Date(x.G.start), k=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`; (byDay[k]=byDay[k]||[]).push(x); });
+    let first=true;
+    for(const day in byDay){
+      const det=document.createElement("details"); det.className="day"; det.open=first; first=false;
+      det.innerHTML=`<summary>${esc(day)} <span class="small">${byDay[day].length} games</span></summary>`;
+      byDay[day].forEach(({G,gi})=>{
+        const g=document.createElement("div"); g.className="game";
+        const head=document.createElement("div"); head.className="gHead";
+        head.appendChild(logoTile(G.away,true)); head.appendChild(document.createTextNode(` ${G.away} @ ${G.home}`)); head.appendChild(logoTile(G.home,true));
+        const when=document.createElement("span"); when.className="when"; when.textContent=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}); head.appendChild(when);
+        g.appendChild(head);
+        const picks=document.createElement("div"); picks.className="picks";
+        [["awaySp",`${G.away} ${fmtSp(-G.spread)}`],["homeSp",`${G.home} ${fmtSp(G.spread)}`],["over",`Over ${G.total}`],["under",`Under ${G.total}`],["awayML",`${G.away} wins`],["homeML",`${G.home} wins`]]
+          .forEach(([type,label])=>{
+            const b=document.createElement("button"); b.type="button"; b.className="pick"; b.dataset.gi=gi; b.dataset.type=type;
+            const p=prob(gi,[{type,line:hasLine(type)?marketLine(G,type):0}]);
+            b.innerHTML=`<span>${esc(label)}</span><b>${pct(p)}</b>`;
+            b.onclick=()=>toggleLeg(gi,type);
+            picks.appendChild(b);
+          });
+        g.appendChild(picks); det.appendChild(g);
+      });
+      out.appendChild(det);
+    }
+    out.dataset.built="1";
+  }
+  out.querySelectorAll(".pick").forEach(b=>b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0));
+}
+
+/* ---- one leg row (used by the Card and by hot slips) ---- */
+function legRow(l,opts){
+  const G=GAMES[l.gi], row=document.createElement("div"); row.className="leg";
+  row.appendChild(legTeam(G,l.type)?logoTile(legTeam(G,l.type)):duoTile(G));
+  const mid=document.createElement("div");
+  mid.innerHTML=`<div class="pickName">${esc(legLabel(G,l))}</div><div class="who">${esc(legWho(G,l))}</div>`;
+  if(hasLine(l.type)){
+    const base=marketLine(G,l.type), moved=l.line!==base, q=dkQuote(G,l.type,l.line);
+    const n=document.createElement("div"); n.className="nudge";
+    n.innerHTML=`<button type="button" data-n="-0.5" aria-label="Lower the line">−</button>
+      <button type="button" class="val${moved?" moved":""}" aria-label="Pick from every line">${legMarket(l.type)==="Spread"?fmtSp(l.line):l.line}</button>
+      <button type="button" data-n="0.5" aria-label="Raise the line">+</button>
+      <span class="hint">${moved?`market ${legMarket(l.type)==="Spread"?fmtSp(base):base}`:"tap number for all lines"}</span>`;
+    n.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{ l.line=Math.round((l.line+ +b.dataset.n)*2)/2; opts.onChange(); });
+    n.querySelector(".val").onclick=()=>openSheet(l,opts.onChange);
+    mid.appendChild(n);
+    const dk=document.createElement("div"); dk.className="dk";
+    dk.textContent=q?`DraftKings pays ${money(q.dec)} (${q.am})${q.fair!==null?` · their chance ${pct(q.fair)}`:""}`:(G.alt?"DraftKings doesn't list this exact line":"DK alternate lines load Thursdays");
+    mid.appendChild(dk);
+  }
+  row.appendChild(mid);
+  const right=document.createElement("div"); right.className="right";
+  right.innerHTML=`<div class="pct">${pct(prob(l.gi,[l]))}<small>this pick</small></div>`;
+  if(opts.remove){ const b=document.createElement("button"); b.type="button"; b.className="rm"; b.textContent="Remove"; b.setAttribute("aria-label","Remove this pick"); b.onclick=()=>opts.remove(); right.appendChild(b); }
+  row.appendChild(right);
+  return row;
+}
+/* legs grouped by game with the same-game "together" line */
+function legGroups(container,legs,opts){
+  const {groups}=slipProb(legs);
+  groups.sort((a,b)=>GAMES[a.gi].start.localeCompare(GAMES[b.gi].start));
+  groups.forEach(gr=>{
+    const G=GAMES[gr.gi];
+    const h=document.createElement("div"); h.className="gameHead"; h.innerHTML=`<span>${esc(G.away)} @ ${esc(G.home)}</span><span>${esc(whenShort(G))}</span>`;
+    container.appendChild(h);
+    gr.legs.forEach(l=>container.appendChild(legRow(l,{onChange:opts.onChange,remove:opts.removable?()=>{S.legs.splice(S.legs.indexOf(l),1);render();}:null})));
+    if(gr.legs.length>1){
+      const t=document.createElement("div"); t.className="together";
+      t.innerHTML=`<span>Same game · together <b>${pct(gr.p)}</b> vs ${pct(gr.indep)} if unrelated</span>`;
+      if(opts.prohib){
+        const wrap=document.createElement("span"), logged=new Set(prohibLog().map(r=>r.key));
+        for(let x=0;x<gr.legs.length;x++)for(let y=x+1;y<gr.legs.length;y++){
+          const a=gr.legs[x], c=gr.legs[y], key=prohibKey(G,a,c), done=logged.has(key);
+          const b=document.createElement("button"); b.type="button"; b.className=done?"done":""; b.disabled=done;
+          b.textContent=(done?"Logged ✓":"Prohibited")+(gr.legs.length>2?` · ${legMarket(a.type)} + ${legMarket(c.type)}`:"");
+          b.onclick=()=>{prohibAdd(G,a,c);opts.onChange();}; wrap.appendChild(b); wrap.appendChild(document.createTextNode(" "));
+        }
+        t.appendChild(wrap);
+      }
+      container.appendChild(t);
+    }
   });
-  return HOTSIM;
 }
-/* a leg: which game, what kind of pick, and (for spreads/totals) the line for THIS side */
-function mkLeg(S,type,line){
-  const G=S.G, L={gi:S.gi,type,line:line==null?null:line};
-  if(type==="homeML"){L.team=G.home;L.label=`${G.home} to win`;L.market="Winner";L.side="home";}
-  else if(type==="awayML"){L.team=G.away;L.label=`${G.away} to win`;L.market="Winner";L.side="away";}
-  else if(type==="homeSp"){L.team=G.home;L.label=`${G.home} ${fmtSp(line)}`;L.market="Spread";L.side="home";}
-  else if(type==="awaySp"){L.team=G.away;L.label=`${G.away} ${fmtSp(line)}`;L.market="Spread";L.side="away";}
-  else if(type==="over"){L.label=`Over ${line}`;L.market="Total";L.side="over";}
-  else {L.label=`Under ${line}`;L.market="Total";L.side="under";}
-  return L;
-}
-function legVal(L,t,m){
-  switch(L.type){
-    case "over":   return t-L.line;
-    case "under":  return L.line-t;
-    case "homeSp": return m+L.line;
-    case "awaySp": return L.line-m;
-    case "homeML": return m;
-    default:       return -m;          // awayML
+
+/* ---- The Card: live, no Analyze button ---- */
+function renderCard(){
+  const n=S.legs.length, legsEl=document.getElementById("legs");
+  legsEl.innerHTML="";
+  const paysIn=document.getElementById("pays"), pay=payoutFor(n);
+  document.getElementById("who").value=S.who;
+  if(document.activeElement!==paysIn) paysIn.value=S.pays!=null?S.pays:"";
+  paysIn.placeholder=PAYOUT[n]?PAYOUT[n].toFixed(2):"";
+  document.getElementById("paysEst").classList.toggle("hidden",!(pay&&pay.est));
+  document.getElementById("paysNote").textContent = pay&&!pay.est ? "Using the payout you typed." : pay ? "Type what your app shows for this slip. Until you do, this is a typical pick'em payout — an estimate." : n?"No typical payout on file for that many picks — type your app's.":"";
+  const set=(id,v)=>document.getElementById(id).textContent=v;
+  const v=document.getElementById("verdict");
+  if(!n){
+    set("bigProb","—"); set("bigSub","Add picks from the Slips tab"); v.textContent=""; set("why","");
+    ["oBook","oBreak","oFair","oEv"].forEach(id=>set(id,"—")); set("stressOut","");
+    legsEl.innerHTML=`<p class="empty">Nothing on the card yet.</p>`; return;
   }
+  legGroups(legsEl,S.legs,{onChange:render,removable:true});
+  const {joint}=slipProb(S.legs);
+  set("bigProb",pct(joint));
+  set("bigSub",n===1?"chance this pick hits":n===2?"chance both picks hit":`chance all ${n} picks hit`);
+  if(!pay){ v.textContent=""; set("why","Type your app's payout above to get a verdict."); ["oBook","oBreak","oFair","oEv"].forEach(id=>set(id,"—")); set("stressOut",""); return; }
+  const dec=pay.dec, ev=joint*dec-1, g=grade(ev), cents=Math.round(Math.abs(ev)*100);
+  v.className="verdict "+g.cls; v.textContent=g.word+(pay.est?" (est. payout)":"");
+  set("why",`${g.why} Bet $1: it pays ${money(dec)} if it hits. On average you get back ${money(joint*dec)} — about ${cents}¢ ${ev>=0?"ahead":"lost"} per $1.`);
+  set("oBook",money(dec)); set("oBreak",(100/dec).toFixed(1)+"%"); set("oFair",joint>0?money(1/joint):"—"); set("oEv",(ev>=0?"+":"−")+cents+"¢");
+  /* stress: total AND margin each nudged -3..+3 → 49 versions of the game, all lookups */
+  const words=[];
+  for(let dt=-3;dt<=3;dt++)for(let dm=-3;dm<=3;dm++) words.push(grade(slipProb(S.legs,dt,dm).joint*dec-1).word);
+  const same=words.filter(w=>w===g.word).length, seen=ORDER.filter(w=>words.includes(w));
+  set("stressOut", same===49 ? `Solid. It stays "${g.word}" no matter which way the game drifts.`
+    : same>=35 ? `Mostly holds. It's "${g.word}" in ${same} of 49 versions, ranging from "${seen[0]}" to "${seen[seen.length-1]}".`
+    : `Shaky. Small changes in the game move it anywhere from "${seen[0]}" to "${seen[seen.length-1]}". Don't lean on this one.`);
 }
-/* chance every leg in this list (all from game S) hits, played out together */
-function jointP(S,legs){
-  let win=0,push=0; const n=legs.length, tot=S.tot, mar=S.mar;
-  for(let i=0;i<NSIM;i++){
-    const t=tot[i], m=mar[i]; let ok=true, pu=false;
-    for(let k=0;k<n;k++){ const v=legVal(legs[k],t,m); if(v===0){pu=true;break;} if(v<0){ok=false;break;} }
-    if(pu) push++; else if(ok) win++;
-  }
-  return push===NSIM ? 0 : win/(NSIM-push);
+
+/* ---- hot slips: precomputed by refresh.py, nudged live here ---- */
+let hotN=3, HOT=[];
+function renderHot(){
+  const out=document.getElementById("hotOut"), st=document.getElementById("hotStatus");
+  out.innerHTML="";
+  const src=(R&&R.hot&&R.hot[hotN])||[];
+  if(!GAMES.some(G=>G.sim)){ st.textContent="No games with lines yet — lines load closer to game day."; return; }
+  if(!src.length){ st.textContent="No hot slips in this lines file — run refresh.py."; return; }
+  HOT=src.filter(s=>s.legs.every(l=>GAMES[l.gi]&&GAMES[l.gi].sim)).map(s=>({legs:s.legs.map(l=>({gi:l.gi,type:l.type,line:hasLine(l.type)?l.line:0}))}));
+  if(!HOT.length){ st.textContent="Today's hot slips have kicked off — new ones come with the next lines refresh."; return; }
+  const lined=GAMES.filter(G=>G.sim).length;
+  st.textContent=`Top ${HOT.length} slips from ${lined} games, ranked by the chance the whole slip hits. Tap one to adjust lines.`;
+  HOT.forEach((s,i)=>{ const d=document.createElement("div"); d.className="hs"; out.appendChild(d); paintHot(d,s,i); });
 }
-function gameBlocks(S){
-  const G=S.G;
-  const W=[mkLeg(S,"homeML"),mkLeg(S,"awayML")];
-  const P=[mkLeg(S,"homeSp",G.spread),mkLeg(S,"awaySp",-G.spread)];
-  const T=[mkLeg(S,"over",G.total),mkLeg(S,"under",G.total)];
-  [...W,...P,...T].forEach(l=>{l.p=jointP(S,[l]);});
-  const out=[];
-  const add=legs=>out.push({S,legs,p:legs.length===1?legs[0].p:jointP(S,legs)});
-  [...W,...P,...T].forEach(l=>add([l]));
-  W.forEach(w=>P.forEach(p=>add([w,p])));
-  W.forEach(w=>T.forEach(t=>add([w,t])));
-  P.forEach(p=>T.forEach(t=>add([p,t])));
-  W.forEach(w=>P.forEach(p=>T.forEach(t=>add([w,p,t]))));
-  return out;
+function paintHot(d,s,i){
+  const {joint}=slipProb(s.legs), n=s.legs.length, pay=PAYOUT[n];
+  const moved=s.legs.some(l=>hasLine(l.type)&&l.line!==marketLine(GAMES[l.gi],l.type));
+  const open=d.classList.contains("open");
+  d.innerHTML=`<button type="button" class="hsHead" aria-expanded="${open}">
+      <span class="rank">#${i+1}</span>
+      <span><span class="big">${pct(joint)}</span><span class="sub" style="display:block">chance all ${n} hit${pay?` · $1 pays ${money(pay)} <span class="est">est.</span>`:""}${moved?` · <b style="color:var(--mid)">lines moved</b>`:""}</span></span>
+      <span class="sub">${open?"":"tap to edit"}</span></button>
+    <div class="hsBody"></div>
+    <div class="hsFoot"><button class="primary" type="button" data-use="1">Use this slip</button>${moved?`<button class="ghost" type="button" data-reset="1">Back to market lines</button>`:""}</div>`;
+  const repaint=()=>paintHot(d,s,i);
+  legGroups(d.querySelector(".hsBody"),s.legs,{onChange:repaint,prohib:true});
+  d.querySelector(".hsHead").onclick=()=>{ document.querySelectorAll(".hs.open").forEach(x=>{ if(x!==d){x.classList.remove("open"); x.querySelector(".hsHead").setAttribute("aria-expanded","false"); x.querySelector(".hsHead .sub:last-child").textContent="tap to edit";} }); d.classList.toggle("open"); repaint(); };
+  d.querySelector("[data-use]").onclick=()=>{ setLegs(s.legs); show("card"); };
+  const rs=d.querySelector("[data-reset]"); if(rs) rs.onclick=()=>{ s.legs.forEach(l=>{ if(hasLine(l.type)) l.line=marketLine(GAMES[l.gi],l.type); }); repaint(); };
 }
-function buildSlips(N){
-  const sims=hotPrep(); if(!sims.length) return [];
-  if(!HOTBLOCKS) HOTBLOCKS=sims.map(gameBlocks);
-  let beam=[{legs:0,p:1,blocks:[]}];
-  HOTBLOCKS.forEach(blocks=>{
-    const next=beam.slice();                       // option: skip this game entirely
-    beam.forEach(ps=>blocks.forEach(b=>{
-      const k=ps.legs+b.legs.length; if(k>N) return;
-      next.push({legs:k,p:ps.p*b.p,blocks:ps.blocks.concat([b])});
-    }));
-    const by={}; next.forEach(x=>{(by[x.legs]=by[x.legs]||[]).push(x);});
-    beam=[]; for(const k in by){ by[k].sort((a,b)=>b.p-a.p); beam.push(...by[k].slice(0,BEAM)); }
-  });
-  const full=beam.filter(x=>x.legs===N).sort((a,b)=>b.p-a.p);
-  const need=N<=3?1:2, out=[];                     // top slips must actually differ
-  for(const s of full){
-    const keys=new Set(s.blocks.flatMap(b=>b.legs.map(l=>l.gi+":"+l.type)));
-    let ok=true;
-    for(const o of out){ let shared=0; o.keys.forEach(k=>{if(keys.has(k))shared++;}); if(N-shared<need){ok=false;break;} }
-    if(!ok) continue;
-    /* private copy so nudging one slip never touches another */
-    out.push({keys, blocks:s.blocks.map(b=>({S:b.S,legs:b.legs.map(l=>({...l,base:l.line}))}))});
-    if(out.length===HOT_TOP) break;
-  }
-  return out;
+
+/* ---- line sheet: every rung for one pick (was the Line Mover tab) ---- */
+const MOVES=[]; for(let k=-10;k<=10;k+=0.5) MOVES.push(k);   // every half-point, DK quotes live on the .5s
+function openSheet(l,onChange){
+  const G=GAMES[l.gi], base=marketLine(G,l.type), sp=legMarket(l.type)==="Spread";
+  const side=l.type==="over"?"Over":l.type==="under"?"Under":legTeam(G,l.type);
+  const fmt=v=>sp?fmtSp(v):String(v);
+  const rows=MOVES.map(k=>{ const L=base+k, p=prob(l.gi,[{type:l.type,line:L}]), q=dkQuote(G,l.type,L); return {k,L,p,q}; });
+  const box=document.getElementById("sheetIn");
+  box.innerHTML=`<h2><span>${esc(side)} — every line</span><button type="button" class="close" aria-label="Close">×</button></h2>
+    <p class="small" style="margin:0 0 4px">${esc(G.away)} @ ${esc(G.home)} · market ${esc(fmt(base))}. Tap a line to use it.</p>
+    <div class="scroll"><table class="ladder">
+      <tr><th>Line</th><th>Our chance</th><th>Fair pays</th><th>DK pays</th><th>DK's chance</th></tr>
+      ${rows.map(r=>`<tr class="${r.k===0?"base":""}${r.L===l.line?" cur":""}" data-l="${r.L}">
+        <td><button type="button" class="use">${esc(fmt(r.L))}${r.k===0?" <span class='small'>(market)</span>":""}</button></td>
+        <td class="p">${pct(r.p)}</td><td>${r.p>0?money(1/r.p):"—"}</td>
+        <td>${r.q?`${money(r.q.dec)} <span class="small">${r.q.am}</span>`:"—"}</td>
+        <td class="p" style="color:var(--muted)">${r.q&&r.q.fair!==null?pct(r.q.fair):"—"}</td></tr>`).join("")}
+    </table></div>
+    <p class="small" style="margin:10px 0 0">"Fair pays" is what $1 on that line deserves to pay if it hits, by our numbers. "DK pays" is DraftKings' real price for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole numbers can push — prefer the half-point.${G.alt?"":" <b>No DraftKings alternate lines for this game yet</b> — they load Thursdays."}</p>`;
+  const dlg=document.getElementById("sheet");
+  box.querySelector(".close").onclick=()=>dlg.close();
+  box.querySelectorAll("tr[data-l]").forEach(tr=>tr.querySelector(".use").onclick=()=>{ l.line=+tr.dataset.l; dlg.close(); onChange(); });
+  dlg.showModal();
+  const cur=box.querySelector("tr.cur"); if(cur) cur.scrollIntoView({block:"center"});
 }
+document.getElementById("sheet").addEventListener("click",e=>{ if(e.target.id==="sheet") e.target.close(); });
 
 /* ---- prohibited log (notebook only — does not change the picks) ---- */
 function prohibLog(){ try{return JSON.parse(localStorage.getItem("udProhibited")||"[]");}catch(e){return [];} }
-function prohibKey(G,a,b){ return `${G.away} @ ${G.home}|${a.label}|${b.label}`; }
+function prohibKey(G,a,b){ return `${G.away} @ ${G.home}|${legLabel(G,a)}|${legLabel(G,b)}`; }
 function prohibPattern(a,b){
-  const m=[a.market,b.market].sort().join(" + ");
-  if(a.market!=="Total"&&b.market!=="Total") return m+(a.side===b.side?", same team":", opposite teams");
+  const m=[legMarket(a.type),legMarket(b.type)].sort().join(" + ");
+  if(legMarket(a.type)!=="Total"&&legMarket(b.type)!=="Total") return m+(legSide(a.type)===legSide(b.type)?", same team":", opposite teams");
   return m;
 }
 function prohibAdd(G,a,b){
   const L=prohibLog(), key=prohibKey(G,a,b);
   if(L.some(r=>r.key===key)) return;
-  L.push({key,date:new Date().toISOString().slice(0,10),game:`${G.away} @ ${G.home}`,a:a.label,b:b.label,pattern:prohibPattern(a,b)});
+  L.push({key,date:new Date().toISOString().slice(0,10),game:`${G.away} @ ${G.home}`,a:legLabel(G,a),b:legLabel(G,b),pattern:prohibPattern(a,b)});
   try{localStorage.setItem("udProhibited",JSON.stringify(L.slice(-500)));}catch(e){}
   prohibButtons();
 }
 function prohibButtons(){
   const n=prohibLog().length;
   document.getElementById("prohibCopy").textContent=`Copy Prohibited log (${n})`;
-  document.getElementById("prohibActions").style.display = n ? "flex" : "none";
+  document.getElementById("prohibActions").classList.toggle("hidden",!n);
 }
 document.getElementById("prohibCopy").onclick=()=>{
   const L=prohibLog();
@@ -934,113 +631,47 @@ document.getElementById("prohibClear").onclick=()=>{
   b.dataset.armed="1"; b.textContent="Sure? Tap again"; setTimeout(()=>{delete b.dataset.armed;b.textContent="Clear log";},2500);
 };
 
-/* ---- UI ---- */
-(function initChips(){
+/* ---- wiring ---- */
+document.getElementById("tabSlips").onclick=()=>show("slips");
+document.getElementById("tabCard").onclick=()=>show("card");
+document.getElementById("barGo").onclick=()=>show("card");
+document.getElementById("backToSlips").onclick=()=>show("slips");
+document.getElementById("clearSlip").onclick=()=>{S.legs=[];render();};
+document.getElementById("pays").addEventListener("input",e=>{ const v=parseFloat(e.target.value); S.pays=isNaN(v)||v<=1?null:v; render(); });
+document.getElementById("who").onchange=e=>{S.who=e.target.value;saveSlip();};
+document.getElementById("reload").onclick=()=>location.reload();
+document.getElementById("copy").onclick=()=>{
+  const n=S.legs.length; if(!n) return;
+  const {joint}=slipProb(S.legs), pay=payoutFor(n);
+  const desc=S.legs.map(l=>{const G=GAMES[l.gi];return `${G.away} @ ${G.home} ${legLabel(G,l)}`;}).join(" | ");
+  const row=[new Date().toISOString().slice(0,10),S.who,desc,n,pay?money(pay.dec)+(pay.est?" est":""):"",pct(joint),pay?grade(joint*pay.dec-1).word:"",""].join("\t");
+  navigator.clipboard.writeText(row).then(()=>{const b=document.getElementById("copy");b.textContent="Copied — paste in the sheet";setTimeout(()=>b.textContent="Copy row for the log",2200);});
+};
+(function chips(){
   const c=document.getElementById("chips");
-  for(let n=2;n<=6;n++){
-    const b=document.createElement("button"); b.className="chip"+(n===hotN?" on":""); b.textContent=n;
-    b.onclick=()=>{hotN=n;c.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",+x.textContent===n));HOTSLIPS=null;hotSlips();};
-    c.appendChild(b);
-  }
-  prohibButtons();
+  for(let n=2;n<=6;n++){ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=n; b.setAttribute("aria-pressed",n===hotN);
+    b.onclick=()=>{hotN=n;c.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",+x.textContent===n));renderHot();}; c.appendChild(b); }
 })();
-function hotSlips(){
-  if(HOTSLIPS){renderHot();return;}
-  const st=document.getElementById("hotStatus");
-  const lined=GAMES.filter(G=>G.spread!=null&&G.total!=null).length;
-  if(!lined){st.textContent="No games with lines yet — lines load closer to game day.";document.getElementById("hotOut").innerHTML="";return;}
-  st.textContent=HOTSIM?`Searching ${lined} games for the best ${hotN}-pick slips…`:`Playing out ${lined} games 20,000 times each…`;
-  document.getElementById("hotOut").innerHTML="";
-  setTimeout(()=>{
-    HOTSLIPS=buildSlips(hotN);
-    st.textContent=HOTSLIPS.length?`Top ${HOTSLIPS.length} slips from ${lined} games, ranked by the chance the whole slip hits. Tap one to adjust lines.`:"Couldn't build a slip — not enough lined games.";
-    renderHot();
-  },30);
-}
-function renderHot(){
-  if(!HOTSLIPS) return;
-  const out=document.getElementById("hotOut"); out.innerHTML="";
-  HOTSLIPS.forEach((s,i)=>{
-    const d=document.createElement("div"); d.className="hs"; d.dataset.i=i;
-    paintSlip(d,s,i);
-    d.addEventListener("click",e=>{
-      const btn=e.target.closest("button");
-      if(btn){ slipButton(btn,d,s,i); return; }
-      if(!d.classList.contains("open")){ document.querySelectorAll(".hs.open").forEach(x=>x.classList.remove("open")); d.classList.add("open"); }
-    });
-    out.appendChild(d);
-  });
-}
-function slipButton(btn,d,s,i){
-  if(btn.dataset.nudge){
-    const b=s.blocks[+btn.dataset.b], l=b.legs[+btn.dataset.l], step=+btn.dataset.nudge;
-    l.line=Math.round((l.line+step)*2)/2;
-    Object.assign(l, mkLeg(b.S,l.type,l.line), {base:l.base,p:l.p});
-    paintSlip(d,s,i); return;
-  }
-  if(btn.dataset.reset){
-    s.blocks.forEach(b=>b.legs.forEach(l=>{ if(l.line!==l.base){ l.line=l.base; Object.assign(l, mkLeg(b.S,l.type,l.line), {base:l.base}); } }));
-    paintSlip(d,s,i); return;
-  }
-  if(btn.dataset.prohib){
-    const [bi,x,y]=btn.dataset.prohib.split(",").map(Number); const b=s.blocks[bi];
-    prohibAdd(b.S.G,b.legs[x],b.legs[y]); paintSlip(d,s,i); return;
-  }
-  if(btn.dataset.load){
-    document.getElementById("legs").innerHTML=""; count=0;
-    s.blocks.forEach(b=>b.legs.forEach(l=>addLeg(l.market==="Winner"?{gi:l.gi,type:l.type}:{gi:l.gi,type:l.type,line:l.line})));
-    updatePayout();
-    document.querySelector('.tab[data-tab="card"]').click();
-    window.scrollTo({top:0,behavior:"smooth"});
-    document.getElementById("run").click();
-  }
-}
-function paintSlip(d,s,i){
-  /* recompute — cheap, the game sims are already in memory */
-  let joint=1;
-  s.blocks.forEach(b=>{ b.legs.forEach(l=>{l.p=jointP(b.S,[l]);}); b.p=b.legs.length===1?b.legs[0].p:jointP(b.S,b.legs); b.indep=b.legs.reduce((a,l)=>a*l.p,1); joint*=b.p; });
-  s.p=joint;
-  const n=s.blocks.reduce((a,b)=>a+b.legs.length,0), pay=payoutFor(n);
-  const moved=s.blocks.some(b=>b.legs.some(l=>l.line!==l.base));
-  const logged=new Set(prohibLog().map(r=>r.key));
-  let h=`<div class="hsHead">
-    <div class="rank">#${i+1}</div>
-    <div><div class="big">${pct(joint)}</div>
-      <div class="sub">chance all ${n} hit · standard ${pay?`$1 pays $${pay.mult.toFixed(2)}`:"payout unknown"}${moved?" · <b style='color:#8A6D00'>lines moved</b>":""}</div></div>
-    <div class="sub" style="text-align:right">${d.classList.contains("open")?"":"tap to edit"}</div>
-  </div>`;
-  s.blocks.forEach((b,bi)=>{
-    const G=b.S.G;
-    h+=`<div class="hsGame">${G.away} @ ${G.home} · ${whenShort(G)}</div>`;
-    b.legs.forEach((l,li)=>{
-      const tile=l.market==="Total"?duoTile(G):logoTile(l.team);
-      const who=l.market==="Total"?`${G.away} @ ${G.home}`:(l.side==="home"?`vs ${G.away}`:`at ${G.home}`);
-      const nudge=l.market==="Winner"?"":`<div class="nudge">
-          <button type="button" data-nudge="-0.5" data-b="${bi}" data-l="${li}" aria-label="lower">−</button>
-          <span class="val${l.line!==l.base?" moved":""}">${l.market==="Spread"?fmtSp(l.line):l.line}</span>
-          <button type="button" data-nudge="0.5" data-b="${bi}" data-l="${li}" aria-label="raise">+</button>
-          ${l.line!==l.base?`<span style="font-size:12px;color:var(--muted)">market ${l.market==="Spread"?fmtSp(l.base):l.base}</span>`:""}
-          ${(q=>q?`<span style="font-size:12px;color:var(--muted)">· DK ${q.am}${q.fair!==null?` (${(q.fair*100).toFixed(0)}%)`:""}</span>`:"")(dkQuote(G,l.type,l.line))}
-        </div>`;
-      h+=`<div class="leg">${tile}<div><div class="pick">${l.label}</div><div class="who">${who}</div>${nudge}</div>
-          <div class="pct">${pct(l.p)}<small>this pick</small></div></div>`;
-    });
-    if(b.legs.length>1){
-      const pairs=[]; for(let x=0;x<b.legs.length;x++)for(let y=x+1;y<b.legs.length;y++)pairs.push([x,y]);
-      const btns=pairs.map(([x,y])=>{
-        const a=b.legs[x], c=b.legs[y], done=logged.has(prohibKey(G,a,c));
-        const lab=b.legs.length>2?`${a.market} + ${c.market}`:"";
-        return `<button type="button" class="${done?"done":""}" data-prohib="${bi},${x},${y}" ${done?"disabled":""}>${done?"Logged ✓":"Prohibited"}${lab?" · "+lab:""}</button>`;
-      }).join(" ");
-      h+=`<div class="together"><span>Same game · together <b>${pct(b.p)}</b> vs ${pct(b.indep)} if unrelated</span><span>${btns}</span></div>`;
-    }
-  });
-  h+=`<div class="hsFoot"><button class="primary" type="button" data-load="1">Load onto the Card</button>${moved?`<button class="ghost" type="button" data-reset="1">Back to market lines</button>`:""}</div>`;
-  d.innerHTML=h;
-}
 
-addLeg();
-updatePayout();
+function init(){
+  R=window.RATINGS||null;
+  GAMES=(R&&R.upcoming)||[]; LOGOS=(R&&R.logos)||{}; COLORS=(R&&R.colors)||{};
+  GAMES.forEach((G,i)=>{ BY_ID[G.id]=i; if(new Date(G.start).getTime()<Date.now()) delete G.sim; });   // kicked off = off the board
+  const tag=document.getElementById("ratingsTag");
+  if(!R){ tag.textContent="No lines file loaded — run refresh.py first"; tag.classList.add("stale"); }
+  else {
+    const gen=new Date(R.generated), lg=R.lines_generated?new Date(R.lines_generated):gen, mins=Math.round((Date.now()-lg)/60000);
+    const ago=mins<60?`${mins} min ago`:mins<2880?`${Math.round(mins/60)} hr ago`:`${Math.round(mins/1440)} days ago`;
+    const lined=GAMES.filter(G=>G.sim).length;
+    tag.textContent=`Lines as of ${lg.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago}) · ${lined} games with lines`;
+    if(R.alt_generated) tag.textContent+=` · DK alt lines ${new Date(R.alt_generated).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})}`;
+    if(mins>360||!lined) tag.classList.add("stale");
+    if(!lined) tag.textContent+=" — run refresh.py";
+  }
+  loadSlip(); prohibButtons(); renderHot(); render(); show("slips");
+}
+/* ratings.js with a cache-buster, without document.write; works from file:// too */
+(function(){ const s=document.createElement("script"); s.src="ratings.js?v="+Date.now(); s.onload=init; s.onerror=init; document.head.appendChild(s); })();
 </script>
 </body>
 </html>

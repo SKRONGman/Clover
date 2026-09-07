@@ -30,7 +30,7 @@ from collections import defaultdict
 
 import numpy as np
 
-import refresh as R   # reuse the API + rating code so this tests the real thing
+import refresh as R   # reuse the API + rating code so this tests the real thing (refresh imports sim)
 import bayes          # hierarchical Bayesian ratings (Gibbs / MCMC)
 
 TEST_SEASONS = [2019, 2021, 2022, 2023, 2024, 2025]     # 2020 = COVID, skipped
@@ -44,50 +44,16 @@ TAIL_MOVES = [-14, -10, -7, -3, 0, 3, 7, 10, 14]     # points to move a line, bo
 
 
 # ----------------------------------------------------------------------
-# the football, ported from index.html so the numbers match the page
+# the football lives in sim.py - the same code refresh.py ships to the page
 # ----------------------------------------------------------------------
-_rng = np.random.default_rng(7)
+import sim
 
-
-def team_points(mean, disp, n):
-    """n simulated scores for a team expected to score `mean`."""
-    m = _rng.gamma(disp, 1.0 / disp, size=n)               # hot/cold multiplier
-    p_td = np.minimum(mean * 0.70 / 7 / DRIVES * m, 0.90)
-    p_fg = np.minimum(mean * 0.30 / 3 / DRIVES * m, 0.90)
-    r = _rng.random((n, DRIVES))
-    td = r < p_td[:, None]
-    fg = (~td) & (r < (p_td + p_fg)[:, None])
-    q = _rng.random((n, DRIVES))
-    td_pts = np.where(q < 0.90, 7, np.where(q < 0.95, 8, 6))
-    return (td * td_pts).sum(1) + fg.sum(1) * 3
-
-
-_DISPS = [400, 80, 40, 20, 12, 8, 5, 3.5, 2.5, 1.8]
-_disp_cache = {}
-
-
-def pick_disp(home_mean, away_mean, target_sd):
-    """Same dispersion search as the page, cached on rounded inputs."""
-    key = (round(home_mean), round(away_mean), round(target_sd, 1))
-    if key in _disp_cache:
-        return _disp_cache[key]
-    best, gap = _DISPS[0], 1e9
-    for d in _DISPS:
-        t = team_points(home_mean, d, 1500) + team_points(away_mean, d, 1500)
-        g = abs(t.std() - target_sd)
-        if g < gap:
-            gap, best = g, d
-    _disp_cache[key] = best
-    return best
+_seed = [0]
 
 
 def sim_game(home_mean, away_mean, target_sd, n=SIMS):
-    d = pick_disp(home_mean, away_mean, target_sd)
-    h = team_points(home_mean, d, n).astype(float)
-    a = team_points(away_mean, d, n).astype(float)
-    h = np.maximum(0, np.round(h + (home_mean - h.mean())))
-    a = np.maximum(0, np.round(a + (away_mean - a.mean())))
-    return h, a
+    _seed[0] += 1
+    return sim.sim_game(home_mean, away_mean, target_sd, n=n, seed=_seed[0])
 
 
 def bet_probs(h, a, spread, total):

@@ -34,6 +34,8 @@ from datetime import datetime, timezone
 
 import requests
 
+import sim            # the one game simulator - tables for the page are built here
+
 # ----------------------------------------------------------------------
 # CONFIG
 # ----------------------------------------------------------------------
@@ -54,8 +56,8 @@ K_SHRINK = 4.0
 # Home field, in points of margin. Split evenly across the two teams.
 HFA_POINTS = 2.4
 
-OUT = "ratings.json"
-OUT_JS = "ratings.js"      # same numbers, loadable by index.html when opened locally
+OUT = "ratings.json"       # everything, incl. team ratings and accuracy (research)
+OUT_JS = "ratings.js"      # only what the page needs: slate, lines, sim tables, hot slips
 
 # Upcoming games: how many days ahead to list, and which book's line to
 # auto-fill. Underdog isn't in the feed; DraftKings tracks it closest.
@@ -197,8 +199,8 @@ def pull_upcoming(season):
         if hc != "fbs" and ac != "fbs":
             continue
         start = parse_dt(pick(g, "start_date", "startDate", default="") or "")
-        if start is None or start.timestamp() > horizon or start.timestamp() < now.timestamp() - 6 * 3600:
-            continue
+        if start is None or start.timestamp() > horizon or start.timestamp() < now.timestamp():
+            continue                                    # kicked off already - pregame picks are moot
         games.append({
             "id": pick(g, "id"),
             "week": pick(g, "week", default=0),
@@ -465,6 +467,14 @@ def pull_alt_lines(up):
                     best, best_len = g, L
         if best is not None and best_len > event_for.get(best["id"], (None, -1))[1]:
             event_for[best["id"]] = (e, best_len)
+    # DK's MAIN spread and total (with prices) for every game, in one call for the
+    # whole slate (2 credits). The alternate_* markets below leave the main line
+    # out, and the main line is the rung people care about most.
+    main = {}
+    data, remaining = odds_get(f"/sports/{ODDS_SPORT}/odds", bookmakers=ODDS_BOOK,
+                               markets="spreads,totals", oddsFormat="american")
+    for e in data or []:
+        main[e.get("id")] = e
     pulled = skipped = 0
     for g in lined:
         ev = event_for.get(g["id"], (None, 0))[0]
@@ -482,20 +492,25 @@ def pull_alt_lines(up):
             continue
         alt = {"book": ODDS_BOOK, "asof": datetime.now(timezone.utc).isoformat(timespec="minutes"),
                "spreads": {"home": [], "away": []}, "totals": {"over": [], "under": []}}
-        for bk in data.get("bookmakers", []):
-            for m in bk.get("markets", []):
-                for o in m.get("outcomes", []):
-                    pt, price = o.get("point"), o.get("price")
-                    if pt is None or price is None:
-                        continue
-                    if m["key"] == "alternate_spreads":
-                        side = "home" if team_match(g["home"], o.get("name")) else "away" if team_match(g["away"], o.get("name")) else None
-                        if side:
-                            alt["spreads"][side].append([float(pt), int(price)])
-                    elif m["key"] == "alternate_totals":
-                        side = "over" if o.get("name") == "Over" else "under" if o.get("name") == "Under" else None
-                        if side:
-                            alt["totals"][side].append([float(pt), int(price)])
+        seen = set()
+        for src in (data, main.get(ev["id"]) or {}):
+            for bk in src.get("bookmakers", []):
+                for m in bk.get("markets", []):
+                    for o in m.get("outcomes", []):
+                        pt, price = o.get("point"), o.get("price")
+                        if pt is None or price is None:
+                            continue
+                        if m["key"] in ("alternate_spreads", "spreads"):
+                            kind = "spreads"
+                            side = "home" if team_match(g["home"], o.get("name")) else "away" if team_match(g["away"], o.get("name")) else None
+                        elif m["key"] in ("alternate_totals", "totals"):
+                            kind = "totals"
+                            side = "over" if o.get("name") == "Over" else "under" if o.get("name") == "Under" else None
+                        else:
+                            continue
+                        if side and (kind, side, float(pt)) not in seen:
+                            seen.add((kind, side, float(pt)))
+                            alt[kind][side].append([float(pt), int(price)])
         for d in (alt["spreads"], alt["totals"]):
             for k in d:
                 d[k].sort()
@@ -539,17 +554,32 @@ def write_upcoming(R, alt_lines=False):
         g["proj_away"] = round(ap, 1)
     R["upcoming"] = up
     R["lines_generated"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    lined = sum(1 for g in up if g["spread"] is not None)
+    lined = sum(1 for g in up if g["spread"] is not None and g["total"] is not None)
     print(f"  {len(up)} games in the next {DAYS_AHEAD} days, {lined} with a line")
 
-    with open(OUT, "w") as f:
-        json.dump(R, f, indent=1)
+    # Play every lined game out once (sim.py) and store the result as a table
+    # the page can look numbers up in. The page never simulates anything, so
+    # every % it shows is the same on every device and matches calibrate.py.
+    print(f"Playing out {lined} games {sim.SIMS:,} times each…")
+    R["hot"] = sim.attach_sims(up)
+    R["sim"] = {"sd": sim.DEFAULT_SD, "n": sim.SIMS}
+    print(f"  hot slips: " + ", ".join(f"{k}-pick top {v[0]['p']*100:.0f}%" for k, v in R["hot"].items() if v))
+
+    atomic_write(OUT, json.dumps(R, indent=1))
     # Same data as a script file. A browser will not let a page opened by
     # double-clicking read ratings.json, but it will happily load ratings.js,
     # so the tool works both from the desktop and from the website.
-    with open(OUT_JS, "w") as f:
-        f.write("window.RATINGS = " + json.dumps(R, separators=(",", ":")) + ";\n")
-    print(f"Wrote {OUT} and {OUT_JS} — lines as of {R['lines_generated']}")
+    page = {k: v for k, v in R.items() if k not in ("teams", "accuracy", "league")}
+    atomic_write(OUT_JS, "window.RATINGS = " + json.dumps(page, separators=(",", ":")) + ";\n")
+    print(f"Wrote {OUT} and {OUT_JS} ({os.path.getsize(OUT_JS)//1024} KB) — lines as of {R['lines_generated']}")
+
+
+def atomic_write(path, text):
+    """Write to a temp file then rename, so a crash never leaves a half-written file."""
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
+        f.write(text)
+    os.replace(tmp, path)
 
 
 # ----------------------------------------------------------------------
