@@ -1,6 +1,6 @@
 # Clover — project status
 
-Last updated: 2026-09-08 (after the architecture review + rebuild)
+Last updated: 2026-09-08 (rebuild + "Not on my app" reshuffle + desktop grid)
 
 ## LIVE
 - **App:** https://skrongman.github.io/Clover/  (share this; works on phone)
@@ -16,14 +16,14 @@ Last updated: 2026-09-08 (after the architecture review + rebuild)
 
 ### Architecture (since 2026-09-08 rebuild — "option B")
 - **The page never simulates.** `refresh.py` → `sim.py` plays every lined game out 20,000 times (centered on the market line, SD 15.2) and ships a sparse table of (total, margin) counts per game in `ratings.js` (`g.sim`, ~5 KB/game, varint+base64). Every % on every screen is a lookup in that table — identical on every device, identical across screens, and it's the same code `calibrate.py` certifies (`calibrate.py` imports `sim.py`).
-- **Hot slips are precomputed too** (`R.hot["2"..."6"]`, top 5 each, beam search in `sim.build_hot_slips`) at market lines. The page recomputes a slip only when you nudge a line.
+- **Hot slips are built in the page** (beam search over the tables, ~200 ms for 53 games) so feedback can reshuffle them instantly. Top 6, no two share more than half their picks.
 - `ratings.js` carries only what the page needs (slate, lines, alt lines, sims, hot, logos, colors) — ~430 KB raw / ~150 KB gzipped. `ratings.json` keeps everything incl. team ratings + accuracy (research).
 - Games that already kicked off are dropped by `refresh.py` and hidden by the page.
 - Games with no line are not offered (nothing to center on). Flip in `sim.attach_sims` if ever wanted.
 - One `slip` object in JS state (persisted to localStorage `cloverSlip`, keyed by game id). Every screen reads/writes it. Spread lines are always the side's OWN number (away spread = away team's spread), everywhere.
 
 ### Two screens
-- **Slips** (home) — **Hot slips** (pick 2–6 → top 5 precomputed; tap to open, −/+ nudges a line by 0.5, tap the number for every line; "Use this slip") and **Build your own** (every lined game grouped by day, six pick buttons with the % on each; tap to add/remove). Sticky bottom bar shows "N picks · X% · verdict" → "See the Card".
+- **Slips** (home) — **Hot slips** (pick 2–6 → top 6 in a 3-up grid; tap to open, −/+ nudges a line by 0.5, tap the number for every line; "Use this slip"). **"Not on my app"** on any pick blocks it (localStorage `cloverNA`, keyed by game id so it expires with the game) and reshuffles; **"Pick types my app offers"** Winner/Spread/Total toggles (`cloverMarkets`) are the global lever. Blocked picks show struck-through in Build your own. and **Build your own** (every lined game grouped by day, six pick buttons with the % on each; tap to add/remove). Sticky bottom bar shows "N picks · X% · verdict" → "See the Card".
 - **The Card** (ticket) — big %, verdict, "Show the math"; **Payout: "Your app pays, on $1"** — type what the app shows (until then it's the `PAYOUT` stand-in, tagged **est.** everywhere); picks grouped by game with same-game "together X% vs Y% if unrelated"; **"How sure is this?"** now shifts total AND margin −3..+3 (49 versions) and uses the joint sim (old version never moved the margin, so spread picks always read "Solid"); Copy row for the log.
 - **Line sheet** (was the Line Mover tab) — bottom sheet on any spread/total pick: every half-point −10..+10, our chance, fair payout, DK pays, DK's chance. Tap a row to use it.
 - One verdict scale everywhere: Great ≥ +15¢ / Good ≥ +5¢ / Coin toss ≥ −5¢ / Bad ≥ −20¢ / Terrible, per $1 of expected value.
@@ -37,6 +37,7 @@ Last updated: 2026-09-08 (after the architecture review + rebuild)
 5. **The Odds API (the-odds-api.com):** NCAAF game lines from 9 US books. **Underdog has NO game-level lines** in the feed. **Alternate spreads + totals: YES** (DK 84 rungs) — pulled weekly (DK only). The `alternate_*` markets do NOT include DK's main line, so `pull_alt_lines` also pulls `spreads,totals` for DK in one slate-wide call and merges them in. Player props: PrizePicks covers NCAAF (flat −137); Underdog inconclusive.
 
 ## Danny's directives
+- Desktop-first for now; mobile optimization later (he said so 2026-09-08).
 - Rookie weekend gamblers. Simple beats complete. Not Underdog-specific. Likes 3-pick slips.
 - Hot Slips = highest win probability, no payout floor. He manages bankroll. Revisit only if he asks.
 - Prohibited feedback = notate only until many confirmed examples.
@@ -48,7 +49,7 @@ Last updated: 2026-09-08 (after the architecture review + rebuild)
 
 ## Components (in repo)
 - `index.html` — the app (lookups only). Loads `ratings.js?v=<timestamp>` via a created script tag (no `document.write`). CSP meta restricts scripts to self, images to the CFBD logo CDN.
-- `sim.py` — **the one football.** `game_grid`, `Grid.prob`, `Grid.encode/decode`, `build_hot_slips`, `attach_sims`. `python sim.py` self-checks the encode/decode round trip.
+- `sim.py` — **the one football.** `game_grid`, `Grid.prob`, `Grid.encode/decode`, `attach_sims`. `python sim.py` self-checks the encode/decode round trip.
 - `refresh.py` — auto-detects season; caches prior season; `--lines-only` (~3 CFBD calls); `--alt-lines` (Odds API); calls `sim.attach_sims`; writes atomically (temp + rename).
 - `calibrate.py`, `bayes.py` — research tools; `calibrate.py` imports `sim.py`.
 - `.github/workflows/refresh.yml` — the schedule. `requirements.txt`: requests, numpy.

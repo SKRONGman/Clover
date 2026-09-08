@@ -561,9 +561,9 @@ def write_upcoming(R, alt_lines=False):
     # the page can look numbers up in. The page never simulates anything, so
     # every % it shows is the same on every device and matches calibrate.py.
     print(f"Playing out {lined} games {sim.SIMS:,} times each…")
-    R["hot"] = sim.attach_sims(up)
+    sim.attach_sims(up)
+    R.pop("hot", None)                 # hot slips are built in the page now (so feedback can reshuffle them)
     R["sim"] = {"sd": sim.DEFAULT_SD, "n": sim.SIMS}
-    print(f"  hot slips: " + ", ".join(f"{k}-pick top {v[0]['p']*100:.0f}%" for k, v in R["hot"].items() if v))
 
     atomic_write(OUT, json.dumps(R, indent=1))
     # Same data as a script file. A browser will not let a page opened by

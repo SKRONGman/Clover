@@ -14,7 +14,6 @@ is calibrated (calibrate.py --tails) and set by DEFAULT_SD.
 """
 
 import base64
-import itertools
 import numpy as np
 
 DEFAULT_SD = 15.2          # total-points volatility; verified within ~2 pts at every rung 19-83%
@@ -173,67 +172,9 @@ def center_for(g):
     return tot, mar, src
 
 
-# ----------------------------------------------------------------------
-# hot slips (auto parlay builder) - same rules the page used to run in JS
-# ----------------------------------------------------------------------
-HOT_TOP = 5
-BEAM = 400
-
-
-def _blocks(gi, g, grid):
-    """Every way to take 1-3 picks from one game at the market lines."""
-    W = [("homeML", None), ("awayML", None)]
-    P = [("homeSp", g["spread"]), ("awaySp", -g["spread"])]
-    T = [("over", g["total"]), ("under", g["total"])]
-    combos = [[l] for l in W + P + T]
-    combos += [[w, p] for w in W for p in P]
-    combos += [[w, t] for w in W for t in T]
-    combos += [[p, t] for p in P for t in T]
-    combos += [[w, p, t] for w in W for p in P for t in T]
-    out = []
-    for legs in combos:
-        p = grid.prob([(t, 0 if l is None else l) for t, l in legs])
-        out.append({"gi": gi, "legs": [{"gi": gi, "type": t, "line": l} for t, l in legs], "p": p})
-    return out
-
-
-def build_hot_slips(games, grids, n_legs, top=HOT_TOP):
-    """games: list of upcoming games (index = gi); grids: {gi: Grid} for lined games.
-    Returns the top slips as lists of legs, ranked by chance the whole slip hits."""
-    all_blocks = [_blocks(gi, games[gi], grids[gi]) for gi in sorted(grids)]
-    beam = [{"k": 0, "p": 1.0, "blocks": []}]
-    for blocks in all_blocks:
-        nxt = list(beam)                                   # skip this game entirely
-        for ps in beam:
-            for b in blocks:
-                k = ps["k"] + len(b["legs"])
-                if k > n_legs:
-                    continue
-                nxt.append({"k": k, "p": ps["p"] * b["p"], "blocks": ps["blocks"] + [b]})
-        by = {}
-        for x in nxt:
-            by.setdefault(x["k"], []).append(x)
-        beam = []
-        for k, xs in by.items():
-            xs.sort(key=lambda x: -x["p"])
-            beam.extend(xs[:BEAM])
-    full = sorted((x for x in beam if x["k"] == n_legs), key=lambda x: -x["p"])
-    need = 1 if n_legs <= 3 else 2                         # top slips must actually differ
-    out = []
-    for s in full:
-        keys = {f"{l['gi']}:{l['type']}" for b in s["blocks"] for l in b["legs"]}
-        if any(n_legs - len(keys & o["keys"]) < need for o in out):
-            continue
-        out.append({"keys": keys, "p": s["p"],
-                    "legs": [dict(l) for b in s["blocks"] for l in b["legs"]]})
-        if len(out) == top:
-            break
-    return [{"p": round(s["p"], 5), "legs": s["legs"]} for s in out]
-
-
-def attach_sims(up, sd=DEFAULT_SD, n=SIMS, hot_sizes=range(2, 7)):
-    """Give every upcoming game a table, and build the hot slips. Mutates `up`;
-    returns the hot slips dict {"2": [...], ..., "6": [...]}."""
+def attach_sims(up, sd=DEFAULT_SD, n=SIMS):
+    """Give every lined upcoming game a table. Mutates `up`; returns {gi: Grid}.
+    (Hot slips are built in the page from these tables - see index.html.)"""
     grids = {}
     for gi, g in enumerate(up):
         g.pop("sim", None)
@@ -244,11 +185,7 @@ def attach_sims(up, sd=DEFAULT_SD, n=SIMS, hot_sizes=range(2, 7)):
         grid = game_grid(tot, mar, sd, n, seed=int(g.get("id") or gi) % (2 ** 31))
         g["sim"] = dict(grid.encode(), sd=sd, center=src)
         grids[gi] = grid
-    hot = {}
-    if grids:
-        for k in hot_sizes:
-            hot[str(k)] = build_hot_slips(up, grids, k)
-    return hot
+    return grids
 
 
 if __name__ == "__main__":
