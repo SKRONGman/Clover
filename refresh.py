@@ -272,10 +272,15 @@ def pull_upcoming(season):
 _DETAILS = re.compile(r"^\s*([A-Z]{2,4})\s+([-+]?\d+(?:\.\d+)?)\s*$")
 
 
+ESPN_HEADERS = {"Accept": "application/json, text/plain, */*",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
+                "Referer": "https://www.espn.com/"}
+
+
 def espn_get(**params):
-    r = requests.get(ESPN_NFL, params=params, timeout=30,
-                     headers={"Accept": "application/json", "User-Agent": "clover-refresh"})
-    r.raise_for_status()
+    r = requests.get(ESPN_NFL, params=params, timeout=30, headers=ESPN_HEADERS)
+    if r.status_code != 200:
+        raise RuntimeError(f"ESPN {r.status_code}: {r.text[:200]}")
     return r.json()
 
 
@@ -313,14 +318,20 @@ def pull_nfl_upcoming():
     horizon = now.timestamp() + DAYS_AHEAD * 86400
     d0 = now.strftime("%Y%m%d")
     d1 = datetime.fromtimestamp(horizon, timezone.utc).strftime("%Y%m%d")
-    try:
-        data = espn_get(dates=f"{d0}-{d1}", limit=100)
-        events = data.get("events") or []
-        if not events:                                  # some seasons ignore the range; take the current week
-            events = espn_get(limit=100).get("events") or []
-    except Exception as e:
-        print(f"  NFL feed unavailable ({e}) - keeping college only")
+    events = []
+    for attempt, params in enumerate(({"dates": f"{d0}-{d1}", "limit": 100}, {"limit": 100}, {})):
+        try:
+            events = espn_get(**params).get("events") or []
+        except Exception as e:
+            print(f"  NFL feed attempt {attempt + 1} failed ({params}): {e}")
+            continue
+        if events:
+            break
+        print(f"  NFL feed attempt {attempt + 1} returned no events ({params})")
+    if not events:
+        print("  NFL feed unavailable - keeping college only")
         return [], {}
+    print(f"  NFL feed: {len(events)} events")
     games, art = [], {}
     for e in events:
         comp = (e.get("competitions") or [{}])[0]
