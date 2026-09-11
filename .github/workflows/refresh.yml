@@ -4,9 +4,11 @@
 # Times are UTC. Central time is UTC-5 (CDT) / UTC-6 (CST).
 #   Full refresh (ratings + lines): Tuesdays 11:00 UTC = 6am CDT (the page runs
 #   on market lines, so team ratings only matter for research - weekly is plenty)
-#   Lines only: every hour Thu-Sun, 15:00-05:00 UTC = 10am-midnight CDT
+#   Lines only: every hour Thu-Mon, 15:00-05:00 UTC = 10am-midnight CDT
+#     (Monday added for Monday Night Football; college + NFL refresh together)
 #   Alt lines (DraftKings alternate spreads/totals via the-odds-api.com,
-#   spends ODDS_KEY credits, ~2 per game): Thursdays 15:10 UTC = 10:10am CDT
+#   spends ODDS_KEY credits, ~2 per game): Thursdays 15:10 UTC = 10:10am CDT.
+#     College every week; NFL every other week (even ISO weeks) - refresh.py decides.
 # Change the cron lines below to adjust. You can also run it any time from
 # the Actions tab -> "Refresh lines" -> "Run workflow".
 
@@ -20,8 +22,8 @@ on:
         default: "lines"
   schedule:
     - cron: "0 11 * * 2"                 # full refresh weekly, Tuesday 6am CDT
-    - cron: "5 15-23 * * 4,5,6,0"        # lines hourly Thu-Sun daytime CDT
-    - cron: "5 0-5 * * 5,6,0,1"          # ...continuing to midnight CDT (next day UTC)
+    - cron: "5 15-23 * * 1,4,5,6,0"      # lines hourly Thu-Mon daytime CDT
+    - cron: "5 0-5 * * 1,2,5,6,0"        # ...continuing to midnight CDT (next day UTC)
     - cron: "10 15 * * 4"                # alt lines, Thursday 10:10am CDT
 
 permissions:
