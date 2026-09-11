@@ -17,14 +17,21 @@ WEEKLY:
     python refresh.py --lines-only --alt-lines   # + DraftKings alternate lines (weekly; spends ODDS_KEY credits)
     (on GitHub this runs itself on a schedule; see .github/workflows/refresh.yml)
 
+LEAGUES:
+    College (FBS) comes from CollegeFootballData. The NFL slate + lines come
+    from ESPN's public scoreboard feed (no key). Both land in the same
+    `upcoming` list, tagged league = "ncaaf" | "nfl"; the page has a switch.
+
 FIRST RUN - do this one first:
     python refresh.py --check
     Prints the raw field names the API actually returns. CFBD has used both
     snake_case and camelCase over time and I could not test this against the
     live API, so if something breaks, --check is what tells us why.
+    python refresh.py --check-nfl          # same idea for the ESPN NFL feed
 """
 
 import os
+import re
 import sys
 import json
 import math
@@ -64,14 +71,24 @@ OUT_JS = "ratings.js"      # only what the page needs: slate, lines, sim tables,
 DAYS_AHEAD = 8
 BOOKS = ["DraftKings", "ESPN Bet", "Bovada"]     # in order of preference
 
+# NFL slate + lines: ESPN's public scoreboard (the same CDN the logos come from).
+# No key, no credits. Lines are ESPN BET's, which track DraftKings within a
+# half point. Unofficial endpoint - if it ever changes, `--check-nfl` shows why.
+ESPN_NFL = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+
 # Alternate lines (every spread/total rung DraftKings offers) come from
 # the-odds-api.com. Free tier = 500 credits/month; each game costs 2 credits
-# (2 markets x 1 bookmaker), so a weekly pull of ~50 games is ~100 credits.
-# Key lives in the ODDS_KEY secret. --alt-lines is the only thing that spends it.
+# (2 markets x 1 bookmaker), so a weekly pull of ~50 college games is ~100
+# credits and ~16 NFL games ~34. Both every week would top the free tier, so
+# NFL alt lines are pulled every OTHER week (even ISO weeks) and go first on
+# those weeks - the ODDS_MIN_REMAINING guard then trims the college tail, not
+# the NFL. Key lives in the ODDS_KEY secret. --alt-lines is the only thing
+# that spends it.
 ODDS_BASE = "https://api.the-odds-api.com/v4"
-ODDS_SPORT = "americanfootball_ncaaf"
+ODDS_SPORTS = {"ncaaf": "americanfootball_ncaaf", "nfl": "americanfootball_nfl"}
 ODDS_BOOK = "draftkings"
 ODDS_MIN_REMAINING = 40        # stop pulling when this few credits are left
+NFL_ALT_EVERY_OTHER_WEEK = True
 
 
 # ----------------------------------------------------------------------
@@ -178,7 +195,7 @@ def drives_from_json(rows):
 
 
 def parse_dt(s):
-    """CFBD dates look like 2025-08-23T16:00:00.000Z."""
+    """CFBD dates look like 2025-08-23T16:00:00.000Z; ESPN's like 2025-09-14T17:00Z."""
     try:
         return datetime.fromisoformat(s.replace("Z", "+00:00"))
     except Exception:
@@ -203,6 +220,7 @@ def pull_upcoming(season):
             continue                                    # kicked off already - pregame picks are moot
         games.append({
             "id": pick(g, "id"),
+            "league": "ncaaf",
             "week": pick(g, "week", default=0),
             "start": start.isoformat(timespec="minutes"),
             "home": pick(g, "home_team", "homeTeam"),
@@ -246,6 +264,112 @@ def pull_upcoming(season):
             g["book"] = pick(chosen, "provider")
     games.sort(key=lambda g: g["start"])
     return games
+
+
+# ----------------------------------------------------------------------
+# NFL (ESPN scoreboard)
+# ----------------------------------------------------------------------
+_DETAILS = re.compile(r"^\s*([A-Z]{2,4})\s+([-+]?\d+(?:\.\d+)?)\s*$")
+
+
+def espn_get(**params):
+    r = requests.get(ESPN_NFL, params=params, timeout=30,
+                     headers={"Accept": "application/json", "User-Agent": "clover-refresh"})
+    r.raise_for_status()
+    return r.json()
+
+
+def espn_spread(odds, home_abbr, away_abbr):
+    """Home-team spread (negative = home favored) from one ESPN odds record.
+    `details` ("KC -3.5") names the favorite, so it is the unambiguous source;
+    the bare `spread` field is the fallback, sign-checked against `favorite`."""
+    d = (odds.get("details") or "").strip().upper()
+    if d in ("EVEN", "PK", "PICK", "PICK'EM"):
+        return 0.0
+    m = _DETAILS.match(d)
+    if m:
+        abbr, num = m.group(1), float(m.group(2))
+        if abbr == (home_abbr or "").upper():
+            return num
+        if abbr == (away_abbr or "").upper():
+            return -num
+    sp = odds.get("spread")
+    if sp is None:
+        return None
+    sp = float(sp)
+    home_fav = (odds.get("homeTeamOdds") or {}).get("favorite")
+    away_fav = (odds.get("awayTeamOdds") or {}).get("favorite")
+    if home_fav is True and sp > 0:
+        sp = -sp
+    elif away_fav is True and sp < 0:
+        sp = -sp
+    return sp
+
+
+def pull_nfl_upcoming():
+    """NFL games kicking off within DAYS_AHEAD days, with ESPN BET's spread and
+    total, plus logo + color for each team. Returns (games, art)."""
+    now = datetime.now(timezone.utc)
+    horizon = now.timestamp() + DAYS_AHEAD * 86400
+    d0 = now.strftime("%Y%m%d")
+    d1 = datetime.fromtimestamp(horizon, timezone.utc).strftime("%Y%m%d")
+    try:
+        data = espn_get(dates=f"{d0}-{d1}", limit=100)
+        events = data.get("events") or []
+        if not events:                                  # some seasons ignore the range; take the current week
+            events = espn_get(limit=100).get("events") or []
+    except Exception as e:
+        print(f"  NFL feed unavailable ({e}) - keeping college only")
+        return [], {}
+    games, art = [], {}
+    for e in events:
+        comp = (e.get("competitions") or [{}])[0]
+        start = parse_dt(e.get("date") or comp.get("date") or "")
+        if start is None or start.timestamp() > horizon or start.timestamp() < now.timestamp():
+            continue
+        state = ((comp.get("status") or {}).get("type") or {}).get("state")
+        if state and state != "pre":
+            continue
+        home = away = None
+        for c in comp.get("competitors") or []:
+            t = c.get("team") or {}
+            side = {"name": t.get("displayName") or t.get("name"), "abbr": t.get("abbreviation"),
+                    "short": t.get("shortDisplayName") or t.get("name")}
+            if c.get("homeAway") == "home":
+                home = side
+            elif c.get("homeAway") == "away":
+                away = side
+            if side["name"]:
+                color = t.get("color")
+                art[side["name"]] = {"logo": t.get("logo"),
+                                     "color": ("#" + color) if color and not color.startswith("#") else color}
+        if not home or not away or not home["name"] or not away["name"]:
+            continue
+        g = {
+            "id": int(e.get("id")),                     # ESPN game id (CFBD uses the same id space)
+            "league": "nfl",
+            "week": ((e.get("week") or {}).get("number")) or 0,
+            "start": start.isoformat(timespec="minutes"),
+            "home": home["name"],
+            "away": away["name"],
+            "home_short": home["short"],            # "Chiefs" - the page uses it where space is tight
+            "away_short": away["short"],
+            "neutral": bool(comp.get("neutralSite", False)),
+            "spread": None,
+            "total": None,
+            "book": None,
+        }
+        for o in comp.get("odds") or []:
+            sp = espn_spread(o, home["abbr"], away["abbr"])
+            ou = o.get("overUnder")
+            if sp is None or ou is None:
+                continue
+            g["spread"], g["total"] = float(sp), float(ou)
+            g["book"] = (o.get("provider") or {}).get("name") or "ESPN BET"
+            break
+        games.append(g)
+    games.sort(key=lambda g: g["start"])
+    return games, art
 
 
 # ----------------------------------------------------------------------
@@ -426,7 +550,8 @@ ODDS_ALIASES = {
 
 
 def team_match(cfbd_name, odds_name):
-    """CFBD says 'Florida State'; the odds feed says 'Florida State Seminoles'."""
+    """CFBD says 'Florida State'; the odds feed says 'Florida State Seminoles'.
+    NFL names are already full ('Kansas City Chiefs' both sides) - exact match."""
     if not cfbd_name or not odds_name:
         return False
     cfbd_name = ODDS_ALIASES.get(cfbd_name, cfbd_name)
@@ -440,17 +565,20 @@ def team_match(cfbd_name, odds_name):
     return not (rest.startswith("(") and "(" not in a)
 
 
-def pull_alt_lines(up):
-    """Attach DraftKings alternate spreads/totals to each upcoming game that
-    has a line. Games keep whatever they already had if a pull fails."""
-    events, remaining = odds_get(f"/sports/{ODDS_SPORT}/events")     # this call is free
+def pull_alt_lines(up, league="ncaaf"):
+    """Attach DraftKings alternate spreads/totals to each upcoming game of one
+    league that has a line. Games keep whatever they already had if a pull fails.
+    Returns credits remaining (None if the feed failed)."""
+    sport = ODDS_SPORTS[league]
+    events, remaining = odds_get(f"/sports/{sport}/events")     # this call is free
     if events is None:
-        return
-    print(f"  odds api: {len(events)} events listed, {remaining} credits left")
+        return None
+    print(f"  odds api [{league}]: {len(events)} events listed, {remaining} credits left")
     # Match each odds-feed event to ONE of our games: same kickoff (±6h) and
     # both team names match. 'Texas' also prefix-matches 'Texas A&M Aggies',
     # so when several games fit, the longest name wins.
-    lined = [g for g in up if g["spread"] is not None and g["total"] is not None]
+    lined = [g for g in up if g.get("league", "ncaaf") == league
+             and g["spread"] is not None and g["total"] is not None]
     event_for = {}
     for e in events:
         et = parse_dt(e.get("commence_time", "") or "")
@@ -471,7 +599,7 @@ def pull_alt_lines(up):
     # whole slate (2 credits). The alternate_* markets below leave the main line
     # out, and the main line is the rung people care about most.
     main = {}
-    data, remaining = odds_get(f"/sports/{ODDS_SPORT}/odds", bookmakers=ODDS_BOOK,
+    data, remaining = odds_get(f"/sports/{sport}/odds", bookmakers=ODDS_BOOK,
                                markets="spreads,totals", oddsFormat="american")
     for e in data or []:
         main[e.get("id")] = e
@@ -484,7 +612,7 @@ def pull_alt_lines(up):
         if remaining is not None and remaining < ODDS_MIN_REMAINING:
             print(f"  stopping: only {remaining} credits left")
             break
-        data, remaining = odds_get(f"/sports/{ODDS_SPORT}/events/{ev['id']}/odds",
+        data, remaining = odds_get(f"/sports/{sport}/events/{ev['id']}/odds",
                                    bookmakers=ODDS_BOOK,
                                    markets="alternate_spreads,alternate_totals",
                                    oddsFormat="american")
@@ -517,23 +645,41 @@ def pull_alt_lines(up):
         if any(alt["spreads"].values()) or any(alt["totals"].values()):
             g["alt"] = alt
             pulled += 1
-    print(f"  alt lines: {pulled} games pulled, {skipped} not matched in the odds feed, {remaining} credits left")
+    print(f"  alt lines [{league}]: {pulled} games pulled, {skipped} not matched in the odds feed, {remaining} credits left")
+    return remaining
+
+
+def nfl_alt_week():
+    """NFL alt lines run on even ISO weeks (see the credit math in CONFIG)."""
+    return (not NFL_ALT_EVERY_OTHER_WEEK) or datetime.now(timezone.utc).isocalendar()[1] % 2 == 0
 
 
 def write_upcoming(R, alt_lines=False):
-    """Refresh the slate + lines, project each game, write both output files."""
-    print("Pulling upcoming games and lines…")
+    """Refresh the slate + lines (both leagues), project each college game,
+    play everything out, write both output files."""
+    print("Pulling upcoming college games and lines…")
     up = pull_upcoming(SEASON)
+    print("Pulling upcoming NFL games and lines…")
+    nfl, nfl_art = pull_nfl_upcoming()
+    for g in nfl:
+        line = f"{g['away']} {-g['spread']:+g} / {g['total']} ({g['book']})" if g["spread"] is not None else "no line"
+        print(f"    {g['start'][:16]}  {g['away']} @ {g['home']}  {line}")
+    up = sorted(up + nfl, key=lambda g: g["start"])
     # alt lines are pulled weekly; every other refresh keeps the last copy
     old = {g["id"]: g.get("alt") for g in R.get("upcoming", []) if g.get("alt")}
     for g in up:
         if g["id"] in old:
             g["alt"] = old[g["id"]]
     if alt_lines:
-        print("Pulling DraftKings alternate lines…")
-        pull_alt_lines(up)
+        if nfl_alt_week():
+            print("Pulling DraftKings alternate lines (NFL week: NFL first)…")
+            pull_alt_lines(up, "nfl")
+        else:
+            print("Pulling DraftKings alternate lines (off week for NFL - college only)…")
+        pull_alt_lines(up, "ncaaf")
     R["alt_generated"] = max([g["alt"]["asof"] for g in up if g.get("alt")], default=None)
-    art = cached(f"teams_{SEASON}", lambda: pull_team_art(SEASON))
+    art = dict(cached(f"teams_{SEASON}", lambda: pull_team_art(SEASON)))
+    art.update(nfl_art)
     R["logos"] = {}
     R["colors"] = {}
     for g in up:
@@ -546,6 +692,8 @@ def write_upcoming(R, alt_lines=False):
             if a.get("color"):
                 R["colors"][team] = a["color"]
     for g in up:
+        if g["league"] != "ncaaf":
+            continue                                    # NFL has no ratings; sims center on the market
         hp, ap = project(g["home"], g["away"], R)
         if g["neutral"]:                                # take the home edge back out
             hp -= HFA_POINTS / 2
@@ -554,16 +702,17 @@ def write_upcoming(R, alt_lines=False):
         g["proj_away"] = round(ap, 1)
     R["upcoming"] = up
     R["lines_generated"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    lined = sum(1 for g in up if g["spread"] is not None and g["total"] is not None)
-    print(f"  {len(up)} games in the next {DAYS_AHEAD} days, {lined} with a line")
+    lined = {lg: sum(1 for g in up if g["league"] == lg and g["spread"] is not None and g["total"] is not None)
+             for lg in sim.LEAGUES}
+    print(f"  {len(up)} games in the next {DAYS_AHEAD} days: {lined['ncaaf']} college + {lined['nfl']} NFL with a line")
 
     # Play every lined game out once (sim.py) and store the result as a table
     # the page can look numbers up in. The page never simulates anything, so
     # every % it shows is the same on every device and matches calibrate.py.
-    print(f"Playing out {lined} games {sim.SIMS:,} times each…")
+    print(f"Playing out {sum(lined.values())} games {sim.SIMS:,} times each…")
     sim.attach_sims(up)
     R.pop("hot", None)                 # hot slips are built in the page now (so feedback can reshuffle them)
-    R["sim"] = {"sd": sim.DEFAULT_SD, "n": sim.SIMS}
+    R["sim"] = {"sd": sim.SD_BY_LEAGUE, "margin_sd": sim.MARGIN_SD_BY_LEAGUE, "n": sim.SIMS}
 
     atomic_write(OUT, json.dumps(R, indent=1))
     # Same data as a script file. A browser will not let a page opened by
@@ -601,10 +750,35 @@ def check():
         print("\nBooks in the feed:", ", ".join(map(str, provs)))
 
 
+def check_nfl():
+    """Raw look at the ESPN feed: first event's teams + odds record, then what we parse."""
+    data = espn_get(limit=100)
+    events = data.get("events") or []
+    print(f"{len(events)} events in the current-week feed")
+    if not events:
+        return
+    e = events[0]
+    comp = (e.get("competitions") or [{}])[0]
+    print("\nevent:", e.get("id"), e.get("name"), e.get("date"))
+    for c in comp.get("competitors") or []:
+        t = c.get("team") or {}
+        print("  ", c.get("homeAway"), t.get("displayName"), t.get("abbreviation"), t.get("logo"), t.get("color"))
+    print("\nodds records:")
+    for o in comp.get("odds") or []:
+        print(json.dumps({k: o.get(k) for k in ("provider", "details", "overUnder", "spread", "homeTeamOdds", "awayTeamOdds")},
+                         indent=1, default=str)[:1500])
+    games, art = pull_nfl_upcoming()
+    print(f"\nparsed {len(games)} upcoming NFL games:")
+    for g in games:
+        print(f"  {g['start']}  {g['away']} @ {g['home']}  spread(home) {g['spread']}  total {g['total']}  {g['book']}")
+
+
 def main():
     ap_ = argparse.ArgumentParser()
     ap_.add_argument("--check", action="store_true",
                      help="print raw API field names and exit")
+    ap_.add_argument("--check-nfl", action="store_true",
+                     help="print a raw ESPN NFL record and what we parse from it, then exit")
     ap_.add_argument("--lines-only", action="store_true",
                      help="keep existing ratings, refresh only upcoming games + lines (~3 API calls)")
     ap_.add_argument("--alt-lines", action="store_true",
@@ -612,6 +786,9 @@ def main():
     args = ap_.parse_args()
     if args.check:
         check()
+        return
+    if args.check_nfl:
+        check_nfl()
         return
 
     if args.lines_only:

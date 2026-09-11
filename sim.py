@@ -10,18 +10,30 @@ functions, so what is calibrated is exactly what ships.
 Points arrive as touchdowns and field goals, not on a smooth curve. A per-game
 hot/cold multiplier gives the fat right tail real football has. The center of
 each game is the betting line (settled finding: nothing beats it); the shape
-is calibrated (calibrate.py --tails) and set by DEFAULT_SD.
+is calibrated (calibrate.py --tails) and set per league: DEFAULT_SD for
+college, NFL_SD / NFL_MARGIN_SD for the NFL (calibrate.py --nfl --tails).
 """
 
 import base64
 import numpy as np
 
-DEFAULT_SD = 15.2          # total-points volatility; verified within ~2 pts at every rung 19-83%
+DEFAULT_SD = 15.2          # college total-points volatility; verified within ~2 pts at every rung 19-83%
+NFL_SD = 13.1              # NFL total-points volatility, calibrated (2019, 2021-2025 vs the closing line)
+NFL_MARGIN_SD = 11.7       # NFL margin volatility, calibrated (calibrate.py --nfl --tails): every rung 11-89% within ~3 pts
+SD_BY_LEAGUE = {"ncaaf": DEFAULT_SD, "nfl": NFL_SD}
+MARGIN_SD_BY_LEAGUE = {"ncaaf": None, "nfl": NFL_MARGIN_SD}     # None = margin width comes from the drive engine
+LEAGUES = ("ncaaf", "nfl")
 DRIVES = 12                # possessions per team in a normal game
 SIMS = 20000               # games played out per matchup
 HALF = 64                  # table covers center +/- HALF points on each axis (4 sigma)
 _DISPS = [400, 80, 40, 20, 12, 8, 5, 3.5, 2.5, 1.8]
 _disp_cache = {}
+
+
+def sd_for(g):
+    """(total_sd, margin_sd) for a game: by its league tag (college if untagged)."""
+    lg = g.get("league", "ncaaf")
+    return SD_BY_LEAGUE.get(lg, DEFAULT_SD), MARGIN_SD_BY_LEAGUE.get(lg)
 
 
 def team_points(rng, mean, disp, n):
@@ -54,12 +66,24 @@ def pick_disp(home_mean, away_mean, target_sd):
     return best
 
 
-def sim_game(home_mean, away_mean, target_sd=DEFAULT_SD, n=SIMS, seed=0):
-    """Whole-number home and away scores, n of each, centered exactly on the means."""
+def sim_game(home_mean, away_mean, target_sd=DEFAULT_SD, n=SIMS, seed=0, margin_sd=None):
+    """Whole-number home and away scores, n of each, centered exactly on the means.
+
+    margin_sd=None (college): shift only, the drive engine's own width stands.
+    margin_sd set (NFL): the drive engine cannot get tighter than ~13.7 on its
+    own and real NFL games are tighter, with margins tighter than totals. So
+    the total and margin deviations are each scaled to their target before
+    rounding - the fat right tail and the lumpy scores survive, the width
+    matches what the closing line actually misses by."""
     rng = np.random.default_rng(seed)
     d = pick_disp(home_mean, away_mean, target_sd)
     h = team_points(rng, home_mean, d, n).astype(float)
     a = team_points(rng, away_mean, d, n).astype(float)
+    if margin_sd is not None:
+        t, m = h + a, h - a
+        t = t.mean() + (t - t.mean()) * (target_sd / max(t.std(), 1e-9))
+        m = m.mean() + (m - m.mean()) * (margin_sd / max(m.std(), 1e-9))
+        h, a = (t + m) / 2, (t - m) / 2
     h = np.maximum(0, np.round(h + (home_mean - h.mean())))     # shift only - keeps the lumpiness
     a = np.maximum(0, np.round(a + (away_mean - a.mean())))
     return h, a
@@ -143,10 +167,10 @@ def leg_value(typ, line, T, M):
     raise ValueError(typ)
 
 
-def game_grid(total_center, margin_center, sd=DEFAULT_SD, n=SIMS, seed=0):
+def game_grid(total_center, margin_center, sd=DEFAULT_SD, n=SIMS, seed=0, margin_sd=None):
     hp = max((total_center + margin_center) / 2, 0.0)
     ap = max((total_center - margin_center) / 2, 0.0)
-    h, a = sim_game(hp, ap, sd, n, seed)
+    h, a = sim_game(hp, ap, sd, n, seed, margin_sd)
     t = (h + a).astype(int)
     m = (h - a).astype(int)
     t0 = max(0, int(round(total_center)) - HALF)
@@ -162,8 +186,8 @@ def game_grid(total_center, margin_center, sd=DEFAULT_SD, n=SIMS, seed=0):
 def center_for(g):
     """Where a game's sim is centered: the market line if there is one, else
     the ratings projection. Returns (total_center, margin_center, source)."""
-    tot = g.get("proj_home", 0) + g.get("proj_away", 0)
-    mar = g.get("proj_home", 0) - g.get("proj_away", 0)
+    tot = (g.get("proj_home") or 0) + (g.get("proj_away") or 0)     # NFL games carry no projection
+    mar = (g.get("proj_home") or 0) - (g.get("proj_away") or 0)
     src = "model"
     if g.get("total") is not None:
         tot, src = g["total"], "market"
@@ -172,18 +196,21 @@ def center_for(g):
     return tot, mar, src
 
 
-def attach_sims(up, sd=DEFAULT_SD, n=SIMS):
-    """Give every lined upcoming game a table. Mutates `up`; returns {gi: Grid}.
+def attach_sims(up, n=SIMS):
+    """Give every lined upcoming game a table, at its league's volatility.
+    Mutates `up`; returns {gi: Grid}.
     (Hot slips are built in the page from these tables - see index.html.)"""
     grids = {}
     for gi, g in enumerate(up):
         g.pop("sim", None)
+        g.setdefault("league", "ncaaf")
         if g.get("spread") is None or g.get("total") is None:
             continue                       # no line = nothing to center on; the page won't offer it
         tot, mar, src = center_for(g)
+        sd, msd = sd_for(g)
         # seeded by game id: same lines -> byte-identical table -> no churn in the repo
-        grid = game_grid(tot, mar, sd, n, seed=int(g.get("id") or gi) % (2 ** 31))
-        g["sim"] = dict(grid.encode(), sd=sd, center=src)
+        grid = game_grid(tot, mar, sd, n, seed=int(g.get("id") or gi) % (2 ** 31), margin_sd=msd)
+        g["sim"] = dict(grid.encode(), sd=sd, msd=msd, center=src)
         grids[gi] = grid
     return grids
 
@@ -199,3 +226,7 @@ if __name__ == "__main__":
     D = Grid.decode(e)
     assert (D.counts == G.counts).all() and (D.t0, D.m0, D.n) == (G.t0, G.m0, G.n), "round trip failed"
     print("round trip ok")
+    # NFL-shaped game: Chiefs -3, total 45.5, at the NFL widths
+    N = game_grid(45.5, 3.0, sd=NFL_SD, margin_sd=NFL_MARGIN_SD)
+    print("nfl", [("homeSp", -3.0)], round(N.prob([("homeSp", -3.0)]) * 100, 1),
+          "home ML", round(N.prob([("homeML", 0)]) * 100, 1))

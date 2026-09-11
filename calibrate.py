@@ -51,9 +51,9 @@ import sim
 _seed = [0]
 
 
-def sim_game(home_mean, away_mean, target_sd, n=SIMS):
+def sim_game(home_mean, away_mean, target_sd, n=SIMS, margin_sd=None):
     _seed[0] += 1
-    return sim.sim_game(home_mean, away_mean, target_sd, n=n, seed=_seed[0])
+    return sim.sim_game(home_mean, away_mean, target_sd, n=n, seed=_seed[0], margin_sd=margin_sd)
 
 
 def bet_probs(h, a, spread, total):
@@ -280,16 +280,24 @@ def run_tails(season, vol):
     cur_g = R.pull_games(season)
     lines = pull_lines(season)
     print(f"  {len(cur_g)} games, {len(lines)} with lines")
-    recs = []            # (kind, move, p, hit)
+    rows = []
     for g in cur_g:
         ln = lines.get(g["id"])
         if not ln or ln[0] is None or ln[1] is None:
             continue
-        spread, total, _ = ln
+        rows.append((g["hp"], g["ap"], ln[0], ln[1]))
+    return tails_from_rows(rows, vol)
+
+
+def tails_from_rows(rows, vol, margin_sd=None):
+    """rows = (home_pts, away_pts, home_spread, total) with the home spread in
+    CFBD convention (negative = home favored). Returns (kind, move, p, hit)."""
+    recs = []
+    for hp, ap, spread, total in rows:
         ph, pa = blended(0, 0, spread, total, 1.0, 1.0)     # market-implied score
-        h, a = sim_game(ph, pa, vol)
+        h, a = sim_game(ph, pa, vol, margin_sd=margin_sd)
         t, m = h + a, h - a
-        at, am = g["hp"] + g["ap"], g["hp"] - g["ap"]
+        at, am = hp + ap, hp - ap
         for k in TAIL_MOVES:
             # over a moved total
             L = total + k
@@ -302,6 +310,83 @@ def run_tails(season, vol):
                 hs, as_ = (m + S > 0).sum(), (m + S < 0).sum()
                 recs.append(("sp", k, hs / max(hs + as_, 1), am + S > 0))
     return recs
+
+
+NFL_SEASONS = [2019, 2021, 2022, 2023, 2024, 2025]     # same test years as college
+
+
+def load_nfl(path, seasons=NFL_SEASONS):
+    """nflverse games.csv (github.com/nflverse/nfldata, data/games.csv): every
+    NFL game since 1999 with the closing spread_line (POSITIVE = home favored)
+    and total_line. Flip the spread to CFBD convention. Regular season only."""
+    import csv
+    rows = []
+    with open(path, newline="") as f:
+        for r in csv.DictReader(f):
+            try:
+                if int(r["season"]) not in seasons or r.get("game_type", "REG") != "REG":
+                    continue
+                hp, ap = float(r["home_score"]), float(r["away_score"])
+                sp, tot = float(r["spread_line"]), float(r["total_line"])
+            except (ValueError, KeyError):
+                continue                                   # unplayed or unlined
+            rows.append((hp, ap, -sp, tot))
+    return rows
+
+
+def tails_report(allr, vol, label, out_name):
+    print(f"\n================ TAIL CALIBRATION [{label}] ================")
+    print(f"Market center, sim shape, volatility {vol}. 'said' = what the alt-line tool would claim.")
+    out = {"vol": vol, "league": label, "n": len(allr)}
+    for lab, kind in (("Totals (over a moved total)", "ou"), ("Spreads (home covers a moved spread)", "sp")):
+        print(f"\n  {lab}:")
+        out[kind] = tail_table(allr, kind)
+        for row in out[kind]:
+            gap = row["hit"] - row["said"]
+            flag = "" if abs(gap) < 2.5 else ("  <-- sim too confident" if (row["said"] > 50) == (gap < 0) else "  <-- sim too timid")
+            print(f"    said {row['bin']:>7}  (avg {row['said']:5.1f}%)  hit {row['hit']:5.1f}%  n={row['n']}{flag}")
+    out["by_move"] = {}
+    for lab, kind in (("Totals: over, with the total moved by", "ou"), ("Spreads: home covers, with the spread moved by", "sp")):
+        print(f"\n  {lab}:")
+        for k in TAIL_MOVES:
+            sel = [r for r in allr if r[1] == k and r[0] == kind]
+            if not sel:
+                continue
+            said = 100 * np.mean([r[2] for r in sel]); hit = 100 * np.mean([r[3] for r in sel])
+            out["by_move"][f"{kind}{k:+d}"] = {"said": round(said, 1), "hit": round(hit, 1), "n": len(sel)}
+            gap = hit - said
+            flag = "" if abs(gap) < 2.5 else "  <-- off"
+            print(f"    {k:+3d} pts: said {said:5.1f}%  hit {hit:5.1f}%  n={len(sel)}{flag}")
+    with open(out_name, "w") as f:
+        json.dump(out, f, indent=1)
+    print(f"\nWrote {out_name}")
+    print("If 'hit' tracks 'said' within ~2 points at every rung, the alt-line tool can be trusted.")
+    print("If the sim is too confident at the ends, widen it (raise --vol); too timid, narrow it.")
+
+
+def scan_vols(rows, vols, label, margin_sd=None):
+    """One line per volatility: the worst said-vs-hit gap across the 20-80%
+    rungs, so the right SD for a league is a glance, not a judgment call."""
+    print(f"\n================ VOLATILITY SCAN [{label}] ================")
+    print(f"  {len(rows)} games. Worst |hit - said| over the 20-80% rungs and over the +/-7..14 pt moves; lower is better.")
+    best = None
+    for v in vols:
+        recs = tails_from_rows(rows, v, margin_sd)
+        worst = {}
+        for kind in ("ou", "sp"):
+            rws = [r for r in tail_table(recs, kind) if 20 <= int(r["bin"].split("-")[0]) < 80]
+            worst[kind] = max((abs(r["hit"] - r["said"]) for r in rws), default=float("nan"))
+        # the big moves (+/-7, +/-10, +/-14) are where the SD shows itself most
+        big = [abs(100 * np.mean([r[3] for r in sel]) - 100 * np.mean([r[2] for r in sel]))
+               for kind in ("ou", "sp") for k in TAIL_MOVES if abs(k) >= 7
+               for sel in [[r for r in recs if r[0] == kind and r[1] == k]] if sel]
+        worst["big"] = max(big) if big else float("nan")
+        score = max(worst.values())
+        print(f"    vol {v:5.1f}:  totals worst {worst['ou']:4.1f}  spreads worst {worst['sp']:4.1f}  big moves worst {worst['big']:4.1f}  -> {score:4.1f}")
+        if best is None or score < best[1]:
+            best = (v, score)
+    print(f"  Best of these: vol {best[0]} (worst gap {best[1]:.1f} pts). Put that in sim.py for this league.")
+    return best
 
 
 def tail_table(records, kind=None, bins=TAIL_BINS):
@@ -346,40 +431,39 @@ def main():
     ap.add_argument("--tails", action="store_true",
                     help="test the sim's SHAPE: move every market line +/-3..14 pts and check said-vs-hit")
     ap.add_argument("--vol", type=float, default=16.4, help="total volatility for --tails (default 16.4)")
+    ap.add_argument("--nfl", metavar="GAMES_CSV",
+                    help="NFL instead of college: path to nflverse games.csv (no API key needed). Use with --tails or --scan")
+    ap.add_argument("--scan", nargs="*", type=float, metavar="VOL",
+                    help="try several volatilities and report the worst calibration gap for each, e.g. --scan 12.5 13 13.5 14 14.5")
+    ap.add_argument("--msd", type=float, default=None,
+                    help="NFL only: margin volatility, separate from the total's (default sim.NFL_MARGIN_SD)")
     args = ap.parse_args()
 
-    if args.tails:
-        allr = []
+    if args.nfl:
+        rows = load_nfl(args.nfl, args.seasons)
+        print(f"NFL: {len(rows)} regular-season games with a closing line in {args.seasons}")
+        msd = args.msd if args.msd is not None else sim.NFL_MARGIN_SD
+        print(f"  margin volatility {msd} (total volatility is --vol / --scan)")
+        if args.scan:
+            scan_vols(rows, args.scan, "nfl", msd)
+            return
+        vol = args.vol if args.vol != 16.4 else sim.NFL_SD
+        tails_report(tails_from_rows(rows, vol, msd), vol, "nfl", "calibration_tails_nfl.json")
+        return
+
+    if args.tails or args.scan:
+        allr, rows = [], []
         for y in args.seasons:
             allr.extend(run_tails(y, args.vol))
-        print("\n================ TAIL CALIBRATION ================")
-        print(f"Market center, sim shape, volatility {args.vol}. 'said' = what the alt-line tool would claim.")
-        out = {"vol": args.vol, "seasons": args.seasons, "n": len(allr)}
-        for label, kind in (("Totals (over a moved total)", "ou"), ("Spreads (home covers a moved spread)", "sp")):
-            print(f"\n  {label}:")
-            out[kind] = tail_table(allr, kind)
-            for row in out[kind]:
-                gap = row["hit"] - row["said"]
-                flag = "" if abs(gap) < 2.5 else ("  <-- sim too confident" if (row["said"] > 50) == (gap < 0) else "  <-- sim too timid")
-                print(f"    said {row['bin']:>7}  (avg {row['said']:5.1f}%)  hit {row['hit']:5.1f}%  n={row['n']}{flag}")
-        # by move size, so we see where it breaks
-        out["by_move"] = {}
-        for label, kind in (("Totals: over, with the total moved by", "ou"), ("Spreads: home covers, with the spread moved by", "sp")):
-            print(f"\n  {label}:")
-            for k in TAIL_MOVES:
-                sel = [r for r in allr if r[1] == k and r[0] == kind]
-                if not sel:
-                    continue
-                said = 100 * np.mean([r[2] for r in sel]); hit = 100 * np.mean([r[3] for r in sel])
-                out["by_move"][f"{kind}{k:+d}"] = {"said": round(said, 1), "hit": round(hit, 1), "n": len(sel)}
-                gap = hit - said
-                flag = "" if abs(gap) < 2.5 else "  <-- off"
-                print(f"    {k:+3d} pts: said {said:5.1f}%  hit {hit:5.1f}%  n={len(sel)}{flag}")
-        with open("calibration_tails.json", "w") as f:
-            json.dump(out, f, indent=1)
-        print("\nWrote calibration_tails.json")
-        print("If 'hit' tracks 'said' within ~2 points at every rung, the alt-line tool can be trusted.")
-        print("If the sim is too confident at the ends, we widen it (try --vol 17.5); too timid, narrow it.")
+        if args.scan:
+            # rebuild the raw rows once so the scan doesn't re-pull the API per vol
+            for y in args.seasons:
+                cur_g, lines = R.pull_games(y), pull_lines(y)
+                rows += [(g["hp"], g["ap"], lines[g["id"]][0], lines[g["id"]][1]) for g in cur_g
+                         if g["id"] in lines and lines[g["id"]][0] is not None and lines[g["id"]][1] is not None]
+            scan_vols(rows, args.scan, "ncaaf")
+            return
+        tails_report(allr, args.vol, "ncaaf", "calibration_tails.json")
         return
 
     if args.check:

@@ -1,13 +1,13 @@
 # Clover — The Card
 
-A one-page app that tells you the true chance a college football pick (or slip of picks) hits, and whether the payout is worth it.
+A one-page app that tells you the true chance a college football or NFL pick (or slip of picks) hits, and whether the payout is worth it.
 
 **Live page:** turn on GitHub Pages (Settings → Pages → Branch: main, folder: / root) and the link appears there.
 
 ## Files
 - `index.html` — the app. Loads `ratings.js`.
 - `ratings.js` / `ratings.json` — this week's games, lines, and team ratings. Rewritten automatically by the refresh job.
-- `refresh.py` — pulls games and betting lines from CollegeFootballData and writes the two files above.
+- `refresh.py` — pulls games and betting lines (college from CollegeFootballData, NFL from ESPN's scoreboard feed) and writes the two files above.
 - `.github/workflows/refresh.yml` — the schedule that runs `refresh.py` on GitHub's servers.
 - `bayes.py`, `calibrate.py` — research tools (model calibration). Not needed to run the app.
 - `cache_*.json` — last season's data, cached so the refresh doesn't re-download it.

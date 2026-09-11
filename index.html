@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://cdn.collegefootballdata.com data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://cdn.collegefootballdata.com https://a.espncdn.com data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Clover — The Card</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +45,13 @@ header p{margin:6px 0 0;color:var(--chalk2);font-size:15px;max-width:52ch}
   font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;letter-spacing:.02em}
 .tab[aria-selected="true"]{background:var(--flag);color:#3A2E06;border-color:var(--flag)}
 .tab .n{display:inline-block;min-width:22px;padding:0 6px;border-radius:11px;background:rgba(0,0,0,.18);font-size:14px;margin-left:6px}
+
+/* ---------- league switch ---------- */
+.lg{display:flex;gap:6px;margin:10px 0 0;max-width:420px}
+.lg .chip{background:transparent;border-color:var(--rule);color:var(--chalk2);font-family:"Barlow Condensed",sans-serif;font-size:18px;letter-spacing:.02em}
+.lg .chip[aria-pressed="true"]{background:var(--chalk);color:var(--ink);border-color:var(--chalk)}
+.lg .chip .n{font-family:Barlow,sans-serif;font-weight:400;font-size:13px;margin-left:6px;opacity:.8}
+.gameHead .lgTag{border:1px solid var(--line);border-radius:3px;padding:0 5px;margin-left:6px;font-size:11px}
 
 /* ---------- panels ---------- */
 .slip{background:var(--slip);border-radius:6px;padding:14px;margin-top:14px;border-left:4px solid var(--field)}
@@ -181,6 +188,11 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
 
 <!-- ================= SLIPS ================= -->
 <section id="viewSlips" role="tabpanel">
+  <div class="lg" id="leagueChips" role="group" aria-label="League">
+    <button type="button" class="chip" data-league="ncaaf" aria-pressed="true">College<span class="n" id="nNcaaf"></span></button>
+    <button type="button" class="chip" data-league="nfl" aria-pressed="false">NFL<span class="n" id="nNfl"></span></button>
+  </div>
+
   <div class="slip">
     <h2>Hot slips <span class="sub">most likely to hit, at market lines</span></h2>
     <div class="row">
@@ -198,7 +210,7 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
     <div id="games"></div>
   </div>
 
-  <p class="note"><b>How this works.</b> Every game with a line is played out 20,000 times ahead of time, centered on the market line — nobody beats the line, so we don't try. Hot slips are the combinations most likely to hit, with same-game picks played out together so a favorite plus its own spread counts for what it really is. Tap any slip to nudge a line and watch the chance update. <b>Not on my app</b> drops a pick your app doesn't offer and reshuffles around it — that's remembered until the game is off the board. <b>Prohibited</b> logs a pair your app wouldn't let you combine — it's a notebook, it doesn't change the picks.</p>
+  <p class="note"><b>How this works.</b> Every game with a line is played out 20,000 times ahead of time, centered on the market line — nobody beats the line, so we don't try. Hot slips are the combinations most likely to hit, with same-game picks played out together so a favorite plus its own spread counts for what it really is. Tap any slip to nudge a line and watch the chance update. College and NFL each get their own hot slips; your own slip can mix both. <b>Not on my app</b> drops a pick your app doesn't offer and reshuffles around it — that's remembered until the game is off the board. <b>Prohibited</b> logs a pair your app wouldn't let you combine — it's a notebook, it doesn't change the picks.</p>
   <div class="actions">
     <button class="ghost light hidden" id="naClear" type="button">Not on my app (0) · clear</button>
     <button class="ghost light hidden" id="prohibCopy" type="button">Copy Prohibited log (0)</button>
@@ -251,7 +263,7 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
     <button class="ghost light" id="copy" type="button">Copy row for the log</button>
     <button class="ghost light" id="backToSlips" type="button">Add more picks</button>
   </div>
-  <p class="note">Lines auto-fill from DraftKings, which runs close to most pick'em apps. If your app shows a different number, tap the line and pick it from the list.</p>
+  <p class="note">College lines auto-fill from DraftKings and NFL lines from ESPN BET — both run close to most pick'em apps. If your app shows a different number, tap the line and pick it from the list.</p>
 </div></div></section>
 
 </div>
@@ -275,6 +287,18 @@ let R=null, GAMES=[], BY_ID={}, LOGOS={}, COLORS={};
 const GRIDS={};                               // gi -> decoded table
 const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+/* leagues: every game carries league = "ncaaf" | "nfl" (college if missing) */
+const LEAGUES=["ncaaf","nfl"], LEAGUE_NAME={ncaaf:"College",nfl:"NFL"};
+let league="ncaaf";
+const lgOf=G=>G.league||"ncaaf";
+/* NFL names are long ("Kansas City Chiefs"); where space is tight use "Chiefs" */
+const shortName=(G,t)=>lgOf(G)==="nfl"?((t===G.home?G.home_short:G.away_short)||t):t;
+function loadLeague(){ try{ const v=localStorage.getItem("cloverLeague"); if(LEAGUES.includes(v)) league=v; }catch(e){} }
+function setLeague(v){
+  league=v; try{localStorage.setItem("cloverLeague",v);}catch(e){}
+  document.querySelectorAll("#leagueChips .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.league===v));
+  renderGames(); renderHot();
+}
 
 function gridFor(gi){
   if(GRIDS[gi]) return GRIDS[gi];
@@ -361,7 +385,7 @@ function legLabel(G,l){
   }
 }
 function legTeam(G,type){ return type==="homeML"||type==="homeSp"?G.home:type==="awayML"||type==="awaySp"?G.away:null; }
-function legWho(G,l){ const t=legTeam(G,l.type); return t===null?`${G.away} @ ${G.home}`:t===G.home?`vs ${G.away}`:`at ${G.home}`; }
+function legWho(G,l){ const t=legTeam(G,l.type); return t===null?`${shortName(G,G.away)} @ ${shortName(G,G.home)}`:t===G.home?`vs ${shortName(G,G.away)}`:`at ${shortName(G,G.home)}`; }
 function legMarket(type){ return hasLine(type)?(type==="over"||type==="under"?"Total":"Spread"):"Winner"; }
 function legSide(type){ return type==="homeML"||type==="homeSp"?"home":type==="awayML"||type==="awaySp"?"away":type; }
 function whenShort(G){ const d=new Date(G.start); return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`; }
@@ -434,10 +458,10 @@ function renderBar(){
 /* ---- build your own: every lined game, grouped by day, six picks each ---- */
 function renderGames(){
   const out=document.getElementById("games");
-  if(!out.dataset.built){
+  if(out.dataset.built!==league){
     out.innerHTML="";
-    const lined=GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim);
-    if(!lined.length){ out.innerHTML=`<p class="empty">No games with lines yet — they load closer to game day.</p>`; return; }
+    const lined=GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===league);
+    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet — they load closer to game day.</p>`; out.dataset.built=league; return; }
     const byDay={};
     lined.forEach(x=>{ const d=new Date(x.G.start), k=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`; (byDay[k]=byDay[k]||[]).push(x); });
     let first=true;
@@ -448,11 +472,11 @@ function renderGames(){
       byDay[day].forEach(({G,gi})=>{
         const g=document.createElement("div"); g.className="game";
         const head=document.createElement("div"); head.className="gHead";
-        head.appendChild(logoTile(G.away,true)); head.appendChild(document.createTextNode(` ${G.away} @ ${G.home}`)); head.appendChild(logoTile(G.home,true));
+        head.appendChild(logoTile(G.away,true)); head.appendChild(document.createTextNode(` ${shortName(G,G.away)} @ ${shortName(G,G.home)}`)); head.appendChild(logoTile(G.home,true));
         const when=document.createElement("span"); when.className="when"; when.textContent=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}); head.appendChild(when);
         g.appendChild(head);
         const picks=document.createElement("div"); picks.className="picks";
-        [["awaySp",`${G.away} ${fmtSp(-G.spread)}`],["homeSp",`${G.home} ${fmtSp(G.spread)}`],["over",`Over ${G.total}`],["under",`Under ${G.total}`],["awayML",`${G.away} wins`],["homeML",`${G.home} wins`]]
+        [["awaySp",`${shortName(G,G.away)} ${fmtSp(-G.spread)}`],["homeSp",`${shortName(G,G.home)} ${fmtSp(G.spread)}`],["over",`Over ${G.total}`],["under",`Under ${G.total}`],["awayML",`${shortName(G,G.away)} wins`],["homeML",`${shortName(G,G.home)} wins`]]
           .forEach(([type,label])=>{
             const b=document.createElement("button"); b.type="button"; b.className="pick"; b.dataset.gi=gi; b.dataset.type=type;
             const p=prob(gi,[{type,line:hasLine(type)?marketLine(G,type):0}]);
@@ -464,7 +488,7 @@ function renderGames(){
       });
       out.appendChild(det);
     }
-    out.dataset.built="1";
+    out.dataset.built=league;
   }
   out.querySelectorAll(".pick").forEach(b=>{ b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0); b.classList.toggle("na",!offered(+b.dataset.gi,b.dataset.type)); b.title=offered(+b.dataset.gi,b.dataset.type)?"":"Marked as not on your app"; });
 }
@@ -486,7 +510,7 @@ function legRow(l,opts){
     n.querySelector(".val").onclick=()=>openSheet(l,opts.onChange);
     mid.appendChild(n);
     const dk=document.createElement("div"); dk.className="dk";
-    dk.textContent=q?`DraftKings pays ${money(q.dec)} (${q.am})${q.fair!==null?` · their chance ${pct(q.fair)}`:""}`:(G.alt?"DraftKings doesn't list this exact line":"DK alternate lines load Thursdays");
+    dk.textContent=q?`DraftKings pays ${money(q.dec)} (${q.am})${q.fair!==null?` · their chance ${pct(q.fair)}`:""}`:(G.alt?"DraftKings doesn't list this exact line":lgOf(G)==="nfl"?"DK alternate lines load every other Thursday for NFL":"DK alternate lines load Thursdays");
     mid.appendChild(dk);
   }
   row.appendChild(mid);
@@ -501,9 +525,10 @@ function legRow(l,opts){
 function legGroups(container,legs,opts){
   const {groups}=slipProb(legs);
   groups.sort((a,b)=>GAMES[a.gi].start.localeCompare(GAMES[b.gi].start));
+  const mixed=new Set(groups.map(gr=>lgOf(GAMES[gr.gi]))).size>1;
   groups.forEach(gr=>{
     const G=GAMES[gr.gi];
-    const h=document.createElement("div"); h.className="gameHead"; h.innerHTML=`<span>${esc(G.away)} @ ${esc(G.home)}</span><span>${esc(whenShort(G))}</span>`;
+    const h=document.createElement("div"); h.className="gameHead"; h.innerHTML=`<span>${esc(shortName(G,G.away))} @ ${esc(shortName(G,G.home))}${mixed?`<span class="lgTag">${LEAGUE_NAME[lgOf(G)]}</span>`:""}</span><span>${esc(whenShort(G))}</span>`;
     container.appendChild(h);
     gr.legs.forEach(l=>container.appendChild(legRow(l,{onChange:opts.onChange,na:opts.na,remove:opts.removable?()=>{S.legs.splice(S.legs.indexOf(l),1);render();}:null})));
     if(gr.legs.length>1){
@@ -577,7 +602,7 @@ function gameBlocks(gi){
   return combos.map(legs=>({legs,p:prob(gi,legs)}));
 }
 function buildSlips(N){
-  const gis=GAMES.map((G,gi)=>G.sim?gi:-1).filter(gi=>gi>=0);
+  const gis=GAMES.map((G,gi)=>G.sim&&lgOf(G)===league?gi:-1).filter(gi=>gi>=0);
   let beam=[{k:0,p:1,b:null,prev:null}];
   gis.forEach(gi=>{
     const blocks=gameBlocks(gi), by={};
@@ -599,15 +624,15 @@ function buildSlips(N){
 function renderHot(){
   const out=document.getElementById("hotOut"), st=document.getElementById("hotStatus");
   out.innerHTML="";
-  const lined=GAMES.filter(G=>G.sim).length;
-  if(!lined){ st.textContent="No games with lines yet — lines load closer to game day."; return; }
-  st.textContent=`Searching ${lined} games for the best ${hotN}-pick slips…`;
+  const name=LEAGUE_NAME[league], lined=GAMES.filter(G=>G.sim&&lgOf(G)===league).length;
+  if(!lined){ st.textContent=`No ${name} games with lines yet — lines load closer to game day.`; return; }
+  st.textContent=`Searching ${lined} ${name} games for the best ${hotN}-pick slips…`;
   setTimeout(()=>{
     const t0=performance.now();
     HOT=buildSlips(hotN);
     if(!HOT.length){ st.textContent="Couldn't build a slip with the pick types your app offers — turn a type back on or clear \"Not on my app\"."; return; }
     const na=[...NA].filter(k=>BY_ID[k.split("|")[0]]!=null).length;
-    st.textContent=`Top ${HOT.length} slips from ${lined} games, ranked by the chance the whole slip hits${na?` · skipping ${na} pick${na>1?"s":""} you marked not on your app`:""}. Tap one to adjust lines.`;
+    st.textContent=`Top ${HOT.length} ${name} slips from ${lined} games, ranked by the chance the whole slip hits${na?` · skipping ${na} pick${na>1?"s":""} you marked not on your app`:""}. Tap one to adjust lines.`;
     HOT.forEach((s,i)=>{ const d=document.createElement("div"); d.className="hs"; out.appendChild(d); paintHot(d,s,i); });
   },20);
 }
@@ -637,7 +662,7 @@ function openSheet(l,onChange){
   const rows=MOVES.map(k=>{ const L=base+k, p=prob(l.gi,[{type:l.type,line:L}]), q=dkQuote(G,l.type,L); return {k,L,p,q}; });
   const box=document.getElementById("sheetIn");
   box.innerHTML=`<h2><span>${esc(side)} — every line</span><button type="button" class="close" aria-label="Close">×</button></h2>
-    <p class="small" style="margin:0 0 4px">${esc(G.away)} @ ${esc(G.home)} · market ${esc(fmt(base))}. Tap a line to use it.</p>
+    <p class="small" style="margin:0 0 4px">${esc(shortName(G,G.away))} @ ${esc(shortName(G,G.home))} · market ${esc(fmt(base))}. Tap a line to use it.</p>
     <div class="scroll"><table class="ladder">
       <tr><th>Line</th><th>Our chance</th><th>Fair pays</th><th>DK pays</th><th>DK's chance</th></tr>
       ${rows.map(r=>`<tr class="${r.k===0?"base":""}${r.L===l.line?" cur":""}" data-l="${r.L}">
@@ -646,7 +671,7 @@ function openSheet(l,onChange){
         <td>${r.q?`${money(r.q.dec)} <span class="small">${r.q.am}</span>`:"—"}</td>
         <td class="p" style="color:var(--muted)">${r.q&&r.q.fair!==null?pct(r.q.fair):"—"}</td></tr>`).join("")}
     </table></div>
-    <p class="small" style="margin:10px 0 0">"Fair pays" is what $1 on that line deserves to pay if it hits, by our numbers. "DK pays" is DraftKings' real price for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole numbers can push — prefer the half-point.${G.alt?"":" <b>No DraftKings alternate lines for this game yet</b> — they load Thursdays."}</p>`;
+    <p class="small" style="margin:10px 0 0">"Fair pays" is what $1 on that line deserves to pay if it hits, by our numbers. "DK pays" is DraftKings' real price for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole numbers can push — prefer the half-point.${G.alt?"":` <b>No DraftKings alternate lines for this game yet</b> — ${lgOf(G)==="nfl"?"NFL ones load every other Thursday":"they load Thursdays"}.`}</p>`;
   const dlg=document.getElementById("sheet");
   box.querySelector(".close").onclick=()=>dlg.close();
   box.querySelectorAll("tr[data-l]").forEach(tr=>tr.querySelector(".use").onclick=()=>{ l.line=+tr.dataset.l; dlg.close(); onChange(); });
@@ -685,7 +710,7 @@ function prohibPattern(a,b){
 function prohibAdd(G,a,b){
   const L=prohibLog(), key=prohibKey(G,a,b);
   if(L.some(r=>r.key===key)) return;
-  L.push({key,date:new Date().toISOString().slice(0,10),game:`${G.away} @ ${G.home}`,a:legLabel(G,a),b:legLabel(G,b),pattern:prohibPattern(a,b)});
+  L.push({key,date:new Date().toISOString().slice(0,10),league:LEAGUE_NAME[lgOf(G)],game:`${G.away} @ ${G.home}`,a:legLabel(G,a),b:legLabel(G,b),pattern:prohibPattern(a,b)});
   try{localStorage.setItem("udProhibited",JSON.stringify(L.slice(-500)));}catch(e){}
   prohibButtons();
 }
@@ -696,7 +721,7 @@ function prohibButtons(){
 }
 document.getElementById("prohibCopy").onclick=()=>{
   const L=prohibLog();
-  const tsv=["date\tgame\tpick A\tpick B\tpattern"].concat(L.map(r=>[r.date,r.game,r.a,r.b,r.pattern].join("\t"))).join("\n");
+  const tsv=["date\tleague\tgame\tpick A\tpick B\tpattern"].concat(L.map(r=>[r.date,r.league||"College",r.game,r.a,r.b,r.pattern].join("\t"))).join("\n");
   navigator.clipboard.writeText(tsv).then(()=>{const b=document.getElementById("prohibCopy");b.textContent="Copied";setTimeout(prohibButtons,1800);});
 };
 document.getElementById("prohibClear").onclick=()=>{
@@ -717,7 +742,7 @@ document.getElementById("reload").onclick=()=>location.reload();
 document.getElementById("copy").onclick=()=>{
   const n=S.legs.length; if(!n) return;
   const {joint}=slipProb(S.legs), pay=payoutFor(n);
-  const desc=S.legs.map(l=>{const G=GAMES[l.gi];return `${G.away} @ ${G.home} ${legLabel(G,l)}`;}).join(" | ");
+  const desc=S.legs.map(l=>{const G=GAMES[l.gi];return `${lgOf(G)==="nfl"?"NFL ":""}${G.away} @ ${G.home} ${legLabel(G,l)}`;}).join(" | ");
   const row=[new Date().toISOString().slice(0,10),S.who,desc,n,pay?money(pay.dec)+(pay.est?" est":""):"",pct(joint),pay?grade(joint*pay.dec-1).word:"",""].join("\t");
   navigator.clipboard.writeText(row).then(()=>{const b=document.getElementById("copy");b.textContent="Copied — paste in the sheet";setTimeout(()=>b.textContent="Copy row for the log",2200);});
 };
@@ -737,16 +762,21 @@ function init(){
   GAMES=(R&&R.upcoming)||[]; LOGOS=(R&&R.logos)||{}; COLORS=(R&&R.colors)||{};
   GAMES.forEach((G,i)=>{ BY_ID[G.id]=i; if(new Date(G.start).getTime()<Date.now()) delete G.sim; });   // kicked off = off the board
   const tag=document.getElementById("ratingsTag");
+  const count=lg=>GAMES.filter(G=>G.sim&&lgOf(G)===lg).length, nC=count("ncaaf"), nN=count("nfl");
+  document.getElementById("nNcaaf").textContent=nC?`${nC}`:""; document.getElementById("nNfl").textContent=nN?`${nN}`:"";
   if(!R){ tag.textContent="No lines file loaded — run refresh.py first"; tag.classList.add("stale"); }
   else {
     const gen=new Date(R.generated), lg=R.lines_generated?new Date(R.lines_generated):gen, mins=Math.round((Date.now()-lg)/60000);
     const ago=mins<60?`${mins} min ago`:mins<2880?`${Math.round(mins/60)} hr ago`:`${Math.round(mins/1440)} days ago`;
-    const lined=GAMES.filter(G=>G.sim).length;
-    tag.textContent=`Lines as of ${lg.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago}) · ${lined} games with lines`;
+    const lined=nC+nN;
+    tag.textContent=`Lines as of ${lg.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago}) · ${nC} college + ${nN} NFL games with lines`;
     if(R.alt_generated) tag.textContent+=` · DK alt lines ${new Date(R.alt_generated).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})}`;
     if(mins>360||!lined) tag.classList.add("stale");
     if(!lined) tag.textContent+=" — run refresh.py";
   }
+  loadLeague();
+  if(!count(league)&&count(league==="ncaaf"?"nfl":"ncaaf")) league=league==="ncaaf"?"nfl":"ncaaf";   // open on whichever league has games
+  document.querySelectorAll("#leagueChips .chip").forEach(b=>{ b.setAttribute("aria-pressed",b.dataset.league===league); b.onclick=()=>setLeague(b.dataset.league); });
   NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); renderHot(); render(); show("slips");
 }
 /* ratings.js with a cache-buster, without document.write; works from file:// too */
