@@ -36,6 +36,18 @@ def sd_for(g):
     return SD_BY_LEAGUE.get(lg, DEFAULT_SD), MARGIN_SD_BY_LEAGUE.get(lg)
 
 
+def seed_for(gid, fallback):
+    """A stable 31-bit seed from a game id, which may be an int (CFBD/ESPN) or a
+    string (the-odds-api). Same id -> same table -> no churn in the repo."""
+    if gid is None:
+        return fallback % (2 ** 31)
+    try:
+        return int(gid) % (2 ** 31)
+    except (TypeError, ValueError):
+        import hashlib
+        return int(hashlib.md5(str(gid).encode()).hexdigest(), 16) % (2 ** 31)
+
+
 def team_points(rng, mean, disp, n):
     """n simulated scores for a team expected to score `mean`."""
     m = rng.gamma(disp, 1.0 / disp, size=n)                  # hot/cold multiplier
@@ -208,8 +220,9 @@ def attach_sims(up, n=SIMS):
             continue                       # no line = nothing to center on; the page won't offer it
         tot, mar, src = center_for(g)
         sd, msd = sd_for(g)
-        # seeded by game id: same lines -> byte-identical table -> no churn in the repo
-        grid = game_grid(tot, mar, sd, n, seed=int(g.get("id") or gi) % (2 ** 31), margin_sd=msd)
+        # seeded by game id: same lines -> byte-identical table -> no churn in the repo.
+        # ids are ints (CFBD/ESPN) or strings (the-odds-api) - hash either the same way.
+        grid = game_grid(tot, mar, sd, n, seed=seed_for(g.get("id"), gi), margin_sd=msd)
         g["sim"] = dict(grid.encode(), sd=sd, msd=msd, center=src)
         grids[gi] = grid
     return grids

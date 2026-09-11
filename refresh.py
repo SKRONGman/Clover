@@ -75,6 +75,7 @@ BOOKS = ["DraftKings", "ESPN Bet", "Bovada"]     # in order of preference
 # No key, no credits. Lines are ESPN BET's, which track DraftKings within a
 # half point. Unofficial endpoint - if it ever changes, `--check-nfl` shows why.
 ESPN_NFL = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+NFL_DIAG = {"status": "not attempted", "errors": []}     # written into ratings.json so failures are visible without the Actions log
 
 # Alternate lines (every spread/total rung DraftKings offers) come from
 # the-odds-api.com. Free tier = 500 credits/month; each game costs 2 credits
@@ -126,6 +127,116 @@ def pick(d, *names, default=None):
 # ----------------------------------------------------------------------
 # PULL
 # ----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+# NFL teams - static. Logos live on a.espncdn.com and never change, so we
+# don't fetch them; colors are a fallback only (the logo loads). Keyed by the
+# full name both ESPN and the-odds-api use ("Kansas City Chiefs").
+# ----------------------------------------------------------------------
+NFL_TEAMS = {
+    "Arizona Cardinals": ("ari", "Cardinals", "#97233F"),
+    "Atlanta Falcons": ("atl", "Falcons", "#A71930"),
+    "Baltimore Ravens": ("bal", "Ravens", "#241773"),
+    "Buffalo Bills": ("buf", "Bills", "#00338D"),
+    "Carolina Panthers": ("car", "Panthers", "#0085CA"),
+    "Chicago Bears": ("chi", "Bears", "#0B162A"),
+    "Cincinnati Bengals": ("cin", "Bengals", "#FB4F14"),
+    "Cleveland Browns": ("cle", "Browns", "#311D00"),
+    "Dallas Cowboys": ("dal", "Cowboys", "#003594"),
+    "Denver Broncos": ("den", "Broncos", "#FB4F14"),
+    "Detroit Lions": ("det", "Lions", "#0076B6"),
+    "Green Bay Packers": ("gb", "Packers", "#203731"),
+    "Houston Texans": ("hou", "Texans", "#03202F"),
+    "Indianapolis Colts": ("ind", "Colts", "#002C5F"),
+    "Jacksonville Jaguars": ("jax", "Jaguars", "#006778"),
+    "Kansas City Chiefs": ("kc", "Chiefs", "#E31837"),
+    "Las Vegas Raiders": ("lv", "Raiders", "#000000"),
+    "Los Angeles Chargers": ("lac", "Chargers", "#0080C6"),
+    "Los Angeles Rams": ("lar", "Rams", "#003594"),
+    "Miami Dolphins": ("mia", "Dolphins", "#008E97"),
+    "Minnesota Vikings": ("min", "Vikings", "#4F2683"),
+    "New England Patriots": ("ne", "Patriots", "#002244"),
+    "New Orleans Saints": ("no", "Saints", "#D3BC8D"),
+    "New York Giants": ("nyg", "Giants", "#0B2265"),
+    "New York Jets": ("nyj", "Jets", "#125740"),
+    "Philadelphia Eagles": ("phi", "Eagles", "#004C54"),
+    "Pittsburgh Steelers": ("pit", "Steelers", "#FFB612"),
+    "San Francisco 49ers": ("sf", "49ers", "#AA0000"),
+    "Seattle Seahawks": ("sea", "Seahawks", "#002244"),
+    "Tampa Bay Buccaneers": ("tb", "Buccaneers", "#D50A0A"),
+    "Tennessee Titans": ("ten", "Titans", "#0C2340"),
+    "Washington Commanders": ("wsh", "Commanders", "#5A1414"),
+}
+NFL_LOGO = "https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png"
+
+
+def nfl_team_art():
+    """{full name: {logo, color}} for all 32 teams - no network."""
+    return {name: {"logo": NFL_LOGO.format(abbr=a[0]), "color": a[2]}
+            for name, a in NFL_TEAMS.items()}
+
+
+def nfl_short(name):
+    t = NFL_TEAMS.get(name)
+    return t[1] if t else name
+
+
+def pull_nfl_from_odds():
+    """NFL slate + DraftKings main spread/total from the-odds-api. Reliable from
+    GitHub Actions (ESPN's feed refuses datacenter IPs). /events is free; the one
+    slate-wide /odds call is 2 credits. Returns (games, credits_remaining or None)."""
+    sport = ODDS_SPORTS["nfl"]
+    events, remaining = odds_get(f"/sports/{sport}/events")          # free
+    if events is None:
+        return [], None
+    now = datetime.now(timezone.utc)
+    horizon = now.timestamp() + DAYS_AHEAD * 86400
+    upcoming = {}
+    for e in events:
+        et = parse_dt(e.get("commence_time", "") or "")
+        if et is None or et.timestamp() > horizon or et.timestamp() < now.timestamp():
+            continue
+        upcoming[e.get("id")] = e
+    if not upcoming:
+        NFL_DIAG["status"] = "odds-api: no NFL games in the window"
+        return [], remaining
+    data, remaining = odds_get(f"/sports/{sport}/odds", bookmakers=ODDS_BOOK,
+                               markets="spreads,totals", oddsFormat="american")
+    lines = {e.get("id"): e for e in (data or [])}
+    games = []
+    for eid, e in upcoming.items():
+        home, away = e.get("home_team"), e.get("away_team")
+        if not home or not away:
+            continue
+        start = parse_dt(e.get("commence_time"))
+        spread = total = None
+        for bk in (lines.get(eid) or {}).get("bookmakers", []):
+            for m in bk.get("markets", []):
+                for o in m.get("outcomes", []):
+                    pt = o.get("point")
+                    if pt is None:
+                        continue
+                    if m["key"] == "spreads" and o.get("name") == home:
+                        spread = float(pt)                      # home-team spread, neg = home favored
+                    elif m["key"] == "totals" and o.get("name") == "Over":
+                        total = float(pt)
+        games.append({
+            "id": int(eid) if str(eid).isdigit() else eid,
+            "league": "nfl",
+            "week": 0,
+            "start": start.isoformat(timespec="minutes") if start else now.isoformat(timespec="minutes"),
+            "home": home, "away": away,
+            "home_short": nfl_short(home), "away_short": nfl_short(away),
+            "neutral": False,
+            "spread": spread, "total": total,
+            "book": "DraftKings",
+        })
+    lined = sum(1 for g in games if g["spread"] is not None and g["total"] is not None)
+    NFL_DIAG["status"] = f"odds-api: {len(games)} games, {lined} with a line"
+    games.sort(key=lambda g: g["start"])
+    return games, remaining
+
+
+
 def pull_games(season):
     """FBS games only. Asking the API for classification=fbs returns every
     game with at least one FBS team; we keep those (an FCS opponent still
@@ -323,14 +434,17 @@ def pull_nfl_upcoming():
         try:
             events = espn_get(**params).get("events") or []
         except Exception as e:
+            NFL_DIAG.setdefault("errors", []).append(f"attempt {attempt + 1} {params}: {e}")
             print(f"  NFL feed attempt {attempt + 1} failed ({params}): {e}")
             continue
         if events:
             break
         print(f"  NFL feed attempt {attempt + 1} returned no events ({params})")
     if not events:
+        NFL_DIAG["status"] = "feed returned no events after 3 attempts (see the attempt lines above)"
         print("  NFL feed unavailable - keeping college only")
         return [], {}
+    NFL_DIAG["status"] = f"feed ok: {len(events)} events"
     print(f"  NFL feed: {len(events)} events")
     games, art = [], {}
     for e in events:
@@ -665,16 +779,61 @@ def nfl_alt_week():
     return (not NFL_ALT_EVERY_OTHER_WEEK) or datetime.now(timezone.utc).isocalendar()[1] % 2 == 0
 
 
+NFL_ODDS_MIN_HOURS = 20        # don't spend odds credits on NFL more than ~once a day
+
+
+def pull_nfl(R):
+    """NFL slate + lines. ESPN's free feed first (it refuses GitHub's datacenter
+    IPs, so on Actions this usually returns nothing); then the-odds-api, which is
+    reliable there but costs 2 credits, so it's rate-limited to once per
+    NFL_ODDS_MIN_HOURS and otherwise carries the last pull forward."""
+    NFL_DIAG.clear()
+    NFL_DIAG.update({"status": "not attempted", "errors": []})
+    now = datetime.now(timezone.utc)
+    prev = [g for g in R.get("upcoming", []) if g.get("league") == "nfl"
+            and (parse_dt(g.get("start") or "") or now) > now]     # drop games that kicked off
+    try:
+        nfl, _ = pull_nfl_upcoming()               # ESPN, free
+    except Exception as e:
+        NFL_DIAG.setdefault("errors", []).append(f"espn: {e}")
+        nfl = []
+    if nfl:
+        NFL_DIAG["source"] = "espn"
+        R.setdefault("nfl", {})
+        return nfl
+    # ESPN gave nothing - decide whether to spend odds-api credits
+    state = R.setdefault("nfl", {})
+    last = parse_dt(state.get("odds_asof") or "")
+    fresh_enough = last is not None and (datetime.now(timezone.utc) - last).total_seconds() < NFL_ODDS_MIN_HOURS * 3600
+    if fresh_enough and prev:
+        NFL_DIAG["source"] = "carried forward (odds pull rate-limited)"
+        NFL_DIAG["status"] = f"kept {len(prev)} NFL games from {state.get('odds_asof')}"
+        return prev
+    if os.environ.get("ODDS_KEY", "").strip():
+        nfl, remaining = pull_nfl_from_odds()
+        if nfl:
+            state["odds_asof"] = datetime.now(timezone.utc).isoformat(timespec="minutes")
+            state["odds_remaining"] = remaining
+            NFL_DIAG["source"] = "odds-api"
+            return nfl
+    if prev:                                       # last resort: keep what we had
+        NFL_DIAG["source"] = "carried forward (no fresh feed)"
+        return prev
+    NFL_DIAG.setdefault("status", "no NFL games from any source")
+    return []
+
+
 def write_upcoming(R, alt_lines=False):
     """Refresh the slate + lines (both leagues), project each college game,
     play everything out, write both output files."""
     print("Pulling upcoming college games and lines…")
     up = pull_upcoming(SEASON)
     print("Pulling upcoming NFL games and lines…")
-    nfl, nfl_art = pull_nfl_upcoming()
+    nfl = pull_nfl(R)
     for g in nfl:
         line = f"{g['away']} {-g['spread']:+g} / {g['total']} ({g['book']})" if g["spread"] is not None else "no line"
         print(f"    {g['start'][:16]}  {g['away']} @ {g['home']}  {line}")
+    nfl_art = nfl_team_art()
     up = sorted(up + nfl, key=lambda g: g["start"])
     # alt lines are pulled weekly; every other refresh keeps the last copy
     old = {g["id"]: g.get("alt") for g in R.get("upcoming", []) if g.get("alt")}
@@ -712,6 +871,7 @@ def write_upcoming(R, alt_lines=False):
         g["proj_home"] = round(hp, 1)
         g["proj_away"] = round(ap, 1)
     R["upcoming"] = up
+    R["nfl_diag"] = dict(NFL_DIAG, parsed=sum(1 for g in up if g.get("league") == "nfl"))
     R["lines_generated"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     lined = {lg: sum(1 for g in up if g["league"] == lg and g["spread"] is not None and g["total"] is not None)
              for lg in sim.LEAGUES}
