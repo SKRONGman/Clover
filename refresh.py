@@ -168,6 +168,27 @@ NFL_TEAMS = {
 }
 NFL_LOGO = "https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png"
 
+# Conference/division - static, doesn't change mid-season. Used by the page's
+# NFL Conference/Division filters. "AFC"/"NFC" is just the first word.
+NFL_DIVISIONS = {
+    "Buffalo Bills": "AFC East", "Miami Dolphins": "AFC East",
+    "New England Patriots": "AFC East", "New York Jets": "AFC East",
+    "Baltimore Ravens": "AFC North", "Cincinnati Bengals": "AFC North",
+    "Cleveland Browns": "AFC North", "Pittsburgh Steelers": "AFC North",
+    "Houston Texans": "AFC South", "Indianapolis Colts": "AFC South",
+    "Jacksonville Jaguars": "AFC South", "Tennessee Titans": "AFC South",
+    "Denver Broncos": "AFC West", "Kansas City Chiefs": "AFC West",
+    "Las Vegas Raiders": "AFC West", "Los Angeles Chargers": "AFC West",
+    "Dallas Cowboys": "NFC East", "New York Giants": "NFC East",
+    "Philadelphia Eagles": "NFC East", "Washington Commanders": "NFC East",
+    "Chicago Bears": "NFC North", "Detroit Lions": "NFC North",
+    "Green Bay Packers": "NFC North", "Minnesota Vikings": "NFC North",
+    "Atlanta Falcons": "NFC South", "Carolina Panthers": "NFC South",
+    "New Orleans Saints": "NFC South", "Tampa Bay Buccaneers": "NFC South",
+    "Arizona Cardinals": "NFC West", "Los Angeles Rams": "NFC West",
+    "San Francisco 49ers": "NFC West", "Seattle Seahawks": "NFC West",
+}
+
 
 def nfl_team_art():
     """{full name: {logo, color}} for all 32 teams - no network."""
@@ -178,6 +199,15 @@ def nfl_team_art():
 def nfl_short(name):
     t = NFL_TEAMS.get(name)
     return t[1] if t else name
+
+
+def nfl_div(name):
+    return NFL_DIVISIONS.get(name)
+
+
+def nfl_conf(name):
+    d = NFL_DIVISIONS.get(name)
+    return d.split()[0] if d else None
 
 
 def pull_nfl_from_odds():
@@ -226,6 +256,8 @@ def pull_nfl_from_odds():
             "start": start.isoformat(timespec="minutes") if start else now.isoformat(timespec="minutes"),
             "home": home, "away": away,
             "home_short": nfl_short(home), "away_short": nfl_short(away),
+            "home_conf": nfl_conf(home), "away_conf": nfl_conf(away),
+            "home_div": nfl_div(home), "away_div": nfl_div(away),
             "neutral": False,
             "spread": spread, "total": total,
             "book": "DraftKings",
@@ -336,6 +368,7 @@ def pull_upcoming(season):
             "start": start.isoformat(timespec="minutes"),
             "home": pick(g, "home_team", "homeTeam"),
             "away": pick(g, "away_team", "awayTeam"),
+            "fcs": hc != "fbs" or ac != "fbs",   # FBS-vs-FCS (pure FCS-vs-FCS was never pulled)
             "neutral": bool(pick(g, "neutral_site", "neutralSite", default=False)),
             "spread": None,        # home-team spread, negative = home favored
             "total": None,
@@ -479,6 +512,8 @@ def pull_nfl_upcoming():
             "away": away["name"],
             "home_short": home["short"],            # "Chiefs" - the page uses it where space is tight
             "away_short": away["short"],
+            "home_conf": nfl_conf(home["name"]), "away_conf": nfl_conf(away["name"]),
+            "home_div": nfl_div(home["name"]), "away_div": nfl_div(away["name"]),
             "neutral": bool(comp.get("neutralSite", False)),
             "spread": None,
             "total": None,
@@ -631,13 +666,14 @@ def backtest(games, R):
 
 
 def pull_team_art(season):
-    """Logo + primary color per school, from CFBD /teams (one call, then cached
-    on disk). Logos are ESPN CDN URLs; the page shows initials if one is missing."""
+    """Logo + primary color + conference per school, from CFBD /teams (one call,
+    then cached on disk). Logos are ESPN CDN URLs; the page shows initials if
+    one is missing. Conference feeds the page's Conference filter."""
     out = {}
     try:
         teams = get("/teams", year=season)
     except requests.HTTPError as e:
-        print(f"  team logos unavailable ({e.response.status_code}) — page will show initials")
+        print(f"  team info unavailable ({e.response.status_code}) — page will show initials, no conference filter")
         return out
     for t in teams:
         name = pick(t, "school")
@@ -646,7 +682,33 @@ def pull_team_art(season):
             continue
         out[name] = {"logo": logos[0] if logos else None,
                      "color": pick(t, "color"),
-                     "alt": pick(t, "alt_color", "alternateColor")}
+                     "alt": pick(t, "alt_color", "alternateColor"),
+                     "conference": pick(t, "conference")}
+    return out
+
+
+def pull_rankings(season, weeks):
+    """AP Top 25 rank per team, by week: {week: {school: rank}}. One call per
+    week already in the upcoming slate (same weeks /lines is fetched for)."""
+    out = {}
+    for wk in weeks:
+        try:
+            rows = get("/rankings", year=season, week=wk, seasonType="regular")
+        except requests.HTTPError as e:
+            print(f"  rankings for week {wk} unavailable ({e.response.status_code})")
+            continue
+        ranks = {}
+        for entry in rows:
+            polls = pick(entry, "polls", default=[]) or []
+            ap = next((p for p in polls if "ap" in (p.get("poll") or "").lower()), None)
+            if not ap:
+                continue
+            for r in pick(ap, "ranks", default=[]) or []:
+                school, rk = pick(r, "school"), pick(r, "rank")
+                if school and rk:
+                    ranks[school] = int(rk)
+        if ranks:
+            out[wk] = ranks
     return out
 
 
@@ -848,7 +910,9 @@ def write_upcoming(R, alt_lines=False):
             print("Pulling DraftKings alternate lines (off week for NFL - college only)…")
         pull_alt_lines(up, "ncaaf")
     R["alt_generated"] = max([g["alt"]["asof"] for g in up if g.get("alt")], default=None)
-    art = dict(cached(f"teams_{SEASON}", lambda: pull_team_art(SEASON)))
+    # Cache key bumped (teams_ -> teaminfo_) so an old cache from before the
+    # Conference filter existed gets refetched instead of silently missing it.
+    art = dict(cached(f"teaminfo_{SEASON}", lambda: pull_team_art(SEASON)))
     art.update(nfl_art)
     R["logos"] = {}
     R["colors"] = {}
@@ -864,12 +928,23 @@ def write_upcoming(R, alt_lines=False):
     for g in up:
         if g["league"] != "ncaaf":
             continue                                    # NFL has no ratings; sims center on the market
+        g["home_conf"] = (art.get(g["home"]) or {}).get("conference")
+        g["away_conf"] = (art.get(g["away"]) or {}).get("conference")
         hp, ap = project(g["home"], g["away"], R)
         if g["neutral"]:                                # take the home edge back out
             hp -= HFA_POINTS / 2
             ap += HFA_POINTS / 2
         g["proj_home"] = round(hp, 1)
         g["proj_away"] = round(ap, 1)
+    # AP Top 25 rank, per game's own week - feeds the Top 25 filter.
+    ncaaf_weeks = sorted({g["week"] for g in up if g["league"] == "ncaaf"})
+    rankings = pull_rankings(SEASON, ncaaf_weeks) if ncaaf_weeks else {}
+    for g in up:
+        if g["league"] != "ncaaf":
+            continue
+        wk_ranks = rankings.get(g["week"], {})
+        g["home_rank"] = wk_ranks.get(g["home"])
+        g["away_rank"] = wk_ranks.get(g["away"])
     R["upcoming"] = up
     R["nfl_diag"] = dict(NFL_DIAG, parsed=sum(1 for g in up if g.get("league") == "nfl"))
     R["lines_generated"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
