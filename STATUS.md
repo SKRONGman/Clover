@@ -1,6 +1,17 @@
 # Clover — project status
 
-Last updated: 2026-09-11 (NFL added — calibrated, tested offline, deployed by upload)
+Last updated: 2026-09-13 (filters added — Date/Game time/Conference/FBS/FCS/Top25/Division — staged for upload, not yet live)
+
+## Filters (2026-09-13)
+- New filter panel on the Slips tab, above Hot slips: **Date**, **Game time** (both leagues); **Conference, FBS, FCS, Top 25 (AP)** (college); **Conference, Division** (NFL). Filters apply to BOTH Build your own and Hot Slips generation — a filtered-out game can't be searched into a hot slip either.
+- **Date** defaults to "This weekend" — the nearest Thu–Mon window (computed client-side from today's date, not hardcoded); dropdown also lists every specific date in the loaded slate, or "All upcoming dates."
+- **Game time** buckets: Morning (<12pm), Afternoon (12–4pm), Evening (4–8pm), Primetime (8pm+) — by the browser's local hour, same as every other time shown on the page (no fixed timezone).
+- **FBS/FCS** are two independent toggles, not a radio: since `refresh.py` only ever pulls games with at least one FBS side (pure FCS-vs-FCS was always excluded), "FCS" here means "FBS team vs FCS opponent." Neither checked = show all; one checked = only that kind; both checked = same as neither (standard checkbox-filter behavior).
+- **Top 25** = at least one team in the game is CFBD's AP Top 25 that week.
+- All filter state persists per-league in localStorage (`cloverFilters`), like the slip/league/markets state already did.
+- **New data on every game** (added in `refresh.py`, written every refresh — full or `--lines-only`, no separate step needed): college games get `home_conf`/`away_conf` (from CFBD `/teams`) and `home_rank`/`away_rank` (from a new CFBD `/rankings` pull, one call per week in the slate — well inside the free CFBD quota) and `fcs` (bool, from the classification fields CFBD already returned). NFL games get `home_conf`/`away_conf` (AFC/NFC) and `home_div`/`away_div` from a new static `NFL_DIVISIONS` table in `refresh.py` — no network cost.
+- The team-info cache key changed `teams_<season>` → `teaminfo_<season>` so the **stale `cache_teams_2026.json` already in the repo gets ignored** and a fresh `/teams` pull (now including conference) happens automatically on the next run. The old file is orphaned — safe to delete, not required.
+- Not yet verified live: this was built and syntax-checked (Python `ast.parse`, `node --check`) in the dev session but has NOT been run against the real CFBD `/rankings` endpoint yet (field names there could have moved snake_case/camelCase like everything else CFBD does — `pick()` is used defensively but hasn't been checked against a real response). **First refresh after upload: check the log for "rankings for week N unavailable" lines** — if every week fails, `/rankings` needs a `--check`-style peek (add one if it keeps failing).
 
 ## NFL — first live run checklist (do once after the upload)
 1. Actions → "Refresh lines" → Run workflow → mode `lines`. The log prints every NFL game as `away +spread / total (book)`; check 2–3 against DraftKings. The ESPN feed could not be reached from the dev session, so the parser is written from the known schema and this is its first live test. If anything looks wrong: `python refresh.py --check-nfl` (prints the raw ESPN odds record next to what we parsed). Sign convention lives in `espn_spread()` — reads `details` like "KC -3.5" first, falls back to the `spread` field sign-checked against `favorite`.
@@ -63,6 +74,7 @@ Last updated: 2026-09-11 (NFL added — calibrated, tested offline, deployed by 
 - `.github/workflows/refresh.yml` — the schedule. `requirements.txt`: requests, numpy.
 
 ## Open items / next
+0. **Verify the filters live** (see "Filters" section above) — especially that `/rankings` actually returns AP data and that college Conference options populate (both depend on the new CFBD calls in `write_upcoming`, unverified against the real API).
 1. **Rotate the GitHub PAT** — it's in old chat history. Not needed for deploys anymore (upload or connected-repo session).
 2. Pin the two GitHub Actions (`checkout`, `setup-python`) by commit SHA instead of `@v4`/`@v5`.
 3. Use DK alt lines as a second truth — where DK's devigged chance and our table disagree by >5 pts, which is right? Could calibrate tails past 83% against DK. Research, not urgent.

@@ -194,6 +194,36 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
   </div>
 
   <div class="slip">
+    <h2>Filters</h2>
+    <div class="row">
+      <div><label for="fDate">Date</label><select id="fDate"></select></div>
+      <div><label for="fTime">Game time</label><select id="fTime">
+        <option value="all">All game times</option>
+        <option value="morning">Morning (before 12pm)</option>
+        <option value="afternoon">Afternoon (12&ndash;4pm)</option>
+        <option value="evening">Evening (4&ndash;8pm)</option>
+        <option value="primetime">Primetime (8pm+)</option>
+      </select></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div><label for="fConf">Conference</label><select id="fConf"></select></div>
+      <div id="fDivWrap" class="hidden"><label for="fDiv">Division</label><select id="fDiv"></select></div>
+    </div>
+    <div class="row" id="fRowNcaafExtra" style="margin-top:10px">
+      <div><label>Classification</label>
+        <div class="chips">
+          <button type="button" class="chip" id="fFbs" aria-pressed="false">FBS</button>
+          <button type="button" class="chip" id="fFcs" aria-pressed="false">FCS</button>
+        </div>
+      </div>
+      <div><label>&nbsp;</label>
+        <button type="button" class="chip" id="fTop25" aria-pressed="false" style="width:100%">Top 25 (AP)</button>
+      </div>
+    </div>
+    <p class="small" id="filterCount" style="margin:10px 0 0"></p>
+  </div>
+
+  <div class="slip">
     <h2>Hot slips <span class="sub">most likely to hit, at market lines</span></h2>
     <div class="row">
       <div><label>How many picks?</label>
@@ -297,8 +327,94 @@ function loadLeague(){ try{ const v=localStorage.getItem("cloverLeague"); if(LEA
 function setLeague(v){
   league=v; try{localStorage.setItem("cloverLeague",v);}catch(e){}
   document.querySelectorAll("#leagueChips .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.league===v));
+  populateFilterOptions();
   renderGames(); renderHot();
 }
+
+/* ===================================================================
+   FILTERS — Date, Game time (both leagues); Conference/FBS/FCS/Top25
+   (college); Conference/Division (NFL). Applied to both Build your own
+   and Hot Slips, so a filtered-out game can't be searched into a slip.
+   =================================================================== */
+const TIME_BUCKETS={morning:h=>h<12, afternoon:h=>h>=12&&h<16, evening:h=>h>=16&&h<20, primetime:h=>h>=20};
+function defaultFilters(){ return {date:"weekend", time:"all", conf:"all", div:"all", fbs:false, fcs:false, top25:false}; }
+let FILTERS={ncaaf:defaultFilters(), nfl:defaultFilters()};
+function loadFilters(){
+  try{
+    const s=JSON.parse(localStorage.getItem("cloverFilters")||"null");
+    if(s&&s.ncaaf) FILTERS.ncaaf=Object.assign(defaultFilters(),s.ncaaf);
+    if(s&&s.nfl) FILTERS.nfl=Object.assign(defaultFilters(),s.nfl);
+  }catch(e){}
+}
+function saveFilters(){ try{localStorage.setItem("cloverFilters",JSON.stringify(FILTERS));}catch(e){} }
+function dateKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function gameDateKey(G){ return dateKey(new Date(G.start)); }
+/* the Thu-Mon window we're either in, or heading into next (Tue/Wed = between weekends) */
+function weekendWindow(){
+  const now=new Date(), day=now.getDay(), sinceThu=(day-4+7)%7;      // Thu=0..Wed=6
+  const thu=new Date(now);
+  thu.setDate(now.getDate()+(sinceThu<=4 ? -sinceThu : 7-sinceThu));
+  thu.setHours(0,0,0,0);
+  const mon=new Date(thu); mon.setDate(thu.getDate()+4); mon.setHours(23,59,59,999);
+  return {thu,mon};
+}
+function gameInWeekend(G,win){ const t=new Date(G.start).getTime(); return t>=win.thu.getTime()&&t<=win.mon.getTime(); }
+function filterGame(G){
+  const lg=lgOf(G), f=FILTERS[lg]; if(!f) return true;
+  const d=new Date(G.start);
+  if(f.date==="weekend"){ if(!gameInWeekend(G,weekendWindow())) return false; }
+  else if(f.date!=="all"){ if(gameDateKey(G)!==f.date) return false; }
+  if(f.time!=="all"){ const test=TIME_BUCKETS[f.time]; if(test&&!test(d.getHours())) return false; }
+  if(f.conf!=="all" && G.home_conf!==f.conf && G.away_conf!==f.conf) return false;
+  if(lg==="ncaaf"){
+    if(f.fbs||f.fcs){ const isFcs=!!G.fcs; if(f.fbs&&!f.fcs&&isFcs) return false; if(f.fcs&&!f.fbs&&!isFcs) return false; }
+    if(f.top25 && !G.home_rank && !G.away_rank) return false;
+  } else {
+    if(f.div!=="all" && G.home_div!==f.div && G.away_div!==f.div) return false;
+  }
+  return true;
+}
+function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg&&filterGame(x.G)); }
+function populateFilterOptions(){
+  const lg=league, games=GAMES.filter(G=>G.sim&&lgOf(G)===lg), f=FILTERS[lg];
+  const lbl=d=>`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;
+  const dSel=document.getElementById("fDate"), win=weekendWindow();
+  const dates=[...new Set(games.map(gameDateKey))].sort();
+  dSel.innerHTML=`<option value="weekend">This weekend (${lbl(win.thu)}–${lbl(win.mon)})</option><option value="all">All upcoming dates</option>`
+    +dates.map(k=>{ const [y,m,dd]=k.split("-").map(Number); return `<option value="${k}">${esc(lbl(new Date(y,m-1,dd)))}</option>`; }).join("");
+  dSel.value=[...dSel.options].some(o=>o.value===f.date)?f.date:"weekend";
+  document.getElementById("fTime").value=f.time;
+
+  const cSel=document.getElementById("fConf");
+  if(lg==="ncaaf"){
+    const confs=[...new Set(games.flatMap(G=>[G.home_conf,G.away_conf]).filter(Boolean))].sort();
+    cSel.innerHTML=`<option value="all">All conferences</option>`+confs.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  } else {
+    cSel.innerHTML=`<option value="all">All conferences</option><option value="AFC">AFC</option><option value="NFC">NFC</option>`;
+  }
+  cSel.value=[...cSel.options].some(o=>o.value===f.conf)?f.conf:"all";
+
+  document.getElementById("fDivWrap").classList.toggle("hidden",lg!=="nfl");
+  if(lg==="nfl"){
+    const divs=[...new Set(games.flatMap(G=>[G.home_div,G.away_div]).filter(Boolean))].sort();
+    const dvSel=document.getElementById("fDiv");
+    dvSel.innerHTML=`<option value="all">All divisions</option>`+divs.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join("");
+    dvSel.value=[...dvSel.options].some(o=>o.value===f.div)?f.div:"all";
+  }
+  document.getElementById("fRowNcaafExtra").classList.toggle("hidden",lg!=="ncaaf");
+  if(lg==="ncaaf"){
+    document.getElementById("fFbs").setAttribute("aria-pressed",!!f.fbs);
+    document.getElementById("fFcs").setAttribute("aria-pressed",!!f.fcs);
+    document.getElementById("fTop25").setAttribute("aria-pressed",!!f.top25);
+  }
+}
+document.getElementById("fDate").onchange=e=>{FILTERS[league].date=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fTime").onchange=e=>{FILTERS[league].time=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fConf").onchange=e=>{FILTERS[league].conf=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fDiv").onchange=e=>{FILTERS[league].div=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fFbs").onclick=()=>{FILTERS.ncaaf.fbs=!FILTERS.ncaaf.fbs;saveFilters();populateFilterOptions();renderGames();renderHot();};
+document.getElementById("fFcs").onclick=()=>{FILTERS.ncaaf.fcs=!FILTERS.ncaaf.fcs;saveFilters();populateFilterOptions();renderGames();renderHot();};
+document.getElementById("fTop25").onclick=()=>{FILTERS.ncaaf.top25=!FILTERS.ncaaf.top25;saveFilters();populateFilterOptions();renderGames();renderHot();};
 
 function gridFor(gi){
   if(GRIDS[gi]) return GRIDS[gi];
@@ -458,10 +574,16 @@ function renderBar(){
 /* ---- build your own: every lined game, grouped by day, six picks each ---- */
 function renderGames(){
   const out=document.getElementById("games");
-  if(out.dataset.built!==league){
+  const all=GAMES.filter(G=>G.sim&&lgOf(G)===league).length, lined=filteredGames(league);
+  const cnt=document.getElementById("filterCount");
+  cnt.textContent = !all ? "" : lined.length===all
+    ? `${all} ${LEAGUE_NAME[league]} game${all===1?"":"s"} with a line`
+    : `Showing ${lined.length} of ${all} ${LEAGUE_NAME[league]} games with a line`;
+  const fkey=league+"|"+JSON.stringify(FILTERS[league]);
+  if(out.dataset.built!==fkey){
     out.innerHTML="";
-    const lined=GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===league);
-    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet — they load closer to game day.</p>`; out.dataset.built=league; return; }
+    if(!all){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet — they load closer to game day.</p>`; out.dataset.built=fkey; return; }
+    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters.</p>`; out.dataset.built=fkey; return; }
     const byDay={};
     lined.forEach(x=>{ const d=new Date(x.G.start), k=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`; (byDay[k]=byDay[k]||[]).push(x); });
     let first=true;
@@ -488,7 +610,7 @@ function renderGames(){
       });
       out.appendChild(det);
     }
-    out.dataset.built=league;
+    out.dataset.built=fkey;
   }
   out.querySelectorAll(".pick").forEach(b=>{ b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0); b.classList.toggle("na",!offered(+b.dataset.gi,b.dataset.type)); b.title=offered(+b.dataset.gi,b.dataset.type)?"":"Marked as not on your app"; });
 }
@@ -602,7 +724,7 @@ function gameBlocks(gi){
   return combos.map(legs=>({legs,p:prob(gi,legs)}));
 }
 function buildSlips(N){
-  const gis=GAMES.map((G,gi)=>G.sim&&lgOf(G)===league?gi:-1).filter(gi=>gi>=0);
+  const gis=filteredGames(league).map(x=>x.gi);
   let beam=[{k:0,p:1,b:null,prev:null}];
   gis.forEach(gi=>{
     const blocks=gameBlocks(gi), by={};
@@ -624,8 +746,9 @@ function buildSlips(N){
 function renderHot(){
   const out=document.getElementById("hotOut"), st=document.getElementById("hotStatus");
   out.innerHTML="";
-  const name=LEAGUE_NAME[league], lined=GAMES.filter(G=>G.sim&&lgOf(G)===league).length;
-  if(!lined){ st.textContent=`No ${name} games with lines yet — lines load closer to game day.`; return; }
+  const name=LEAGUE_NAME[league], all=GAMES.filter(G=>G.sim&&lgOf(G)===league).length, lined=filteredGames(league).length;
+  if(!all){ st.textContent=`No ${name} games with lines yet — lines load closer to game day.`; return; }
+  if(!lined){ st.textContent=`No ${name} games match these filters — loosen them to search for slips.`; return; }
   st.textContent=`Searching ${lined} ${name} games for the best ${hotN}-pick slips…`;
   setTimeout(()=>{
     const t0=performance.now();
@@ -777,6 +900,7 @@ function init(){
   loadLeague();
   if(!count(league)&&count(league==="ncaaf"?"nfl":"ncaaf")) league=league==="ncaaf"?"nfl":"ncaaf";   // open on whichever league has games
   document.querySelectorAll("#leagueChips .chip").forEach(b=>{ b.setAttribute("aria-pressed",b.dataset.league===league); b.onclick=()=>setLeague(b.dataset.league); });
+  loadFilters(); populateFilterOptions();
   NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); renderHot(); render(); show("slips");
 }
 /* ratings.js with a cache-buster, without document.write; works from file:// too */
