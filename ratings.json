@@ -1453,12 +1453,6 @@
  },
  "alt_generated": "2026-09-10T15:23+00:00",
  "logos": {
-  "Nevada": "https://cdn.collegefootballdata.com/logos/500/2440.png",
-  "Montana State": "https://cdn.collegefootballdata.com/logos/500/147.png",
-  "Fresno State": "https://cdn.collegefootballdata.com/logos/500/278.png",
-  "Sacramento State": "https://cdn.collegefootballdata.com/logos/500/16.png",
-  "USC": "https://cdn.collegefootballdata.com/logos/500/30.png",
-  "Louisiana": "https://cdn.collegefootballdata.com/logos/500/309.png",
   "Hawai'i": "https://cdn.collegefootballdata.com/logos/500/62.png",
   "New Mexico State": "https://cdn.collegefootballdata.com/logos/500/166.png",
   "Pittsburgh Steelers": "https://a.espncdn.com/i/teamlogos/nfl/500/pit.png",
@@ -1499,26 +1493,26 @@
   "Portland State": "https://cdn.collegefootballdata.com/logos/500/2502.png",
   "Delaware": "https://cdn.collegefootballdata.com/logos/500/48.png",
   "Coastal Carolina": "https://cdn.collegefootballdata.com/logos/500/324.png",
-  "Ohio State": "https://cdn.collegefootballdata.com/logos/500/194.png",
-  "Kent State": "https://cdn.collegefootballdata.com/logos/500/2309.png",
-  "Clemson": "https://cdn.collegefootballdata.com/logos/500/228.png",
-  "North Carolina": "https://cdn.collegefootballdata.com/logos/500/153.png",
   "Penn State": "https://cdn.collegefootballdata.com/logos/500/213.png",
   "Buffalo": "https://cdn.collegefootballdata.com/logos/500/2084.png",
-  "Arkansas": "https://cdn.collegefootballdata.com/logos/500/8.png",
-  "Georgia": "https://cdn.collegefootballdata.com/logos/500/61.png",
   "Iowa State": "https://cdn.collegefootballdata.com/logos/500/66.png",
   "Bowling Green": "https://cdn.collegefootballdata.com/logos/500/189.png",
-  "Georgia Tech": "https://cdn.collegefootballdata.com/logos/500/59.png",
-  "Mercer": "https://cdn.collegefootballdata.com/logos/500/2382.png",
   "Kansas State": "https://cdn.collegefootballdata.com/logos/500/2306.png",
   "Tulane": "https://cdn.collegefootballdata.com/logos/500/2655.png",
-  "Texas State": "https://cdn.collegefootballdata.com/logos/500/326.png",
-  "North Texas": "https://cdn.collegefootballdata.com/logos/500/249.png",
   "Minnesota": "https://cdn.collegefootballdata.com/logos/500/135.png",
   "Akron": "https://cdn.collegefootballdata.com/logos/500/2006.png",
+  "Georgia Tech": "https://cdn.collegefootballdata.com/logos/500/59.png",
+  "Mercer": "https://cdn.collegefootballdata.com/logos/500/2382.png",
+  "Texas State": "https://cdn.collegefootballdata.com/logos/500/326.png",
+  "North Texas": "https://cdn.collegefootballdata.com/logos/500/249.png",
   "Kansas": "https://cdn.collegefootballdata.com/logos/500/2305.png",
   "Arizona State": "https://cdn.collegefootballdata.com/logos/500/9.png",
+  "Clemson": "https://cdn.collegefootballdata.com/logos/500/228.png",
+  "North Carolina": "https://cdn.collegefootballdata.com/logos/500/153.png",
+  "Arkansas": "https://cdn.collegefootballdata.com/logos/500/8.png",
+  "Georgia": "https://cdn.collegefootballdata.com/logos/500/61.png",
+  "Ohio State": "https://cdn.collegefootballdata.com/logos/500/194.png",
+  "Kent State": "https://cdn.collegefootballdata.com/logos/500/2309.png",
   "Wisconsin": "https://cdn.collegefootballdata.com/logos/500/275.png",
   "Eastern Michigan": "https://cdn.collegefootballdata.com/logos/500/2199.png",
   "Vanderbilt": "https://cdn.collegefootballdata.com/logos/500/238.png",
@@ -1531,6 +1525,14 @@
   "Maine": "https://cdn.collegefootballdata.com/logos/500/311.png",
   "Toledo": "https://cdn.collegefootballdata.com/logos/500/2649.png",
   "Temple": "https://cdn.collegefootballdata.com/logos/500/218.png",
+  "Texas A&M": "https://cdn.collegefootballdata.com/logos/500/245.png",
+  "Kentucky": "https://cdn.collegefootballdata.com/logos/500/96.png",
+  "Rutgers": "https://cdn.collegefootballdata.com/logos/500/164.png",
+  "USC": "https://cdn.collegefootballdata.com/logos/500/30.png",
+  "California": "https://cdn.collegefootballdata.com/logos/500/25.png",
+  "Wagner": "https://cdn.collegefootballdata.com/logos/500/2681.png",
+  "Alabama": "https://cdn.collegefootballdata.com/logos/500/333.png",
+  "Florida State": "https://cdn.collegefootballdata.com/logos/500/52.png",
   "Michigan": "https://cdn.collegefootballdata.com/logos/500/130.png",
   "UTEP": "https://cdn.collegefootballdata.com/logos/500/2638.png",
   "Massachusetts": "https://cdn.collegefootballdata.com/logos/500/113.png",
@@ -1541,23 +1543,16 @@
   "Utah State": "https://cdn.collegefootballdata.com/logos/500/328.png",
   "Cincinnati": "https://cdn.collegefootballdata.com/logos/500/2132.png",
   "Miami (OH)": "https://cdn.collegefootballdata.com/logos/500/193.png",
-  "California": "https://cdn.collegefootballdata.com/logos/500/25.png",
-  "Wagner": "https://cdn.collegefootballdata.com/logos/500/2681.png",
-  "Alabama": "https://cdn.collegefootballdata.com/logos/500/333.png",
-  "Florida State": "https://cdn.collegefootballdata.com/logos/500/52.png",
-  "Texas A&M": "https://cdn.collegefootballdata.com/logos/500/245.png",
-  "Kentucky": "https://cdn.collegefootballdata.com/logos/500/96.png",
   "Washington State": "https://cdn.collegefootballdata.com/logos/500/265.png",
   "Duquesne": "https://cdn.collegefootballdata.com/logos/500/2184.png",
-  "Rutgers": "https://cdn.collegefootballdata.com/logos/500/164.png",
   "Liberty": "https://cdn.collegefootballdata.com/logos/500/2335.png",
   "Ball State": "https://cdn.collegefootballdata.com/logos/500/2050.png",
-  "Baylor": "https://cdn.collegefootballdata.com/logos/500/239.png",
-  "Louisiana Tech": "https://cdn.collegefootballdata.com/logos/500/2348.png",
   "Iowa": "https://cdn.collegefootballdata.com/logos/500/2294.png",
   "Northern Iowa": "https://cdn.collegefootballdata.com/logos/500/2460.png",
   "Duke": "https://cdn.collegefootballdata.com/logos/500/150.png",
   "Stanford": "https://cdn.collegefootballdata.com/logos/500/24.png",
+  "Baylor": "https://cdn.collegefootballdata.com/logos/500/239.png",
+  "Louisiana Tech": "https://cdn.collegefootballdata.com/logos/500/2348.png",
   "Indiana": "https://cdn.collegefootballdata.com/logos/500/84.png",
   "Western Kentucky": "https://cdn.collegefootballdata.com/logos/500/98.png",
   "South Carolina": "https://cdn.collegefootballdata.com/logos/500/2579.png",
@@ -1572,77 +1567,75 @@
   "Charlotte": "https://cdn.collegefootballdata.com/logos/500/2429.png",
   "Missouri State": "https://cdn.collegefootballdata.com/logos/500/2623.png",
   "Marshall": "https://cdn.collegefootballdata.com/logos/500/276.png",
-  "Sam Houston": "https://cdn.collegefootballdata.com/logos/500/2534.png",
-  "Nicholls": "https://cdn.collegefootballdata.com/logos/500/2447.png",
-  "Auburn": "https://cdn.collegefootballdata.com/logos/500/2.png",
-  "Florida": "https://cdn.collegefootballdata.com/logos/500/57.png",
-  "Southern Miss": "https://cdn.collegefootballdata.com/logos/500/2572.png",
-  "UConn": "https://cdn.collegefootballdata.com/logos/500/41.png",
-  "Middle Tennessee": "https://cdn.collegefootballdata.com/logos/500/2393.png",
-  "Memphis": "https://cdn.collegefootballdata.com/logos/500/235.png",
-  "UT Martin": "https://cdn.collegefootballdata.com/logos/500/2630.png",
-  "UCF": "https://cdn.collegefootballdata.com/logos/500/2116.png",
-  "Georgia State": "https://cdn.collegefootballdata.com/logos/500/2247.png",
-  "Missouri": "https://cdn.collegefootballdata.com/logos/500/142.png",
-  "Troy": "https://cdn.collegefootballdata.com/logos/500/2653.png",
-  "South Alabama": "https://cdn.collegefootballdata.com/logos/500/6.png",
-  "Ohio": "https://cdn.collegefootballdata.com/logos/500/195.png",
-  "Rice": "https://cdn.collegefootballdata.com/logos/500/242.png",
-  "Western Michigan": "https://cdn.collegefootballdata.com/logos/500/2711.png",
-  "Oklahoma State": "https://cdn.collegefootballdata.com/logos/500/197.png",
-  "Murray State": "https://cdn.collegefootballdata.com/logos/500/93.png",
-  "South Florida": "https://cdn.collegefootballdata.com/logos/500/58.png",
-  "Delaware State": "https://cdn.collegefootballdata.com/logos/500/2169.png",
   "Jacksonville State": "https://cdn.collegefootballdata.com/logos/500/55.png",
   "Georgia Southern": "https://cdn.collegefootballdata.com/logos/500/290.png",
+  "Middle Tennessee": "https://cdn.collegefootballdata.com/logos/500/2393.png",
+  "Nevada": "https://cdn.collegefootballdata.com/logos/500/2440.png",
+  "South Florida": "https://cdn.collegefootballdata.com/logos/500/58.png",
+  "Delaware State": "https://cdn.collegefootballdata.com/logos/500/2169.png",
+  "UCF": "https://cdn.collegefootballdata.com/logos/500/2116.png",
+  "Georgia State": "https://cdn.collegefootballdata.com/logos/500/2247.png",
+  "Memphis": "https://cdn.collegefootballdata.com/logos/500/235.png",
+  "UT Martin": "https://cdn.collegefootballdata.com/logos/500/2630.png",
+  "South Alabama": "https://cdn.collegefootballdata.com/logos/500/6.png",
+  "Ohio": "https://cdn.collegefootballdata.com/logos/500/195.png",
+  "Auburn": "https://cdn.collegefootballdata.com/logos/500/2.png",
+  "Florida": "https://cdn.collegefootballdata.com/logos/500/57.png",
+  "Rice": "https://cdn.collegefootballdata.com/logos/500/242.png",
+  "Western Michigan": "https://cdn.collegefootballdata.com/logos/500/2711.png",
+  "Sam Houston": "https://cdn.collegefootballdata.com/logos/500/2534.png",
+  "Nicholls": "https://cdn.collegefootballdata.com/logos/500/2447.png",
+  "Southern Miss": "https://cdn.collegefootballdata.com/logos/500/2572.png",
+  "UConn": "https://cdn.collegefootballdata.com/logos/500/41.png",
+  "Oklahoma State": "https://cdn.collegefootballdata.com/logos/500/197.png",
+  "Murray State": "https://cdn.collegefootballdata.com/logos/500/93.png",
+  "Missouri": "https://cdn.collegefootballdata.com/logos/500/142.png",
+  "Troy": "https://cdn.collegefootballdata.com/logos/500/2653.png",
   "Washington": "https://cdn.collegefootballdata.com/logos/500/264.png",
   "Eastern Washington": "https://cdn.collegefootballdata.com/logos/500/331.png",
   "Nebraska": "https://cdn.collegefootballdata.com/logos/500/158.png",
   "North Dakota": "https://cdn.collegefootballdata.com/logos/500/155.png",
-  "Notre Dame": "https://cdn.collegefootballdata.com/logos/500/87.png",
-  "Michigan State": "https://cdn.collegefootballdata.com/logos/500/127.png",
-  "Maryland": "https://cdn.collegefootballdata.com/logos/500/120.png",
-  "Virginia Tech": "https://cdn.collegefootballdata.com/logos/500/259.png",
-  "Oklahoma": "https://cdn.collegefootballdata.com/logos/500/201.png",
-  "New Mexico": "https://cdn.collegefootballdata.com/logos/500/167.png",
-  "Ole Miss": "https://cdn.collegefootballdata.com/logos/500/145.png",
-  "LSU": "https://cdn.collegefootballdata.com/logos/500/99.png",
   "Virginia": "https://cdn.collegefootballdata.com/logos/500/258.png",
   "West Virginia": "https://cdn.collegefootballdata.com/logos/500/277.png",
+  "Ole Miss": "https://cdn.collegefootballdata.com/logos/500/145.png",
+  "LSU": "https://cdn.collegefootballdata.com/logos/500/99.png",
+  "Oklahoma": "https://cdn.collegefootballdata.com/logos/500/201.png",
+  "New Mexico": "https://cdn.collegefootballdata.com/logos/500/167.png",
+  "Maryland": "https://cdn.collegefootballdata.com/logos/500/120.png",
+  "Virginia Tech": "https://cdn.collegefootballdata.com/logos/500/259.png",
+  "Notre Dame": "https://cdn.collegefootballdata.com/logos/500/87.png",
+  "Michigan State": "https://cdn.collegefootballdata.com/logos/500/127.png",
   "Colorado State": "https://cdn.collegefootballdata.com/logos/500/36.png",
   "BYU": "https://cdn.collegefootballdata.com/logos/500/252.png",
   "Northwestern": "https://cdn.collegefootballdata.com/logos/500/77.png",
   "Colorado": "https://cdn.collegefootballdata.com/logos/500/38.png",
   "Tennessee": "https://cdn.collegefootballdata.com/logos/500/2633.png",
   "Kennesaw State": "https://cdn.collegefootballdata.com/logos/500/338.png",
-  "Tulsa": "https://cdn.collegefootballdata.com/logos/500/202.png",
-  "East Texas A&M": "https://cdn.collegefootballdata.com/logos/500/2837.png",
-  "Texas": "https://cdn.collegefootballdata.com/logos/500/251.png",
-  "UTSA": "https://cdn.collegefootballdata.com/logos/500/2636.png",
   "TCU": "https://cdn.collegefootballdata.com/logos/500/2628.png",
   "Arkansas State": "https://cdn.collegefootballdata.com/logos/500/2032.png",
+  "Texas": "https://cdn.collegefootballdata.com/logos/500/251.png",
+  "UTSA": "https://cdn.collegefootballdata.com/logos/500/2636.png",
+  "Louisiana": "https://cdn.collegefootballdata.com/logos/500/309.png",
   "UAB": "https://cdn.collegefootballdata.com/logos/500/5.png",
-  "Boise State": "https://cdn.collegefootballdata.com/logos/500/68.png",
-  "South Dakota": "https://cdn.collegefootballdata.com/logos/500/233.png",
+  "Tulsa": "https://cdn.collegefootballdata.com/logos/500/202.png",
+  "East Texas A&M": "https://cdn.collegefootballdata.com/logos/500/2837.png",
   "San Diego State": "https://cdn.collegefootballdata.com/logos/500/21.png",
   "James Madison": "https://cdn.collegefootballdata.com/logos/500/256.png",
-  "North Dakota State": "https://cdn.collegefootballdata.com/logos/500/2449.png",
+  "Boise State": "https://cdn.collegefootballdata.com/logos/500/68.png",
+  "South Dakota": "https://cdn.collegefootballdata.com/logos/500/233.png",
   "Arizona": "https://cdn.collegefootballdata.com/logos/500/12.png",
   "Northern Illinois": "https://cdn.collegefootballdata.com/logos/500/2459.png",
-  "UCLA": "https://cdn.collegefootballdata.com/logos/500/26.png",
-  "Purdue": "https://cdn.collegefootballdata.com/logos/500/2509.png",
+  "Sacramento State": "https://cdn.collegefootballdata.com/logos/500/16.png",
+  "North Dakota State": "https://cdn.collegefootballdata.com/logos/500/2449.png",
   "San Jos\u00e9 State": "https://cdn.collegefootballdata.com/logos/500/23.png",
+  "Fresno State": "https://cdn.collegefootballdata.com/logos/500/278.png",
   "Oregon State": "https://cdn.collegefootballdata.com/logos/500/204.png",
   "Montana": "https://cdn.collegefootballdata.com/logos/500/149.png",
+  "UCLA": "https://cdn.collegefootballdata.com/logos/500/26.png",
+  "Purdue": "https://cdn.collegefootballdata.com/logos/500/2509.png",
   "New England Patriots": "https://a.espncdn.com/i/teamlogos/nfl/500/ne.png"
  },
  "colors": {
-  "Nevada": "#041e42",
-  "Montana State": "#00205c",
-  "Fresno State": "#c41230",
-  "Sacramento State": "#00573c",
-  "USC": "#990000",
-  "Louisiana": "#ce181e",
   "Hawai'i": "#024731",
   "New Mexico State": "#8c0b42",
   "Pittsburgh Steelers": "#FFB612",
@@ -1683,26 +1676,26 @@
   "Portland State": "#00311e",
   "Delaware": "#00539f",
   "Coastal Carolina": "#006f71",
-  "Ohio State": "#ba0c2f",
-  "Kent State": "#002664",
-  "Clemson": "#f56600",
-  "North Carolina": "#7bafd4",
   "Penn State": "#001e44",
   "Buffalo": "#005bbb",
-  "Arkansas": "#a32136",
-  "Georgia": "#ba0c2f",
   "Iowa State": "#c8102e",
   "Bowling Green": "#fd5000",
-  "Georgia Tech": "#b3a369",
-  "Mercer": "#ff7f29",
   "Kansas State": "#512888",
   "Tulane": "#006747",
-  "Texas State": "#501214",
-  "North Texas": "#00853e",
   "Minnesota": "#7a0019",
   "Akron": "#041e42",
+  "Georgia Tech": "#b3a369",
+  "Mercer": "#ff7f29",
+  "Texas State": "#501214",
+  "North Texas": "#00853e",
   "Kansas": "#0051ba",
   "Arizona State": "#ffc627",
+  "Clemson": "#f56600",
+  "North Carolina": "#7bafd4",
+  "Arkansas": "#a32136",
+  "Georgia": "#ba0c2f",
+  "Ohio State": "#ba0c2f",
+  "Kent State": "#002664",
   "Wisconsin": "#a00000",
   "Eastern Michigan": "#046a38",
   "Vanderbilt": "#000000",
@@ -1715,6 +1708,14 @@
   "Maine": "#127dbe",
   "Toledo": "#0b2240",
   "Temple": "#a41e35",
+  "Texas A&M": "#500000",
+  "Kentucky": "#0033a0",
+  "Rutgers": "#ce0e2d",
+  "USC": "#990000",
+  "California": "#041e42",
+  "Wagner": "#00483A",
+  "Alabama": "#9e1b32",
+  "Florida State": "#782f40",
   "Michigan": "#00274c",
   "UTEP": "#ff8200",
   "Massachusetts": "#881c1c",
@@ -1725,23 +1726,16 @@
   "Utah State": "#0f2439",
   "Cincinnati": "#000000",
   "Miami (OH)": "#c41230",
-  "California": "#041e42",
-  "Wagner": "#00483A",
-  "Alabama": "#9e1b32",
-  "Florida State": "#782f40",
-  "Texas A&M": "#500000",
-  "Kentucky": "#0033a0",
   "Washington State": "#a60f2d",
   "Duquesne": "#002D62",
-  "Rutgers": "#ce0e2d",
   "Liberty": "#0a254e",
   "Ball State": "#ba0c2f",
-  "Baylor": "#154734",
-  "Louisiana Tech": "#003087",
   "Iowa": "#000000",
   "Northern Iowa": "#473282",
   "Duke": "#00539b",
   "Stanford": "#8c1515",
+  "Baylor": "#154734",
+  "Louisiana Tech": "#003087",
   "Indiana": "#990000",
   "Western Kentucky": "#c60c30",
   "South Carolina": "#73000a",
@@ -1756,1601 +1750,75 @@
   "Charlotte": "#005035",
   "Missouri State": "#5e0009",
   "Marshall": "#00b140",
-  "Sam Houston": "#f56423",
-  "Nicholls": "#C41230",
-  "Auburn": "#0c2340",
-  "Florida": "#0021a5",
-  "Southern Miss": "#ffc72c",
-  "UConn": "#000e2f",
-  "Middle Tennessee": "#036eb7",
-  "Memphis": "#00498f",
-  "UT Martin": "#FF6700",
-  "UCF": "#000000",
-  "Georgia State": "#0039a6",
-  "Missouri": "#f1b82d",
-  "Troy": "#862633",
-  "South Alabama": "#00205b",
-  "Ohio": "#024230",
-  "Rice": "#00205b",
-  "Western Michigan": "#532e1f",
-  "Oklahoma State": "#fe5c00",
-  "Murray State": "#002148",
-  "South Florida": "#006747",
-  "Delaware State": "#009cdb",
   "Jacksonville State": "#cc0000",
   "Georgia Southern": "#041e42",
+  "Middle Tennessee": "#036eb7",
+  "Nevada": "#041e42",
+  "South Florida": "#006747",
+  "Delaware State": "#009cdb",
+  "UCF": "#000000",
+  "Georgia State": "#0039a6",
+  "Memphis": "#00498f",
+  "UT Martin": "#FF6700",
+  "South Alabama": "#00205b",
+  "Ohio": "#024230",
+  "Auburn": "#0c2340",
+  "Florida": "#0021a5",
+  "Rice": "#00205b",
+  "Western Michigan": "#532e1f",
+  "Sam Houston": "#f56423",
+  "Nicholls": "#C41230",
+  "Southern Miss": "#ffc72c",
+  "UConn": "#000e2f",
+  "Oklahoma State": "#fe5c00",
+  "Murray State": "#002148",
+  "Missouri": "#f1b82d",
+  "Troy": "#862633",
   "Washington": "#33006f",
   "Eastern Washington": "#a10022",
   "Nebraska": "#d00000",
   "North Dakota": "#00A26B",
-  "Notre Dame": "#0c2340",
-  "Michigan State": "#173f35",
-  "Maryland": "#ce1126",
-  "Virginia Tech": "#861f41",
-  "Oklahoma": "#841617",
-  "New Mexico": "#ba0c2f",
-  "Ole Miss": "#13294b",
-  "LSU": "#461d7c",
   "Virginia": "#232d4b",
   "West Virginia": "#eaaa00",
+  "Ole Miss": "#13294b",
+  "LSU": "#461d7c",
+  "Oklahoma": "#841617",
+  "New Mexico": "#ba0c2f",
+  "Maryland": "#ce1126",
+  "Virginia Tech": "#861f41",
+  "Notre Dame": "#0c2340",
+  "Michigan State": "#173f35",
   "Colorado State": "#1e4d2b",
   "BYU": "#003da5",
   "Northwestern": "#582c83",
   "Colorado": "#cfb87c",
   "Tennessee": "#ff8200",
   "Kennesaw State": "#fdbb30",
-  "Tulsa": "#003595",
-  "East Texas A&M": "#000000",
-  "Texas": "#bf5700",
-  "UTSA": "#0c2340",
   "TCU": "#4d1979",
   "Arkansas State": "#cc092f",
+  "Texas": "#bf5700",
+  "UTSA": "#0c2340",
+  "Louisiana": "#ce181e",
   "UAB": "#1a5632",
-  "Boise State": "#0033a0",
-  "South Dakota": "#CD1241",
+  "Tulsa": "#003595",
+  "East Texas A&M": "#000000",
   "San Diego State": "#a6192e",
   "James Madison": "#450084",
-  "North Dakota State": "#00583d",
+  "Boise State": "#0033a0",
+  "South Dakota": "#CD1241",
   "Arizona": "#cc0033",
   "Northern Illinois": "#c8102e",
-  "UCLA": "#2774ae",
-  "Purdue": "#ceb888",
+  "Sacramento State": "#00573c",
+  "North Dakota State": "#00583d",
   "San Jos\u00e9 State": "#0055a2",
+  "Fresno State": "#c41230",
   "Oregon State": "#dc4405",
   "Montana": "#751D4A",
+  "UCLA": "#2774ae",
+  "Purdue": "#ceb888",
   "New England Patriots": "#002244"
  },
  "upcoming": [
-  {
-   "id": 401864500,
-   "league": "ncaaf",
-   "week": 2,
-   "start": "2026-09-13T02:30+00:00",
-   "home": "Nevada",
-   "away": "Montana State",
-   "fcs": true,
-   "neutral": false,
-   "spread": 4.5,
-   "total": 51.5,
-   "book": "DraftKings",
-   "alt": {
-    "book": "draftkings",
-    "asof": "2026-09-10T15:23+00:00",
-    "spreads": {
-     "home": [
-      [
-       3.5,
-       -112
-      ]
-     ],
-     "away": [
-      [
-       -3.5,
-       -108
-      ]
-     ]
-    },
-    "totals": {
-     "over": [
-      [
-       49.5,
-       -110
-      ]
-     ],
-     "under": [
-      [
-       49.5,
-       -110
-      ]
-     ]
-    }
-   },
-   "home_conf": "Mountain West",
-   "away_conf": "Big Sky",
-   "proj_home": 26.0,
-   "proj_away": 24.5,
-   "home_rank": null,
-   "away_rank": null,
-   "sim": {
-    "t0": 0,
-    "m0": -68,
-    "nt": 117,
-    "nm": 129,
-    "n": 20000,
-    "c": "xAMBhQMBBQKBAQL3AQEFBHMCBQMNAesBAQUCBQMFA20EBQQFAQECBQMFAWUCDQEBAQsDYwEFAgUFAQEDCG0GBQgFAwEDAwcBCQUGBQJfAQUEBQEBAQEBBQEFBAUBXQEFAQUGBQYFBAUBBQFbBAUJBQcBAwMFAQkDAgEMBQYFAVkIBQoFAgENBQcFAQEDBQRjAQUCAQIDAwECAQEBAwMCBwFbAwUHBQ0FDAEOAwIBEgMCAQ4FBFkEBQsFDQENAwUBFgUUAQMDBAELBQgFAlEFBQIFAwEKAQEBBgEGAQEBBAEBAQIBAgsFBQFPAQUFBQsBAQMPAQQDBwEHAwEBCQEBAQIBCAUBBQFNBgUWBQ8BBQMTAR8BAQEDARwBAQEBARQBFgMFAQ4FBQUBSwIFDwUDAQwDAQEZAwQBDQEOAQMDEgECAwYBBwUGBQJJAgUBBQgBCQEBAQgBCQECAQ0BDQEEAQgBCgECAQEBBgMCAQMFAQUBRwIFCgUWAQYDEAEZAxABJwEEAycBCwMMARIDBAEJBQIFAUUBBQ4FDAEQAwMBJQEBAQMBIwEOAQUBDAEZAQMBAgEPAQcDBwECBQcFAUMBBQYFCAEPAQEBCgEWAQIBBwEQAQsBBgELAQkBBAEIAQEBBAEFAwQBBAUFRwIFCgUOAQMDFwENAxEBIAEBAQoBHgELAQMBHgEVAQEBCAEQAwEBBAUBRQIFFQUVAQoDFAEgAQIBAgE1AREBAgEUASkBAgEIASYBBAMQARMDBAEJBQVDAQULBQgBCAMMARsBAwEKARABEgEMAQoBHgEEAQgBCQEOAQYDDQEGAQEBBAEDCwE7AwUGBQ8BAwMVAQsBAQESAR8BBQELASUBBwEFARsBCgEGAQoBDAEBAQUBBgMBAQUFAUULBREBCQMbARwDDAE5AQUBAgEpAR0DGAE2AQMBBQEtAQoDCwEJBQYFA0MKBRIBDwMKATgBAgEFASwBEQEGAREBLAEIAQcBJQEPAQUBBwEbAQEDDAEIAwcBAgUEBQE1AwUEBQcBBAMLARABAQERAQoBDwEMARUBCwEKARsBEAEOAR0BBwEFAQsBCQMPAQcBAQEDAQIFAgUBMwEFBgUTAQMDHQEWAQEBFgEoAQMBBgE0ARABBwEmASEBBgEOAS0BBwEDAR0BDwEBAQ4BDQUDBQE3AQUHBQwBEQMLASIBAgEJASkBEwEEARoBOAECAQkBSQEJAQEBIgEhAQIBCAEbAQEDEQEDAwMBCQUBNQMFDAUGAQoBAQEJASMBAgEIAQwBEgEJARMBJwEGAREBEQEXAQ8BCQEWAQ0BBQESAQsBAwMKAQIDAwcCMwIFBAUMAQIBAgEUAQ0BBAEQAScBBAEGATABFQEEASkBGQEJARgBMgEHAQwBGQELAQUBDAEHAQIBBQEEAwMBAgUBNwoFEgEIAxUBJAMIAUEBDQEJAUEBLgEBARkBTgEJAQgBNQEZAQMBHAEhAQQBCAEeAQcDDgEFAwIBBAUDLwEFAQUHAQwDCQEiAQMBBwEhARsBCwEVAS0BEAEOASoBGwENAQ4BLQEJAQcBGQELAQUBBgEMAQMDBgECAwENAS0EBQsBAgMLAQwDDwEUAQkBDAEaARgBEgEYARUBFwERARoBEQEMARYBBwERAQoBDAEGAQkBAwEBAQMBAgUBBQIxAgUIAQQDEQERAwoBNQEGAQoBKgEiAQQBLQE2AQcBEAE0ARMBAwEkASkBAQEMAScBBQEBARMBCQMFAQoFAgUBBQEjAQUGBQoBDQMHARsDAQEmAREBAQEeATcBAwEQAT4BDwELASQBLwEIARQBNwEPAQUBKQEWAQIBBAEYAQMDBQEFAwIBAgUBLQQFBQEEAQEBBwEOAQMBBgETAQ0BCgETARsBBgEQARMBDwESAREBFwERAREBDgEXAQwBCQEKAQgBBAEFAQkBAgMFAQEFAisBCwQFBgENAwwBGgEGAQYBLQERAQgBIwEmAQYBFgFBARIBDQErARkBBQESAR0BCQEHARIBBgECAQcBBQMDAQIFAQUCIwEFAgUJAQUDBAETAQEBBAEwAQgBBAElASoBAwEWAVcBFQEKATkBMAEDAR4BPwELAQQBLAETAQMBCQEVAQEBAgENAwEBBQEBBQILARsDBQMFAwECAwcBDQMEARMBFAECARQBIgEFAQwBIQEOAQ8BFgE2AQ8BCAEeARMBBwELARkBCQEHAQ0BEgMBAQwBAwECAQQFAQcBKwIBAgECAQUBBgEBAQoBEAEJAQoBGgENAQgBHQEUARMBFQEjARQBEQEmARUBEgEUAQ4BCAEMAQwBAgEMAQYBBQEDAQcBAgEBAQIxAgUCAQQDDAEKAwoBHAEHAQUBKgEbAQMBGgErAQgBCwFCAR4BBAEkATEBBAEMASoBFQEFARMBEgEEAQQBDgEFAQEBCAEDAwMBBAUBLQQBAwMJAQwDAwELAQoBBAEQASwBAwENATgBFQEEASMBKAEUAQ8BOwEZAQkBIAEdAQMBBwEXAQsBAwEMAQYBAQMIBQIzAwECAwEBCAMGAQwBCwEFARIBEQEFARMBGgEVAREBGAEhARUBHAEWAREBEAEIARIBCAEOAQsBBAELAQIBCgECAQQBAwEDAQMDAwEBAwIHAQUBFwEFAQUHAQwDAgESAQMBBgEeAQ0BAwEgASkBCwESAS0BCQEJASgBIQEGARUBKwEOAQ8BJAEOAQMBCwEMAQIBAgENAwEBAwECAwEHAS0BAQUBAgEEARIBBQEBARkBFQMPATMBDAEKASMBGAEEARkBPwEKAQcBOAEbAQMBEwEhAQYBBQEWAQkDBwEMAQEBAgEFBQItAwUBAQUDAQELAQsBAgEJARMBBQEQARwBDAEHARIBIAEQARUBJwETAQwBEwEjAQ0BCgEOAQsBBwEIAQ8BAwECAQwBAgECAQIBBAEBBQIvAQEBAwEBCAECAQIBEAEMAQoBDgEWAQcBDwEgAQ0BCwEhASABCQEeASEBEwEPARoBCgELARABDAECAQgBBwEBAQMBAgECAwQvAgEBAwEBBAMCAQcBAgMUAQsBAgELAQ8BCAEHASsBGgEGARMBJQEGAQkBOwEUAQgBGQEdAQUBDgEZAQcBAQEJAQcDAgEIBQMBAhECHwEBAgUHAQUBAQEKAQ8BAQEJAR0BCAEIARoBKAEGAQ0BKQESAQgBGgEbAQ4BCwEYAQ4BAgERAREBAwMKAQQDBgEBAwIBAwEBKQIFAQEDAwEBBgEBAQIBBgEKAQEBDAERAQgBDQELARUBCgETARIBCwEUARABEAESARYBCgEQAQkBBgEGAQUBAwEBAQcBAQECAQIDAQMBAQEFAScCAQMDBAEGAQIBAwEIAQMDEAEPAQIBCQEkAQoBBgEdARkBCQEPAR8BDAEEAR8BDgEIAQwBDgEBAQYBDwEDAQIBBgEEAwEBBAEBKwEBAQUBAwEBCgEDAQEBCwEKAQEBBwEUAQcBAQESARIBAwEYASMBBwEJARwBGgEJAQ4BIwEHAQIBEQEMAQMBCQEOAQUBAwEDAQUBAQEBAQIFAiUBDQUBAgECAQUBCgEEAQMBCAEHAQMBCAERAQYBCQEWAQ4BCwENARwBCgEJARQBDAEJAQkBDgEIAQIBCAEFAQMBAwEDAQEBAQMCAQEDAS8CAQMDAQEEAQEBAgEEAQgBBAEIAQwBCwEGARgBCQEEARABFgEJAQYBFQEHAQoBEAEMAQIBCAELAQUBBAEIAQUBAwEBAQIHASUBBQEBAQMBAQQBAQMHAQIBAQELAQkBAwEGARYBBwEFARQBGwEHAQkBHwERAQUBEwEbAQMBBwEWAQwBAQELAQoBAgEFAQkBAwMDAQEDAQECAwEBAQEBJQIFAgUCAQQBAgEEAQ4BBQECAQsBEAEGAQoBDgENAQYBEgEaAQgBCgEaAQkBBwEEARcBAwEGAQ8BCAEBAQgBBAEBAQIBCQEBCwEFAR0BAQEDAQEBAQEDAQEDAQEBBQEGAQIBBAEGAQcBBAEJAQoBBQEKAQkBCgEEAQkBCwENAQgBBgEIAQYBAgEFAQMBBQEBAQEBAgMBAQMTAQ8BDQEDAQMBAwIBAgEBAQUBCAMGAQgBAgEEAQ0BEgEGAQkBFgEGAQIBFwEKAQIBEAEXAQYBAwEOAQUBAgEFAQQBAQEEAQUBAQEBAQIHAScCBQIHAQEBAQIBEgEDAQEBCAEHAQIBBQEUAQQBBAEVARABAgEGAQwBBgEIARQBDQEBAQcBEgECAQEBBQEDAwIBBAUCAQEDATMBAQEDAQEFAQQDAwEIAQQBBQEKAQYBBgEOAQsBBAEJAREBBwEKAQYBBgEFAQkBBAEIAQYBBAEIAQMBAQEFAQMLARMBCQETAQMBAQMBBAEDAQIBBQEEAwQBBwEGAQwBCwEIAQMBCgEJAQIBCQEMAQkBAgESAQMBAgEBAQYBAQMEAQEDAgMBAQIvAgUCAwEBAQEDAwMBAQEFAQEBBgEEAQEBAgEQAQoBAgEKAREBBgECAQkBDgMOAQUBAQEBAQkBBAECAQQBBwEBAwIFATUBBQUBAQEBAQMBBQEDAQMBDgEFAQIBBwEHAQQBAwEQAQUBAgEIAQYBAwEDAQoBBQMLAQYBAQECAQQBAQEBAQEBAQEBAwEpAQsBAQIFAQECAQEBAQECAQcBAQEFAQgBCAECAQMBBAEHAQsBCwEGAQQBCgEDAQYBAgEBAQUBAQEFAQIBAwEDAwIBATcBCQIBBwEBAwcBAwEBAQUBCgEDAQIBCQEGAQIBBQEMAQcBAgELAQQBAQEHAQgBBQECAQIBBgMGAQEBAQMEBwErAQEBBQEDAQEEAQEBAQEDAQ0BAQECAQQBAwMDAQsBAgEEAQoBBwMFAQoBBAECAQIBAgEBAwgBAQEBAQMBAQUBAQEJAR8BBQEHAgEBAwMBAQUGAQIBAQEEAQEBAQEBAQYBBwEGAQIBBgEHAQcBBgEBAQUBAgEDBQIFAgEDAQIDAQMBAwEhAQ8CAwEBAwEBAwEBAwEDAQIBDQEEAQQBBgEDAQMBBgEEAQMBBgEIAQMBAQEEAQMBAwECAQQDAQEFBQIDAhEBIQEFAQUCBQMBAwMCAQMBAgEBAQoBBgEDAQEBBQEEAQEBAgEHAQEBBAEDAQMBAQECAQMDAQcCAQEHATEBAwEBAQEEAwIBAQMBAQQBAQECAwMBBAEBAQUBBAECAQIBCQECAwMBAwEBAQEDAgMCAQMNATMCBQEFAQMBBQEBAwEDAQMBAgEEAQMBAgEEAQQBAgEDAQMBAQEEAQIBAQEBBwEFAQEBSQQDAQEBAQEBAQEDAQkBAgEBAQMBBwMBAQYBAQEBAQIBAgMCAQIBAQMEAwIBAQcBAwExAQUBAwEBAgEEAQEDAQMBAQIBAgEBAwUBAQMEAQQFAQcDAQILATkBAQEDAgEBBQMBAgMFAQEDAQECAQIBAQEBAQEBAQMCAQIBAQMBAwEBAwMBAQEDAUcBAQEBAQEBAQMBAwcBBQQDAgUCAQMBAQMBAQFFAQcCAQEDAQECAQEDAQECAwEBAgEBAwQBAwMBAQMBAgMDAQMBAQEBCQIRAQEBJwEBAQkBBQEBAQcDBwEBAgECAQIDAQEBAwEBAgEBAwEBAgMCAQRLAQEBAQIFAQcBBQEBAQUBAQIBAQUBBwEBAQEBAQFJAQUBBwEFAgECBwEFAQMBAQIHAgUBQQEHAQMBAQEDAQEBBQEBAQEBAwIBAQ0BBQJPAQcBAwEBAQ0BAQEDAQkBDQFDAQ0BAQENARMBAQFJAQMBAwEBAQsBAQIBAQkBAQEBAQUBVQILAQECCQEDAwMBAwERAj0BBwETAQkCBQERAVMBAwEBAQMBAwEFAQUBBwEBAWkBhwEBAwERAWkBCQH9AQGJAQETAecDAQUBdwEHAY0CAQ==",
-    "sd": 15.2,
-    "msd": null,
-    "center": "market"
-   }
-  },
-  {
-   "id": 401860883,
-   "league": "ncaaf",
-   "week": 2,
-   "start": "2026-09-13T02:30+00:00",
-   "home": "Fresno State",
-   "away": "Sacramento State",
-   "fcs": false,
-   "neutral": false,
-   "spread": -17.5,
-   "total": 44.5,
-   "book": "DraftKings",
-   "alt": {
-    "book": "draftkings",
-    "asof": "2026-09-10T15:23+00:00",
-    "spreads": {
-     "home": [
-      [
-       -39.5,
-       840
-      ],
-      [
-       -38.5,
-       780
-      ],
-      [
-       -37.5,
-       660
-      ],
-      [
-       -36.5,
-       610
-      ],
-      [
-       -35.5,
-       581
-      ],
-      [
-       -34.5,
-       495
-      ],
-      [
-       -33.5,
-       428
-      ],
-      [
-       -32.5,
-       405
-      ],
-      [
-       -31.5,
-       373
-      ],
-      [
-       -30.5,
-       307
-      ],
-      [
-       -29.5,
-       281
-      ],
-      [
-       -28.5,
-       266
-      ],
-      [
-       -27.5,
-       223
-      ],
-      [
-       -26.5,
-       196
-      ],
-      [
-       -25.5,
-       184
-      ],
-      [
-       -24.5,
-       169
-      ],
-      [
-       -23.5,
-       143
-      ],
-      [
-       -22.5,
-       132
-      ],
-      [
-       -21.5,
-       124
-      ],
-      [
-       -20.5,
-       106
-      ],
-      [
-       -19.5,
-       -105
-      ],
-      [
-       -18.5,
-       -108
-      ],
-      [
-       -17.5,
-       -123
-      ],
-      [
-       -16.5,
-       -144
-      ],
-      [
-       -15.5,
-       -155
-      ],
-      [
-       -14.5,
-       -165
-      ],
-      [
-       -13.5,
-       -198
-      ],
-      [
-       -12.5,
-       -217
-      ],
-      [
-       -11.5,
-       -230
-      ],
-      [
-       -10.5,
-       -250
-      ],
-      [
-       -9.5,
-       -295
-      ],
-      [
-       -8.5,
-       -311
-      ],
-      [
-       -7.5,
-       -337
-      ],
-      [
-       -6.5,
-       -434
-      ],
-      [
-       -5.5,
-       -491
-      ],
-      [
-       -4.5,
-       -538
-      ],
-      [
-       -3.5,
-       -610
-      ],
-      [
-       -2.5,
-       -870
-      ],
-      [
-       -1.5,
-       -1000
-      ],
-      [
-       1.5,
-       -1260
-      ],
-      [
-       2.5,
-       -1440
-      ],
-      [
-       3.5,
-       -2100
-      ],
-      [
-       4.5,
-       -2800
-      ]
-     ],
-     "away": [
-      [
-       -4.5,
-       850
-      ],
-      [
-       -3.5,
-       770
-      ],
-      [
-       -2.5,
-       640
-      ],
-      [
-       -1.5,
-       598
-      ],
-      [
-       1.5,
-       521
-      ],
-      [
-       2.5,
-       477
-      ],
-      [
-       3.5,
-       373
-      ],
-      [
-       4.5,
-       342
-      ],
-      [
-       5.5,
-       318
-      ],
-      [
-       6.5,
-       289
-      ],
-      [
-       7.5,
-       235
-      ],
-      [
-       8.5,
-       219
-      ],
-      [
-       9.5,
-       209
-      ],
-      [
-       10.5,
-       181
-      ],
-      [
-       11.5,
-       168
-      ],
-      [
-       12.5,
-       159
-      ],
-      [
-       13.5,
-       146
-      ],
-      [
-       14.5,
-       124
-      ],
-      [
-       15.5,
-       116
-      ],
-      [
-       16.5,
-       108
-      ],
-      [
-       17.5,
-       -108
-      ],
-      [
-       18.5,
-       -112
-      ],
-      [
-       19.5,
-       -126
-      ],
-      [
-       20.5,
-       -141
-      ],
-      [
-       21.5,
-       -166
-      ],
-      [
-       22.5,
-       -177
-      ],
-      [
-       23.5,
-       -194
-      ],
-      [
-       24.5,
-       -231
-      ],
-      [
-       25.5,
-       -255
-      ],
-      [
-       26.5,
-       -274
-      ],
-      [
-       27.5,
-       -318
-      ],
-      [
-       28.5,
-       -392
-      ],
-      [
-       29.5,
-       -419
-      ],
-      [
-       30.5,
-       -469
-      ],
-      [
-       31.5,
-       -610
-      ],
-      [
-       32.5,
-       -680
-      ],
-      [
-       33.5,
-       -740
-      ],
-      [
-       34.5,
-       -920
-      ],
-      [
-       35.5,
-       -1200
-      ],
-      [
-       36.5,
-       -1320
-      ],
-      [
-       37.5,
-       -1540
-      ],
-      [
-       38.5,
-       -2200
-      ],
-      [
-       39.5,
-       -2700
-      ]
-     ]
-    },
-    "totals": {
-     "over": [
-      [
-       25.5,
-       -8200
-      ],
-      [
-       26.5,
-       -4800
-      ],
-      [
-       27.5,
-       -2500
-      ],
-      [
-       28.5,
-       -2000
-      ],
-      [
-       29.5,
-       -1700
-      ],
-      [
-       30.5,
-       -1200
-      ],
-      [
-       31.5,
-       -910
-      ],
-      [
-       32.5,
-       -840
-      ],
-      [
-       33.5,
-       -680
-      ],
-      [
-       34.5,
-       -515
-      ],
-      [
-       35.5,
-       -448
-      ],
-      [
-       36.5,
-       -407
-      ],
-      [
-       37.5,
-       -327
-      ],
-      [
-       38.5,
-       -274
-      ],
-      [
-       39.5,
-       -258
-      ],
-      [
-       40.5,
-       -225
-      ],
-      [
-       41.5,
-       -181
-      ],
-      [
-       42.5,
-       -166
-      ],
-      [
-       43.5,
-       -151
-      ],
-      [
-       44.5,
-       -128
-      ],
-      [
-       45.5,
-       -105
-      ],
-      [
-       46.5,
-       -102
-      ],
-      [
-       47.5,
-       110
-      ],
-      [
-       48.5,
-       131
-      ],
-      [
-       49.5,
-       145
-      ],
-      [
-       50.5,
-       156
-      ],
-      [
-       51.5,
-       184
-      ],
-      [
-       52.5,
-       215
-      ],
-      [
-       53.5,
-       229
-      ],
-      [
-       54.5,
-       256
-      ],
-      [
-       55.5,
-       302
-      ],
-      [
-       56.5,
-       334
-      ],
-      [
-       57.5,
-       363
-      ],
-      [
-       58.5,
-       416
-      ],
-      [
-       59.5,
-       480
-      ],
-      [
-       60.5,
-       513
-      ],
-      [
-       61.5,
-       571
-      ],
-      [
-       62.5,
-       650
-      ],
-      [
-       63.5,
-       730
-      ],
-      [
-       64.5,
-       780
-      ],
-      [
-       65.5,
-       890
-      ],
-      [
-       66.5,
-       1000
-      ],
-      [
-       67.5,
-       1060
-      ]
-     ],
-     "under": [
-      [
-       25.5,
-       1120
-      ],
-      [
-       26.5,
-       1000
-      ],
-      [
-       27.5,
-       820
-      ],
-      [
-       28.5,
-       750
-      ],
-      [
-       29.5,
-       690
-      ],
-      [
-       30.5,
-       583
-      ],
-      [
-       31.5,
-       492
-      ],
-      [
-       32.5,
-       468
-      ],
-      [
-       33.5,
-       404
-      ],
-      [
-       34.5,
-       330
-      ],
-      [
-       35.5,
-       296
-      ],
-      [
-       36.5,
-       274
-      ],
-      [
-       37.5,
-       229
-      ],
-      [
-       38.5,
-       196
-      ],
-      [
-       39.5,
-       186
-      ],
-      [
-       40.5,
-       165
-      ],
-      [
-       41.5,
-       135
-      ],
-      [
-       42.5,
-       124
-      ],
-      [
-       43.5,
-       113
-      ],
-      [
-       44.5,
-       -104
-      ],
-      [
-       45.5,
-       -115
-      ],
-      [
-       46.5,
-       -130
-      ],
-      [
-       47.5,
-       -147
-      ],
-      [
-       48.5,
-       -175
-      ],
-      [
-       49.5,
-       -196
-      ],
-      [
-       50.5,
-       -212
-      ],
-      [
-       51.5,
-       -254
-      ],
-      [
-       52.5,
-       -304
-      ],
-      [
-       53.5,
-       -328
-      ],
-      [
-       54.5,
-       -375
-      ],
-      [
-       55.5,
-       -460
-      ],
-      [
-       56.5,
-       -522
-      ],
-      [
-       57.5,
-       -584
-      ],
-      [
-       58.5,
-       -710
-      ],
-      [
-       59.5,
-       -880
-      ],
-      [
-       60.5,
-       -970
-      ],
-      [
-       61.5,
-       -1160
-      ],
-      [
-       62.5,
-       -1500
-      ],
-      [
-       63.5,
-       -1880
-      ],
-      [
-       64.5,
-       -2200
-      ],
-      [
-       65.5,
-       -3200
-      ],
-      [
-       66.5,
-       -4600
-      ],
-      [
-       67.5,
-       -5900
-      ]
-     ]
-    }
-   },
-   "home_conf": "Pac-12",
-   "away_conf": "Mid-American",
-   "proj_home": 25.9,
-   "proj_away": 21.7,
-   "home_rank": null,
-   "away_rank": null,
-   "sim": {
-    "t0": 0,
-    "m0": -46,
-    "nt": 109,
-    "nm": 129,
-    "n": 20000,
-    "c": "LgT/AgYFCP8CDwUNcwQNB4EBAW8DBQoFDgULbQcFCwcNBQ1rAQUBCQEFAW8FBQsFFgUIZwMFCgUZARAFGwUsZQUFAQcNBwEFDmkEBQgBAQEBAQsFGQUMYQIFDQUTAQEDEQEeBTcFJ18CBQkFAQEOBSIBAQUUBR9dAgsEAQMBAQEHAQIBAQEPBQ8FDlsEBQkFFQECAxcBDwMLATAFMwUVWQEFDgUWAQsFKQUxAQsFMQUqVwMFAgUCAQYDAwEEAQUBCQECAQ0BCAUPBRhbAwUJAQEDEgEFAQEBFwEbAw0BHgUmBR9ZBgUJAQQDCwEeAwMBOgEDAQEBMwEZBUAFPVEBBQcFAQEGAQEBBAEOAQEBAwEDARYBCQEDATEBBwUbBSRbAgECAwYBBQEDARABBgEBAQ8BEAEBAQMBIQUkBRVTBwULAQEDDAEVAw0BLAECAzMBEwMtAS0FSwU4SwIFBwUFAQQDAwEYAQEBAwEbARADBgE2AQMBAgE+ARIFNwU5VQEDAQEFAQUBAQEIAQoBBAEPAQUBAgERARIBBAETARgFGwUZUwUBAgMSAQgDCwEVAQEBBQEzAQkBAQExARkBAQEWAUAFPwUcSwMFBgEGAwgBFgUtAQYBAQEjASMBBQECAWIBBAEBAUQBGQU+BTVDAgUBBQIBBwMBAQcBAQEFAQEBCwEGAQcBFQEHAQwBAgEeAQoBAgEtARAFIgUeQQEFAgUBBQkBAwEDAQgBCAEGAQkBGgEIAQcBJwEJAyIBGQMVATUFLQUZRQIFBAEDAwQBDAMGASUBAwECATABFwMbATwBBAECAUkBDgM3AS4FTQUuSQUBAgMBAQwDAwEOAQoBAgEIAS4BAwEHAScBGAEGAQUBSAEOAQQBLgETBSYFKkECBQIBAQUBAQEBBAEEAQgBBQEJAQQBCwEbAQcBDwEeAQUBBAElARwBBAEbAR8FGgUdPwIFAgMBAQgBBAEBAQcBEwEBAx4BDwMsASIBAgEWAUgBBwEBAUwBHQEDASwBNQU+BSk3AwsDBQEBDQEBAQMBCAEDAQIBDwEfAQEBBgE2ARABBgEyASoDAwFQAQoDUwEhBToFNkMBBQMFBAEEAQMBBgEJAQgBDQEGARYBDwEJAREBDgELAQQBIAEcAQQBIgEcBRYFFz8CBQIBAwEBAQUBBgEBAQUBDQEIAQIBGgEMAxQBIAEGARUBOQEGAQQBPgEeAQUBGAEyBS0FHT0CAQEDAgEEAwIBCgECAQEBFQESAQEBDQEiAQQBCgE8AREBAwEmATcBBQEFAVMBDwECATcBMQVABSo1AQUBBwIDAQEIAQMBAQEDARMBAQEFARQBEQEEAQgBIgENAQcBLAERAQcBBQEvAQ0BAgEyARUFJAUZQQEDAQEGAQMBBgEJAQIBAgEPAQYBAwEVAQ4BAQEXARoBCgEQASsBCgEDASkBFQEEARQBJAUmBQ03AQUBAQIDAgEJAwEBCQEFAQIBDwEVAQIBBwEmAQoBAgEoASIBAgEmAUYBCAEBAUwBEQEBASsBLAUoBR43AQMCAQIFBQECAQEBBQEHAwUBFwEFAQMBEwEeAQQBBwFBARABAgEtAR4BBQEEAVABDAEDATkBHwUpBRs7AQcBAQIBBAEIAQQBCQEDAQoBCQEFAQsBDAELAQcBGAEcAQoBGQEmAQ0BAwEkAQ4BBQEiAR0FFAURPQEBAgEBAwMBBAECAQ8BCAEBAQYBFgEIAQgBHwEJAQQBJQEcAQYBFwE8AQcDNgEWAQIBGwEwBR0FEC8BAQEFAQMBAQQBAgMGAQYDBgEOAQYBAgEaAQgBAQETASUBBwEGATABEQEFAR0BJgEDAQUBPgEJAQEBKgEUBSIFHC8BCwMBAgEBAQIBBQEBAQUBCQEFAQkBBQENAQQBBgEUAQ0BEAEMASIBFgEHARwBGAEKAQYBJgEPAQMBGAETBRQFDjcCAQEDAgUCAQIBBQECAQ0BCwEGAQcBDwEKAQYBEwEOAQQBIQEdAQcBFgEuAQoBBAErARgBAgEfARsFIwULKwELBQUFAQEBAQECAQkDBAELAQYBAQEiAQ0BBQERASoBCQEDAS4BHQEFARoBMAEFAQIBPQEIAQEBIQEZBR4FCycBAQERBgEDBQkBBAECAQYBEQEFAQUBEgELAQUBEwEbAQQBBQE2AQsBBQEeAR4BBwEFAUMBDAEBASABDwUgBRYnAQ0BAQEBAwUDAQQBBQEEAQYBBAEGAQgBCAEOAQkBBwEIARkBDQEGARgBFQEHARwBFwEIAQIBGAEKAQEBFQEZBQ4FDTkCAwIBAQEBAQMBBwECAQIBFAEHAQQBFAEWAQMBCAElAQwBBgEfARUBBgEUASYBBQEBATcBEwEDARYBGgUVBQchAQcBCwIBAgEBAQMBBQEBAwgBBgECAQcBFAEGAQIBGAELAQcBEwEfAQQBAQExARABBAEeARsBBAEEASMBBQECARgBDwUVBQknAQ0BAwEBAQMBAQEBAgECAQMBCQEEAQMBBgEVAQgBBwEQARABCgEIARsBEwEHASEBFQEIAQIBHQEGAxsBEgUNBQg1AQEDAQIBAQEEAQQBAgEBAQgBBQEEAQ0BCAECAREBDwEIAQcBIAEKAQUBEQEWAQYBEwEmAQUBAQEjAQgBAgEUARAFCgUDLwIHAQMCAQUDAgEFAQYBAwEFAQwBAwEEARcBFQEFAQ0BJAEGAQQBGwEQAQUBEgElAQIDMAEJAQIBGwEQBREFChsBEwMDAQEDBQIBBAECAQUBBAECAQQBCgEIAQQBBQEQAQcBBgENAQ0BCgECASABCwEDARUBEwEEAQEBFAEGAxEBCwUHBQYnAQkBAQEBAgMCAQQBBgECAQEBAgEJAQQBBAEKAQQBAwEHAQcBBwEHARQBCwEBARIBEAEIAQ4BHQEIAQIBFAEKAQEBEwEKBQkFBikBBwEFBAEBAQIBBQEDAwUBBgEEAQYBEwEEAQIBEQEOAQQBCQEbAQgBAgEcAQ0BBAEQARIBAwEBARkBBgMLAQsFCwUDJwEBAQMBBwMBBQMCAQQDAwEGAQMBAQEEAQcBAQMLAQgBBAEOARkBBwEGARkBCQEBARcBGgECAQEBDQEDAw0BCQUMBQYnAQUCBwMBAQEBAQMBAgEGAQEBBgEFAQQBBgEHAQMBBAETAQsBBAEKAQwBDQEEARUBCgEHARABEwEBAQQBFAEGAQEBCgEFBQMFAyUBAwEJAQECAQYDAwEBAQEBAgEBAQgBAgEDARIBAQECAQsBCgECAQQBFQEHAQEBGQEKAQIBCAERAQIBAwEVAQsDBgEKBQMFAykBBQIFAgEDAQIBBQEGAQMDBgEJAQMBBQEPAQMDDgEQAQIBBwEXAQMBBgEVAQ4BAwEJAREBAgEBARMBAwECAQYBDAUIBQYhAQMBAQEBAQMBBwUBAQEBAQMBBAEGAQEBBQECAwgBCQEHAQIBCgEFAQIBCQEQAQgBAQEOAQwBAgENAQkBAwECAQ4BAgMJAQMFCAUCKwEBAQEBAwEBAwUBAQIBBgECAQIBAgECAQMBCgEKAQIBDgELAQIBBQEMAQgBBQELAQkBBgEKAQ8FBgEEAQEBBQEDOQEBAgUCAQEBAQMHAQMBAQEJAQQBAQEDAQ4BAwMLAQUBAQEFAQ8BBAECARABCQEDAQ0BDAECAQEBDAECAQEBBgECBQUvAQMBAQEBAQMCAQQDAQEIAwEBAgEEAQEBCAEKAQQDDAEFAQEBCQEIAQEBAwEVAQUBAgELAQ0BAgEBAQkBBAMCAQMFAQUBKQEFAQMEAQEBAgECAQIBBAECAQIBBQEFAQMBCwEGAQgDDwEIAQQBBAENAQMBBQELAQYBAgEHAQkBAQEBAQQBAQMCAQIxAQUBBQIDAgEBAQMBAQEFAQMDBAEGAQIBAQEKAQQBBAEKAQsBAwEDAQgBBQMIAQgBAwEDAQkBAgMJBQQHAScBBwIJAQECAQEBAQECAQYBAQEBAQgBBAECAQUBBgEBAQEBDQELAQEBAgEPAQQDEQEHAwYBDQMBAQcFBQEFBQMlAQsBAwIDAQECAQIBAQEDAQQBAwECAQYBBAECAQQBCgEBAQIBBQEEAQYBBAEIAQIBAgEMAQYBAQEEAQYDAQEFBQIBAQsBLwEBAgEBAwEBAwMDAQMBAwECAQUBAQEEAQUBAgEDAQUBBwEEAQEBBQEGAQEBBgEGAQEBAgEFAQEDAgUBAQQFASMBBQEBAQkCBQEBAgEBAQEBAwECAwQBBwMDAQgBAQECAQYBCAMFAQYBAQMFAQUDAgEEBQgBAQMBAQULARkBAQELAQMBBQIDAQEDAwEBBQEDAwUBBAEBAQUBBAECAQQBCQECAQEBBwEHAQYBAQEHAQEBAgEDAQgFCAECAwEzAQMBAwEBAQEBBwEBAgEEAQIBAQEDAQMBAQEBAQQBAQEDAQMBBQEBAQIBAgECAwUBAwEEAQUBAwUCDQUfAQMBAwELAQEBBQEBAwMBAQMBAgMEAQUBAQECAQYBAgMEAQYBAQEBAQgBAQMGAQQDAgEFBwMDAQEBJwEJAQEBAQEDAQECAQEBAQECAQEDAQECAQIDBwECAwEBAwEBAQEBBgEDAQEBAQEDAQEBAgEEAQEDBAEDBQEBAQMBAQErAQ0BAwIFAQMBAQQDAQECAQIFAgEBAwcBAQECAQIBAwEBAQIBAgEBAQEBAw8BNQEDAgECAwEDAQMCAQIDAQECAQUBAQECAQIBAgEBAQIBBAEBAQEBBwEBAwUBAQEBAQIPAjUCAwEDAQMBBQEBBAECAQEBBwECAwMBBAEFAwcBAgEBAwQFAgEDBQEHAQMBMwEBAQECCQEBAwECBQMBAQEBAQIDAQEDAQQBAwEDAQQBAgUBAwEBAgEDAQEDAgsBNQMLAQECAQMJAQEBAQQBAgEBAQEBAgMEAQMBAQMFAwEBAQEBAQEJAgUCLwEFAQUCAQEBAQMCAQEBAQMBAQEDAQEDAQIBAgEEAQEDAgEGAwEBAgMBAwEBAQ8BNQIRAQkCAQIBAgEBAQEBAQEBAQIBAwEBAwMFAQECAwRFAwUBEwIFAQEBAQQDAQEBAwM/ASkBAQEDBAMCAQIDAQEBBQEBAQECAQMHAS8BJwEBAQEDCwEBAQUBBQEzARUBAwEDAQkBAQEFAgcDBwEBAgMBAQIDAQECAQFTAQUCAwEDAQEDBQIFAQMBAQEBAQcBBQM3ARcBAwEDAQMBAwEBAQMCDwEFAQEBTwEFAQcBBwEFAQEBDwEBAU8BBQEHAQcBBwEHAQkBAQEBAVEBEQEBAREBAQFdAgcBBQEDAQEBcwEHAQ0BbQMHAQcBAwFZAREBDQJ3AQkBBwFTAQUBCQF9ApUBAQ8BQQGrAQH7AQF/AYUBAQ==",
-    "sd": 15.2,
-    "msd": null,
-    "center": "market"
-   }
-  },
-  {
-   "id": 401858445,
-   "league": "ncaaf",
-   "week": 2,
-   "start": "2026-09-13T03:00+00:00",
-   "home": "USC",
-   "away": "Louisiana",
-   "fcs": false,
-   "neutral": false,
-   "spread": -30.5,
-   "total": 58.5,
-   "book": "DraftKings",
-   "alt": {
-    "book": "draftkings",
-    "asof": "2026-09-10T15:23+00:00",
-    "spreads": {
-     "home": [
-      [
-       -50.5,
-       680
-      ],
-      [
-       -49.5,
-       640
-      ],
-      [
-       -48.5,
-       535
-      ],
-      [
-       -47.5,
-       489
-      ],
-      [
-       -46.5,
-       467
-      ],
-      [
-       -45.5,
-       417
-      ],
-      [
-       -44.5,
-       357
-      ],
-      [
-       -43.5,
-       339
-      ],
-      [
-       -42.5,
-       316
-      ],
-      [
-       -41.5,
-       263
-      ],
-      [
-       -40.5,
-       237
-      ],
-      [
-       -39.5,
-       224
-      ],
-      [
-       -38.5,
-       198
-      ],
-      [
-       -37.5,
-       171
-      ],
-      [
-       -36.5,
-       160
-      ],
-      [
-       -35.5,
-       150
-      ],
-      [
-       -34.5,
-       124
-      ],
-      [
-       -33.5,
-       113
-      ],
-      [
-       -32.5,
-       108
-      ],
-      [
-       -31.5,
-       -105
-      ],
-      [
-       -30.5,
-       -115
-      ],
-      [
-       -29.5,
-       -129
-      ],
-      [
-       -28.5,
-       -140
-      ],
-      [
-       -27.5,
-       -169
-      ],
-      [
-       -26.5,
-       -186
-      ],
-      [
-       -25.5,
-       -199
-      ],
-      [
-       -24.5,
-       -228
-      ],
-      [
-       -23.5,
-       -262
-      ],
-      [
-       -22.5,
-       -283
-      ],
-      [
-       -21.5,
-       -308
-      ],
-      [
-       -20.5,
-       -374
-      ],
-      [
-       -19.5,
-       -407
-      ],
-      [
-       -18.5,
-       -440
-      ],
-      [
-       -17.5,
-       -499
-      ],
-      [
-       -16.5,
-       -581
-      ],
-      [
-       -15.5,
-       -630
-      ],
-      [
-       -14.5,
-       -700
-      ],
-      [
-       -13.5,
-       -880
-      ],
-      [
-       -12.5,
-       -960
-      ],
-      [
-       -11.5,
-       -1080
-      ],
-      [
-       -10.5,
-       -1220
-      ],
-      [
-       -9.5,
-       -1560
-      ],
-      [
-       -8.5,
-       -1680
-      ]
-     ],
-     "away": [
-      [
-       8.5,
-       690
-      ],
-      [
-       9.5,
-       660
-      ],
-      [
-       10.5,
-       589
-      ],
-      [
-       11.5,
-       546
-      ],
-      [
-       12.5,
-       510
-      ],
-      [
-       13.5,
-       480
-      ],
-      [
-       14.5,
-       412
-      ],
-      [
-       15.5,
-       383
-      ],
-      [
-       16.5,
-       362
-      ],
-      [
-       17.5,
-       323
-      ],
-      [
-       18.5,
-       292
-      ],
-      [
-       19.5,
-       274
-      ],
-      [
-       20.5,
-       256
-      ],
-      [
-       21.5,
-       217
-      ],
-      [
-       22.5,
-       202
-      ],
-      [
-       23.5,
-       189
-      ],
-      [
-       24.5,
-       166
-      ],
-      [
-       25.5,
-       147
-      ],
-      [
-       26.5,
-       138
-      ],
-      [
-       27.5,
-       126
-      ],
-      [
-       28.5,
-       105
-      ],
-      [
-       29.5,
-       -103
-      ],
-      [
-       30.5,
-       -105
-      ],
-      [
-       31.5,
-       -126
-      ],
-      [
-       32.5,
-       -143
-      ],
-      [
-       33.5,
-       -151
-      ],
-      [
-       34.5,
-       -167
-      ],
-      [
-       35.5,
-       -203
-      ],
-      [
-       36.5,
-       -218
-      ],
-      [
-       37.5,
-       -234
-      ],
-      [
-       38.5,
-       -277
-      ],
-      [
-       39.5,
-       -319
-      ],
-      [
-       40.5,
-       -341
-      ],
-      [
-       41.5,
-       -386
-      ],
-      [
-       42.5,
-       -485
-      ],
-      [
-       43.5,
-       -533
-      ],
-      [
-       44.5,
-       -570
-      ],
-      [
-       45.5,
-       -710
-      ],
-      [
-       46.5,
-       -840
-      ],
-      [
-       47.5,
-       -900
-      ],
-      [
-       48.5,
-       -1040
-      ],
-      [
-       49.5,
-       -1440
-      ],
-      [
-       50.5,
-       -1600
-      ]
-     ]
-    },
-    "totals": {
-     "over": [
-      [
-       40.5,
-       -3700
-      ],
-      [
-       41.5,
-       -2200
-      ],
-      [
-       42.5,
-       -1720
-      ],
-      [
-       43.5,
-       -1520
-      ],
-      [
-       44.5,
-       -1140
-      ],
-      [
-       45.5,
-       -860
-      ],
-      [
-       46.5,
-       -800
-      ],
-      [
-       47.5,
-       -700
-      ],
-      [
-       48.5,
-       -543
-      ],
-      [
-       49.5,
-       -461
-      ],
-      [
-       50.5,
-       -429
-      ],
-      [
-       51.5,
-       -355
-      ],
-      [
-       52.5,
-       -287
-      ],
-      [
-       53.5,
-       -272
-      ],
-      [
-       54.5,
-       -242
-      ],
-      [
-       55.5,
-       -198
-      ],
-      [
-       56.5,
-       -173
-      ],
-      [
-       57.5,
-       -160
-      ],
-      [
-       58.5,
-       -138
-      ],
-      [
-       59.5,
-       -110
-      ],
-      [
-       60.5,
-       -109
-      ],
-      [
-       61.5,
-       100
-      ],
-      [
-       62.5,
-       118
-      ],
-      [
-       63.5,
-       134
-      ],
-      [
-       64.5,
-       142
-      ],
-      [
-       65.5,
-       165
-      ],
-      [
-       66.5,
-       194
-      ],
-      [
-       67.5,
-       205
-      ],
-      [
-       68.5,
-       223
-      ],
-      [
-       69.5,
-       263
-      ],
-      [
-       70.5,
-       295
-      ],
-      [
-       71.5,
-       315
-      ],
-      [
-       72.5,
-       359
-      ],
-      [
-       73.5,
-       421
-      ],
-      [
-       74.5,
-       449
-      ],
-      [
-       75.5,
-       490
-      ],
-      [
-       76.5,
-       564
-      ],
-      [
-       77.5,
-       640
-      ],
-      [
-       78.5,
-       670
-      ],
-      [
-       79.5,
-       750
-      ],
-      [
-       80.5,
-       860
-      ],
-      [
-       81.5,
-       910
-      ],
-      [
-       82.5,
-       980
-      ]
-     ],
-     "under": [
-      [
-       40.5,
-       940
-      ],
-      [
-       41.5,
-       770
-      ],
-      [
-       42.5,
-       700
-      ],
-      [
-       43.5,
-       660
-      ],
-      [
-       44.5,
-       564
-      ],
-      [
-       45.5,
-       473
-      ],
-      [
-       46.5,
-       452
-      ],
-      [
-       47.5,
-       412
-      ],
-      [
-       48.5,
-       344
-      ],
-      [
-       49.5,
-       303
-      ],
-      [
-       50.5,
-       286
-      ],
-      [
-       51.5,
-       245
-      ],
-      [
-       52.5,
-       205
-      ],
-      [
-       53.5,
-       195
-      ],
-      [
-       54.5,
-       176
-      ],
-      [
-       55.5,
-       146
-      ],
-      [
-       56.5,
-       129
-      ],
-      [
-       57.5,
-       120
-      ],
-      [
-       58.5,
-       104
-      ],
-      [
-       59.5,
-       -110
-      ],
-      [
-       60.5,
-       -121
-      ],
-      [
-       61.5,
-       -133
-      ],
-      [
-       62.5,
-       -158
-      ],
-      [
-       63.5,
-       -180
-      ],
-      [
-       64.5,
-       -192
-      ],
-      [
-       65.5,
-       -226
-      ],
-      [
-       66.5,
-       -270
-      ],
-      [
-       67.5,
-       -288
-      ],
-      [
-       68.5,
-       -318
-      ],
-      [
-       69.5,
-       -386
-      ],
-      [
-       70.5,
-       -446
-      ],
-      [
-       71.5,
-       -485
-      ],
-      [
-       72.5,
-       -574
-      ],
-      [
-       73.5,
-       -720
-      ],
-      [
-       74.5,
-       -790
-      ],
-      [
-       75.5,
-       -900
-      ],
-      [
-       76.5,
-       -1140
-      ],
-      [
-       77.5,
-       -1420
-      ],
-      [
-       78.5,
-       -1580
-      ],
-      [
-       79.5,
-       -2000
-      ],
-      [
-       80.5,
-       -2800
-      ],
-      [
-       81.5,
-       -3400
-      ],
-      [
-       82.5,
-       -4200
-      ]
-     ]
-    }
-   },
-   "home_conf": "Big Ten",
-   "away_conf": "Sun Belt",
-   "proj_home": 41.3,
-   "proj_away": 21.2,
-   "home_rank": 14,
-   "away_rank": null,
-   "sim": {
-    "t0": 0,
-    "m0": -34,
-    "nt": 123,
-    "nm": 129,
-    "n": 20000,
-    "c": "qAMBhwQB9wEBBQIFAXMBDQKBAQFvAQUCBQIFAm0BBQIBAQUEBQVlARsBdQIFAwUBbQMFAgEBBQYFDHMCBwMFBW8BBQQFAwUDZwILAwEEBQMFDW0DBQYBAwUKBQllAQkDAQEBAgEDBQIFBGcCBQYBAgUEBQsFB1kBBQIFAgEEBQ8DAQEMAQQFDwULZQIHAQEBAQEBAwEEBQQFDGECBQQFBgEEAwIBCQUTBQVZAQUCAQEDBAEFBQwBBAMSAQgFFwURXQEBBgUCAQEBAQEBAQYBAQMNAQUFDAUPXQEDAwUCAQIDAwEEAQIDCQUMBQpZAQEDAwEBBAMCAQsBAQMUAQYDCgEQBRkFGFcBAQQDAQEGBQcBCQEBAxgDAgEVAQgFHwUWVwEBAgMBAQEBAwEBAQMBBQEDAQMBCAEIAwsBCgUMBQ1ZAgEBAQEBAwEEAwIBDQMBARIBCQMKARoFHQURUQEBAgUEBQgDAQEOARoBAwEDAR4BBQEBARoBEgUXBRpXAwECAQEDBAEBAw8BBQEBAQEBCQEGAQIBFgEJBREFEU8BAwEBAwMDAQQDAgEGAwMBEQEHAQEBEwENAQIBDgEVBSMFE1ECBQMBBgEBAQEBEAEHAwwBHgEDAQEBJAEIAxsBGAUoBRxDAQEBCwMFAgEDAQEBAQEOAQEDEwEMAQEBAQEkAQkBAQEdAQYFHQUcVQIDAQEGAQEBBwEGAQIBBwEUAQgBAgEQARADEwEeBR8FE00BAwIBAwECAQEBBwEBAwkBDgEBAQkBGAECAQEBKwETAQQBHQEeBTEFF0MBBwEDAQEDAQMDBAEJAQIBAgEYAQcBAQEWARoBAwEEATQBCQECAScBGAUjBS5DAgUBAQIDAwEEAQMBAQEIAQYBBAECAQwBCwEGAQ4BEQEFAQIBIgEOAQMBHAEWBRsFGUUBAwEBAQEBAwEBBQECAQMBCwEGAQEBDQEMAQEBCgEfAQEBAQEiARYBAgEdAR0FKgUeRQEHAQMIAQwDBAERAQMDIAEGAQIBEwElAQIDNwEOAQIBJwEiBUEFGEkDAQMDAQEFAQEBBAEJARADBgEWAQwBBQEYAQ4BBQECATEBCgEBASgBFAUsBRo5AQcBCQMBAwEEAQMBAQEDAQYBCwEEAQEBCAESAQUBDQEkAQkBAwEoARMBAgEZASMFKQUcPQEHAwUGAQEDCQEJAQIBBgERAQUBAQEoARIBAgEQATIBAwECATgBFgEBASkBLQU/BShBAQcFAQMBAQEBAQ8BAQECAQgBDgEEAQMBEQEJAQQBKQEbAQMBBAFHAQ0BAwE1ARUFPAUrNQEFAQcCAQEBAQEBAQEBBQEDAQIBBgEHAQYBCwEKAQQBDAEKAQMBEgEoAREBAwEZARIBBgEqARsFHwUVPwEHAgEBAQQBAwEBAQYBCQEDAQMBFAEJAQEBEQEdAQEBGAEgAQUBAgFDARoBAQEfASgFLQUZNwEHAQEBAQEFAgELBQsBBgECAQwBFgEFAQUBLAETAQQBIwEqAQQBAgFFARYBAQEoAS4FNwUcOwEFAQECAQIBAgEBAQEBAQECAQoBBQEDAQkBFwEHAQUBHwEMAQMBHgEdAQUBAwEhAQsBAwEvARUFKAUZRQUBAQMEAQMBAQEDAQYBBAEJARsBCQEEASUBFAEFARABMAEIAQUBNgERAQIBGAEtBSIFFSsBGQMFBAECAw8BCQEDAQsBJAEIAQQBLwEXAQgBIAEwAQcBBQFKAREBAQEwATAFNgUYPQIBAQMEAQMBBAEFAQgBAwEEAQwBBwEBAQwBGQEIAQUBIAERAQcBMAEkAQUBBQFDAQ8BAgE1ARwFJgUdLQERAQEBAQEBAgECAwgBBQEDAQ4BBwEDAQoBFAEJAQwBGwEdAQcBFQEmAQsBAQEzARIBAgEaASQFJwUQOQEBAQMBAwIBBgEBAQIBCAEIAQQBCwEQAQEBDgEhAQ0BAwEqASEBAwEUAUUBCAEDATcBFQEDASkBKgUtBRwvAQsBAQQDAQECAQYBBAEDAQYBBQECARIBDgECAREBGAEJAQIBMQEcAQUBGQE5AQgBAgFDARUBAgEjASoFLQUYNQIBAQEBAQIBAgMBAQUBAQMFAQIBBQEBAQkBBgEHAQ0BEgEJARABKAEOAQQBIAEeAQcBBAE4ARIBBAEpARkFFAUUPQQBAQMBAQYBAgEEAQ4BBgEBAQsBDgEEAQwBHgEKAQMBKwEiAQUBFwEpAQUBAQE5ARgBAQElAR4FKgUMKQELAgEEBQMBAQMHAQcDAwEMAQMBBgEPARMBAwELASYBBgEFATgBHAEHARkBLgEIA0ABDQECAR0BHgUnBR41AgUBAQEDAgEIAwIBBwEGAQMBAwETAQYBBQEQARkBCgEHASwBCwECASsBMAEEAQEBMQENAQIBJwEWBRkFDTMBCQEDAwEFAQIBAgEDAQYBDQEGAQwBCAEHAREBFAETAQUBHgEUAQcBGgElAQgBAgEyARIBAgEVASEFFAUOJwEHAQEBBQIDAQEEAQIBAQEGAQYBBAEDAREBCAECARUBEgEDAQwBJwEKAQQBJAEcAQQBGgFCAQgBAgE5ARABAgErASgFJgUIMQEFAQEBAQIBAQEBAQMBCAEGAQIBBAEPAQEBBgEeAQsBBQEMASMBCwEFATABHQECAScBNgEIAQUBPwEQAQIBHQETBRoFEjcBAwIBAwECAQIBBgEGAQMBBgEDAQUBBAENAQsBCQEZARQBCwEHASIBGwEIASoBHAEIAQQBLAERAQMBEAERBQ0FDzEBAQEFAQMDAQIBAgEEAQQBAgEBAQcBBwEBAQ4BFQEDAQsBJgEPAQkBHgEUAQMBFwE4AQMDLQEWAQIBEAEZBQsFAyUBCQMBAQEBAQEBAgMBAQQBAQECAQcBBwEDAQYBEQECAQgBFQEOAQMBFgEYAQoBAgE1ARMBAgERASIBBQECATUBCAECASIBFwUbBQYvAgUCAQIBAQEDAQMBBAEDAQgBBwEHAQQBDQEHAQYBGAESAQcBEgEfAQUBAwEqARcBAgESASMBBwEFASsBBQMUAQwFGAUNKQEHAgMBAwEBAgEBAQEBAwEEAQkBBQEGAQ8BBgEGAQcBFgEHAQ4BGAEKAQIBKAEgAQgBDQEqAQQBBAEXARIBAwEJAQQFAwUEIQEHAQEBBQEFAQEBAwQBAwEBAQUBCQMEAQ8BCQEEARgBDgEGARABIAEGAQMBKwEYAQQBFAEuAQYBAQE9ARIBAQEJARcFCAUBLwEFAgEBAQEBAgEHAQQBAwEGAQYBAgEGAQ0BAgEFAREBDwECAREBJQEKAQMBGQESAQQBFwEWAQQBAQEkAQUBAQEdAQkFDwUEMQEDAgEBAQIDBQECAQEBBwEEAQUBAgEKAQcBBQEOARUBBwELARsBDQEGAREBGQEEARABEgELAQQBHwEGAQMBDgEGBQwFBykBBQEBAgMBAQIBAgEDAQMBBAEBAQQBBQMCAQ8BBwECARABEwEFAQ0BFgEJAQIBKAESAQcBDwEqAQ0BAgEQAQwBAgEGAQgFBQUFIQEFAQcBAwEBAwEFAQIDBwEBAw8BDQECAQYBDAEGAQMBEQEFAQMBFAEeAQQBAgElAQwDGgEeAQEBAQEpAQgBAQEHARAFAgUBLwEDAQECBwMBAQEDAQUBBAECAQMBBAEEAQgBDQEOAQUBDwEbAQoBAQEfAREBAgEOAQwBAQEBARUBAgMOAQcFCSkBAwEJAgUBAQEBBAEEAQYBAwEDAQkBAwEFARIBBwECARgBEQECAQwBHAEJAQEBDgEaAQcBDwEWAQUBAgEPAQUBAQELAQIFAy8BCwIBAgEBAQMBAwECAwkBAgEBAQQBCwEGAQMBEgEWAQUBEQEaAQEBAwEsAQ0BAgEKARkBBwECARIBAwMFAQQFAQUDLwEFAwECAQMBAgEEAQEBAwECAQYBAQEIAQwBCQMdAQkBAwELARUBBAEDAREBBgEFAR0BEgMBAR0BAwMCAQgFBDMBCQEBAgECAQIBAwECAQQBCAEDAQQBDAEIAQYBDQENAQUBDAEJAQwBAwEKAQMBAgEOAQgBAgEBAQ4DAgEMAQQFBS8BBQEBAQMCAQEBAgECAQYBAgMIAQYBBQEEARABBAMQAQ4BAQEGARcBBgMPAQoBAgEJAQgBAQMEAQEDBAEBBQEpAgMCAQEFAwMBAQEBAwEBAwMBAgEEAQkBBgECAQMBDAEDAQQBEwEKAQEBCQERAQIBAgEeAQgBAgEFARUBAwMDAQQBAQEDAQE3AQMBAwEBAgEBAwMBAgEDAQMBCQECAQIBBwENAQUBBgELAQQBBgEJAQwBAgECAQ8BAgECAQ4BCAMBARIBAQUBBQEjAQsBAQEHAQECAQEBBAECAQYBBQEBAQMBAQEBAQIBDAEEAQIBBwEMAQcBBQEMAQgBAgEDAQIBBAEGAQQBAgEBAQU5AQEBAQEFAQUDAQMDAgEDAQQDBQECAQcBBwEHAQYBAwEPAQkBBAEFARYBBAMLAQoBBAECAQUBAQEBAQQBAQMBOwIBAwcEAwUBBgEEAQIBAwECAQIBCwEHAQEBBAEHAQIBAgELAQ8BAgMQAQcBAQECAQcFAQECOQEBAQEBBwIBBAEDAwUBAwEDAwcBBwEFAQIBBQEEAQQBBQEGAQgBCQEFAQIBAwEMAQIDBgEDBwMDATcBAwEBAQEBAwEBAgEBAwkBAgMHAQUBAgEEAQsBCAMEAQgBAgECAQYBAgEBAQEBBAEEAQIBAwEBAwJBAQEBBQMBAgEBAQEBBAECAwQBBQEBAQIBCQEBAQMBDgEEAQIBBgEKAQMDAwEFAQEDAk8CBQEBBAEEAQQBAQEDAQMBAwEDAQQBAQEJAwEBCQEDBQgBAwEBAwJDAQEBBQEDAwECAQEBAQEEAQIFCAUDAQcBAQEEAQMBBgEFAQQBAQEBAQMBAgMDAQUFATUBCQEJAQUCAQUBBgECAQgBAwMBAQYBAgECAQQBCgUCAQYFAUkBBwEFAQEBAQEBBAEBAQIBBQEDAwcBAgEBAQEBCAEFAwEBBQEBAwNLAQMCAQEDAQEBAwEBAwEBAQYBAwECAQEBBAECAQIBAQECAQMBAgEBAQEBAwUEAQEBAUEBCQEBAQEBAwEBAQEBAQIBBQECAQEBBAEHAQEBAQEDAQUDAQEBAQEBAgEBCwEBATMBDQENAwEBAwYBAgEBAQEBBAECAQEBAQECBQIBAwECAwEFAQEBPwENAQMBAQEDAQEBAQIBAQECAQEBAgMCAQMBAgMBAQQBAQEBAwFLAQEBAQEHAgEBCQIBAgECAQIBAQECAwIBAgMBAQEFAQEBAQFNAQ0BAQEDAQECAwEBAwEFAQEDAQECAwEFAQEBUwEBAgEBBQEBAQMBAQEDAQEDAQQDAQEBAQEFAhMBSwEDAgMBAQEFAQECAQEDAgECAwFNAScBAQEZATsBFQENAQkBAwEJAQMBUwEFAQMBDQIDAREBRwEHASMBTwEBARsDaQEBAQ0CCwEBAWMBFQEFAQEBeQF1ApEBAfcDAWsBDQELAW0B",
-    "sd": 15.2,
-    "msd": null,
-    "center": "market"
-   }
-  },
   {
    "id": 401864578,
    "league": "ncaaf",
@@ -4610,55 +3078,6 @@
    "away_rank": null
   },
   {
-   "id": 401858454,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T16:00+00:00",
-   "home": "Ohio State",
-   "away": "Kent State",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Big Ten",
-   "away_conf": "Mid-American",
-   "proj_home": 48.4,
-   "proj_away": 10.8,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401858229,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T16:00+00:00",
-   "home": "Clemson",
-   "away": "North Carolina",
-   "fcs": false,
-   "neutral": false,
-   "spread": -8.5,
-   "total": 44.5,
-   "book": "DraftKings",
-   "home_conf": "ACC",
-   "away_conf": "ACC",
-   "proj_home": 28.7,
-   "proj_away": 18.3,
-   "home_rank": null,
-   "away_rank": null,
-   "sim": {
-    "t0": 0,
-    "m0": -56,
-    "nt": 109,
-    "nm": 129,
-    "n": 20000,
-    "c": "OAL/AgIFBfkCBAUOBQhzAg0DcQF/AwUMBRAFAm0FBQQHAwUQewJvAQUOBQcFFQUGZwQFCgUSAQYFGAUQZQMNBgEDCwdpBAUGAwEBEQUJBQNhAgUOBSABAwMSARsFGwUUXwMFCQcMBRABAgUJBRRdAQUDBQMFBwEDAQIBDwUKBQJhCAUVAQQDGgELAQEBDgEiBSoFC1kEBQ0FEAEMAQEBAQEgAwEBGwEMBSYFHVcEBQIFAwEKAQEBAwEBAQMBDQEBARABCQUFBQdVAQUHBQ4BAgMRAQkBAQETAR4DBgEiBSIFEFMEBQ4FFwEOAwoBJAU5AQoBAQEiASUFNwUcUQcFAwUDAQkBAgEDARkBAQEEAQMBGQEGAQUBJAEHBRQFE1UBBQUBAQECARYBBwEBARABEAMKARwBAwEKAR0FEwUETQQFCAUdAQUDGgEaAwgBLwEGAQEBKgEOAQEBEAEmBSgFEksBBQsFCgEUAQEBBQEhAwIBHwEVAQMDNgEGAQQBKgEVBSQFFk8CBQYBBAECAQwBAgEDARMBCgEPARIBEAEEAQwBEgEDARYBFQUNBQhNCAUKAQIDFwELAxMBLAEEAQkBUAEJAQEBNAEgAw4BLwUmBQtFAgUIBQ0BCAMGATADAwE1ARQBBAEfATwBAwEBAUYBEwEBAS0BJAUqBRJDAQUBBQIBBgMCAQ8BAwEMAQUBEwEMARABHAELARMBBQEgAREBAwERAQoFEgUMRwIFBgEEAwgBAgEBARcBGAEBARMBKAEJAQUBNwESAQIBGwEgAQIBBgEnBRUFDUUHBQwBBQMMARMDCAEpAQUDRQErAQIBFgFIAQwBAQFMARcDGwEyBS8FEj0BBQQFBQEKAwEBHAEFAQMBGgEOAQQBBAEzAQcBCAEtARwBCgEFAU8BCQMyAQ0FIgUORwIBAwMKAQQBBAEFAQ4BAgEIARcBCAELARsBFAERASUBEQEFARIBHgEDAQ0BFQULBQo/AwUEAQEDDAEMAwYBJQEDAQQBOAETAQQBLQEtAQcBFAFXAQsDPwEcAQEBFAEkBR0FDjcCBQUFAwEFAwYBFQMFAR0BDAEFARoBOAEDAQgBTgETAQQBKwErAQMBAwFMAQ8BAQEjARgFIQULOwMFAwEEAwEBDQMEAQQBDAEHAQwBFgEMAQwBCwEfARABDAEeARQBCwECARUBEwEDAQ8BGAUNBQY5AQUEBQcBCAMGARIBAwEIARYBAwEGATsBGwEDARkBNAEEAQ8BOgEVAQEBKgEdAxUBGgURBQUxAQUBBQQBAQMFAQkDBgEhAQcBAgEbASYDEQFPAQ4BCgFDAS0BAQEkAVMBBgEBAUYBEwECARwBJwUVBQkvAQUCBQEDAQECAQcDAgEKAQ4BAQEJARcBCgEJARsBGwEMAQgBLgENAQoBLQEoAQcBAQEqAQwBAQEfAQQFDwUIOQIBAQMGAQMBAQEFAQoBBgEKAREBCAEJAR4BDAEGARgBGwELARQBMgEJARUBMQEMAQEBHgEPAxABEAUIBQIrAQUCBQIBAQMHAQUDBwESAQIBCQEiAQgDGgEyAQUBCwFVARABBAE7ATgBBgESAUMBCAEBAT4BFwMPASEFFwUGNQMBAgMCAQcBAQMTAQkDFQEXAQMBDQEnARYBBQEgATIBBAEHAUcBEQEIAS4BMwEBAQMBQAEIAQIBHQEPBRUFDC0BBwIDAQEDAwUBBwEHAQQBCwELAQgBDgEOARABEQEWARIBEAETAQcBFwEZAQoBEwEVAQoBAwEXARABAQELAQQFCgUFJQEFAQkBAQUBAwMEAQgBAQEFARsBCwEEASEBEwEBAQwBRgEKAQQBNQEgAQEBGwE2AQcBEQFAAQoBAQElARkDCwEVBQkFAykCBQIBAQMGAQMDAQEIAQQBAQEPAQ0BAwEMASEBCAECATEBHwEIASUBSQEPAQUBNQEmAQMBIwEsAQYBAwE5AQcBAgERAQsFDgUFLwMFAQEBAQQBBgEEAQQBBAEMAQMBCAERARABCAEMASEBCQENARkBHgEQAQcBJQEUAQUBFQEWAQgBBAEYAQoBAQEMAQcFCwUDKwEFAQMBAQEBAwEEAQIBBwECAQcBCwEQAQQBCAEXAQUBDAElAQ0BCgEdAR0BCAEVASMBAwERASYBDwEBAREBCgEBAQoBCwUFBQQjAQUBBwIDAgEGAQEBAQEKAQQDEwETAQQBBwEmARMBAgEuAS0BCQETATkBFQEEASsBJgEGARYBMQEKAQEBJAEKAwoBDQUKBQIpAQMBAQIDAQEMAQIBAQEDAQkBAQEGAREBBAEGAQ4BFwEIAQgBHAEQAQkBHAEqAQoBBwEvAQoBBgESASMBBgMmAQMDDAEHBQQFAi0BBQMDAgEDAQMBAwEHAQQBBwEOAQ8BDAEOARIBDAESARsBDQESASABEgEMARsBFAEHAQkBFQEFAQIBCQEMAwcBBgUCBQErAQMBAQIDAQEHAQEDBwEMAQIBCAEUAQYBBwEeARUBCAESASsBCAEHASgBEAEDARwBHwEEAQoBGQEGAQEBDQEHAQEBCQEIBQUFAykBBQIFBAEEAQEBAQEKAQUBAQETARYBBAEOASQBCAEHASYBEgEEARgBJgEJAQIBLwEUAwsBJAEEAx4BBwMIAQcFBAUDIQEFAgUDAQEDAgEKAwEBBQEDAQcBCQEKAQkBCwELAQ4BCwEIARoBFQELARUBFAEKAQgBHwEKAQcBCgESAQEDEwEEAwcBBQUDBQErAgEBAQIBAwECAwMBBwEBAQkBDgEDAQsBFwENAQsBDQEXAQQBEQEgAQsBCQERARABBAEIAR4BCQEDARcBBQECAQUBBAMGAQIFASkCBQMBAgMFAQUDBAEKAQMBBQEMAQUBAgEPARcBCAEKAR4BEQEGARkBJgEEAQ0BLQEHAQEBGAERAQIBBQEWAQIBAQEJAQcDBgEGBQElAQcBBQMBAQEBAQEBBwECAQUBDgEIAQMBCAEVAQgBBwETARcBBAELARQBCwEEARgBHAEOAQcBGwELAQMBCwEMBQsBAgMDAQIFAh8BBwEBAQEBAwIBAgECAQIBAwEDAQIBBAEEAQYBBwEJAQYBCAEHAQ8BCAEJAQsBBAEMARYBCAEFARcBCgEDAQwBCwEHAQwBCwEDAQIBBAEBAQEBAikBBwEFAwECBQMDAwEHAQIBBAEQAQgBAgEIARIBCQEDARcBCAECARgBJgEFAQQBGwELAQEBEgESAQIBBAEEAQIDBAEFAwEBAi0BBQQBAwMBAQUBAQEBAQUBBgEBAQQBHAEBAQYBDAERAQQBBwEVAQoBAwEIAQ0BBwEPARoBCgEGARcBCgECAQgBDwEBAwkBBAEBAQIBAQUCJQEHAgUDAQMBAwEBAQQBBQEEAQgBCQEHAQQBCgEGAQYBDgEIAQoBAwERAQ0BBgEHAQ4BAgEFAQ0BAgEEAQgBBwEBAQEBCgUBBwEFASMBAwEBAgECAwIBAgEBAwQBBAECAQkBCQEFAQQBEQELAQcBDQEKAQMBCQELAQMBBQEOAQUDAQEJAwEBCAECAwkBAQMCLwMBAgMCAQEDAgEEAQEDAgEKAQEBBAETAQQBAgEVAQwBAQEGARgBBwEEAQ8BFQEBAQYBFQEEAQEBCQEIAQEDAwEBAwYBAQUBBQEnAgEBAQEHAgEGAwEBBQEDAQQBBAELAQMBBAETAQMBBQEPARIBBQEGAQsBCAEBAQkBDAECAQQBDQECAQEBBQEHBQUFAS0BBQEDAQECAQEDBwEGAQIBBgEDAQUBBgEEAQMBBgEFAQcBBQEMAQ0BBQEIAQgBBQEDAQgBBAMJAQQBAwEEAQQBAQMEAQIFAQUBJwEBAgMCAQMBAgEBAQIBBQMDAQwBAgEDAREBCQMKARYBAQEFAQ8BBAMIAQoBAgEEAQoBBAMJAQgBAgEBAQUFATUBAQEDAQEFAwEBAwEBAQEBBgEFAQEBBQEQAQMBAwELAQkBAgEEAQsBAgECAQkBBgECAQQBCwUGAQMBAQECAQUDAQEEBQExAQMBAwEBAwECAQIBBAECAQQBAgEEAQQBBQEBAQUBBAEBAQUBCAEDAQQBBQEEAQQBBQEEAQEBAgEFAQIDAwEBAQEBAQEDNwEDAgECAwEBBQECAQIBAQEIAQMDAwEEAQEBCQEIAQMBAgEDAQgBAwECAQgDAQEFAQEBAgEBAQEBAQECAQIFAS8BBQMBAgMDAQQDAQEEAQMBAQEGAQYBAQEDAQYBBQEBAQkBCAEFAQgBCgECAwgBCQECAQIBBwEBAQIBBgEBBQEFAQEBLwEBAQMBAQEBAgEBAQEBAgECAQEBAgEBAQIBAgEFAQUBAgECAQoBBgMEAQQBBgEDAQcBAwEBAQQBBQEBAwEBAgcBBQEDAQcBIQEBAQkBAQEBAgUBAQEBBAEGAwEBBwEEAQEBBgECAQIBBAEGAQUDAwEEAQQBAgEHAQIFAQUBBQEBAR8BBQEDAQMCAQEDAgcCAwEBAQEEAwQBBQEBAQEBBAEHAQIBBAEIAQEBAwEOAQcDBAECAwMBBwECAwMBAjMBBwIHAQEBAQMBAgECAQEBAQMCAQUBAQMBAQoBAgEBAQMBBQECAQQBCQECAQEDAwEBAwQBAQMBAQMLASsBAQEFAQEBAwIBAQEBBQEBAwEEAQIBAwMHAQMBAwECAQEBBgEBAQQBAwECAwIBBAEBAwIDAQEBAQIBAQsBHwEPAgUBAQIDAQEBAQIBAQEFAQEDBwEBAQIBBAEDAwEBAwECAQIBBAEEAQEBAgEBBwEBAQEBBQEBAQEBHQERAQkBBwEBAQEBAQMBAgMBAQgDAQEFAQUDBwEEAQEDCQEDAwUBBQUDBQIBAQMBQQIBAQkBAQMBAQEDAwMBAwMCAQIBAwEBAQEBBAEDBQIDAgEBAQEDAT8BBwEBAQEEAwEBAQECAQIBAQMCAwIBAgEBAQMBAgMBAQMBAwMCAwEJAT0CBQIFAwEEBQUBAQMDAQIBAgMBAQEDAgEEAQEFAgMBBwEBAQMBAQEBAQkBKQIFAQEBAwEFAgUBAQMBAQECAQIBAgMBAQIDAQECAQQDAQEEAQEBAgMBBQMDATMBBwENAQEBAQEDAgMDAQIBAQEBAQIBAgMBBQEBAgEDBQEBAgEBBQFDAQUBAQEBAQMBAQEDAQUCAQEBAQ8BAQMBAQMBAwEPASkBEQIDAQMBAQEFAgEBBwEFAQUCAQIBAQEBBQEBAhMBNwEJAwUBAQIBAQEBAQIBAQcBAQEBAgEBCwEFAUcBCQEBAQUBAQIDAQEBCQEFAQUCBQFRAQ0BCwINAQcBRwENAQEBCwIFAQcBCQFpAQsBAwELAU0BBwIDAgUBBwENAXEBVwILARcBBQENAYMBAVUBAwEFAREBBQFTAQsBGwFnAQEBBQETAX0BbQF/AXEBpwMB",
-    "sd": 15.2,
-    "msd": null,
-    "center": "market"
-   }
-  },
-  {
    "id": 401858456,
    "league": "ncaaf",
    "week": 3,
@@ -4678,36 +3097,6 @@
    "away_rank": null
   },
   {
-   "id": 401856686,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T16:00+00:00",
-   "home": "Arkansas",
-   "away": "Georgia",
-   "fcs": false,
-   "neutral": false,
-   "spread": 17.5,
-   "total": 52.5,
-   "book": "DraftKings",
-   "home_conf": "SEC",
-   "away_conf": "SEC",
-   "proj_home": 25.3,
-   "proj_away": 34.4,
-   "home_rank": null,
-   "away_rank": null,
-   "sim": {
-    "t0": 0,
-    "m0": -82,
-    "nt": 117,
-    "nm": 129,
-    "n": 20000,
-    "c": "UgH/AgP/AgUFBPkCAQUFBQFzAgUEBwEFAfEBAwUHBQNtCgUIBQQBBgUEBQJlAg8BbwEFCwUEBQNtDwUTBQkBBAMCAQUFBQUBXw4FBAUBAQgFBQEBBQJpCgUCBQcFAwUBYQsFDAUPAQQDAQELAwEBCAUCXw0FDgUEAQsBAwMGAQIDBQEBBQIFAVcDBQUFAgEDAQEBBAEBAwMDAQEDYQoFFQUZAQYDCwEDAwIBBwMBAQgFAVkPBSEFFQEMAQEBBQEYBQoBCgMDAQkFAgUBUQ0FCwUIAQgDAwEIAwEBAQEEAQEDAgEBBQFVBwURBQoBAQMNAQgDBgEJAwIBBgUDWRUFEwUXAQ8BAQEMASEFHgEEAwcBBQMBAQMFBFEMBRMFBgEbAwQBEwEDAQEBCAEKAQEDBgEBAwIBAwUFTwgFEAUKAQsDEQEFAQEBBQEJAQIBAgEEAwIBAwUBUwkFJQUmAQ8DDwEgAwMBIQEBAwsBCQMDAQUDAQEDBQFLEwUgBQ8BIQECAQUBKgEEAQEBEQENAwUBGAEDAw8BAgEBAwMFA0kMBQ4FDAELAQMBCAEPAQQBBQEJAQUBBQEEAQcBBAEFAwQBAQMCAQNNFAUpBSEBEAMWAR0BAwELASIBAQEBARABBQMIAQcBAQECAQgBAQMCSwsFKgUmARwDFQFDAQIBAwEkAQ8BAQEJARcBAQEDARcBAwMGAQcDAQcBQxQFEQUMAR0DBQEeAQMBCwEMARkBAwEEAQsBAwEFAQcBCQEDAwkBAgMDAQFHCAUTBRgBDwECARgBIwECAQ8BGgEJAQQBGAEGAQMBCwEMAQIBAgEEAwIBAQMBAQMFAT8WBSgFLAEUAxEBSQEBAQYBNQENAQEBEwEcAQIBDAEdAQEBAgELAQMDBQEBBQJDFQUjBRkBJgEBAQkBQwMIASABHAECAykBBwEDARYBCgMFAQkFAwEBAwEBAQUCOwQFDwUZARYBAgERARgBAgESAR8BEgEFAQ8BCgEGAQwBCQEHAQgBAgECAQMBAgEBAQIFAgECBQE5DQUaBRsBEAMXASoDCwEzAQ4BAgElAR0BAgEMARYBBQEDARQBAgEDAQgBBAMDAQQDAQEBPRYFIgUcARkBAgEKAUUBAgEDAUMBIQEBARkBMAEDAQQBIQEKAQEBCwEMAwQBCQECAwEBAQUDOw4FEAUPARUBAgEQASgBBwEKASUBHAEGAQwBEwEKAQsBBQEJAQcBBAEQAQQBAwEDAQYFAgcBOQ4FIQUaAQ4BBAERASgBAQEQAS8BEgEHASgBEgECARsBEgEFAQUBDwEEAQMBDAEEAQIBAwEBAwEFAQEDNxEFIgUwAScDDwFGAQIBBgFFARQDJAEnAQIBCwE7AQoBAgEcARsBAgEEAQsDAgEHAQQDAgEEAwIHAS8JBRkFHQERAQIBFQEtAQQBBQERASgBCQEVATIBCQEGARwBDQEEAQoBFgEBAQEBCgEEAwUBBAEBAQEHAQEBMwoFEQUXARYBAQEYASEBAQEUASwBGAEMASEBGAEGARYBFAEHAQ0BFAEIAQMBBwEGAQMBBAEBAQMBAQEEAwIFAgEDMQoFHwUgAREDHwE2AQIBCwFCARMBBQEtASYBAgEZATIBBwEKARUBCwEBAQoBCwEBAQMBBQEDAwIBAQkBAQEvCgUQBRoBGwMVAUoBAQEHATABJgEHARkBPQEGAQYBIgEXAQIBEgEPAQMBBAEPAQYBAQECAQcFBAEBAwEHAi0FBRAFFAEWAQIBCwEiAQMBCQEkAR0BBgEbASgBDAEWAQ8BDQEOAQwBCwEHAQoBBgEOAQYBBwEGBwEBAQMCMwUFCwUeAQwBAQEVAScBAwELATsBDgEKASYBHQEEARkBJwEIAQ0BHwETAQQBCAEOAQMBBQEFAQMBAwEKAQMBAQECAQEDAQEBLwcFFAUcARkBAQEYAT4BAQEHATgBIgEEARgBLAEDARIBMgESAQEBIwEWAQEBCwEdAQQBAwENAQgBAQEDBQIBBAEBAwEvCQULBRsBHAEDAQsBJgEFAQ4BIAElAQcBEQE3AQQBDQEYARMBCQESARMBCQECARABCQECAQIBDQEBAQMBCwECAQEJAS0DBQcFGQEOAQEBFQEaAQIBCQErARUBBgEeARoBDQEVAR4BEgERAR0BEQEFARQBCQEFAQgBEAEEAQMBBgECAQIDAQMBCwElBQURBRQBCwEBARMBJAEBAQ0BNwEXAQUBHAE8AQQBFAEuAQ8BCwEfARwBAQENARYBBgEDARQBBgECAQMBBQEBAQEHAi8HBQ4FEAESAwoBJgECAQMBJAEhAxkBMAEKAQsBIAEUAQYBDgEdAQYBCAEfAQYBAgEIAQ0BAgEEAQcBBAEBAQIBAgUBLQoFDAUJAQkDCQETAQIBDAEkARkBDAEZAR0BAgEUAREBFAENAREBFwEIARcBCAETAQgBBAEJAQEBAwEEAQEBAgEBAQMBAgEBAQEBASsHBQkFFwELAQMBDAEgAQIBBwEpAQwBBAEqASIBBgEQASUBCQEHASUBFQEEARIBHwEJAQUBFgEEAQIBBAEFAwEBAQEBAQEDAS0DBRQFEgENAQEBBQEmAQEBBQEtARcBAgEXAS4BCQEOATsBFgEDARMBJgEHAQcBFwEMAQIBDQEQAQMBBAEIAwEBBAECAQIDAwUBJwYFCQUJARADBwEXAQMBCAEgARgBCgEQAS0BCAENASIBGAEJARUBGwEMAQsBFAEJAQgBBwEMAQEBAgELAQMFBgUDAQILAQEBHQIFBQUJAQcBAgEOAQ4DAgEgARMBAwEXARgBCAEQARkBCAEHARsBGAEJARcBBwEKAQgBCgEHAQUBBQEFAQEBBAEDAQEBAQkBAQEBASMBBQoFDwELAxIBHAECAQYBJAEPAQMBIgEqAQIBDQE8AQ8BBwErAREBAwEXAR0BBwEEAQoBCQEBAQoBEAEDAQEBDAEFAQEBAQEBAwEBAgEBJQIFBgUIAQYDBwEYAwcBFwEbAQQBEwEqAQYBCgEmARgBBQEOAR0BBgEIARsBCgEHAQwBEwEEAwgBCQEBAQIBAgEBAQEBAQMBKQIFAwUIAQcBAgEHAREBAQEFARgBDgEFARABEQEEAQgBGAEMAQ8BFAEXAQsBEgEOAQ0BDQEGAQUBBwEKAQIBBQEDAQEBAwECAwMDAgUBIwEFCwUEAQUDDAEQAQEBBQEhAQkBBwEYARsBBQERARsBDAEGARsBGgEFAREBHQEFAQYBEgEHAQIBBwEHBQUBAwMDAQIFBAUBIQIFBwUFAQkDBwEZAQEBCAEhAQsBAQEUASABBAEJAScBDgEEARcBEwECAQ0BGAETAQYBDQERAQIBBAERAQMBAgEDAQMBAQECAQUBAgEBAwElAQUEBQQBBgMHARIBAgEFAQ4BEAEDARMBFQEGAQUBFAENAQkBFAEVAQwBDQEZAQUBBQEGAQ4BBwEDAQoBBQEBAQEBBAEDAQIBAQEBBQEBASkBBQYBAwECAQQBCgMDARMBCQEGARUBEQEEAQsBFAEJAQkBHwEKAQQBFAERAQcBBwEUAQ0BAgEHAQYBAwEDAQYBAwcCAQEBAS0CBQIBBQECAQYBEgMBARQBCwEBAQsBEgEDAQkBIgEMAQMBHQEdAQYBEAEcAQcBBAERAQwBAgEJAQ4BBQEBAQcBAgEBAQMBAgUEJwIFAgUEAQYBAQEBAQsBAQMGAQoBAwEIARkBAgECAR4BCwEDAQkBFwECAQoBEQENAQUBCgENAQYBBgENAQcBAwEDAQMBAQMCAQMDAQUBAQEFAR8BBQEBBQMDAQUBAgEJAQwBCQEBAQ0BCAEFAQoBEAENAQgBDwEOAQcBFAEGAQUBBQEKAQkBAgEJAQcBAQEEAQMBAwEDAQIBAgMBKQEFAgUBBQIBCgMEARABBwECARMBEwEBAQQBFgEFAQUBHQEQAQcBDAEaAQcBAwESAQUDBwEFAQEBBAEIAQUDAgEBBQMBAQEBLwUBAwMCAQQFDAEKAwwBCgEDAQgBFwELAQYBCwEYAQUBCgEOAQkBAwENAQoBBAECAQYBBwMGAQUBAQEDAQMBAwMBFwEPAQUBBQMBAgMBAQQFBgEFAQIBCAELAQQBAwELAQgBBgEKARgBBgELARIBBwEHAQkBCgEGAQQBBAEIAQIBBAEGAQIBBQECDwEpAwEBAwMBBQMEAQwBAgEBARABDgECAQYBEgEGAQMBCgEOAQQBCQEIAQUBBgEMAQoBAgEJAQkBAwEEAQUBAgECAQMBAQkCLwIBAQUHAwEBDAEJAQEBBwENAQMBBgETAQkBBAEKAREBBAEDARQBBAEDARIBBAECAQUBCwEBAQEBBwECAwIBAgECAQEBAQEBBQEDASkCAwMBAgMBAQUBAQMEAQoBBgEFAQcBCAECAQkBBgEFAQUBDAEHAQYBBwEKAQMBAwEHAQIBAgEFAQYBAgECAQUFAQMCIwERAQEBAQEBAgEEAQQBAwEFAQQBAgEHAQQBBQEFAQcBCwEBAQQBCgEIAQgBCAEDAQIBBAEHAQMBAgEGAQUBAQEBAQEBAQMCAQEBAQEBBQEJAR8CAwEBAgMBAQwDAgEEAQgBAwECAQYDBQEHAQgBBQELAQgBBgEFAQgBBAECAQUBCQEBAQMBCAEEAwMBBAEBAQEBAQEBAQIBAQEBKwQFAQEBBQgDAwEEAQgDAwELAQIDCAELAQIBBQEPAQYBAgEIAQYBAQEDAQgBAwEBAQQBBAECAwYDAQECAQIBAQMCEwEfAQUDAQEBAgEDAQMBAQEDAQgBAwECAQgBDAEBAQUBBQEGAQUBBgEFAQIBAgEBAQMBAgEBAQUBAgEDAQIBAQEBAwEBAQMBAQI1AQUBAQIBAgMDAQcBAQECAQUBBgECAQgBBQEGAQIBBwUCAQQBAgEEAQEBAgECAQEBAQECAQEBAgEBAwIDASkBCQEBAgEEBQYBBAMCAQcBBQEBAQUBCAEBAQEBCgEEAQIBBQEGAQMBAgEJAQQBAQEFAQUBAQEFAQQFAQEBAQEvAQcBBQEDAQMCAQEBAQEEAQMDAgEDAQEBAwEFAQUBBgEDAQYBAQEEAQQBAwMBAQMBAQMDAQEFAQUBKwEPAQEBAwEBAgECAwMBAgEBAQcDAwEGAQQDBAEFAQQBAgMBAQEBAwEGAwEBAQEECQEPAS0CAwIBBAUCBQUBBAMBAQgDAQEJAQQBAQEDAQYBAgMEAQIBAQECAQIFAQ8BMQMHAgMBAQUBAgECAQMBAgEBAQIBBwECAQEBAgEEAQIBBQEEAwEDBQEBAwEBAgUBFwEnAQcDAQIBAgEBAQMDAgEDAwEBAQEEAQEBBAEDAQMBAgEDBQEBAQECBQEDAQEBBQEJATcBAwEDAwECAQQBAwEBAwQFCAMBAQIBBQEBAQEBBgEBAQEBAQMCBwIBAgMBAwMHAQUBKwEBAgMBBwMBBAMCAQYDAQEDAQUDBAEGAwIBAgMDAQEBAgUBBwENASsCBwEFAwcFAwEBAQECAQEBAQcCAQIBAQEEAQMBAgEDAQEDAQECAQEHAQsBPQIDAgUBBQQBAQEDAQIBAQEDAQMDAQECAQEBAQcCBQFNAwEBAwEBBAEBBwIBAQUCAQMBAQUCAQEHAgECAQIDAgUBNQEJAQMBAQIDAgEEBwEBAQEBAQEDAgECAQIDAgECBQIFAQECBQE5AQMBBQEDAQsCAQEBAgEBAwEBBAUEAQEBAgsBAQFRAQMBAQEDAQEBAQEDAQcBAQEFAQEBCQEBAQUBQQENAQcCBQEFBAEBAQEDAgcBCwJHAQkCBQEBAQcBBQEDAQMBAQIBAQMBAQEHAUsBAQEFAQEBAQEBAgEBAQEDAQcBAQEBAQUBAwFZAQMBBwIDAQsBAQEPARkBMQEPAwEBAwIBAQMBAwEDAgEBAwILAUsCDQENAwMBBQEBAWEBFwJrAQcBBQEJAXUBAQENAWMBDwEBAXkBBQEBAVUBJwEHAQ8B3wECeQEHARUBYQEXAXEBFQFrAZ0BAe8CAQ==",
-    "sd": 15.2,
-    "msd": null,
-    "center": "market"
-   }
-  },
-  {
    "id": 401856798,
    "league": "ncaaf",
    "week": 3,
@@ -4723,25 +3112,6 @@
    "away_conf": "Mid-American",
    "proj_home": 30.4,
    "proj_away": 16.6,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401858228,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T16:00+00:00",
-   "home": "Georgia Tech",
-   "away": "Mercer",
-   "fcs": true,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "ACC",
-   "away_conf": "Southern",
-   "proj_home": 41.5,
-   "proj_away": 22.7,
    "home_rank": null,
    "away_rank": null
   },
@@ -4765,25 +3135,6 @@
    "away_rank": null
   },
   {
-   "id": 401860889,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T16:00+00:00",
-   "home": "Texas State",
-   "away": "North Texas",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Pac-12",
-   "away_conf": "American Athletic",
-   "proj_home": 33.4,
-   "proj_away": 42.1,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
    "id": 401858451,
    "league": "ncaaf",
    "week": 3,
@@ -4799,6 +3150,44 @@
    "away_conf": "Mid-American",
    "proj_home": 31.8,
    "proj_away": 18.3,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401858228,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T16:00+00:00",
+   "home": "Georgia Tech",
+   "away": "Mercer",
+   "fcs": true,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "ACC",
+   "away_conf": "Southern",
+   "proj_home": 41.5,
+   "proj_away": 22.7,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401860889,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T16:00+00:00",
+   "home": "Texas State",
+   "away": "North Texas",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Pac-12",
+   "away_conf": "American Athletic",
+   "proj_home": 33.4,
+   "proj_away": 42.1,
    "home_rank": null,
    "away_rank": null
   },
@@ -4831,6 +3220,85 @@
     "msd": null,
     "center": "market"
    }
+  },
+  {
+   "id": 401858229,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T16:00+00:00",
+   "home": "Clemson",
+   "away": "North Carolina",
+   "fcs": false,
+   "neutral": false,
+   "spread": -8.5,
+   "total": 44.5,
+   "book": "DraftKings",
+   "home_conf": "ACC",
+   "away_conf": "ACC",
+   "proj_home": 28.7,
+   "proj_away": 18.3,
+   "home_rank": null,
+   "away_rank": null,
+   "sim": {
+    "t0": 0,
+    "m0": -56,
+    "nt": 109,
+    "nm": 129,
+    "n": 20000,
+    "c": "OAL/AgIFBfkCBAUOBQhzAg0DcQF/AwUMBRAFAm0FBQQHAwUQewJvAQUOBQcFFQUGZwQFCgUSAQYFGAUQZQMNBgEDCwdpBAUGAwEBEQUJBQNhAgUOBSABAwMSARsFGwUUXwMFCQcMBRABAgUJBRRdAQUDBQMFBwEDAQIBDwUKBQJhCAUVAQQDGgELAQEBDgEiBSoFC1kEBQ0FEAEMAQEBAQEgAwEBGwEMBSYFHVcEBQIFAwEKAQEBAwEBAQMBDQEBARABCQUFBQdVAQUHBQ4BAgMRAQkBAQETAR4DBgEiBSIFEFMEBQ4FFwEOAwoBJAU5AQoBAQEiASUFNwUcUQcFAwUDAQkBAgEDARkBAQEEAQMBGQEGAQUBJAEHBRQFE1UBBQUBAQECARYBBwEBARABEAMKARwBAwEKAR0FEwUETQQFCAUdAQUDGgEaAwgBLwEGAQEBKgEOAQEBEAEmBSgFEksBBQsFCgEUAQEBBQEhAwIBHwEVAQMDNgEGAQQBKgEVBSQFFk8CBQYBBAECAQwBAgEDARMBCgEPARIBEAEEAQwBEgEDARYBFQUNBQhNCAUKAQIDFwELAxMBLAEEAQkBUAEJAQEBNAEgAw4BLwUmBQtFAgUIBQ0BCAMGATADAwE1ARQBBAEfATwBAwEBAUYBEwEBAS0BJAUqBRJDAQUBBQIBBgMCAQ8BAwEMAQUBEwEMARABHAELARMBBQEgAREBAwERAQoFEgUMRwIFBgEEAwgBAgEBARcBGAEBARMBKAEJAQUBNwESAQIBGwEgAQIBBgEnBRUFDUUHBQwBBQMMARMDCAEpAQUDRQErAQIBFgFIAQwBAQFMARcDGwEyBS8FEj0BBQQFBQEKAwEBHAEFAQMBGgEOAQQBBAEzAQcBCAEtARwBCgEFAU8BCQMyAQ0FIgUORwIBAwMKAQQBBAEFAQ4BAgEIARcBCAELARsBFAERASUBEQEFARIBHgEDAQ0BFQULBQo/AwUEAQEDDAEMAwYBJQEDAQQBOAETAQQBLQEtAQcBFAFXAQsDPwEcAQEBFAEkBR0FDjcCBQUFAwEFAwYBFQMFAR0BDAEFARoBOAEDAQgBTgETAQQBKwErAQMBAwFMAQ8BAQEjARgFIQULOwMFAwEEAwEBDQMEAQQBDAEHAQwBFgEMAQwBCwEfARABDAEeARQBCwECARUBEwEDAQ8BGAUNBQY5AQUEBQcBCAMGARIBAwEIARYBAwEGATsBGwEDARkBNAEEAQ8BOgEVAQEBKgEdAxUBGgURBQUxAQUBBQQBAQMFAQkDBgEhAQcBAgEbASYDEQFPAQ4BCgFDAS0BAQEkAVMBBgEBAUYBEwECARwBJwUVBQkvAQUCBQEDAQECAQcDAgEKAQ4BAQEJARcBCgEJARsBGwEMAQgBLgENAQoBLQEoAQcBAQEqAQwBAQEfAQQFDwUIOQIBAQMGAQMBAQEFAQoBBgEKAREBCAEJAR4BDAEGARgBGwELARQBMgEJARUBMQEMAQEBHgEPAxABEAUIBQIrAQUCBQIBAQMHAQUDBwESAQIBCQEiAQgDGgEyAQUBCwFVARABBAE7ATgBBgESAUMBCAEBAT4BFwMPASEFFwUGNQMBAgMCAQcBAQMTAQkDFQEXAQMBDQEnARYBBQEgATIBBAEHAUcBEQEIAS4BMwEBAQMBQAEIAQIBHQEPBRUFDC0BBwIDAQEDAwUBBwEHAQQBCwELAQgBDgEOARABEQEWARIBEAETAQcBFwEZAQoBEwEVAQoBAwEXARABAQELAQQFCgUFJQEFAQkBAQUBAwMEAQgBAQEFARsBCwEEASEBEwEBAQwBRgEKAQQBNQEgAQEBGwE2AQcBEQFAAQoBAQElARkDCwEVBQkFAykCBQIBAQMGAQMDAQEIAQQBAQEPAQ0BAwEMASEBCAECATEBHwEIASUBSQEPAQUBNQEmAQMBIwEsAQYBAwE5AQcBAgERAQsFDgUFLwMFAQEBAQQBBgEEAQQBBAEMAQMBCAERARABCAEMASEBCQENARkBHgEQAQcBJQEUAQUBFQEWAQgBBAEYAQoBAQEMAQcFCwUDKwEFAQMBAQEBAwEEAQIBBwECAQcBCwEQAQQBCAEXAQUBDAElAQ0BCgEdAR0BCAEVASMBAwERASYBDwEBAREBCgEBAQoBCwUFBQQjAQUBBwIDAgEGAQEBAQEKAQQDEwETAQQBBwEmARMBAgEuAS0BCQETATkBFQEEASsBJgEGARYBMQEKAQEBJAEKAwoBDQUKBQIpAQMBAQIDAQEMAQIBAQEDAQkBAQEGAREBBAEGAQ4BFwEIAQgBHAEQAQkBHAEqAQoBBwEvAQoBBgESASMBBgMmAQMDDAEHBQQFAi0BBQMDAgEDAQMBAwEHAQQBBwEOAQ8BDAEOARIBDAESARsBDQESASABEgEMARsBFAEHAQkBFQEFAQIBCQEMAwcBBgUCBQErAQMBAQIDAQEHAQEDBwEMAQIBCAEUAQYBBwEeARUBCAESASsBCAEHASgBEAEDARwBHwEEAQoBGQEGAQEBDQEHAQEBCQEIBQUFAykBBQIFBAEEAQEBAQEKAQUBAQETARYBBAEOASQBCAEHASYBEgEEARgBJgEJAQIBLwEUAwsBJAEEAx4BBwMIAQcFBAUDIQEFAgUDAQEDAgEKAwEBBQEDAQcBCQEKAQkBCwELAQ4BCwEIARoBFQELARUBFAEKAQgBHwEKAQcBCgESAQEDEwEEAwcBBQUDBQErAgEBAQIBAwECAwMBBwEBAQkBDgEDAQsBFwENAQsBDQEXAQQBEQEgAQsBCQERARABBAEIAR4BCQEDARcBBQECAQUBBAMGAQIFASkCBQMBAgMFAQUDBAEKAQMBBQEMAQUBAgEPARcBCAEKAR4BEQEGARkBJgEEAQ0BLQEHAQEBGAERAQIBBQEWAQIBAQEJAQcDBgEGBQElAQcBBQMBAQEBAQEBBwECAQUBDgEIAQMBCAEVAQgBBwETARcBBAELARQBCwEEARgBHAEOAQcBGwELAQMBCwEMBQsBAgMDAQIFAh8BBwEBAQEBAwIBAgECAQIBAwEDAQIBBAEEAQYBBwEJAQYBCAEHAQ8BCAEJAQsBBAEMARYBCAEFARcBCgEDAQwBCwEHAQwBCwEDAQIBBAEBAQEBAikBBwEFAwECBQMDAwEHAQIBBAEQAQgBAgEIARIBCQEDARcBCAECARgBJgEFAQQBGwELAQEBEgESAQIBBAEEAQIDBAEFAwEBAi0BBQQBAwMBAQUBAQEBAQUBBgEBAQQBHAEBAQYBDAERAQQBBwEVAQoBAwEIAQ0BBwEPARoBCgEGARcBCgECAQgBDwEBAwkBBAEBAQIBAQUCJQEHAgUDAQMBAwEBAQQBBQEEAQgBCQEHAQQBCgEGAQYBDgEIAQoBAwERAQ0BBgEHAQ4BAgEFAQ0BAgEEAQgBBwEBAQEBCgUBBwEFASMBAwEBAgECAwIBAgEBAwQBBAECAQkBCQEFAQQBEQELAQcBDQEKAQMBCQELAQMBBQEOAQUDAQEJAwEBCAECAwkBAQMCLwMBAgMCAQEDAgEEAQEDAgEKAQEBBAETAQQBAgEVAQwBAQEGARgBBwEEAQ8BFQEBAQYBFQEEAQEBCQEIAQEDAwEBAwYBAQUBBQEnAgEBAQEHAgEGAwEBBQEDAQQBBAELAQMBBAETAQMBBQEPARIBBQEGAQsBCAEBAQkBDAECAQQBDQECAQEBBQEHBQUFAS0BBQEDAQECAQEDBwEGAQIBBgEDAQUBBgEEAQMBBgEFAQcBBQEMAQ0BBQEIAQgBBQEDAQgBBAMJAQQBAwEEAQQBAQMEAQIFAQUBJwEBAgMCAQMBAgEBAQIBBQMDAQwBAgEDAREBCQMKARYBAQEFAQ8BBAMIAQoBAgEEAQoBBAMJAQgBAgEBAQUFATUBAQEDAQEFAwEBAwEBAQEBBgEFAQEBBQEQAQMBAwELAQkBAgEEAQsBAgECAQkBBgECAQQBCwUGAQMBAQECAQUDAQEEBQExAQMBAwEBAwECAQIBBAECAQQBAgEEAQQBBQEBAQUBBAEBAQUBCAEDAQQBBQEEAQQBBQEEAQEBAgEFAQIDAwEBAQEBAQEDNwEDAgECAwEBBQECAQIBAQEIAQMDAwEEAQEBCQEIAQMBAgEDAQgBAwECAQgDAQEFAQEBAgEBAQEBAQECAQIFAS8BBQMBAgMDAQQDAQEEAQMBAQEGAQYBAQEDAQYBBQEBAQkBCAEFAQgBCgECAwgBCQECAQIBBwEBAQIBBgEBBQEFAQEBLwEBAQMBAQEBAgEBAQEBAgECAQEBAgEBAQIBAgEFAQUBAgECAQoBBgMEAQQBBgEDAQcBAwEBAQQBBQEBAwEBAgcBBQEDAQcBIQEBAQkBAQEBAgUBAQEBBAEGAwEBBwEEAQEBBgECAQIBBAEGAQUDAwEEAQQBAgEHAQIFAQUBBQEBAR8BBQEDAQMCAQEDAgcCAwEBAQEEAwQBBQEBAQEBBAEHAQIBBAEIAQEBAwEOAQcDBAECAwMBBwECAwMBAjMBBwIHAQEBAQMBAgECAQEBAQMCAQUBAQMBAQoBAgEBAQMBBQECAQQBCQECAQEDAwEBAwQBAQMBAQMLASsBAQEFAQEBAwIBAQEBBQEBAwEEAQIBAwMHAQMBAwECAQEBBgEBAQQBAwECAwIBBAEBAwIDAQEBAQIBAQsBHwEPAgUBAQIDAQEBAQIBAQEFAQEDBwEBAQIBBAEDAwEBAwECAQIBBAEEAQEBAgEBBwEBAQEBBQEBAQEBHQERAQkBBwEBAQEBAQMBAgMBAQgDAQEFAQUDBwEEAQEDCQEDAwUBBQUDBQIBAQMBQQIBAQkBAQMBAQEDAwMBAwMCAQIBAwEBAQEBBAEDBQIDAgEBAQEDAT8BBwEBAQEEAwEBAQECAQIBAQMCAwIBAgEBAQMBAgMBAQMBAwMCAwEJAT0CBQIFAwEEBQUBAQMDAQIBAgMBAQEDAgEEAQEFAgMBBwEBAQMBAQEBAQkBKQIFAQEBAwEFAgUBAQMBAQECAQIBAgMBAQIDAQECAQQDAQEEAQEBAgMBBQMDATMBBwENAQEBAQEDAgMDAQIBAQEBAQIBAgMBBQEBAgEDBQEBAgEBBQFDAQUBAQEBAQMBAQEDAQUCAQEBAQ8BAQMBAQMBAwEPASkBEQIDAQMBAQEFAgEBBwEFAQUCAQIBAQEBBQEBAhMBNwEJAwUBAQIBAQEBAQIBAQcBAQEBAgEBCwEFAUcBCQEBAQUBAQIDAQEBCQEFAQUCBQFRAQ0BCwINAQcBRwENAQEBCwIFAQcBCQFpAQsBAwELAU0BBwIDAgUBBwENAXEBVwILARcBBQENAYMBAVUBAwEFAREBBQFTAQsBGwFnAQEBBQETAX0BbQF/AXEBpwMB",
+    "sd": 15.2,
+    "msd": null,
+    "center": "market"
+   }
+  },
+  {
+   "id": 401856686,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T16:00+00:00",
+   "home": "Arkansas",
+   "away": "Georgia",
+   "fcs": false,
+   "neutral": false,
+   "spread": 17.5,
+   "total": 52.5,
+   "book": "DraftKings",
+   "home_conf": "SEC",
+   "away_conf": "SEC",
+   "proj_home": 25.3,
+   "proj_away": 34.4,
+   "home_rank": null,
+   "away_rank": null,
+   "sim": {
+    "t0": 0,
+    "m0": -82,
+    "nt": 117,
+    "nm": 129,
+    "n": 20000,
+    "c": "UgH/AgP/AgUFBPkCAQUFBQFzAgUEBwEFAfEBAwUHBQNtCgUIBQQBBgUEBQJlAg8BbwEFCwUEBQNtDwUTBQkBBAMCAQUFBQUBXw4FBAUBAQgFBQEBBQJpCgUCBQcFAwUBYQsFDAUPAQQDAQELAwEBCAUCXw0FDgUEAQsBAwMGAQIDBQEBBQIFAVcDBQUFAgEDAQEBBAEBAwMDAQEDYQoFFQUZAQYDCwEDAwIBBwMBAQgFAVkPBSEFFQEMAQEBBQEYBQoBCgMDAQkFAgUBUQ0FCwUIAQgDAwEIAwEBAQEEAQEDAgEBBQFVBwURBQoBAQMNAQgDBgEJAwIBBgUDWRUFEwUXAQ8BAQEMASEFHgEEAwcBBQMBAQMFBFEMBRMFBgEbAwQBEwEDAQEBCAEKAQEDBgEBAwIBAwUFTwgFEAUKAQsDEQEFAQEBBQEJAQIBAgEEAwIBAwUBUwkFJQUmAQ8DDwEgAwMBIQEBAwsBCQMDAQUDAQEDBQFLEwUgBQ8BIQECAQUBKgEEAQEBEQENAwUBGAEDAw8BAgEBAwMFA0kMBQ4FDAELAQMBCAEPAQQBBQEJAQUBBQEEAQcBBAEFAwQBAQMCAQNNFAUpBSEBEAMWAR0BAwELASIBAQEBARABBQMIAQcBAQECAQgBAQMCSwsFKgUmARwDFQFDAQIBAwEkAQ8BAQEJARcBAQEDARcBAwMGAQcDAQcBQxQFEQUMAR0DBQEeAQMBCwEMARkBAwEEAQsBAwEFAQcBCQEDAwkBAgMDAQFHCAUTBRgBDwECARgBIwECAQ8BGgEJAQQBGAEGAQMBCwEMAQIBAgEEAwIBAQMBAQMFAT8WBSgFLAEUAxEBSQEBAQYBNQENAQEBEwEcAQIBDAEdAQEBAgELAQMDBQEBBQJDFQUjBRkBJgEBAQkBQwMIASABHAECAykBBwEDARYBCgMFAQkFAwEBAwEBAQUCOwQFDwUZARYBAgERARgBAgESAR8BEgEFAQ8BCgEGAQwBCQEHAQgBAgECAQMBAgEBAQIFAgECBQE5DQUaBRsBEAMXASoDCwEzAQ4BAgElAR0BAgEMARYBBQEDARQBAgEDAQgBBAMDAQQDAQEBPRYFIgUcARkBAgEKAUUBAgEDAUMBIQEBARkBMAEDAQQBIQEKAQEBCwEMAwQBCQECAwEBAQUDOw4FEAUPARUBAgEQASgBBwEKASUBHAEGAQwBEwEKAQsBBQEJAQcBBAEQAQQBAwEDAQYFAgcBOQ4FIQUaAQ4BBAERASgBAQEQAS8BEgEHASgBEgECARsBEgEFAQUBDwEEAQMBDAEEAQIBAwEBAwEFAQEDNxEFIgUwAScDDwFGAQIBBgFFARQDJAEnAQIBCwE7AQoBAgEcARsBAgEEAQsDAgEHAQQDAgEEAwIHAS8JBRkFHQERAQIBFQEtAQQBBQERASgBCQEVATIBCQEGARwBDQEEAQoBFgEBAQEBCgEEAwUBBAEBAQEHAQEBMwoFEQUXARYBAQEYASEBAQEUASwBGAEMASEBGAEGARYBFAEHAQ0BFAEIAQMBBwEGAQMBBAEBAQMBAQEEAwIFAgEDMQoFHwUgAREDHwE2AQIBCwFCARMBBQEtASYBAgEZATIBBwEKARUBCwEBAQoBCwEBAQMBBQEDAwIBAQkBAQEvCgUQBRoBGwMVAUoBAQEHATABJgEHARkBPQEGAQYBIgEXAQIBEgEPAQMBBAEPAQYBAQECAQcFBAEBAwEHAi0FBRAFFAEWAQIBCwEiAQMBCQEkAR0BBgEbASgBDAEWAQ8BDQEOAQwBCwEHAQoBBgEOAQYBBwEGBwEBAQMCMwUFCwUeAQwBAQEVAScBAwELATsBDgEKASYBHQEEARkBJwEIAQ0BHwETAQQBCAEOAQMBBQEFAQMBAwEKAQMBAQECAQEDAQEBLwcFFAUcARkBAQEYAT4BAQEHATgBIgEEARgBLAEDARIBMgESAQEBIwEWAQEBCwEdAQQBAwENAQgBAQEDBQIBBAEBAwEvCQULBRsBHAEDAQsBJgEFAQ4BIAElAQcBEQE3AQQBDQEYARMBCQESARMBCQECARABCQECAQIBDQEBAQMBCwECAQEJAS0DBQcFGQEOAQEBFQEaAQIBCQErARUBBgEeARoBDQEVAR4BEgERAR0BEQEFARQBCQEFAQgBEAEEAQMBBgECAQIDAQMBCwElBQURBRQBCwEBARMBJAEBAQ0BNwEXAQUBHAE8AQQBFAEuAQ8BCwEfARwBAQENARYBBgEDARQBBgECAQMBBQEBAQEHAi8HBQ4FEAESAwoBJgECAQMBJAEhAxkBMAEKAQsBIAEUAQYBDgEdAQYBCAEfAQYBAgEIAQ0BAgEEAQcBBAEBAQIBAgUBLQoFDAUJAQkDCQETAQIBDAEkARkBDAEZAR0BAgEUAREBFAENAREBFwEIARcBCAETAQgBBAEJAQEBAwEEAQEBAgEBAQMBAgEBAQEBASsHBQkFFwELAQMBDAEgAQIBBwEpAQwBBAEqASIBBgEQASUBCQEHASUBFQEEARIBHwEJAQUBFgEEAQIBBAEFAwEBAQEBAQEDAS0DBRQFEgENAQEBBQEmAQEBBQEtARcBAgEXAS4BCQEOATsBFgEDARMBJgEHAQcBFwEMAQIBDQEQAQMBBAEIAwEBBAECAQIDAwUBJwYFCQUJARADBwEXAQMBCAEgARgBCgEQAS0BCAENASIBGAEJARUBGwEMAQsBFAEJAQgBBwEMAQEBAgELAQMFBgUDAQILAQEBHQIFBQUJAQcBAgEOAQ4DAgEgARMBAwEXARgBCAEQARkBCAEHARsBGAEJARcBBwEKAQgBCgEHAQUBBQEFAQEBBAEDAQEBAQkBAQEBASMBBQoFDwELAxIBHAECAQYBJAEPAQMBIgEqAQIBDQE8AQ8BBwErAREBAwEXAR0BBwEEAQoBCQEBAQoBEAEDAQEBDAEFAQEBAQEBAwEBAgEBJQIFBgUIAQYDBwEYAwcBFwEbAQQBEwEqAQYBCgEmARgBBQEOAR0BBgEIARsBCgEHAQwBEwEEAwgBCQEBAQIBAgEBAQEBAQMBKQIFAwUIAQcBAgEHAREBAQEFARgBDgEFARABEQEEAQgBGAEMAQ8BFAEXAQsBEgEOAQ0BDQEGAQUBBwEKAQIBBQEDAQEBAwECAwMDAgUBIwEFCwUEAQUDDAEQAQEBBQEhAQkBBwEYARsBBQERARsBDAEGARsBGgEFAREBHQEFAQYBEgEHAQIBBwEHBQUBAwMDAQIFBAUBIQIFBwUFAQkDBwEZAQEBCAEhAQsBAQEUASABBAEJAScBDgEEARcBEwECAQ0BGAETAQYBDQERAQIBBAERAQMBAgEDAQMBAQECAQUBAgEBAwElAQUEBQQBBgMHARIBAgEFAQ4BEAEDARMBFQEGAQUBFAENAQkBFAEVAQwBDQEZAQUBBQEGAQ4BBwEDAQoBBQEBAQEBBAEDAQIBAQEBBQEBASkBBQYBAwECAQQBCgMDARMBCQEGARUBEQEEAQsBFAEJAQkBHwEKAQQBFAERAQcBBwEUAQ0BAgEHAQYBAwEDAQYBAwcCAQEBAS0CBQIBBQECAQYBEgMBARQBCwEBAQsBEgEDAQkBIgEMAQMBHQEdAQYBEAEcAQcBBAERAQwBAgEJAQ4BBQEBAQcBAgEBAQMBAgUEJwIFAgUEAQYBAQEBAQsBAQMGAQoBAwEIARkBAgECAR4BCwEDAQkBFwECAQoBEQENAQUBCgENAQYBBgENAQcBAwEDAQMBAQMCAQMDAQUBAQEFAR8BBQEBBQMDAQUBAgEJAQwBCQEBAQ0BCAEFAQoBEAENAQgBDwEOAQcBFAEGAQUBBQEKAQkBAgEJAQcBAQEEAQMBAwEDAQIBAgMBKQEFAgUBBQIBCgMEARABBwECARMBEwEBAQQBFgEFAQUBHQEQAQcBDAEaAQcBAwESAQUDBwEFAQEBBAEIAQUDAgEBBQMBAQEBLwUBAwMCAQQFDAEKAwwBCgEDAQgBFwELAQYBCwEYAQUBCgEOAQkBAwENAQoBBAECAQYBBwMGAQUBAQEDAQMBAwMBFwEPAQUBBQMBAgMBAQQFBgEFAQIBCAELAQQBAwELAQgBBgEKARgBBgELARIBBwEHAQkBCgEGAQQBBAEIAQIBBAEGAQIBBQECDwEpAwEBAwMBBQMEAQwBAgEBARABDgECAQYBEgEGAQMBCgEOAQQBCQEIAQUBBgEMAQoBAgEJAQkBAwEEAQUBAgECAQMBAQkCLwIBAQUHAwEBDAEJAQEBBwENAQMBBgETAQkBBAEKAREBBAEDARQBBAEDARIBBAECAQUBCwEBAQEBBwECAwIBAgECAQEBAQEBBQEDASkCAwMBAgMBAQUBAQMEAQoBBgEFAQcBCAECAQkBBgEFAQUBDAEHAQYBBwEKAQMBAwEHAQIBAgEFAQYBAgECAQUFAQMCIwERAQEBAQEBAgEEAQQBAwEFAQQBAgEHAQQBBQEFAQcBCwEBAQQBCgEIAQgBCAEDAQIBBAEHAQMBAgEGAQUBAQEBAQEBAQMCAQEBAQEBBQEJAR8CAwEBAgMBAQwDAgEEAQgBAwECAQYDBQEHAQgBBQELAQgBBgEFAQgBBAECAQUBCQEBAQMBCAEEAwMBBAEBAQEBAQEBAQIBAQEBKwQFAQEBBQgDAwEEAQgDAwELAQIDCAELAQIBBQEPAQYBAgEIAQYBAQEDAQgBAwEBAQQBBAECAwYDAQECAQIBAQMCEwEfAQUDAQEBAgEDAQMBAQEDAQgBAwECAQgBDAEBAQUBBQEGAQUBBgEFAQIBAgEBAQMBAgEBAQUBAgEDAQIBAQEBAwEBAQMBAQI1AQUBAQIBAgMDAQcBAQECAQUBBgECAQgBBQEGAQIBBwUCAQQBAgEEAQEBAgECAQEBAQECAQEBAgEBAwIDASkBCQEBAgEEBQYBBAMCAQcBBQEBAQUBCAEBAQEBCgEEAQIBBQEGAQMBAgEJAQQBAQEFAQUBAQEFAQQFAQEBAQEvAQcBBQEDAQMCAQEBAQEEAQMDAgEDAQEBAwEFAQUBBgEDAQYBAQEEAQQBAwMBAQMBAQMDAQEFAQUBKwEPAQEBAwEBAgECAwMBAgEBAQcDAwEGAQQDBAEFAQQBAgMBAQEBAwEGAwEBAQEECQEPAS0CAwIBBAUCBQUBBAMBAQgDAQEJAQQBAQEDAQYBAgMEAQIBAQECAQIFAQ8BMQMHAgMBAQUBAgECAQMBAgEBAQIBBwECAQEBAgEEAQIBBQEEAwEDBQEBAwEBAgUBFwEnAQcDAQIBAgEBAQMDAgEDAwEBAQEEAQEBBAEDAQMBAgEDBQEBAQECBQEDAQEBBQEJATcBAwEDAwECAQQBAwEBAwQFCAMBAQIBBQEBAQEBBgEBAQEBAQMCBwIBAgMBAwMHAQUBKwEBAgMBBwMBBAMCAQYDAQEDAQUDBAEGAwIBAgMDAQEBAgUBBwENASsCBwEFAwcFAwEBAQECAQEBAQcCAQIBAQEEAQMBAgEDAQEDAQECAQEHAQsBPQIDAgUBBQQBAQEDAQIBAQEDAQMDAQECAQEBAQcCBQFNAwEBAwEBBAEBBwIBAQUCAQMBAQUCAQEHAgECAQIDAgUBNQEJAQMBAQIDAgEEBwEBAQEBAQEDAgECAQIDAgECBQIFAQECBQE5AQMBBQEDAQsCAQEBAgEBAwEBBAUEAQEBAgsBAQFRAQMBAQEDAQEBAQEDAQcBAQEFAQEBCQEBAQUBQQENAQcCBQEFBAEBAQEDAgcBCwJHAQkCBQEBAQcBBQEDAQMBAQIBAQMBAQEHAUsBAQEFAQEBAQEBAgEBAQEDAQcBAQEBAQUBAwFZAQMBBwIDAQsBAQEPARkBMQEPAwEBAwIBAQMBAwEDAgEBAwILAUsCDQENAwMBBQEBAWEBFwJrAQcBBQEJAXUBAQENAWMBDwEBAXkBBQEBAVUBJwEHAQ8B3wECeQEHARUBYQEXAXEBFQFrAZ0BAe8CAQ==",
+    "sd": 15.2,
+    "msd": null,
+    "center": "market"
+   }
+  },
+  {
+   "id": 401858454,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T16:00+00:00",
+   "home": "Ohio State",
+   "away": "Kent State",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Big Ten",
+   "away_conf": "Mid-American",
+   "proj_home": 48.4,
+   "proj_away": 10.8,
+   "home_rank": null,
+   "away_rank": null
   },
   {
    "id": 401858460,
@@ -4947,6 +3415,93 @@
    "away_rank": null
   },
   {
+   "id": 401856694,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T19:30+00:00",
+   "home": "Texas A&M",
+   "away": "Kentucky",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "SEC",
+   "away_conf": "SEC",
+   "proj_home": 33.9,
+   "proj_away": 20.7,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401858457,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T19:30+00:00",
+   "home": "Rutgers",
+   "away": "USC",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Big Ten",
+   "away_conf": "Big Ten",
+   "proj_home": 28.2,
+   "proj_away": 37.6,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401858233,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T19:30+00:00",
+   "home": "California",
+   "away": "Wagner",
+   "fcs": true,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "ACC",
+   "away_conf": "NEC",
+   "proj_home": 32.7,
+   "proj_away": 19.5,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401856685,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T19:30+00:00",
+   "home": "Alabama",
+   "away": "Florida State",
+   "fcs": false,
+   "neutral": false,
+   "spread": -17.5,
+   "total": 50.5,
+   "book": "DraftKings",
+   "home_conf": "SEC",
+   "away_conf": "ACC",
+   "proj_home": 32.4,
+   "proj_away": 22.4,
+   "home_rank": null,
+   "away_rank": null,
+   "sim": {
+    "t0": 0,
+    "m0": -46,
+    "nt": 115,
+    "nm": 129,
+    "n": 20000,
+    "c": "LgH/AgH/AgMFBAUDcwENAfEBAgUDBQYFBG0CBQIHBAUGewEFAW8CBQcFAwUFZwEFBQUEAQQFCgULZQENBAcBaQELAwUHBQkFBWcDBQkBAgMEAQkFGgURZQIFAQEIAQEDCAcEBQxdAgUBBQEFBAEBAwoFBAUFYQQFBgEBAwsBAwMJARgFGgUMXwIFAwEDBRIFCwEFBRIFEGUBAwIBAQMDAwoBBgUDBQdbBAUFBQwBBgMJAQgDAwEVBRUFD1MBBQIFBQECAwQBEgUhAQQDGwELBRQFHFcCBwMDAQELAQEBAgECAQwBBAMMAQkFDQUKWwIFBgECAw4BBgMJARUBAQEEARcFGgUJUwMFBAUGAQcDBAEXAQMDLAEQAQEBGQEpBSoFElEBBQIBBgUKBQwBBAMCARQBBAMdAQgFHAUYTwEHAQMDBQkBAgECAQsBCgMJAQwBAgEDARUFFAUTTQEFBQULAQcBAQEJAQ4DBwEgAQUBAQEqAQ8DEwEnBSIFE0sBBQUBAQMEARwDAgEVAQYBAwEVAR8BAwECATIBBAMzARIFLQUbSQIFAQECAwMBBgECAQEBAwEIAQIBBwEGAQ0BAwEBARABBwEBARYBDAUSBQlBAQsCAQEDBAEBAwcBBgEBAQYBGQEEAQcBJwEIAQIBEwEhAQMBCwEiBSwFD0sFAQEDBAEHAwEBEwEDAQEBGgEPAQEBFQEkAQgBAQFMARABAQEoAS0FNAUUPQELAQEBAwIBBwUGAQQBAgEHARMBCAEGAQ0BEgEBAQIBJgEOAQMBHQEYBRcFCUcDCQEBBQEGAQEBBwEJAQIBCQEYAQoBCgEaAQwBAwEdAR4BAgENARcFHAUNOQELAwUEAQQDAwENAQIBAwEdAQkBAgEcARoBAgEOAT0BCAECATwBFAMbAS0FNQUcPQEFAQUCAQgDAQEPAQUBAgENARQBAQECASQBCAECASUBJgEFAQQBQwEMAQEBJgEUBRsFDzsBBwIDAwEFAwEBAgECAQgBAgEFAQQBBwEGAQoBEQEGARUBIwEGAQQBJgEFAQUBFQEgBRMFET8BAQEDAwEDAwEBBgMEAQ4BBQEEARYBDAMUASUBAwEMAUIBCgEDASwBIAMVASMFJwULNwEFAQUEAQMDAQENAQMBAQENAQ0BAgELASIBBQEDATgBCAEGAR4BPgEIAQQBVwEaAQEBLQEkBS4FGDsBAQIDAQEBBQIBBgEEAQEBDgECAQUBCwENAQwBAgEtAQkBCAEdARsBCQEDAS8BFQEEASgBEAUjBRA/AgEDAwMBAwEDAwYBAwEDAREBCgEIARUBEgEEARUBJQELARABLgEPAQIBKwEZAQMBEQEdBRkFCjEBBQEBAQMEBQEBCQEBAQIBCwEFAQIBDwEYAQIBCAEqAQgBAQEzASQBBAEeAUIBBgNRARYDHwEhBSQFDj0CAwEBBQEDAQIBBwEOAwQBHgEIAQMBFQEWAQkBBgEwAQwBCQElATsBCwEIAT4BDQMaARAFHgUOMwEBAQsCAQQBAgEHAQgBAgEIAQgBCQEQAQgBCgEZARIBBwEbAR4BDAEXAR8BDwEFASQBEgEDARkBFgURBRIxAQsCAQQFBgEBAQEBDAEKAQYBCgEfAQQBCQE6AREBAQE2ASgBBgEVAVgBFQEBAUIBIgECAREBHgUXBQgvAgUBAQEFBAUEAQYBAgEJAQwBBgEBAR0BDQEFARABOAEGAQYBQgEcAQsBJAFCAQYBAwFOARMDHgEZBRoFEC8BBQEFAQMCAQIBAwECAQQBCgEEAQYBCgESAQcBCQEPARIBEQEOASoBEwEIARMBHwEPAQQBJwERAQEBEwEVBQ8FDjEBBQIBAQUDAQEBBAEOAQUBAgEOAQ4BBgESASIBCwELAR4BEwEGASMBJwEJARIBNgEHAQEBLAEZAQMBDgEcBRQFCTcDBQQBBAMFAQ0BAwEFARcBCgEBAR4BHwEDARYBMAEFAQYBNwEnAQQBHwE9AQgBAwFAARgDJAEfBR4FDycBBwEDAQECAQEBAQEDAQIBAQECAQwBBQEEARIBEAEFAQgBGAELAQYBFQEgAQ8BCAEoARoBBQEoASABBgEDASYBCAEBARYBEwUPBQstAQkBAQQBAwEBAQQDAgEHAQYBAwELAQkBBQEHARUBCQEQAScBEQEFARwBIQEOAQ8BHgEIAQIBGwERAQIBFAEXBQsFCDUBAQIBAgMJAQYBAQEHAQ4BBwECAR0BDwEDARMBFQEIAQ4BKwETAQIBMAEwAQIBGwE1AQYDKQERAQMBGAEMBQ8FBS8BBwIBAQMFAQEBAQEKAQcBAQEIAR4BBAEHASIBDgEIARsBMAEIAQcBLgEcAQUBHQEoAQIBAQEyAQoBAgEcAQsFCwUOLQIFAQEBAQIBAgECAQUBBAEEAQYBCAEFAQoBCgEMAQYBFgEQAQwBDwEhAREBCAEkARwBDQEeARQBCAECASQBDQEBAR0BCwUKBQMvAQECAQEDAwEBAQEBBAEIAQEBBQEOAQMBAQESARIBBQETAR4BDQEOASwBFAECASEBHQEFAQ8BNwEOAQEBIwEYAQEBCwEOBQoFCjUCAQQBAQEBAQsBAgEBAQwBCgEDAQwBDwEFAQIBJgETAQYBEgEvAQsDMgEfAQgBEwEuAQQDJAEJAQIBDAEWBQgFBS8EAQEBAQEFAQEDAwEEAQEBBgEKAQEDDwEKAQUBCAEaARABBwEZARkBCgEKASABDwEGAQ0BFAEEAQEBJwEJAQEBDQEKBQ0FBC0BAwEDAwEBAQMBAgEFAQQBBAEGARABBgELAQwBEQEEAQwBHAEIARABIAESAQYBHwEZAQYBCgEaAQcBAQEZAQYDCwEIBQYFBCcCAQIFAQEBAwIBBQECAQMBBgEDAQIBBwENAQEBCAEeAQ8BBwEbASUBAwENATMBCwECASoBHQEFARQBJwELAxwBCQECAQwBEwUFBQEnAgECBQUFAgEEAQEBAwEIAQEBBAEKAQgBBAEHAREBAgEDASMBEQEFARkBHgEOAQEBMwEJAQQBEwEbAQYDIAEHAwcBBQUHLQEHAQEBAQIBAQEBAQUBBAEFAQMBAwEKAQgBCgEIARMBCgEFARYBEAEIAQwBEQEKAQQBFwEZAQYBDwEQAQUBAQETAQMDBgEEBQMFBCcCAwIBAQEBAQMBAQEEAQkBBAEBAQQBCgECAQsBFAEDAQcBFAEOAQQBEQEeAQcBDgEjAQYBBgEcARkBBQERARgBAwECARMBBQEBAQUBBQUCBQIpAwUBBQIDAQEDAQ4BAgEBARABDwEEAQsBHQEFAQUBHAEVAQQBEgEdAQoBAQEpARIBBgEMARYBAwEBARYBBgMKAQUFAwUBGQERAQEBAwEBAwEDBQUBBAEEAQEBBwEHAQQBCQERAQgBBAEQAQ0BAwEPAQ4BDAEGARgBCQEDAQ4BDwEGAQEBCwEDAwYBAwUEBQIfAQMBBwIFAgMBAQEBBQEDAQUBAwEFAQgBDgEFAQcBEAEOAQMBEQEVAQQBDAETAQoBAgERARYBBAEKAQ4BBgEBAQ0BBwEBAQIBAgUDBQEbAQEBBQEJAQEDAQUBAQEBAQMDAgEKAQgDDwEMAQMBBwEZAQUBAwERARUBAwEJAR0BCAEEAREBDQEDAQkBDQEFAxIBCwEBAQIBBAUELwIBAQMDAQIBAgEEAQQBAwEDAQ4BAwECAQkBCQMIAQ4BBAECARUBDwEGAQ4BEwEGAQUBEwEJAQMBEQEOAQIDCQEBAwQBBQUCBQMfAQUDAQEFAwEBAQEDAQEEAQQBAwECAQkBAQEGAQwBBwEMAQcBCAEDAQwBDAEFAQsBDQEGAQUBBwEIAQUBBAEKAQUBAQEFAQMDAwEBCwEdAQkBAQMFAwEDAQMBAwEGAQQBAwEJAQoBAQEFAQkBBgEDAQ4BCQMOARYBAQEFARkBBwEBAQ8BCwEDAQgBCwECAwUBAgsBGwERAQEBBQIFBQEEAQEBAQEGAQEDCwEQAQYBBQENAQoBAgEZAREBBQEKARIBBAEBARABBwEBAQcBBwEBAQIBCgEEAwMBAwsCKwEBAQEBAQIBAgEEAQEBAgEDAQkBCQECAQ4BBQEGAQgBDQEIAQQBEgEKAQoBDAEOAQIBBgEMAQMBAwEEAQUBAQMGAQEDAQ0BGQEHAQMBAQEBAQMCAQMBAQEBAQIBAwEDAQMBAwEGAQIBBgEHAQkBCQEHAQcBAgEGAQgBBgEKAQ4BAwEBAQkBCgEDAQQBBwECAwIBAQECAQEBAScBCwEBAQEBAQIBAwEEAQEBBAEFAQIBBQEHAQgDCgEKAQEBCgENAQcBAQEPAQkBBAEEAQ0BCAEBAQgBBQEBAQMBBAUFAQEFAx8BAQEPAQEBAwEDAQMDAQMBAgEBAQIBBQMDAQwBBAEEAQcBEQEFAQIBCgEKAQEBCwEFAQIBAwEIAQQBAwEHAQYBAQEBAQQFAQcBHQEHAQcCAwEDAwECAQIBAgECAQEBAgEBAQcBAwEDAQsBBAEEAQgBBQEBAQMBBwEDAQUBBQEDAQIBAwEDAQIBAgEDBQIvAQUBDQQBAgEDAQEBAwEBAQEBBQEHAQIBBQEEAQQBBgEFAQUBAgEKAQ4DAwEIAQMDBQEGAwEBBA0BLQEBAQEBAQEBAwEBAQEBBQEBAwYBBQMDAQQBBAECAQgBBAEGAQYBCAEFAQMBCAEFAQIBBQEIAwEBBwEEAwMBBAUDAQE3AQEBAQIDAQUDAQMBAQEDAQMBBgEEAQEBAgEGAQQBBAEHAQMBAQEEAQMBAQEDAQUBAQMFAQIDAgMBAwExAQcBAwUDAwEBAQEBBAEBAQIBAQEDAQQBAgEBAQUBBwEDAQQBCQEGAwkBAwMBAQkBAwMCAQEBAQEBAQEBAQMDLQEHAQMBAQMBAQEBAQEBAwEBAQEBBAEEAQIDBQECAQIBBwEGAQMBAwEGAQQBAgEFAQQBAgEBAQYFBQEGAwI3AgUBAQEFAgMBAQMBAQMDBQIBAwEDAQIBBAEDAQMBAwEFAwEBAgEGAwEBBgUCBwEHAQsBKQEDAQEBBQIBAwcCAwIBAwEBAQMBAwEBAQEBAQECAQIBBAEEAwIBAwECBQEDAgcBMwEFAQMBBQMHBAEBAQEBBAEBAQIBAwEFAwEBCwEFAQEBAQEBAQEDBwEBSwEBAQEBAwIBAgEBAwEBAgMCAQIBAgEBAQIBAQMCAQcBAgMGAQcDAgECBQIHATsBAwEBAQkBAQEBAwECAQQBAQMDAwEBAwEDAQIBAgUBAQMBAQMCBQINAS8BBQEHAQEBBwEBAQECAQEBAgMBAwIDAQMFAQIBAQEFAQMBAgMBOwENAQcBBQIBAQEBAQEBBQMBAQIBAgMDAQMBAgEDAQETAjsBAwEDAQcCAQEBAgECAQEDAgMBAQEBAwMCAQQBAQUDAQIDAQECAQIBAwEDBwE5AQkBAwEDAQECAQMBAgcCAQIBAgECAwMBAQEBAQIBAQUBBwE7AREBAQEBAQ0BBQEBAQkCAQQBAgEBAQEBAQMCPQEHAQ8BAQEBAQUBAQEFAgEBAQEBAQEBAQEDAgECBQFJAQkBAQEHAgUBAQMBAQEBAQEDAQECAwIDAhMBNQEJARECAwEJAQUBAQIBAQEBAwIDAUsBCwEBAQEBAQEBAQECBQEFAgcBCQEBAQECBQFVAgcBAwEFAWUBDQIDAQMBCwJNARMBAQEBAQUBBwEBAQMBAQEFAQMBXwEHAQ0CFwFZAQEBAQEDAgsBCQENATMBDwEFAQUBBwEPAQMBAQFXARMBEwFfAQcBAwEPAmEBiwEBAQF/AY0CAQUB+QMB+wEBEwE=",
+    "sd": 15.2,
+    "msd": null,
+    "center": "market"
+   }
+  },
+  {
    "id": 401858450,
    "league": "ncaaf",
    "week": 3,
@@ -5053,74 +3608,6 @@
    "away_rank": null
   },
   {
-   "id": 401858233,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T19:30+00:00",
-   "home": "California",
-   "away": "Wagner",
-   "fcs": true,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "ACC",
-   "away_conf": "NEC",
-   "proj_home": 32.7,
-   "proj_away": 19.5,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401856685,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T19:30+00:00",
-   "home": "Alabama",
-   "away": "Florida State",
-   "fcs": false,
-   "neutral": false,
-   "spread": -17.5,
-   "total": 50.5,
-   "book": "DraftKings",
-   "home_conf": "SEC",
-   "away_conf": "ACC",
-   "proj_home": 32.4,
-   "proj_away": 22.4,
-   "home_rank": null,
-   "away_rank": null,
-   "sim": {
-    "t0": 0,
-    "m0": -46,
-    "nt": 115,
-    "nm": 129,
-    "n": 20000,
-    "c": "LgH/AgH/AgMFBAUDcwENAfEBAgUDBQYFBG0CBQIHBAUGewEFAW8CBQcFAwUFZwEFBQUEAQQFCgULZQENBAcBaQELAwUHBQkFBWcDBQkBAgMEAQkFGgURZQIFAQEIAQEDCAcEBQxdAgUBBQEFBAEBAwoFBAUFYQQFBgEBAwsBAwMJARgFGgUMXwIFAwEDBRIFCwEFBRIFEGUBAwIBAQMDAwoBBgUDBQdbBAUFBQwBBgMJAQgDAwEVBRUFD1MBBQIFBQECAwQBEgUhAQQDGwELBRQFHFcCBwMDAQELAQEBAgECAQwBBAMMAQkFDQUKWwIFBgECAw4BBgMJARUBAQEEARcFGgUJUwMFBAUGAQcDBAEXAQMDLAEQAQEBGQEpBSoFElEBBQIBBgUKBQwBBAMCARQBBAMdAQgFHAUYTwEHAQMDBQkBAgECAQsBCgMJAQwBAgEDARUFFAUTTQEFBQULAQcBAQEJAQ4DBwEgAQUBAQEqAQ8DEwEnBSIFE0sBBQUBAQMEARwDAgEVAQYBAwEVAR8BAwECATIBBAMzARIFLQUbSQIFAQECAwMBBgECAQEBAwEIAQIBBwEGAQ0BAwEBARABBwEBARYBDAUSBQlBAQsCAQEDBAEBAwcBBgEBAQYBGQEEAQcBJwEIAQIBEwEhAQMBCwEiBSwFD0sFAQEDBAEHAwEBEwEDAQEBGgEPAQEBFQEkAQgBAQFMARABAQEoAS0FNAUUPQELAQEBAwIBBwUGAQQBAgEHARMBCAEGAQ0BEgEBAQIBJgEOAQMBHQEYBRcFCUcDCQEBBQEGAQEBBwEJAQIBCQEYAQoBCgEaAQwBAwEdAR4BAgENARcFHAUNOQELAwUEAQQDAwENAQIBAwEdAQkBAgEcARoBAgEOAT0BCAECATwBFAMbAS0FNQUcPQEFAQUCAQgDAQEPAQUBAgENARQBAQECASQBCAECASUBJgEFAQQBQwEMAQEBJgEUBRsFDzsBBwIDAwEFAwEBAgECAQgBAgEFAQQBBwEGAQoBEQEGARUBIwEGAQQBJgEFAQUBFQEgBRMFET8BAQEDAwEDAwEBBgMEAQ4BBQEEARYBDAMUASUBAwEMAUIBCgEDASwBIAMVASMFJwULNwEFAQUEAQMDAQENAQMBAQENAQ0BAgELASIBBQEDATgBCAEGAR4BPgEIAQQBVwEaAQEBLQEkBS4FGDsBAQIDAQEBBQIBBgEEAQEBDgECAQUBCwENAQwBAgEtAQkBCAEdARsBCQEDAS8BFQEEASgBEAUjBRA/AgEDAwMBAwEDAwYBAwEDAREBCgEIARUBEgEEARUBJQELARABLgEPAQIBKwEZAQMBEQEdBRkFCjEBBQEBAQMEBQEBCQEBAQIBCwEFAQIBDwEYAQIBCAEqAQgBAQEzASQBBAEeAUIBBgNRARYDHwEhBSQFDj0CAwEBBQEDAQIBBwEOAwQBHgEIAQMBFQEWAQkBBgEwAQwBCQElATsBCwEIAT4BDQMaARAFHgUOMwEBAQsCAQQBAgEHAQgBAgEIAQgBCQEQAQgBCgEZARIBBwEbAR4BDAEXAR8BDwEFASQBEgEDARkBFgURBRIxAQsCAQQFBgEBAQEBDAEKAQYBCgEfAQQBCQE6AREBAQE2ASgBBgEVAVgBFQEBAUIBIgECAREBHgUXBQgvAgUBAQEFBAUEAQYBAgEJAQwBBgEBAR0BDQEFARABOAEGAQYBQgEcAQsBJAFCAQYBAwFOARMDHgEZBRoFEC8BBQEFAQMCAQIBAwECAQQBCgEEAQYBCgESAQcBCQEPARIBEQEOASoBEwEIARMBHwEPAQQBJwERAQEBEwEVBQ8FDjEBBQIBAQUDAQEBBAEOAQUBAgEOAQ4BBgESASIBCwELAR4BEwEGASMBJwEJARIBNgEHAQEBLAEZAQMBDgEcBRQFCTcDBQQBBAMFAQ0BAwEFARcBCgEBAR4BHwEDARYBMAEFAQYBNwEnAQQBHwE9AQgBAwFAARgDJAEfBR4FDycBBwEDAQECAQEBAQEDAQIBAQECAQwBBQEEARIBEAEFAQgBGAELAQYBFQEgAQ8BCAEoARoBBQEoASABBgEDASYBCAEBARYBEwUPBQstAQkBAQQBAwEBAQQDAgEHAQYBAwELAQkBBQEHARUBCQEQAScBEQEFARwBIQEOAQ8BHgEIAQIBGwERAQIBFAEXBQsFCDUBAQIBAgMJAQYBAQEHAQ4BBwECAR0BDwEDARMBFQEIAQ4BKwETAQIBMAEwAQIBGwE1AQYDKQERAQMBGAEMBQ8FBS8BBwIBAQMFAQEBAQEKAQcBAQEIAR4BBAEHASIBDgEIARsBMAEIAQcBLgEcAQUBHQEoAQIBAQEyAQoBAgEcAQsFCwUOLQIFAQEBAQIBAgECAQUBBAEEAQYBCAEFAQoBCgEMAQYBFgEQAQwBDwEhAREBCAEkARwBDQEeARQBCAECASQBDQEBAR0BCwUKBQMvAQECAQEDAwEBAQEBBAEIAQEBBQEOAQMBAQESARIBBQETAR4BDQEOASwBFAECASEBHQEFAQ8BNwEOAQEBIwEYAQEBCwEOBQoFCjUCAQQBAQEBAQsBAgEBAQwBCgEDAQwBDwEFAQIBJgETAQYBEgEvAQsDMgEfAQgBEwEuAQQDJAEJAQIBDAEWBQgFBS8EAQEBAQEFAQEDAwEEAQEBBgEKAQEDDwEKAQUBCAEaARABBwEZARkBCgEKASABDwEGAQ0BFAEEAQEBJwEJAQEBDQEKBQ0FBC0BAwEDAwEBAQMBAgEFAQQBBAEGARABBgELAQwBEQEEAQwBHAEIARABIAESAQYBHwEZAQYBCgEaAQcBAQEZAQYDCwEIBQYFBCcCAQIFAQEBAwIBBQECAQMBBgEDAQIBBwENAQEBCAEeAQ8BBwEbASUBAwENATMBCwECASoBHQEFARQBJwELAxwBCQECAQwBEwUFBQEnAgECBQUFAgEEAQEBAwEIAQEBBAEKAQgBBAEHAREBAgEDASMBEQEFARkBHgEOAQEBMwEJAQQBEwEbAQYDIAEHAwcBBQUHLQEHAQEBAQIBAQEBAQUBBAEFAQMBAwEKAQgBCgEIARMBCgEFARYBEAEIAQwBEQEKAQQBFwEZAQYBDwEQAQUBAQETAQMDBgEEBQMFBCcCAwIBAQEBAQMBAQEEAQkBBAEBAQQBCgECAQsBFAEDAQcBFAEOAQQBEQEeAQcBDgEjAQYBBgEcARkBBQERARgBAwECARMBBQEBAQUBBQUCBQIpAwUBBQIDAQEDAQ4BAgEBARABDwEEAQsBHQEFAQUBHAEVAQQBEgEdAQoBAQEpARIBBgEMARYBAwEBARYBBgMKAQUFAwUBGQERAQEBAwEBAwEDBQUBBAEEAQEBBwEHAQQBCQERAQgBBAEQAQ0BAwEPAQ4BDAEGARgBCQEDAQ4BDwEGAQEBCwEDAwYBAwUEBQIfAQMBBwIFAgMBAQEBBQEDAQUBAwEFAQgBDgEFAQcBEAEOAQMBEQEVAQQBDAETAQoBAgERARYBBAEKAQ4BBgEBAQ0BBwEBAQIBAgUDBQEbAQEBBQEJAQEDAQUBAQEBAQMDAgEKAQgDDwEMAQMBBwEZAQUBAwERARUBAwEJAR0BCAEEAREBDQEDAQkBDQEFAxIBCwEBAQIBBAUELwIBAQMDAQIBAgEEAQQBAwEDAQ4BAwECAQkBCQMIAQ4BBAECARUBDwEGAQ4BEwEGAQUBEwEJAQMBEQEOAQIDCQEBAwQBBQUCBQMfAQUDAQEFAwEBAQEDAQEEAQQBAwECAQkBAQEGAQwBBwEMAQcBCAEDAQwBDAEFAQsBDQEGAQUBBwEIAQUBBAEKAQUBAQEFAQMDAwEBCwEdAQkBAQMFAwEDAQMBAwEGAQQBAwEJAQoBAQEFAQkBBgEDAQ4BCQMOARYBAQEFARkBBwEBAQ8BCwEDAQgBCwECAwUBAgsBGwERAQEBBQIFBQEEAQEBAQEGAQEDCwEQAQYBBQENAQoBAgEZAREBBQEKARIBBAEBARABBwEBAQcBBwEBAQIBCgEEAwMBAwsCKwEBAQEBAQIBAgEEAQEBAgEDAQkBCQECAQ4BBQEGAQgBDQEIAQQBEgEKAQoBDAEOAQIBBgEMAQMBAwEEAQUBAQMGAQEDAQ0BGQEHAQMBAQEBAQMCAQMBAQEBAQIBAwEDAQMBAwEGAQIBBgEHAQkBCQEHAQcBAgEGAQgBBgEKAQ4BAwEBAQkBCgEDAQQBBwECAwIBAQECAQEBAScBCwEBAQEBAQIBAwEEAQEBBAEFAQIBBQEHAQgDCgEKAQEBCgENAQcBAQEPAQkBBAEEAQ0BCAEBAQgBBQEBAQMBBAUFAQEFAx8BAQEPAQEBAwEDAQMDAQMBAgEBAQIBBQMDAQwBBAEEAQcBEQEFAQIBCgEKAQEBCwEFAQIBAwEIAQQBAwEHAQYBAQEBAQQFAQcBHQEHAQcCAwEDAwECAQIBAgECAQEBAgEBAQcBAwEDAQsBBAEEAQgBBQEBAQMBBwEDAQUBBQEDAQIBAwEDAQIBAgEDBQIvAQUBDQQBAgEDAQEBAwEBAQEBBQEHAQIBBQEEAQQBBgEFAQUBAgEKAQ4DAwEIAQMDBQEGAwEBBA0BLQEBAQEBAQEBAwEBAQEBBQEBAwYBBQMDAQQBBAECAQgBBAEGAQYBCAEFAQMBCAEFAQIBBQEIAwEBBwEEAwMBBAUDAQE3AQEBAQIDAQUDAQMBAQEDAQMBBgEEAQEBAgEGAQQBBAEHAQMBAQEEAQMBAQEDAQUBAQMFAQIDAgMBAwExAQcBAwUDAwEBAQEBBAEBAQIBAQEDAQQBAgEBAQUBBwEDAQQBCQEGAwkBAwMBAQkBAwMCAQEBAQEBAQEBAQMDLQEHAQMBAQMBAQEBAQEBAwEBAQEBBAEEAQIDBQECAQIBBwEGAQMBAwEGAQQBAgEFAQQBAgEBAQYFBQEGAwI3AgUBAQEFAgMBAQMBAQMDBQIBAwEDAQIBBAEDAQMBAwEFAwEBAgEGAwEBBgUCBwEHAQsBKQEDAQEBBQIBAwcCAwIBAwEBAQMBAwEBAQEBAQECAQIBBAEEAwIBAwECBQEDAgcBMwEFAQMBBQMHBAEBAQEBBAEBAQIBAwEFAwEBCwEFAQEBAQEBAQEDBwEBSwEBAQEBAwIBAgEBAwEBAgMCAQIBAgEBAQIBAQMCAQcBAgMGAQcDAgECBQIHATsBAwEBAQkBAQEBAwECAQQBAQMDAwEBAwEDAQIBAgUBAQMBAQMCBQINAS8BBQEHAQEBBwEBAQECAQEBAgMBAwIDAQMFAQIBAQEFAQMBAgMBOwENAQcBBQIBAQEBAQEBBQMBAQIBAgMDAQMBAgEDAQETAjsBAwEDAQcCAQEBAgECAQEDAgMBAQEBAwMCAQQBAQUDAQIDAQECAQIBAwEDBwE5AQkBAwEDAQECAQMBAgcCAQIBAgECAwMBAQEBAQIBAQUBBwE7AREBAQEBAQ0BBQEBAQkCAQQBAgEBAQEBAQMCPQEHAQ8BAQEBAQUBAQEFAgEBAQEBAQEBAQEDAgECBQFJAQkBAQEHAgUBAQMBAQEBAQEDAQECAwIDAhMBNQEJARECAwEJAQUBAQIBAQEBAwIDAUsBCwEBAQEBAQEBAQECBQEFAgcBCQEBAQECBQFVAgcBAwEFAWUBDQIDAQMBCwJNARMBAQEBAQUBBwEBAQMBAQEFAQMBXwEHAQ0CFwFZAQEBAQEDAgsBCQENATMBDwEFAQUBBwEPAQMBAQFXARMBEwFfAQcBAwEPAmEBiwEBAQF/AY0CAQUB+QMB+wEBEwE=",
-    "sd": 15.2,
-    "msd": null,
-    "center": "market"
-   }
-  },
-  {
-   "id": 401856694,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T19:30+00:00",
-   "home": "Texas A&M",
-   "away": "Kentucky",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "SEC",
-   "away_conf": "SEC",
-   "proj_home": 33.9,
-   "proj_away": 20.7,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
    "id": 401860890,
    "league": "ncaaf",
    "week": 3,
@@ -5140,25 +3627,6 @@
    "away_rank": null
   },
   {
-   "id": 401858457,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T19:30+00:00",
-   "home": "Rutgers",
-   "away": "USC",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Big Ten",
-   "away_conf": "Big Ten",
-   "proj_home": 28.2,
-   "proj_away": 37.6,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
    "id": 401866422,
    "league": "ncaaf",
    "week": 3,
@@ -5174,25 +3642,6 @@
    "away_conf": "Mid-American",
    "proj_home": 30.6,
    "proj_away": 18.8,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401867804,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T20:00+00:00",
-   "home": "Baylor",
-   "away": "Louisiana Tech",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Big 12",
-   "away_conf": "Sun Belt",
-   "proj_home": 29.2,
-   "proj_away": 27.9,
    "home_rank": null,
    "away_rank": null
   },
@@ -5231,6 +3680,25 @@
    "away_conf": "ACC",
    "proj_home": 35.5,
    "proj_away": 21.8,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401867804,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T20:00+00:00",
+   "home": "Baylor",
+   "away": "Louisiana Tech",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Big 12",
+   "away_conf": "Sun Belt",
+   "proj_home": 29.2,
+   "proj_away": 27.9,
    "home_rank": null,
    "away_rank": null
   },
@@ -5390,21 +3858,116 @@
    "away_rank": null
   },
   {
-   "id": 401870764,
+   "id": 401869948,
    "league": "ncaaf",
    "week": 3,
    "start": "2026-09-19T23:00+00:00",
-   "home": "Sam Houston",
-   "away": "Nicholls",
-   "fcs": true,
+   "home": "Jacksonville State",
+   "away": "Georgia Southern",
+   "fcs": false,
    "neutral": false,
    "spread": null,
    "total": null,
    "book": null,
    "home_conf": "Conference USA",
-   "away_conf": "Southland",
-   "proj_home": 24.6,
-   "proj_away": 26.4,
+   "away_conf": "Sun Belt",
+   "proj_home": 33.2,
+   "proj_away": 26.6,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401864443,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:00+00:00",
+   "home": "Middle Tennessee",
+   "away": "Nevada",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Conference USA",
+   "away_conf": "Mountain West",
+   "proj_home": 25.3,
+   "proj_away": 23.6,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401862777,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:00+00:00",
+   "home": "South Florida",
+   "away": "Delaware State",
+   "fcs": true,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "American Athletic",
+   "away_conf": "MEAC",
+   "proj_home": 41.3,
+   "proj_away": 18.9,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401856800,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:00+00:00",
+   "home": "UCF",
+   "away": "Georgia State",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Big 12",
+   "away_conf": "Sun Belt",
+   "proj_home": 33.2,
+   "proj_away": 18.9,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401862772,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:00+00:00",
+   "home": "Memphis",
+   "away": "UT Martin",
+   "fcs": true,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "American Athletic",
+   "away_conf": "OVC",
+   "proj_home": 41.2,
+   "proj_away": 16.1,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401866423,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:00+00:00",
+   "home": "South Alabama",
+   "away": "Ohio",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Sun Belt",
+   "away_conf": "Mid-American",
+   "proj_home": 26.6,
+   "proj_away": 30.2,
    "home_rank": null,
    "away_rank": null
   },
@@ -5439,120 +4002,6 @@
    }
   },
   {
-   "id": 401861963,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:00+00:00",
-   "home": "Southern Miss",
-   "away": "UConn",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Sun Belt",
-   "away_conf": "FBS Independents",
-   "proj_home": 28.2,
-   "proj_away": 29.5,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401864443,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:00+00:00",
-   "home": "Middle Tennessee",
-   "away": "Nevada",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Conference USA",
-   "away_conf": "Mountain West",
-   "proj_home": 25.3,
-   "proj_away": 23.6,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401862772,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:00+00:00",
-   "home": "Memphis",
-   "away": "UT Martin",
-   "fcs": true,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "American Athletic",
-   "away_conf": "OVC",
-   "proj_home": 41.2,
-   "proj_away": 16.1,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401856800,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:00+00:00",
-   "home": "UCF",
-   "away": "Georgia State",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Big 12",
-   "away_conf": "Sun Belt",
-   "proj_home": 33.2,
-   "proj_away": 18.9,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401856689,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:00+00:00",
-   "home": "Missouri",
-   "away": "Troy",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "SEC",
-   "away_conf": "Sun Belt",
-   "proj_home": 31.4,
-   "proj_away": 17.9,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401866423,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:00+00:00",
-   "home": "South Alabama",
-   "away": "Ohio",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Sun Belt",
-   "away_conf": "Mid-American",
-   "proj_home": 26.6,
-   "proj_away": 30.2,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
    "id": 401862773,
    "league": "ncaaf",
    "week": 3,
@@ -5568,6 +4017,44 @@
    "away_conf": "Mid-American",
    "proj_home": 19.3,
    "proj_away": 24.0,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401870764,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:00+00:00",
+   "home": "Sam Houston",
+   "away": "Nicholls",
+   "fcs": true,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Conference USA",
+   "away_conf": "Southland",
+   "proj_home": 24.6,
+   "proj_away": 26.4,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401861963,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:00+00:00",
+   "home": "Southern Miss",
+   "away": "UConn",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Sun Belt",
+   "away_conf": "FBS Independents",
+   "proj_home": 28.2,
+   "proj_away": 29.5,
    "home_rank": null,
    "away_rank": null
   },
@@ -5591,40 +4078,21 @@
    "away_rank": null
   },
   {
-   "id": 401862777,
+   "id": 401856689,
    "league": "ncaaf",
    "week": 3,
    "start": "2026-09-19T23:00+00:00",
-   "home": "South Florida",
-   "away": "Delaware State",
-   "fcs": true,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "American Athletic",
-   "away_conf": "MEAC",
-   "proj_home": 41.3,
-   "proj_away": 18.9,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
-   "id": 401869948,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:00+00:00",
-   "home": "Jacksonville State",
-   "away": "Georgia Southern",
+   "home": "Missouri",
+   "away": "Troy",
    "fcs": false,
    "neutral": false,
    "spread": null,
    "total": null,
    "book": null,
-   "home_conf": "Conference USA",
+   "home_conf": "SEC",
    "away_conf": "Sun Belt",
-   "proj_home": 33.2,
-   "proj_away": 26.6,
+   "proj_home": 31.4,
+   "proj_away": 17.9,
    "home_rank": null,
    "away_rank": null
   },
@@ -5667,83 +4135,34 @@
    "away_rank": null
   },
   {
-   "id": 401858453,
+   "id": 401856802,
    "league": "ncaaf",
    "week": 3,
    "start": "2026-09-19T23:30+00:00",
-   "home": "Notre Dame",
-   "away": "Michigan State",
+   "home": "Virginia",
+   "away": "West Virginia",
    "fcs": false,
-   "neutral": false,
-   "spread": -29.5,
+   "neutral": true,
+   "spread": -8.5,
    "total": 53.5,
    "book": "DraftKings",
-   "home_conf": "FBS Independents",
-   "away_conf": "Big Ten",
-   "proj_home": 40.2,
-   "proj_away": 19.1,
+   "home_conf": "ACC",
+   "away_conf": "Big 12",
+   "proj_home": 30.6,
+   "proj_away": 19.9,
    "home_rank": null,
    "away_rank": null,
    "sim": {
     "t0": 0,
-    "m0": -34,
+    "m0": -56,
     "nt": 119,
     "nm": 129,
     "n": 20000,
-    "c": "IgGLBgOBAQH3AQEFAgUCcwENA/cBAQUFBQNtAQUDAQEFAwULawEFAQ8EYwENAQMEBQUFBWcBBQUFAwEGBQwFCmUBDQcHAwUOaQQFAgUEBQcFBGEBBQUFCgECAwUBCAUMBQdnAgUJAwEBCQEBBRAFDVcBFwMDAgEEBQ8FBmEDBQMBAQMHAQIDBQEJBRwFC1kBCwIBBQMBAQ0BAgMRAQYFFgUsZQQFAgEFAQIDEAEHBQgFD2EBAQEBAQEFAQIBAgEFAQYDAwERBRIFDlMBCwIBAgEBAQEBBwUdAQMDGAESBSIFKVcCBwQDAQEGAQIFDQUeAQcFEQUeVwEFAQMCAQEBAQEEBQUBBgEBAQQBDwUcBRBTAQUBAQEDAwECAQEBAgEOAQEBAQEeAQQBAgERAR4FLAUoVwIBAwMCAQsBAgEBAREBCQEDAyIBBgMYARIFIgUyUQEFAwUEAQMBAQMGAQQBAQEDAQgBBwECARABEgUNBRJTAgEBAwQBAQMCAQcDAQEUAQgBAQEcAQ0BAgERAR0FLgUrUQEBAgUDAQEBAQENAQMDDQEWBTQBBQEBASMBFwVABTRRAQEBAwIBAQMBAQkBBAECAQ0BCAMEARMBBgEFASgBDQUdBTBNAQcCAwEBAgMEAQsBAQEGAQwDAwEQAQ4DGwEjBSYFIk0BAwEFAQEHAQIBAgEVAQ8BAgENAR4BBAEBAUIBCwMpAS4FSwVCSwEFBAEBAwMBCgEBAQMBFQMCARQBDQEEAQEBIQECAyYBEwUwBTZPAQEBAQEBAgEDAQMBAQEDAQUBBgEBAQ4BFgEHAxMBEwEGASYBLAUkBSFNAgEBAwMBAQMJAQUBAQERAQsBAQEJAR8BBAEDAUABFgEBAR4BLwVNBTdLAQUDAQMBAQEIAQYDAwEdAQoBAwEXARsBAgEBAUYBCAECATgBJAVNBThJAQEBBQQBAwMGAQcBAQECARIBBAEEARIBEAEEAQMBKAERAQkBMQEUBScFHkUBAwEBAQEBAwMBAwMDAQwBBQEBAQsBCwEFAQoBIwEHAQMBQAEWAQIBIAEhBToFJD0BAQEDAQUBAQQBAQEBAQgBBgEBAQgBDQEBAx4BCwEBASABOwEBAQMBVgELAzsBLgVWBTVDAQUBAQMFCAMDAQcBCAEEAQMBEQEIAQUBHQEdAQQBBgEwAQsBAgE1ASUFPAUvSQEDAQMBAQQBAQEEAQUBBwEDAQ8BEQEGARABIQEIAQMBJgEVAQIBJAEoBTgFHT0BCwEBAQECAwIBBgEBAQQBEAEHAQIBJAEZAQQBHgEqAQgBBAFTARsBBAE6AToFWgU2SQEBAQEBAQEBBwEGAQMBDwEPAQMBAwEoAQ8BBAEpASABCAELAU0BDAECAUYBHgVCBSs9AQUBAQEBAQEDAQQDAQEHAQUBBQEMAQgBBQEGARIBFQEEARMBIQELAQQBMgEPAQEBMwEkBTIFHTcBEQEBAgEFAwIBBwMGAQ0BBwECASUBFwEDARUBMQEIAQMBQQEgAQEBLAEnBTUFHj0BBQIBAgMCAQgBAQEDAQ8BCAEBAQoBFgEDAQYBJAEQAQUBJQEjAQMBBAFZAQoBAQE/ASYFRgUvQwMBAQMGAwMDBQECAQMBDQELAQcBBAEhARUBBwEiAR0BCAEIAToBFgEIATkBKAUyBTBHAQECAQUBAgEEAQUBBQEEAQoBDAEMAQMBHAEUAQoBGAEsAQMBBAE3ARoBAQEoAScFMQUgPQEDAQMIAQEBAwEFAQQBAQEMAQoBAQENASkBCAECATABFwECASQBSQEHAQMBXAETAQEBRwE/BUAFJTsBAQEDAQEEBQIBAwEDAQMBEgEGAQEBDgESAQUBBQEyARQBCwEpASgBDgEFAUcBDQEFATcBHQUrBSY9AQECAQEBAQEDAQIBAwEEAQYBBgEIAQcBBwEOAQ8BBwEGAR4BFAEKASABNwEJAQUBMwERAQQBKQEkBR8FEzMBCQMBAgEBAQEBAwMCAQgBBwEDAQgBCwEGAQYBHAEHAQQBMgEYAQYBGQE/AQkBAQFSARoBAwE1ASwFNQUhPQMBAQMCAQIDAwEJAQIBBwEYAQkBAgESARgBCAECATgBFgECASEBKQEDAQUBPgEUAQIBOwEbBSYFJDUCBwEBAgMDAQEBAQECAQQDAwEKAQgBAwEMARoBBQEFASgBDQEGASQBKwEHAQQBRwEQAQQBJQEaBSIFFDsCBQEBAgEBAQMBAwEGAQQBAQELAQoBBgELASgBCQEGASUBFAELAR4BLwEEAQYBOwEaAQIBJAEfBSgFCzUBAwEFAQMDAQcDAgELAwQBFQELAQUBDAEgAQgBBQEzAREBBQEkAT0BBQEEAUsBDQEEAS8BGgUoBR41AQcBAwEBAgEBAQEBAQEIAQIBAwEMAQgBBwEbASMBBgECASkBCwEGASQBKwEDAQgBPwEEAQMBJAEWBRcFGSsBCQEJAQECAQEBAQEDAQIBAwEDAQMBBgEIAQoBBAENAQsBCgEjARUBCwEaASYBBQEBATwBDgEBARcBJQUQBQs3AQMBAQEBAwEBAQIBBAMFAQkBAwECARMBDgEHAQcBHgEEAQUBJQEZAQQBGwEZAQUBBQE0AQ8BAQEjASEFHQUMJwEHAQMBBwEBAwUDAQYBAQEDAQ0BBQEFARUBDgECARMBEgEHAQcBOQESAyoBJwEGAQIBKAEGAQUBJgEWBR8FFzUBBwEBAgMDAQMBBAEFAQUBBAEDAQcBBwEBAQsBDwEHAQYBGAENAQUBEQEoAQUBBgEgAQgBBQEdAQoFDwUNMQEFAQMBAQQDAQECAQIBAgECAQgBAwEBAQwBCQEBAQkBGwEIAQIBGAEUAQcBGgEvAQQBBAEzAQ0BAQETAREFBgUCMwEBAQECAQEBAwEDAQEBAQEGAQMBAgEFAQsBBQEDAQ8BEwMPARYBBgEFASEBEgEGAR4BJAEDAQIBKwENAQIBKQEUBRwFBS0BBwEDAgEDAQEBAQEEAQYBAwEBAwoBBQECAQ0BCwEDARIBGAECAQUBHgEQAQUBJAEVAQIBBgElAQoBAwEfAQsFDgUIMwEHAQECAQMBAQEBAQMBAQEFAQ4BBAEFAQoBCQEJAQYBGAEIAQIBHAESAQIBEgEfAQUBAQEbAQ8BAwENAQsFBgUEMwEDAQECAQEBAgMBAQUBBQECAQMBCQEBAQIBCQELAQMBBQEVAQMBAwEiARQDHQEZAQEBAQEvAQgDDAEPBQgFAy8BBwEHAgEEAQMBBAEBAQQBCgECAQQBGAEIAQMBFQERAQQBBQEnAQ0BAwEUARIBAgEBASMBAwECASABBAUQBQInAQ0CAwEBAwECBQUBAQEDAQMBBgEGAQIBBgEHAQUBCgESAQUDGQENAQUBDwETAQEBAQERAQIBAQEMAQYFCAUCJQELAQMBBwEBAQECAQYBBwECAQMBBQEDAQMBCQENAQQBCgEUAQoBAwEbARMBBAENAR8BAgMQAQkBAQEGAQgFAgUBMQIBAgMCAwEBAgEBAwYBAwMDAQcBAgEBARABBQECAQ4BCQEGAQQBEwEIAQIBEQEVAQMDJgEEAwQBBwUFBQIlAQkBBwEDAQEBAQEDBQEBAQMBCAEJAwEBDAEHAQIBCgERAQQBAQESAQsBBQEOAQsBAwECARgBAgMRAQMFBAUBKQEFAQsBAQIBBAMBAQIDBQEHAQYBAQEJAQcBBAEGAREBBAEEAQUBCAEDAQYBCQEDAQEBBwEDAwgBAgUEBQMlAQkBBQMBAgEBAQEBAQEBAwQBBAEBAQUBCQEGAQEBCgEHAQMBBwENAQMBAgEPAQoBAQEIARgBAgMGAQUBAQEGAQIFAgUBJwEDAgcBAQIBAQUBBQIBBAEDAQQBCAEEAQIBCgEGAQgBDgEEAQIBAgERAQcBAQERAQ8BAQEBAQ4BAQMCAQZJAQEBAQMBBAECAQMBAwEIAQEBAQEFAQgDBAENAQMBAgENAQMBBAEGAQIFCQUDAQE3AQcBAQIDAgECBQIBAgEEAQIBAgEDAQUBAQESAQoBAwEBARQBAgMIAQcBAQMDAQQDBgUFAQEFATUBDwEBAwEEAQIBAgEDAQoBAQECAQsBBAMHAQwBBQEBAQ4BAgMGAQcDAQEFAQIDAQEBNwEFAQMBAQEBAQMBAQEDAwEDAQEBBAEEAQQBAQEGAQMBAgEHAQUDAQEKAwEBBgEFBQQBAQMCBwEtAQ0CAwEBAgEEAwEBAgEGAwIBBAEEAQEBBgEHAQQBBwEHAQIDBAEBAQIBBAEEBQQBAQMEAQM1AQMBAQEFAQMBBQIDBAEFAQEBAwEDAQEBAgEIAQMFCwECAwUBAwUBBQEBAQsCJQEbAgECAwMDAwEDAQIBAgECAQIBCAECAwoBBwECAwoBBgMCAQUBAQMDMwEVAQ0BAQEDAwEHBQIBBQEEAQMBBAMGAQUBBAMCAQQFAUMBAQEDAQcBBQIBAgECAQQBBgUBAQIDAwEBCQIBAgECBQEHAUcCAQEDAQEDAQEDAQEFAwEBCwEEAQEBBgEEBQIBAgMBAQJTAQMBBQEBAgEBAQIBAgMCAQIBAgMEAQMFBQEBBQFBAQEBBQEHAgUDAQEDAgUBAQIBAgEBAQIBAQECAQMBAgEBAQMBAgEBAwEHAUsBAQEDAQUCBQEBBQEBAwMBAwcBAwIFATUBGwEBAQUCAwEBAQUDBQEBAgECAQIDAgEBAwNDAQkBAQEJAhMDAQEDBgEBAwEBAwUBSwEBAQsDBQEBAgUBCwEFAQ8BVQEHAgEBAQEDBAUBAQEDAVEBBQEDAQMBAQEFAQUCBwEFBAcBBwFVAQECBQEJAQECBwIHAWUCBQIDAQMCBQFVAQcBFQIBAQsBVQERAgEBAQJZASEBAQERAQcBUQGbAQEJAQUBhQIBaQGJCQGHAwE=",
+    "c": "uAMBiwMBcwGLAgIFAm0BBQEHAfEBAQsBBQQFAW0DBQQBAQUDBQRzAQ0BaQEFAQUGCwFhAgUDBQUBAgMDAQYFBgUHXwENBAUEBwQFA2kCAwEBBwMBAQUFBWcFBQYBAQMIAQcDAQEKBQgFA18CBwIDAQEHAQEDBgECBQkFBVcBBQELBAEBAQEBAQEBAQIBBQUBBQFbAwUJBRMBBAMFAQYDAQENBQkFA1MBBQIFBwECAwIBCgUUAQEDBQEGBQsFAlEBBQIHAgMCAQUDBQMCAQIDCAECBQYFAU8BBQEFBQUHBQ0BAgMFAQ0DAwEMBQUFAlMGBQkBAgMJAQoDAwEXAQEDHgEJAw0BEAUQBQZLAQUEBQQBAwULAQEBAgEPAQIBAQMUAQUBAQEIAQIFAgUITwMLBQECAw0BBQECAQcBCQECAQYBDAMDAQwFAwUCRwEFBAUGAQIDDQEKAwYBEwEBAQUBIQEFAxUBEQEBAQgBHAUQBQNFAQUEBQQBAwMHAQ0DAgEZAQYDCAEOAQIBAQEbAQUBAgETAQ4FEAUHSQEFBAEEAwQBAQEDAQIBAgEFAQgBCQEFAQoBBAECAQ8BDQEEAQgBBwUGBQFNBQMBAQgBBgMMARIBAQEGARIBAgEDAR0BDQEBARMBFwMJAR4FCwUDRQIFBQECAwYBDwEBAQQBGAEFAxYBFwEBAQ8BLQEGAQMBMQEMAQEBDQEbBRQFB0MCBwcDBgEHAwIBCQEHAQMBCgEUAQcBBgEQAQsBBQECARUBCQEBAQwBCwUKBQI7AQsDAQIDBAECAwgBBQECAQ8BFwEFAQsBJAEFAQYBFwENAxABEgMGAREFCgUEPwMFBAECAwoBBAMJASABAgMoAQgDIAEhAQQBEQEzAQoDJwEWAwgBFQUNBQE9AQUDAQQDBAEMAwIBEAEHAQQBDwEUAQQBAwEoAQ0BBQERASMBAgEDARoBDAEBAQ8BFQULBQNDAQEBAQEBBQMEAQUBBgEKAQoBCgEKAREBCwEPARcBDgEPAQsBFAEBAQ4BDgECAQsBDgUFBQQ5AQUGBQYBBAMIAQsBAQEMASABDQEHAS0BFwEDAR8BMQEIAQYBKQEKAQEBIAEUAwcBDQUNQwMFBAELAwMBGAEFAQIBHAEUAQIBDAFEAQgBBQEvASUBAwEZATABCAEDAS8BDgMQARcFDwUBOwEBAQMBAQUDBAEFAQcBBwEGAREBBgEOAQsBGgEPAQcBHAEQAQsBHAEhAQUBAwEiAQkDDAELBQgFAj8FAQQDBQELAQQBBQEUAQgBCQEkAQsBBgEVASABCgERATcBBwEKASQBCwEDAQ8BHgMHAQ0FBQUCMQIFAQECAwQBBQMFARgBAgEDARQBCwECAR0BKQEDAQsBQAEVAQMBLQEpAQEBCgFFAQUBAgEXAQ0BAQEMARcFB0EBAQYDAQEGAQkBAgEJAQ4BBgEFAS4BEwELARcBJgEOAQsBLgEPAQkBEgEbAQUBAwEkAQwDDQEKBQcFAzMBBQEBBgEBAQMBBgEFAQkBCQEJAQYBFQEGAREBGQESAQ0BGgEjAQgBEgEgARIBCwEWAQ8BBQEXARMDBAEGBQQFATcCBQYBCQEDAQYBFAEIAxoBHQEHAQ4BNQELAQoBRgEcAQIBGAE0AQcBDAEoAQcDFAENAwUBDwUGBQEvAQECBQcFCQECAw8BGAECAQ4BIgEJAQcBKQEhAQgBFgE/AQ0BCAFCARoBCAEQATMBAwEBASABDQECAQkBDwUIBQMzAgEBAwEDBQECAQMBCwEGAQ4BEgENARUBBwEYARABEQEUARwBHwENARQBEQEJAREBFgEPAQMBIwEFAwYBBgUIBQExAQEBAwMBAwMFAQwBBAECARYBDgEFARwBJwEJARYBMQEaAQwBKwEgAQgBGgErAQoBBgEoARADDwERAwcBBgUEBQEvAQEBAwEBBQEBAQEBDwEJAQEBEAEtAQEBDwEmASMBAwEkATIBCwEQAUcBEwEBASUBJgEDAREBMAEJAxkBDAMFAQgFCwUCIQENAgEBAQEBBAEBAQQBBgEFAQEBCQERAQ0BBQEQAR8BCgEMAScBEwEQARkBHwEXAQkBIgEVAQoBDgEbAQsBAQEXAQgDBAEFBQcFASUBDQMDAwEJAQMBAwELAQcBCgESARQBDAERASEBDgEVASEBFAEJAScBJQEFAQ0BKAEHAQoBFwEMAwwBCQMEAQQFAiMBCwEBAQMCAQcDAQENAQUBAwELARQDBwElAQ0BBQEvARkBBwEtATsBDAEOAUwBEwEBAS0BLwEGAQgBJgEHAQEBBwEQAwMBDAUDBQIhAQ0FAQIDCAELAwYBEQEFAQMBHwESAQcBGgEwARABCgEyASABCgEUAT4BDgEGASIBGQEIAQ0BHwEEAQEBEQEIAwMBBgUDBQEfAQcDAwEBAwECAwIBBAEDAQoBCwEHAQwBDgEVAQwBEgETARoBGQENARoBFQEWARMBGAEbAQUBFAEWAQMBEwEUAQUBAQELAQUDAwEDBQMFASMBAQQDAQUDAQcBAgEEAQoBBgMLARUBBgEKASgBFgELASMBHgEHAREBQAEPAQcBMwEUAQEBHAEeAQUBAwEaAQoDBgEKAQEBAwEFNQUDAQEGAQIDCQEIAQMBCgEZAQ0BBwEVASYBBwEJATMBFAEJASMBKQELAQ8BMgETAQMBJQEbAQEBCwEYAQIDEwEHAwIBAwUBJQEHAQUFAQUBAgMIAQIBDAEKAQsBBQELARkBEQEMARcBIAEYAQkBHwEXAQ4BEwETARIBBgEcAQoBBQEKAQ8BBAEBAQ4BAgMDBwEpAQkEAQMBAwEGAQEBDQENAQYBCQEUAQwBBwEVARYBCAEWAR8BDQEQASwBDgELASMBGAEFAQsBEQEHAQUBBwEHAwcBBAMBAQQFAQUBIQIHAwUDAQkBAQEEARcBCAEFARQBDgEGAQ8BKQEHAQcBJAEUAQgBHQE4AQcBCwEjARIBAQESARsBAgEFARUBBQMIAQYDAQECBQIFASEDAQIBAQEEAQMDAwEMAQQBAQEJAQgBAwEIARkBDQEIARQBGwEHAREBKQEMAQwBLgEdAQkBEQEgAQkBCAEZARIBAgELAREBBgMGAQMFAgUBHwEJAQMBAQEBAQEDAQEBBgEHAQYBAwEMAQYBDAEOAQUBFQERAREBDAEZARoBBwEWARQBDwEMARoBEQEDAQoBCwEBAQYBCgEBAQEBCQEBAwMBAScBBwEBAwEBAQoBAgMFAQcBAgEDAQ8BCAEGARQBFAEHAQ8BIQEVAQkBJgEhAQcBEgEtAQ0BCAEZARQBBQEMARIBCQEBAQwBBAMDAQIFAx8BBwEBAQkCAQUDAwEGAQUBAQEOAQ8BAgEGARcBCgEDARsBHgEHAQoBIQEKAQUBGwEfAQUBBgEgAQkBAwEWAQkBAgEDAQsDAQEBAQQLAh8BAwEBAQUBAQUDAwECAQQBBgEFAQcBDAEMARYBEQENAQsBGwEQAQ0BBgEZARABDAEOAQsBBgEKARcBBQEDAQYBBwEBAQQBBQECAwMFAjEBAQMBBAECAQUBAwEDAQ0BAwEEAQ0BDAEHAQ4BEwELARMBFAESAQoBGAEXAQUBDwEQAQkBBwEPAQoBBAEKAQQDAgEEAQQBAQMBAwEvBQEEAwMBBQEFAQIBBAEHAQQBCAEQAQgBAwEWARABBQEPASgBCwEHASUBHAEEARIBIwEFAQQBFgEIAQIBDQEJAQEDCAEBAwIBAQMBIQEFAQEBBQEBAQMDAQIBAQEBAQoBAQECAQkBCAEEAQgBEAEFAQYBFQEOAQQBDAEhAQkBBAEXARABCQEKARIBCQEBAQ0BBQMDAQYBATsBAQEBAgEBAQUBBAEFAQoBBQEMAQkBCgEIARABEgEIAQwBEAEJAQoBEAEQAQYBEwELAQMBBgEHAQYBAgEEAQIBAwEBAQIBAQMCBQEjAQUCBwIBAQEDAQEBBAEBAQQBBwEGAQoBCwEIAQMBGAEQAQYBDgEWAQUBCgEXARQBAgEMAQ0BBgECARIBBgEBAQMBAwEBAQEBAwEBAwEBAQMCIQEBAQUDAwEBAwECAQIBAwEBAQMBAQETAQkBAwERARABBgEIARYBBwEFAREBEgEFAQMBFAEKAQIBFgEQAQEBAwESAQIDBwEGBQMFAS0BAQEDAgEBAwQBBAMEAQYBBQEEAQkBCwEQAQcBBQEIAQsBBgEMAQoBBgEFAQwBCAECAQwBCwEDAQMBCgEDAQEBCgEBAwIBAgUBBQEPAREBBQEBAwECAQEBAgECAQEBAQEEAQkBBgEDAQwBBQECAQwBCgEGAQgBEwEGAQMBDgESAQYBCgEIAQQBCAENAQQBAgECAQQBAQEBAQQBAQEBJwEVAQECAQEBAQEIAQEDBwEIAQQBBgEMAQYBBwERAQsBAQEKARMBBAEHAQwBCQEBAQsBDAEDAQMBCgEDAwQBAwUBBwErAgEBBQIFBAEDAQIBAgEGAQQBBAEMAQkBBQEHAQwBDQECAQ4BDQEFAQUBDAEEAQMBBgECAQIBAgEFAQMBAQEDAQIBAQEBAwEDAw0BGwEDAQMBAQEDAQECAQQBAQEEAQMBAwEJAQUBBgEHAQcBBQEOAQUBBQEFAQkBCgEBAQkBBQEFAQUBBAEEAQMBBAEEAQEBAwEBBQEpAQEBCQEBAgEBAQQBAwMDAQMBBQMFARABAgEIAQcBBgEFAQ8BBAECAQwBCQEGAQYBCAEJAwMBCgEBAwIBAgUBBQItAQUBAQEDAQEGBQQBBQECAQUBDQEEAQMBCAEIAQIBBgELAQgBAQEGAQ4BAQEGAQoBBQMCAQkDAgECAQETARUBBwIHAQ0CAwMBAgEDAQMBAQEHAQQBBQEGAQQBBAEHAQgBAwECAQYBCAECAQQBBgECAwMBAgECAQQBAwEDAwEBAQEBCQEnAQ8FAQMBAQEEAQYBBAEHAQcBAwEDAQkBAgECAQYBCgEDAQQBAgEEAQIBAwEFAwIBAgMBAQETAR8BAQEFAQUBAQIBAQMEAwEBBAEFAQIBAQEEAQoBAQECAQgBAgECAQYBBgEDAQQBCAEDAQIBCQEBAQEBAgEKAQEBAQEEAQI5AQcBAwIBBAEBAQIBBAEGAQIBAgEEAQMBAwEFAQUBBwEDAQwBAgEDAQYBBAMBAQYBBAMBAQEDAQkBBQExAQMBAQEBAQEBAwMDAwEFAQMBAwEEAwQBBAEBAQQBAQECAwEBBQEBAQIBAgECAwEBAwEDAQIHATcCAQEBAQEDAQEDAQEFAQEBAgEFAQQBAQEEAQIBAQECAQUFBAEHAQEBAwECAQMBAQECAQQBAgEBAQIFAQEBOwEHAQMDAQEBAQEDAQEBBAEDAQYBBAEBAQcBBAEBAQEBAwEDAQIBBAECAwMBBAcBBwE7AQMBAwEHAQECAQEBAQEEAQEDBwEEAQEDAgECAQMBAQEBAQQBAQECAQUDAQEBQQIPAgcEAQIDAgEFAQEBAQECAQEDAwEBAwEBAQUDAwEBAQECRQEDAQUDBQIBAgMBAQQBAQMBAQMDBAEFAQIBAQEDAQQBAQEBAQEBAQMBNQEPAQMCAQEBAQMCAwEBAgEBAQIBAQEEAQEBAgEEAQUBAgMBAwEBAwECBQIBAgUBQQEBAQMBAwIDAwEDAQIDAgEBAwIBAQMCAQIBAgECAQEBAgMEAQIBAREBBQE1AQUBCQIBAQECAQMDAgECAQQDAQECAQEBAQMBAwIBBQMBCwExAQ0BBwELAQEDAwEBAgcGAwEBAgECBQEFAQEBRwEBAQMBBQEBAwECAQEDAQMDAQMFAQEBAQMBBAEBAQEDAVMBBQIBAwcBAwMHAQMBAwIJAU8BAQEHAQcBBQEFAQEBBQIBAQUBXwEDAQcBAwIBAQUBAQEFAQcBWwEBAQEBAQELARUBTQEPAQMBAQEBAgUBEQFXAQMBAQEDAQMCcwEVAQ0CUQEDAQsBCQEDAQEBAwENAU0BBwENAQcBZQIPAR8BAQFjAQEBbQEDAQcCAwGPAQEPAY0BAUcBAQGhAQFpAQ==",
     "sd": 15.2,
     "msd": null,
     "center": "market"
    }
-  },
-  {
-   "id": 401858232,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:30+00:00",
-   "home": "Maryland",
-   "away": "Virginia Tech",
-   "fcs": false,
-   "neutral": false,
-   "spread": 1.5,
-   "total": 50.5,
-   "book": "DraftKings",
-   "home_conf": "Big Ten",
-   "away_conf": "ACC",
-   "proj_home": 27.7,
-   "proj_away": 22.5,
-   "home_rank": null,
-   "away_rank": null,
-   "sim": {
-    "t0": 0,
-    "m0": -66,
-    "nt": 115,
-    "nm": 129,
-    "n": 20000,
-    "c": "wgMB/wIDBQQFAfMCAgUCBQZzAgUCBwHxAQIFAgUGBQZtBAUDBQIBBQUCBQJrAQcBDQFjAQUHBQgFBQUBBQFhBAUJBQUBAwMCAQ0FBgUDXwIFAgcGAQEBAQEIBwMFAV0BBQEFBgEBAwcFAgUCYQIFDAUOAQMDDgEKAwIBEQUIBQJZBAUIBQcBCgMBAQsBAQMJAQUFCAUCVwIFAgUDAQIDBgEBAQMBBAMCAQJhAQUGBRAFDgEJAwgBCQULBQUFAVMDBQsFCwEEAwgBFwUVAQMDBgEHBQ0FBlECBQoFBgEGAQIBAQEDAQIBBAEDAQwBBQEBAQUBBAUCBQFPAgUCBQsBAgEBAREBBQMMAQ8BAQEFARgBAQECAQkFAQUCTQEFDwUTAQgDDgEaBS8BBAMaAQ0DAwERBQoFAksDBQYFBgEUAQEBAQEYAQEBAgEMAQ0BAwECARgBAwEBAQUBBAUHBQJJBAUDBQ0BAgMOAQUBAQESAQQBBgEJAQwBAwEEAQsBAQEFBwJNAgUOBRUBAQEBARYBFAMKATMBAQEBASIBCQMXARMDAgETBQhLAwUNBQUBBwEBAQIBJwEBAQEBIwEPAQEBDQEmAQMBAgEkAQUDDAEEBQgFAUMBBQYFCAEFAwkBDwEBAQsBBgEMAQoBCwEIAQYBBgECAQcBCgECAQYBBQUCTQQFDwEDAQIBGAEPAQEBCwEnAQYBBwEpAQkDFAEPAwkBFgMCAQgFBgUBPwQFDgUUAQgDDAEsAQEBBwEyAQ0BAQEjASwDBgEyAQQBAQEaAREDBgEOBQoFAT0DBQYFCwEJAwoBEwECAQsBDQETAQsBBwEcAQ4BBQEPARcBCAEEARYBBAEBAQgBBwUFBQE7AgUIBQUBAgMXAQkDFgEVAQgBDwEhAQUBBAEfAQsBBAEaARMBAwEJAQ8BAQECAQpFAQUKBQwBCQMSAR8DCQE2AQcBAgE5ASABAgEeAT4BBQECATEBCgMSAQwDAgEJBQcFATcBBQcFCAEJAwUBHAEBAQIBKgEUAQQBGAEpAQcBAgExAQ8BBAESASMBAwMhAQoBAQELAQcFBTsBBQMFCAEHAwsBDwEBAREBCQEIAQoBGwEJAQwBGgELARQBFAEKAQkBCwEJAQIBCwEFAwUBAgUBOQEFBgUIAQIBAQENARMDEAEsAQIBBgE3ARoBBAEnASkBAwEKATEBCQMaAREBAQEOARIDAwEIBQI3AQUCBRABBAMMASQBAgEGAUABDAEHASMBPAEHARMBTwEFAQMBMgEjAQIBBwEoAQgDEQEMAwcBAgUFBQEvAQUBBQsBBwEBAQkBDgECAQQBEwELAQwBEAEoAQ8BGAEWARgBFQEHAR4BDgEMAQgBEwEHAQIBDwEDAwMBAwUDBQEtAQUCBQUBAgEBAQwBEAECAQ8BFgEFAQ0BMgEQAQIBKQEdAQgBIAEwAQgBDgElARABBAENAQkBAQEGAQkDAQEBBQI3BQULAQgDDQEXAwQBLwEFAQUBNAEdAQEBIAFEAQ0BDgE+ARwBBQEZAS4BBgEIASIBCAECAQgBDgMDAQUFAwUBLwIFAwEEAwYBGgEBAQgBHwEeAQUBHAEtAQYBEQE2ARkBEAEWATQBDgEHASYBEgEFAQoBGwEEAxABBQMBAQUFAwUBJwEFAwUEAQQDBwEKAQIBEAEQAQoBDgEcARABCQEmARUBDgEXARoBGgESAR4BCQEHARIBCQEFAQoBBQEBAQQBBwMBAQMFAjEDBQcBAgMMAQsDDQEgAQYBBAEvARsBAQEnATABBwERAT0BGQEHAScBIQEEAQ4BKgEEAQQBGgEKAwMBAwUGLwIFAwUGAQIDBQEXAQEBBQErAQ0BAwEYASIBAwEQAUwBFwEIATQBOQEJARMBPgEPAQQBHwEfAQMBBwEfAQQBAQEDAQMFCAUDLQIFAQEGAwIBCQECAQUBEgEYAQQBFAEgAQsBCwEUARoBHgETAR0BEAETARcBFwESAQwBFAELAQMBDwEMAQQBAQELAQEDAQEBBQErAQUBAQIDCAEFAwUBGgEIAQoBHAEPAQgBHgEgAQoBGwFCAQwBDAErAR0BBwEeAR4BBwEFARoBCQEEAQoBCAMEAQULASMBBQEFBAEBAQEBBAEOAwYBIgEFAQEBGgEbAQEBHgE8AQkBBQFKAScBBQEZAT0BEQEIATcBFAEBARgBIAEBAQYBEQEKAwsBBAUEJwEFAQUDAQIDAQEKAQEBBwEOAQ4BAwEJASUBBgEHASYBGQEIAR0BMQEMAQ0BIwEWARYBDQElAQsBCgEVAQkBBAEFAQsBAQMIAQMDAgECKwEFAQEDAwUBAwEBAQUBCwEFAQUBDgEOAQQBGgEYAQ0BFAEeARYBDwEVAQ8BEAEaARIBDgENAQwBAwEMAQkBBQEFAQYBBwMEAQEBAQECAQEpAQUCBQQBBAMFARABAQEFAR0BCwEEARsBLAEDAQ4BNAEUAQMBLgE2AQEBFAE0AQwBAwEhARgBAQEQARMBAgEBAQ4BBgMEAQMDAgEFIQELAQECAwQBBAMEAQ0BBQEDARUBFwEFAQsBKwEQAQsBLQEtAQUBCwE6AQ8BBAEgAScBBgENASMBCQEBARwBDAMBAQwBAQMGAQQFAgUBHwELAgEIAwEBCQEFAQIBCQENAQkBFAETAQkBEAEQARYBCQEhARkBFQEUARABGwENAQwBDwERAQcBBQEMAQYBBAEFAQYBAwMDAQEDAQEBLwIBAwEBAQUBCQEBAQEBEAEIAQMBFgEXAQMBDAEpAQ0BCAEuARwBBwEfASwBCQEPASABDwEFARQBEAEDAQkBCwEFAQEBBAEELQEFAQUEAQIDAwEQAQEBAwEQARQBAwELASEBBgEKAToBFwEHARwBMQEJAQ8BOgEZAQUBGwEkAQcBBAEnAQ0BAgEEAQoBAgEDAQwBAwMBAQEDAS0DAQEDAQEHAQMBAgEHARQBCAEIARYBDgEHARgBIgEGAQ0BHgEUAQgBEAEXAQcBBQEWAQ8BDAEHARIBBQEDAQYBAwECAQMBAgEBAwIBAQsBFwENAQMDAQEBAQMJAQUBBAETAQsBDAEMARIBCwEOARwBEgEMARgBHQEPARIBFAEJAQoBEQELAQgBBgEJAQIBBgEIAQQBAQEBAQEDAi8BAQMDAgEIAQMBAgELAQYBAQEHARwBBQEGASYBEQEDARwBKQEJAQgBNQEPAQUBEgEeAQMBBQEkAQkBAQEPAQgDBgEJAwEBBAEBAQEBAQECLQEDAQEIAQMDCgENAwQBFgEEAQIBFgEWAQQBEgEmAQ0BCwEcARwBBAEMASABCAEHARcBDQEEAQYBDQEGAQMBBwEJAQEBAQEGBQINAR8BAwEBBAMBAQMBBQEBAQYBCwEEAQkBDAEMAQkBDQEVARMBCgEMARYBEAEQAQkBFAERAQYBCQEKAQQBBwEKAQMDAwEDAQItAQUCBwUBAQEDAQUBAwMLAQgDCQEXAQwBBQEfARIBBQERASABBwEHARwBFQEKARMBFQEDAQcBEgEFAQIBCwEIAQIBAwEGAQIDAgcBJQEBAQMCAQMFBwEIAwYBEAEHAQEBFQEPAQIBDwEfAQ0BBAEjAQ8BAgEXARkBCgEJAR4BCwECAQoBEQEDAQIBCgECAQEBAwEFBQETAR8BAQEDBQEFAQIBBAEKAQcBBAEKAQwBCQEIARgBCQELAQ0BFwEHAQkBFQEJAQgBCgETAQYBAwEHAQQBBAEDAQQBBAECAQIBAwMBBwElAQUBAQEBAQEEAQQBAQEGAQcBAgEGAQcBBgEEARIBDQEGAQUBEwEFARkBFQELAQgBEwEMAQUBDQERAQMBBgEJAQIBAwEEAQQBAQECAQEBAQMBLwEFCQECAQEBBQEIAQEBAwEOAQcBAgELAREBBgEMASABBgECARcBGwEFAQkBFQEOAQMBDAEIAQQBBwEMAQUBAwEFAQIBAQECAQIFAQsBGQEBAQUCBQMBAwUJAQEBAgEIAQoBAwEFARQBCQEFAREBDAEDAQYBFAEIAQUBFQEPAQcBBgEQAQEBAgEKAQMBAgEDAQEBBgMDEwEdAgUBAQYBAgECAQEBBQEDAQcBBQEFAQIBDQEGAQcBCQEJAREBCQENAREBCgEQAQkBCgEGAQQBAwEDAQgBAwEIAQQBAwEFAQIBAgUBIwETAQMFAQIBAgEDAQcBAQEDAQoBCQEDAQwBFQEKAQQBEAENAQMBCgESAQcBCQEFAQwBAgEFAQkBAgEDAQQBBgEBAQQBAwMCAQEtAQkBAQIBCQECAwkBBAEBAQMBBgEDAQMBDQEPAQQBCQEXAQYBAgENAQ8BBQERARABBgEDAQQBBgMGAQYBAgMDAQIJAgMBHQEHAQMBAQIFAgMCAQIBBQEEAQMBBQEFAQQBCgENAQIBBQERAQcBCwEHAQ0BBgEHAQcBAwEDAQIBAQEEAQEBAgEDAQEDAwcCLwIBAQUCAQIBBAEDAQEBAwECAQgBAwEGAQYBAgEGAQcBBwECAQUBCgEFAQQBDAEDAQMBBgEJAwEBBQUDBQEBAgEBAwErAQMDAQEBAQEBAwMBBAEBAQEBBQEEAQIBAwEOAQQBAgEIAQkBBQEFAQ0BAgECAQsBCQEBAQUBDAEEAQEBAgEDAQEBAgECAQIDAy0BBwEFAgECAwQBBwMBAQcBAgEEAQgBBwECAQMBBgEGAQMBDAEEAQMBBwEKAQIBAQEHAQoBAQECAQYBAwEEAQIBAgUBAQIYARQBCQEBAgEEAQIBAQEBAQIBBAEBAQQBBgEEAQQBCAEEAQQBCgEGAQgBAwECAQQBBQEGAQYBBgEBAQIBAgEFAQMDAgEBQwEBAQECAQIBAwEBAQoBAgECAQEBCQEEAQEBBQEKAQMBAwEJAQYBAgEJAQMFAwEBBQEBAQMCDwEbAQ0BBwEBAgUGAQEBAgEEAQQBBgECAQoBAQMJAQUBAwECAQUBBAEBAQYBAwMGAQYBAQMBAQEDAgEBBQEHATMCAwIBAgEBAQIBAgEEAQIBAwEFAQEBAgEIAQQBAgECAQQBBQEDAQUDAgEDAQEBAgECAwMFAgEBNwEHAQUCAQIBAQEFAQIBAQECAQcBAwEGAQMBAwECAQgBAQECAQEBBQEEAQEBAwEBAQIDAgUBAQIBAgsBAQEvAQUFAQEDBAEBAwMBAwEBAQUBBAEIAQIBAQEIAQYDAwEJAQEBAQECBQIBAgUDAQEDATMCBwEBAQMBAQEBAQMBAwEBAwEGAQIBBAEDAQMBAQEBAQgBAgEBAQMBBAECAQEBBAEEAwIBAwEBAQEBAj8BBQEBAQECAQEBAQEBAQMBAwEBAQMBAQECAQIBBQEBAQEBBAECAQMBAQEBAQEDAgECAwEBAQECAwIHATkBAQIDAgMDBQEBBAEBAQEBBAECAQIBAwEGAwEBAQMCAQEBAgUCBQEBAgMBOwEBAQEBDQEBAgEJAQEDAgEDAQIBAgEGAQIBAQEDAQUDBAEEAQQDAgECAwEBAgECAQFHAgMBBQIDAQEEAQYBAgEBAwEBAQEBAQEDAQEBAwIBAQMCAwEBAQUBPQEHAQUCAQEDAgEBAwEBAwEBAQEBAwEDAwEBAgEDAQEBAgECBwEBAQsBMQEDAQEBBQEBAQkBAQEBAwEBAQEBAgEGAwEBAwECAwIBAgECAwcFAQEBBQE5AQEBAwEFAQkBAwEDAQMBAQQFAgECAQEBAQEBAQEDAgEBBQEBAUkBBwEDAQECAQEBAwEBAQEJAQECAwEFAQ0BAwEFA0MBBQEDAQkBAQIBAgMDAQIDAWUBAQIDAQUBAQEBAwEBAQIHAQUBAwELAVUBAQEDAQsBJQFBAQEBCwIDAQEBAQEBAQEBAwITATUBGwEFAQcCAQELAQcBTwEFAQEBAwEBAQcBBwERARUBUwILAQUBVQEDAQUBBwEFAQcBBwEDAQkBYQEBARcBSQElAYUBAQMBiQEB3wIBewEVAQ8BYwGDAQKJAQFfAZMDAYABAQ==",
-    "sd": 15.2,
-    "msd": null,
-    "center": "market"
-   }
-  },
-  {
-   "id": 401856690,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-19T23:30+00:00",
-   "home": "Oklahoma",
-   "away": "New Mexico",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "SEC",
-   "away_conf": "Mountain West",
-   "proj_home": 28.0,
-   "proj_away": 17.0,
-   "home_rank": null,
-   "away_rank": null
   },
   {
    "id": 401856688,
@@ -5776,30 +4195,79 @@
    }
   },
   {
-   "id": 401856802,
+   "id": 401856690,
    "league": "ncaaf",
    "week": 3,
    "start": "2026-09-19T23:30+00:00",
-   "home": "Virginia",
-   "away": "West Virginia",
+   "home": "Oklahoma",
+   "away": "New Mexico",
    "fcs": false,
-   "neutral": true,
-   "spread": -8.5,
-   "total": 53.5,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "SEC",
+   "away_conf": "Mountain West",
+   "proj_home": 28.0,
+   "proj_away": 17.0,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401858232,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:30+00:00",
+   "home": "Maryland",
+   "away": "Virginia Tech",
+   "fcs": false,
+   "neutral": false,
+   "spread": 1.5,
+   "total": 50.5,
    "book": "DraftKings",
-   "home_conf": "ACC",
-   "away_conf": "Big 12",
-   "proj_home": 30.6,
-   "proj_away": 19.9,
+   "home_conf": "Big Ten",
+   "away_conf": "ACC",
+   "proj_home": 27.7,
+   "proj_away": 22.5,
    "home_rank": null,
    "away_rank": null,
    "sim": {
     "t0": 0,
-    "m0": -56,
+    "m0": -66,
+    "nt": 115,
+    "nm": 129,
+    "n": 20000,
+    "c": "wgMB/wIDBQQFAfMCAgUCBQZzAgUCBwHxAQIFAgUGBQZtBAUDBQIBBQUCBQJrAQcBDQFjAQUHBQgFBQUBBQFhBAUJBQUBAwMCAQ0FBgUDXwIFAgcGAQEBAQEIBwMFAV0BBQEFBgEBAwcFAgUCYQIFDAUOAQMDDgEKAwIBEQUIBQJZBAUIBQcBCgMBAQsBAQMJAQUFCAUCVwIFAgUDAQIDBgEBAQMBBAMCAQJhAQUGBRAFDgEJAwgBCQULBQUFAVMDBQsFCwEEAwgBFwUVAQMDBgEHBQ0FBlECBQoFBgEGAQIBAQEDAQIBBAEDAQwBBQEBAQUBBAUCBQFPAgUCBQsBAgEBAREBBQMMAQ8BAQEFARgBAQECAQkFAQUCTQEFDwUTAQgDDgEaBS8BBAMaAQ0DAwERBQoFAksDBQYFBgEUAQEBAQEYAQEBAgEMAQ0BAwECARgBAwEBAQUBBAUHBQJJBAUDBQ0BAgMOAQUBAQESAQQBBgEJAQwBAwEEAQsBAQEFBwJNAgUOBRUBAQEBARYBFAMKATMBAQEBASIBCQMXARMDAgETBQhLAwUNBQUBBwEBAQIBJwEBAQEBIwEPAQEBDQEmAQMBAgEkAQUDDAEEBQgFAUMBBQYFCAEFAwkBDwEBAQsBBgEMAQoBCwEIAQYBBgECAQcBCgECAQYBBQUCTQQFDwEDAQIBGAEPAQEBCwEnAQYBBwEpAQkDFAEPAwkBFgMCAQgFBgUBPwQFDgUUAQgDDAEsAQEBBwEyAQ0BAQEjASwDBgEyAQQBAQEaAREDBgEOBQoFAT0DBQYFCwEJAwoBEwECAQsBDQETAQsBBwEcAQ4BBQEPARcBCAEEARYBBAEBAQgBBwUFBQE7AgUIBQUBAgMXAQkDFgEVAQgBDwEhAQUBBAEfAQsBBAEaARMBAwEJAQ8BAQECAQpFAQUKBQwBCQMSAR8DCQE2AQcBAgE5ASABAgEeAT4BBQECATEBCgMSAQwDAgEJBQcFATcBBQcFCAEJAwUBHAEBAQIBKgEUAQQBGAEpAQcBAgExAQ8BBAESASMBAwMhAQoBAQELAQcFBTsBBQMFCAEHAwsBDwEBAREBCQEIAQoBGwEJAQwBGgELARQBFAEKAQkBCwEJAQIBCwEFAwUBAgUBOQEFBgUIAQIBAQENARMDEAEsAQIBBgE3ARoBBAEnASkBAwEKATEBCQMaAREBAQEOARIDAwEIBQI3AQUCBRABBAMMASQBAgEGAUABDAEHASMBPAEHARMBTwEFAQMBMgEjAQIBBwEoAQgDEQEMAwcBAgUFBQEvAQUBBQsBBwEBAQkBDgECAQQBEwELAQwBEAEoAQ8BGAEWARgBFQEHAR4BDgEMAQgBEwEHAQIBDwEDAwMBAwUDBQEtAQUCBQUBAgEBAQwBEAECAQ8BFgEFAQ0BMgEQAQIBKQEdAQgBIAEwAQgBDgElARABBAENAQkBAQEGAQkDAQEBBQI3BQULAQgDDQEXAwQBLwEFAQUBNAEdAQEBIAFEAQ0BDgE+ARwBBQEZAS4BBgEIASIBCAECAQgBDgMDAQUFAwUBLwIFAwEEAwYBGgEBAQgBHwEeAQUBHAEtAQYBEQE2ARkBEAEWATQBDgEHASYBEgEFAQoBGwEEAxABBQMBAQUFAwUBJwEFAwUEAQQDBwEKAQIBEAEQAQoBDgEcARABCQEmARUBDgEXARoBGgESAR4BCQEHARIBCQEFAQoBBQEBAQQBBwMBAQMFAjEDBQcBAgMMAQsDDQEgAQYBBAEvARsBAQEnATABBwERAT0BGQEHAScBIQEEAQ4BKgEEAQQBGgEKAwMBAwUGLwIFAwUGAQIDBQEXAQEBBQErAQ0BAwEYASIBAwEQAUwBFwEIATQBOQEJARMBPgEPAQQBHwEfAQMBBwEfAQQBAQEDAQMFCAUDLQIFAQEGAwIBCQECAQUBEgEYAQQBFAEgAQsBCwEUARoBHgETAR0BEAETARcBFwESAQwBFAELAQMBDwEMAQQBAQELAQEDAQEBBQErAQUBAQIDCAEFAwUBGgEIAQoBHAEPAQgBHgEgAQoBGwFCAQwBDAErAR0BBwEeAR4BBwEFARoBCQEEAQoBCAMEAQULASMBBQEFBAEBAQEBBAEOAwYBIgEFAQEBGgEbAQEBHgE8AQkBBQFKAScBBQEZAT0BEQEIATcBFAEBARgBIAEBAQYBEQEKAwsBBAUEJwEFAQUDAQIDAQEKAQEBBwEOAQ4BAwEJASUBBgEHASYBGQEIAR0BMQEMAQ0BIwEWARYBDQElAQsBCgEVAQkBBAEFAQsBAQMIAQMDAgECKwEFAQEDAwUBAwEBAQUBCwEFAQUBDgEOAQQBGgEYAQ0BFAEeARYBDwEVAQ8BEAEaARIBDgENAQwBAwEMAQkBBQEFAQYBBwMEAQEBAQECAQEpAQUCBQQBBAMFARABAQEFAR0BCwEEARsBLAEDAQ4BNAEUAQMBLgE2AQEBFAE0AQwBAwEhARgBAQEQARMBAgEBAQ4BBgMEAQMDAgEFIQELAQECAwQBBAMEAQ0BBQEDARUBFwEFAQsBKwEQAQsBLQEtAQUBCwE6AQ8BBAEgAScBBgENASMBCQEBARwBDAMBAQwBAQMGAQQFAgUBHwELAgEIAwEBCQEFAQIBCQENAQkBFAETAQkBEAEQARYBCQEhARkBFQEUARABGwENAQwBDwERAQcBBQEMAQYBBAEFAQYBAwMDAQEDAQEBLwIBAwEBAQUBCQEBAQEBEAEIAQMBFgEXAQMBDAEpAQ0BCAEuARwBBwEfASwBCQEPASABDwEFARQBEAEDAQkBCwEFAQEBBAEELQEFAQUEAQIDAwEQAQEBAwEQARQBAwELASEBBgEKAToBFwEHARwBMQEJAQ8BOgEZAQUBGwEkAQcBBAEnAQ0BAgEEAQoBAgEDAQwBAwMBAQEDAS0DAQEDAQEHAQMBAgEHARQBCAEIARYBDgEHARgBIgEGAQ0BHgEUAQgBEAEXAQcBBQEWAQ8BDAEHARIBBQEDAQYBAwECAQMBAgEBAwIBAQsBFwENAQMDAQEBAQMJAQUBBAETAQsBDAEMARIBCwEOARwBEgEMARgBHQEPARIBFAEJAQoBEQELAQgBBgEJAQIBBgEIAQQBAQEBAQEDAi8BAQMDAgEIAQMBAgELAQYBAQEHARwBBQEGASYBEQEDARwBKQEJAQgBNQEPAQUBEgEeAQMBBQEkAQkBAQEPAQgDBgEJAwEBBAEBAQEBAQECLQEDAQEIAQMDCgENAwQBFgEEAQIBFgEWAQQBEgEmAQ0BCwEcARwBBAEMASABCAEHARcBDQEEAQYBDQEGAQMBBwEJAQEBAQEGBQINAR8BAwEBBAMBAQMBBQEBAQYBCwEEAQkBDAEMAQkBDQEVARMBCgEMARYBEAEQAQkBFAERAQYBCQEKAQQBBwEKAQMDAwEDAQItAQUCBwUBAQEDAQUBAwMLAQgDCQEXAQwBBQEfARIBBQERASABBwEHARwBFQEKARMBFQEDAQcBEgEFAQIBCwEIAQIBAwEGAQIDAgcBJQEBAQMCAQMFBwEIAwYBEAEHAQEBFQEPAQIBDwEfAQ0BBAEjAQ8BAgEXARkBCgEJAR4BCwECAQoBEQEDAQIBCgECAQEBAwEFBQETAR8BAQEDBQEFAQIBBAEKAQcBBAEKAQwBCQEIARgBCQELAQ0BFwEHAQkBFQEJAQgBCgETAQYBAwEHAQQBBAEDAQQBBAECAQIBAwMBBwElAQUBAQEBAQEEAQQBAQEGAQcBAgEGAQcBBgEEARIBDQEGAQUBEwEFARkBFQELAQgBEwEMAQUBDQERAQMBBgEJAQIBAwEEAQQBAQECAQEBAQMBLwEFCQECAQEBBQEIAQEBAwEOAQcBAgELAREBBgEMASABBgECARcBGwEFAQkBFQEOAQMBDAEIAQQBBwEMAQUBAwEFAQIBAQECAQIFAQsBGQEBAQUCBQMBAwUJAQEBAgEIAQoBAwEFARQBCQEFAREBDAEDAQYBFAEIAQUBFQEPAQcBBgEQAQEBAgEKAQMBAgEDAQEBBgMDEwEdAgUBAQYBAgECAQEBBQEDAQcBBQEFAQIBDQEGAQcBCQEJAREBCQENAREBCgEQAQkBCgEGAQQBAwEDAQgBAwEIAQQBAwEFAQIBAgUBIwETAQMFAQIBAgEDAQcBAQEDAQoBCQEDAQwBFQEKAQQBEAENAQMBCgESAQcBCQEFAQwBAgEFAQkBAgEDAQQBBgEBAQQBAwMCAQEtAQkBAQIBCQECAwkBBAEBAQMBBgEDAQMBDQEPAQQBCQEXAQYBAgENAQ8BBQERARABBgEDAQQBBgMGAQYBAgMDAQIJAgMBHQEHAQMBAQIFAgMCAQIBBQEEAQMBBQEFAQQBCgENAQIBBQERAQcBCwEHAQ0BBgEHAQcBAwEDAQIBAQEEAQEBAgEDAQEDAwcCLwIBAQUCAQIBBAEDAQEBAwECAQgBAwEGAQYBAgEGAQcBBwECAQUBCgEFAQQBDAEDAQMBBgEJAwEBBQUDBQEBAgEBAwErAQMDAQEBAQEBAwMBBAEBAQEBBQEEAQIBAwEOAQQBAgEIAQkBBQEFAQ0BAgECAQsBCQEBAQUBDAEEAQEBAgEDAQEBAgECAQIDAy0BBwEFAgECAwQBBwMBAQcBAgEEAQgBBwECAQMBBgEGAQMBDAEEAQMBBwEKAQIBAQEHAQoBAQECAQYBAwEEAQIBAgUBAQIYARQBCQEBAgEEAQIBAQEBAQIBBAEBAQQBBgEEAQQBCAEEAQQBCgEGAQgBAwECAQQBBQEGAQYBBgEBAQIBAgEFAQMDAgEBQwEBAQECAQIBAwEBAQoBAgECAQEBCQEEAQEBBQEKAQMBAwEJAQYBAgEJAQMFAwEBBQEBAQMCDwEbAQ0BBwEBAgUGAQEBAgEEAQQBBgECAQoBAQMJAQUBAwECAQUBBAEBAQYBAwMGAQYBAQMBAQEDAgEBBQEHATMCAwIBAgEBAQIBAgEEAQIBAwEFAQEBAgEIAQQBAgECAQQBBQEDAQUDAgEDAQEBAgECAwMFAgEBNwEHAQUCAQIBAQEFAQIBAQECAQcBAwEGAQMBAwECAQgBAQECAQEBBQEEAQEBAwEBAQIDAgUBAQIBAgsBAQEvAQUFAQEDBAEBAwMBAwEBAQUBBAEIAQIBAQEIAQYDAwEJAQEBAQECBQIBAgUDAQEDATMCBwEBAQMBAQEBAQMBAwEBAwEGAQIBBAEDAQMBAQEBAQgBAgEBAQMBBAECAQEBBAEEAwIBAwEBAQEBAj8BBQEBAQECAQEBAQEBAQMBAwEBAQMBAQECAQIBBQEBAQEBBAECAQMBAQEBAQEDAgECAwEBAQECAwIHATkBAQIDAgMDBQEBBAEBAQEBBAECAQIBAwEGAwEBAQMCAQEBAgUCBQEBAgMBOwEBAQEBDQEBAgEJAQEDAgEDAQIBAgEGAQIBAQEDAQUDBAEEAQQDAgECAwEBAgECAQFHAgMBBQIDAQEEAQYBAgEBAwEBAQEBAQEDAQEBAwIBAQMCAwEBAQUBPQEHAQUCAQEDAgEBAwEBAwEBAQEBAwEDAwEBAgEDAQEBAgECBwEBAQsBMQEDAQEBBQEBAQkBAQEBAwEBAQEBAgEGAwEBAwECAwIBAgECAwcFAQEBBQE5AQEBAwEFAQkBAwEDAQMBAQQFAgECAQEBAQEBAQEDAgEBBQEBAUkBBwEDAQECAQEBAwEBAQEJAQECAwEFAQ0BAwEFA0MBBQEDAQkBAQIBAgMDAQIDAWUBAQIDAQUBAQEBAwEBAQIHAQUBAwELAVUBAQEDAQsBJQFBAQEBCwIDAQEBAQEBAQEBAwITATUBGwEFAQcCAQELAQcBTwEFAQEBAwEBAQcBBwERARUBUwILAQUBVQEDAQUBBwEFAQcBBwEDAQkBYQEBARcBSQElAYUBAQMBiQEB3wIBewEVAQ8BYwGDAQKJAQFfAZMDAYABAQ==",
+    "sd": 15.2,
+    "msd": null,
+    "center": "market"
+   }
+  },
+  {
+   "id": 401858453,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-19T23:30+00:00",
+   "home": "Notre Dame",
+   "away": "Michigan State",
+   "fcs": false,
+   "neutral": false,
+   "spread": -29.5,
+   "total": 53.5,
+   "book": "DraftKings",
+   "home_conf": "FBS Independents",
+   "away_conf": "Big Ten",
+   "proj_home": 40.2,
+   "proj_away": 19.1,
+   "home_rank": null,
+   "away_rank": null,
+   "sim": {
+    "t0": 0,
+    "m0": -34,
     "nt": 119,
     "nm": 129,
     "n": 20000,
-    "c": "uAMBiwMBcwGLAgIFAm0BBQEHAfEBAQsBBQQFAW0DBQQBAQUDBQRzAQ0BaQEFAQUGCwFhAgUDBQUBAgMDAQYFBgUHXwENBAUEBwQFA2kCAwEBBwMBAQUFBWcFBQYBAQMIAQcDAQEKBQgFA18CBwIDAQEHAQEDBgECBQkFBVcBBQELBAEBAQEBAQEBAQIBBQUBBQFbAwUJBRMBBAMFAQYDAQENBQkFA1MBBQIFBwECAwIBCgUUAQEDBQEGBQsFAlEBBQIHAgMCAQUDBQMCAQIDCAECBQYFAU8BBQEFBQUHBQ0BAgMFAQ0DAwEMBQUFAlMGBQkBAgMJAQoDAwEXAQEDHgEJAw0BEAUQBQZLAQUEBQQBAwULAQEBAgEPAQIBAQMUAQUBAQEIAQIFAgUITwMLBQECAw0BBQECAQcBCQECAQYBDAMDAQwFAwUCRwEFBAUGAQIDDQEKAwYBEwEBAQUBIQEFAxUBEQEBAQgBHAUQBQNFAQUEBQQBAwMHAQ0DAgEZAQYDCAEOAQIBAQEbAQUBAgETAQ4FEAUHSQEFBAEEAwQBAQEDAQIBAgEFAQgBCQEFAQoBBAECAQ8BDQEEAQgBBwUGBQFNBQMBAQgBBgMMARIBAQEGARIBAgEDAR0BDQEBARMBFwMJAR4FCwUDRQIFBQECAwYBDwEBAQQBGAEFAxYBFwEBAQ8BLQEGAQMBMQEMAQEBDQEbBRQFB0MCBwcDBgEHAwIBCQEHAQMBCgEUAQcBBgEQAQsBBQECARUBCQEBAQwBCwUKBQI7AQsDAQIDBAECAwgBBQECAQ8BFwEFAQsBJAEFAQYBFwENAxABEgMGAREFCgUEPwMFBAECAwoBBAMJASABAgMoAQgDIAEhAQQBEQEzAQoDJwEWAwgBFQUNBQE9AQUDAQQDBAEMAwIBEAEHAQQBDwEUAQQBAwEoAQ0BBQERASMBAgEDARoBDAEBAQ8BFQULBQNDAQEBAQEBBQMEAQUBBgEKAQoBCgEKAREBCwEPARcBDgEPAQsBFAEBAQ4BDgECAQsBDgUFBQQ5AQUGBQYBBAMIAQsBAQEMASABDQEHAS0BFwEDAR8BMQEIAQYBKQEKAQEBIAEUAwcBDQUNQwMFBAELAwMBGAEFAQIBHAEUAQIBDAFEAQgBBQEvASUBAwEZATABCAEDAS8BDgMQARcFDwUBOwEBAQMBAQUDBAEFAQcBBwEGAREBBgEOAQsBGgEPAQcBHAEQAQsBHAEhAQUBAwEiAQkDDAELBQgFAj8FAQQDBQELAQQBBQEUAQgBCQEkAQsBBgEVASABCgERATcBBwEKASQBCwEDAQ8BHgMHAQ0FBQUCMQIFAQECAwQBBQMFARgBAgEDARQBCwECAR0BKQEDAQsBQAEVAQMBLQEpAQEBCgFFAQUBAgEXAQ0BAQEMARcFB0EBAQYDAQEGAQkBAgEJAQ4BBgEFAS4BEwELARcBJgEOAQsBLgEPAQkBEgEbAQUBAwEkAQwDDQEKBQcFAzMBBQEBBgEBAQMBBgEFAQkBCQEJAQYBFQEGAREBGQESAQ0BGgEjAQgBEgEgARIBCwEWAQ8BBQEXARMDBAEGBQQFATcCBQYBCQEDAQYBFAEIAxoBHQEHAQ4BNQELAQoBRgEcAQIBGAE0AQcBDAEoAQcDFAENAwUBDwUGBQEvAQECBQcFCQECAw8BGAECAQ4BIgEJAQcBKQEhAQgBFgE/AQ0BCAFCARoBCAEQATMBAwEBASABDQECAQkBDwUIBQMzAgEBAwEDBQECAQMBCwEGAQ4BEgENARUBBwEYARABEQEUARwBHwENARQBEQEJAREBFgEPAQMBIwEFAwYBBgUIBQExAQEBAwMBAwMFAQwBBAECARYBDgEFARwBJwEJARYBMQEaAQwBKwEgAQgBGgErAQoBBgEoARADDwERAwcBBgUEBQEvAQEBAwEBBQEBAQEBDwEJAQEBEAEtAQEBDwEmASMBAwEkATIBCwEQAUcBEwEBASUBJgEDAREBMAEJAxkBDAMFAQgFCwUCIQENAgEBAQEBBAEBAQQBBgEFAQEBCQERAQ0BBQEQAR8BCgEMAScBEwEQARkBHwEXAQkBIgEVAQoBDgEbAQsBAQEXAQgDBAEFBQcFASUBDQMDAwEJAQMBAwELAQcBCgESARQBDAERASEBDgEVASEBFAEJAScBJQEFAQ0BKAEHAQoBFwEMAwwBCQMEAQQFAiMBCwEBAQMCAQcDAQENAQUBAwELARQDBwElAQ0BBQEvARkBBwEtATsBDAEOAUwBEwEBAS0BLwEGAQgBJgEHAQEBBwEQAwMBDAUDBQIhAQ0FAQIDCAELAwYBEQEFAQMBHwESAQcBGgEwARABCgEyASABCgEUAT4BDgEGASIBGQEIAQ0BHwEEAQEBEQEIAwMBBgUDBQEfAQcDAwEBAwECAwIBBAEDAQoBCwEHAQwBDgEVAQwBEgETARoBGQENARoBFQEWARMBGAEbAQUBFAEWAQMBEwEUAQUBAQELAQUDAwEDBQMFASMBAQQDAQUDAQcBAgEEAQoBBgMLARUBBgEKASgBFgELASMBHgEHAREBQAEPAQcBMwEUAQEBHAEeAQUBAwEaAQoDBgEKAQEBAwEFNQUDAQEGAQIDCQEIAQMBCgEZAQ0BBwEVASYBBwEJATMBFAEJASMBKQELAQ8BMgETAQMBJQEbAQEBCwEYAQIDEwEHAwIBAwUBJQEHAQUFAQUBAgMIAQIBDAEKAQsBBQELARkBEQEMARcBIAEYAQkBHwEXAQ4BEwETARIBBgEcAQoBBQEKAQ8BBAEBAQ4BAgMDBwEpAQkEAQMBAwEGAQEBDQENAQYBCQEUAQwBBwEVARYBCAEWAR8BDQEQASwBDgELASMBGAEFAQsBEQEHAQUBBwEHAwcBBAMBAQQFAQUBIQIHAwUDAQkBAQEEARcBCAEFARQBDgEGAQ8BKQEHAQcBJAEUAQgBHQE4AQcBCwEjARIBAQESARsBAgEFARUBBQMIAQYDAQECBQIFASEDAQIBAQEEAQMDAwEMAQQBAQEJAQgBAwEIARkBDQEIARQBGwEHAREBKQEMAQwBLgEdAQkBEQEgAQkBCAEZARIBAgELAREBBgMGAQMFAgUBHwEJAQMBAQEBAQEDAQEBBgEHAQYBAwEMAQYBDAEOAQUBFQERAREBDAEZARoBBwEWARQBDwEMARoBEQEDAQoBCwEBAQYBCgEBAQEBCQEBAwMBAScBBwEBAwEBAQoBAgMFAQcBAgEDAQ8BCAEGARQBFAEHAQ8BIQEVAQkBJgEhAQcBEgEtAQ0BCAEZARQBBQEMARIBCQEBAQwBBAMDAQIFAx8BBwEBAQkCAQUDAwEGAQUBAQEOAQ8BAgEGARcBCgEDARsBHgEHAQoBIQEKAQUBGwEfAQUBBgEgAQkBAwEWAQkBAgEDAQsDAQEBAQQLAh8BAwEBAQUBAQUDAwECAQQBBgEFAQcBDAEMARYBEQENAQsBGwEQAQ0BBgEZARABDAEOAQsBBgEKARcBBQEDAQYBBwEBAQQBBQECAwMFAjEBAQMBBAECAQUBAwEDAQ0BAwEEAQ0BDAEHAQ4BEwELARMBFAESAQoBGAEXAQUBDwEQAQkBBwEPAQoBBAEKAQQDAgEEAQQBAQMBAwEvBQEEAwMBBQEFAQIBBAEHAQQBCAEQAQgBAwEWARABBQEPASgBCwEHASUBHAEEARIBIwEFAQQBFgEIAQIBDQEJAQEDCAEBAwIBAQMBIQEFAQEBBQEBAQMDAQIBAQEBAQoBAQECAQkBCAEEAQgBEAEFAQYBFQEOAQQBDAEhAQkBBAEXARABCQEKARIBCQEBAQ0BBQMDAQYBATsBAQEBAgEBAQUBBAEFAQoBBQEMAQkBCgEIARABEgEIAQwBEAEJAQoBEAEQAQYBEwELAQMBBgEHAQYBAgEEAQIBAwEBAQIBAQMCBQEjAQUCBwIBAQEDAQEBBAEBAQQBBwEGAQoBCwEIAQMBGAEQAQYBDgEWAQUBCgEXARQBAgEMAQ0BBgECARIBBgEBAQMBAwEBAQEBAwEBAwEBAQMCIQEBAQUDAwEBAwECAQIBAwEBAQMBAQETAQkBAwERARABBgEIARYBBwEFAREBEgEFAQMBFAEKAQIBFgEQAQEBAwESAQIDBwEGBQMFAS0BAQEDAgEBAwQBBAMEAQYBBQEEAQkBCwEQAQcBBQEIAQsBBgEMAQoBBgEFAQwBCAECAQwBCwEDAQMBCgEDAQEBCgEBAwIBAgUBBQEPAREBBQEBAwECAQEBAgECAQEBAQEEAQkBBgEDAQwBBQECAQwBCgEGAQgBEwEGAQMBDgESAQYBCgEIAQQBCAENAQQBAgECAQQBAQEBAQQBAQEBJwEVAQECAQEBAQEIAQEDBwEIAQQBBgEMAQYBBwERAQsBAQEKARMBBAEHAQwBCQEBAQsBDAEDAQMBCgEDAwQBAwUBBwErAgEBBQIFBAEDAQIBAgEGAQQBBAEMAQkBBQEHAQwBDQECAQ4BDQEFAQUBDAEEAQMBBgECAQIBAgEFAQMBAQEDAQIBAQEBAwEDAw0BGwEDAQMBAQEDAQECAQQBAQEEAQMBAwEJAQUBBgEHAQcBBQEOAQUBBQEFAQkBCgEBAQkBBQEFAQUBBAEEAQMBBAEEAQEBAwEBBQEpAQEBCQEBAgEBAQQBAwMDAQMBBQMFARABAgEIAQcBBgEFAQ8BBAECAQwBCQEGAQYBCAEJAwMBCgEBAwIBAgUBBQItAQUBAQEDAQEGBQQBBQECAQUBDQEEAQMBCAEIAQIBBgELAQgBAQEGAQ4BAQEGAQoBBQMCAQkDAgECAQETARUBBwIHAQ0CAwMBAgEDAQMBAQEHAQQBBQEGAQQBBAEHAQgBAwECAQYBCAECAQQBBgECAwMBAgECAQQBAwEDAwEBAQEBCQEnAQ8FAQMBAQEEAQYBBAEHAQcBAwEDAQkBAgECAQYBCgEDAQQBAgEEAQIBAwEFAwIBAgMBAQETAR8BAQEFAQUBAQIBAQMEAwEBBAEFAQIBAQEEAQoBAQECAQgBAgECAQYBBgEDAQQBCAEDAQIBCQEBAQEBAgEKAQEBAQEEAQI5AQcBAwIBBAEBAQIBBAEGAQIBAgEEAQMBAwEFAQUBBwEDAQwBAgEDAQYBBAMBAQYBBAMBAQEDAQkBBQExAQMBAQEBAQEBAwMDAwEFAQMBAwEEAwQBBAEBAQQBAQECAwEBBQEBAQIBAgECAwEBAwEDAQIHATcCAQEBAQEDAQEDAQEFAQEBAgEFAQQBAQEEAQIBAQECAQUFBAEHAQEBAwECAQMBAQECAQQBAgEBAQIFAQEBOwEHAQMDAQEBAQEDAQEBBAEDAQYBBAEBAQcBBAEBAQEBAwEDAQIBBAECAwMBBAcBBwE7AQMBAwEHAQECAQEBAQEEAQEDBwEEAQEDAgECAQMBAQEBAQQBAQECAQUDAQEBQQIPAgcEAQIDAgEFAQEBAQECAQEDAwEBAwEBAQUDAwEBAQECRQEDAQUDBQIBAgMBAQQBAQMBAQMDBAEFAQIBAQEDAQQBAQEBAQEBAQMBNQEPAQMCAQEBAQMCAwEBAgEBAQIBAQEEAQEBAgEEAQUBAgMBAwEBAwECBQIBAgUBQQEBAQMBAwIDAwEDAQIDAgEBAwIBAQMCAQIBAgECAQEBAgMEAQIBAREBBQE1AQUBCQIBAQECAQMDAgECAQQDAQECAQEBAQMBAwIBBQMBCwExAQ0BBwELAQEDAwEBAgcGAwEBAgECBQEFAQEBRwEBAQMBBQEBAwECAQEDAQMDAQMFAQEBAQMBBAEBAQEDAVMBBQIBAwcBAwMHAQMBAwIJAU8BAQEHAQcBBQEFAQEBBQIBAQUBXwEDAQcBAwIBAQUBAQEFAQcBWwEBAQEBAQELARUBTQEPAQMBAQEBAgUBEQFXAQMBAQEDAQMCcwEVAQ0CUQEDAQsBCQEDAQEBAwENAU0BBwENAQcBZQIPAR8BAQFjAQEBbQEDAQcCAwGPAQEPAY0BAUcBAQGhAQFpAQ==",
+    "c": "IgGLBgOBAQH3AQEFAgUCcwENA/cBAQUFBQNtAQUDAQEFAwULawEFAQ8EYwENAQMEBQUFBWcBBQUFAwEGBQwFCmUBDQcHAwUOaQQFAgUEBQcFBGEBBQUFCgECAwUBCAUMBQdnAgUJAwEBCQEBBRAFDVcBFwMDAgEEBQ8FBmEDBQMBAQMHAQIDBQEJBRwFC1kBCwIBBQMBAQ0BAgMRAQYFFgUsZQQFAgEFAQIDEAEHBQgFD2EBAQEBAQEFAQIBAgEFAQYDAwERBRIFDlMBCwIBAgEBAQEBBwUdAQMDGAESBSIFKVcCBwQDAQEGAQIFDQUeAQcFEQUeVwEFAQMCAQEBAQEEBQUBBgEBAQQBDwUcBRBTAQUBAQEDAwECAQEBAgEOAQEBAQEeAQQBAgERAR4FLAUoVwIBAwMCAQsBAgEBAREBCQEDAyIBBgMYARIFIgUyUQEFAwUEAQMBAQMGAQQBAQEDAQgBBwECARABEgUNBRJTAgEBAwQBAQMCAQcDAQEUAQgBAQEcAQ0BAgERAR0FLgUrUQEBAgUDAQEBAQENAQMDDQEWBTQBBQEBASMBFwVABTRRAQEBAwIBAQMBAQkBBAECAQ0BCAMEARMBBgEFASgBDQUdBTBNAQcCAwEBAgMEAQsBAQEGAQwDAwEQAQ4DGwEjBSYFIk0BAwEFAQEHAQIBAgEVAQ8BAgENAR4BBAEBAUIBCwMpAS4FSwVCSwEFBAEBAwMBCgEBAQMBFQMCARQBDQEEAQEBIQECAyYBEwUwBTZPAQEBAQEBAgEDAQMBAQEDAQUBBgEBAQ4BFgEHAxMBEwEGASYBLAUkBSFNAgEBAwMBAQMJAQUBAQERAQsBAQEJAR8BBAEDAUABFgEBAR4BLwVNBTdLAQUDAQMBAQEIAQYDAwEdAQoBAwEXARsBAgEBAUYBCAECATgBJAVNBThJAQEBBQQBAwMGAQcBAQECARIBBAEEARIBEAEEAQMBKAERAQkBMQEUBScFHkUBAwEBAQEBAwMBAwMDAQwBBQEBAQsBCwEFAQoBIwEHAQMBQAEWAQIBIAEhBToFJD0BAQEDAQUBAQQBAQEBAQgBBgEBAQgBDQEBAx4BCwEBASABOwEBAQMBVgELAzsBLgVWBTVDAQUBAQMFCAMDAQcBCAEEAQMBEQEIAQUBHQEdAQQBBgEwAQsBAgE1ASUFPAUvSQEDAQMBAQQBAQEEAQUBBwEDAQ8BEQEGARABIQEIAQMBJgEVAQIBJAEoBTgFHT0BCwEBAQECAwIBBgEBAQQBEAEHAQIBJAEZAQQBHgEqAQgBBAFTARsBBAE6AToFWgU2SQEBAQEBAQEBBwEGAQMBDwEPAQMBAwEoAQ8BBAEpASABCAELAU0BDAECAUYBHgVCBSs9AQUBAQEBAQEDAQQDAQEHAQUBBQEMAQgBBQEGARIBFQEEARMBIQELAQQBMgEPAQEBMwEkBTIFHTcBEQEBAgEFAwIBBwMGAQ0BBwECASUBFwEDARUBMQEIAQMBQQEgAQEBLAEnBTUFHj0BBQIBAgMCAQgBAQEDAQ8BCAEBAQoBFgEDAQYBJAEQAQUBJQEjAQMBBAFZAQoBAQE/ASYFRgUvQwMBAQMGAwMDBQECAQMBDQELAQcBBAEhARUBBwEiAR0BCAEIAToBFgEIATkBKAUyBTBHAQECAQUBAgEEAQUBBQEEAQoBDAEMAQMBHAEUAQoBGAEsAQMBBAE3ARoBAQEoAScFMQUgPQEDAQMIAQEBAwEFAQQBAQEMAQoBAQENASkBCAECATABFwECASQBSQEHAQMBXAETAQEBRwE/BUAFJTsBAQEDAQEEBQIBAwEDAQMBEgEGAQEBDgESAQUBBQEyARQBCwEpASgBDgEFAUcBDQEFATcBHQUrBSY9AQECAQEBAQEDAQIBAwEEAQYBBgEIAQcBBwEOAQ8BBwEGAR4BFAEKASABNwEJAQUBMwERAQQBKQEkBR8FEzMBCQMBAgEBAQEBAwMCAQgBBwEDAQgBCwEGAQYBHAEHAQQBMgEYAQYBGQE/AQkBAQFSARoBAwE1ASwFNQUhPQMBAQMCAQIDAwEJAQIBBwEYAQkBAgESARgBCAECATgBFgECASEBKQEDAQUBPgEUAQIBOwEbBSYFJDUCBwEBAgMDAQEBAQECAQQDAwEKAQgBAwEMARoBBQEFASgBDQEGASQBKwEHAQQBRwEQAQQBJQEaBSIFFDsCBQEBAgEBAQMBAwEGAQQBAQELAQoBBgELASgBCQEGASUBFAELAR4BLwEEAQYBOwEaAQIBJAEfBSgFCzUBAwEFAQMDAQcDAgELAwQBFQELAQUBDAEgAQgBBQEzAREBBQEkAT0BBQEEAUsBDQEEAS8BGgUoBR41AQcBAwEBAgEBAQEBAQEIAQIBAwEMAQgBBwEbASMBBgECASkBCwEGASQBKwEDAQgBPwEEAQMBJAEWBRcFGSsBCQEJAQECAQEBAQEDAQIBAwEDAQMBBgEIAQoBBAENAQsBCgEjARUBCwEaASYBBQEBATwBDgEBARcBJQUQBQs3AQMBAQEBAwEBAQIBBAMFAQkBAwECARMBDgEHAQcBHgEEAQUBJQEZAQQBGwEZAQUBBQE0AQ8BAQEjASEFHQUMJwEHAQMBBwEBAwUDAQYBAQEDAQ0BBQEFARUBDgECARMBEgEHAQcBOQESAyoBJwEGAQIBKAEGAQUBJgEWBR8FFzUBBwEBAgMDAQMBBAEFAQUBBAEDAQcBBwEBAQsBDwEHAQYBGAENAQUBEQEoAQUBBgEgAQgBBQEdAQoFDwUNMQEFAQMBAQQDAQECAQIBAgECAQgBAwEBAQwBCQEBAQkBGwEIAQIBGAEUAQcBGgEvAQQBBAEzAQ0BAQETAREFBgUCMwEBAQECAQEBAwEDAQEBAQEGAQMBAgEFAQsBBQEDAQ8BEwMPARYBBgEFASEBEgEGAR4BJAEDAQIBKwENAQIBKQEUBRwFBS0BBwEDAgEDAQEBAQEEAQYBAwEBAwoBBQECAQ0BCwEDARIBGAECAQUBHgEQAQUBJAEVAQIBBgElAQoBAwEfAQsFDgUIMwEHAQECAQMBAQEBAQMBAQEFAQ4BBAEFAQoBCQEJAQYBGAEIAQIBHAESAQIBEgEfAQUBAQEbAQ8BAwENAQsFBgUEMwEDAQECAQEBAgMBAQUBBQECAQMBCQEBAQIBCQELAQMBBQEVAQMBAwEiARQDHQEZAQEBAQEvAQgDDAEPBQgFAy8BBwEHAgEEAQMBBAEBAQQBCgECAQQBGAEIAQMBFQERAQQBBQEnAQ0BAwEUARIBAgEBASMBAwECASABBAUQBQInAQ0CAwEBAwECBQUBAQEDAQMBBgEGAQIBBgEHAQUBCgESAQUDGQENAQUBDwETAQEBAQERAQIBAQEMAQYFCAUCJQELAQMBBwEBAQECAQYBBwECAQMBBQEDAQMBCQENAQQBCgEUAQoBAwEbARMBBAENAR8BAgMQAQkBAQEGAQgFAgUBMQIBAgMCAwEBAgEBAwYBAwMDAQcBAgEBARABBQECAQ4BCQEGAQQBEwEIAQIBEQEVAQMDJgEEAwQBBwUFBQIlAQkBBwEDAQEBAQEDBQEBAQMBCAEJAwEBDAEHAQIBCgERAQQBAQESAQsBBQEOAQsBAwECARgBAgMRAQMFBAUBKQEFAQsBAQIBBAMBAQIDBQEHAQYBAQEJAQcBBAEGAREBBAEEAQUBCAEDAQYBCQEDAQEBBwEDAwgBAgUEBQMlAQkBBQMBAgEBAQEBAQEBAwQBBAEBAQUBCQEGAQEBCgEHAQMBBwENAQMBAgEPAQoBAQEIARgBAgMGAQUBAQEGAQIFAgUBJwEDAgcBAQIBAQUBBQIBBAEDAQQBCAEEAQIBCgEGAQgBDgEEAQIBAgERAQcBAQERAQ8BAQEBAQ4BAQMCAQZJAQEBAQMBBAECAQMBAwEIAQEBAQEFAQgDBAENAQMBAgENAQMBBAEGAQIFCQUDAQE3AQcBAQIDAgECBQIBAgEEAQIBAgEDAQUBAQESAQoBAwEBARQBAgMIAQcBAQMDAQQDBgUFAQEFATUBDwEBAwEEAQIBAgEDAQoBAQECAQsBBAMHAQwBBQEBAQ4BAgMGAQcDAQEFAQIDAQEBNwEFAQMBAQEBAQMBAQEDAwEDAQEBBAEEAQQBAQEGAQMBAgEHAQUDAQEKAwEBBgEFBQQBAQMCBwEtAQ0CAwEBAgEEAwEBAgEGAwIBBAEEAQEBBgEHAQQBBwEHAQIDBAEBAQIBBAEEBQQBAQMEAQM1AQMBAQEFAQMBBQIDBAEFAQEBAwEDAQEBAgEIAQMFCwECAwUBAwUBBQEBAQsCJQEbAgECAwMDAwEDAQIBAgECAQIBCAECAwoBBwECAwoBBgMCAQUBAQMDMwEVAQ0BAQEDAwEHBQIBBQEEAQMBBAMGAQUBBAMCAQQFAUMBAQEDAQcBBQIBAgECAQQBBgUBAQIDAwEBCQIBAgECBQEHAUcCAQEDAQEDAQEDAQEFAwEBCwEEAQEBBgEEBQIBAgMBAQJTAQMBBQEBAgEBAQIBAgMCAQIBAgMEAQMFBQEBBQFBAQEBBQEHAgUDAQEDAgUBAQIBAgEBAQIBAQECAQMBAgEBAQMBAgEBAwEHAUsBAQEDAQUCBQEBBQEBAwMBAwcBAwIFATUBGwEBAQUCAwEBAQUDBQEBAgECAQIDAgEBAwNDAQkBAQEJAhMDAQEDBgEBAwEBAwUBSwEBAQsDBQEBAgUBCwEFAQ8BVQEHAgEBAQEDBAUBAQEDAVEBBQEDAQMBAQEFAQUCBwEFBAcBBwFVAQECBQEJAQECBwIHAWUCBQIDAQMCBQFVAQcBFQIBAQsBVQERAgEBAQJZASEBAQERAQcBUQGbAQEJAQUBhQIBaQGJCQGHAwE=",
     "sd": 15.2,
     "msd": null,
     "center": "market"
@@ -5863,21 +4331,21 @@
    "away_rank": null
   },
   {
-   "id": 401862775,
+   "id": 401856799,
    "league": "ncaaf",
    "week": 3,
    "start": "2026-09-20T00:00+00:00",
-   "home": "Tulsa",
-   "away": "East Texas A&M",
-   "fcs": true,
+   "home": "TCU",
+   "away": "Arkansas State",
+   "fcs": false,
    "neutral": false,
    "spread": null,
    "total": null,
    "book": null,
-   "home_conf": "American Athletic",
-   "away_conf": "Southland",
-   "proj_home": 32.1,
-   "proj_away": 20.3,
+   "home_conf": "Big 12",
+   "away_conf": "Sun Belt",
+   "proj_home": 31.6,
+   "proj_away": 20.7,
    "home_rank": null,
    "away_rank": null
   },
@@ -5901,25 +4369,6 @@
    "away_rank": null
   },
   {
-   "id": 401856799,
-   "league": "ncaaf",
-   "week": 3,
-   "start": "2026-09-20T00:00+00:00",
-   "home": "TCU",
-   "away": "Arkansas State",
-   "fcs": false,
-   "neutral": false,
-   "spread": null,
-   "total": null,
-   "book": null,
-   "home_conf": "Big 12",
-   "away_conf": "Sun Belt",
-   "proj_home": 31.6,
-   "proj_away": 20.7,
-   "home_rank": null,
-   "away_rank": null
-  },
-  {
    "id": 401862776,
    "league": "ncaaf",
    "week": 3,
@@ -5939,21 +4388,21 @@
    "away_rank": null
   },
   {
-   "id": 401860885,
+   "id": 401862775,
    "league": "ncaaf",
    "week": 3,
-   "start": "2026-09-20T02:00+00:00",
-   "home": "Boise State",
-   "away": "South Dakota",
+   "start": "2026-09-20T00:00+00:00",
+   "home": "Tulsa",
+   "away": "East Texas A&M",
    "fcs": true,
    "neutral": false,
    "spread": null,
    "total": null,
    "book": null,
-   "home_conf": "Pac-12",
-   "away_conf": "MVFC",
-   "proj_home": 36.7,
-   "proj_away": 18.3,
+   "home_conf": "American Athletic",
+   "away_conf": "Southland",
+   "proj_home": 32.1,
+   "proj_away": 20.3,
    "home_rank": null,
    "away_rank": null
   },
@@ -5977,21 +4426,21 @@
    "away_rank": null
   },
   {
-   "id": 401864507,
+   "id": 401860885,
    "league": "ncaaf",
    "week": 3,
-   "start": "2026-09-20T02:30+00:00",
-   "home": "Sacramento State",
-   "away": "North Dakota State",
-   "fcs": false,
+   "start": "2026-09-20T02:00+00:00",
+   "home": "Boise State",
+   "away": "South Dakota",
+   "fcs": true,
    "neutral": false,
    "spread": null,
    "total": null,
    "book": null,
-   "home_conf": "Mid-American",
-   "away_conf": "Mountain West",
-   "proj_home": 24.7,
-   "proj_away": 25.7,
+   "home_conf": "Pac-12",
+   "away_conf": "MVFC",
+   "proj_home": 36.7,
+   "proj_away": 18.3,
    "home_rank": null,
    "away_rank": null
   },
@@ -6015,21 +4464,21 @@
    "away_rank": null
   },
   {
-   "id": 401858458,
+   "id": 401864507,
    "league": "ncaaf",
    "week": 3,
-   "start": "2026-09-20T03:00+00:00",
-   "home": "UCLA",
-   "away": "Purdue",
+   "start": "2026-09-20T02:30+00:00",
+   "home": "Sacramento State",
+   "away": "North Dakota State",
    "fcs": false,
    "neutral": false,
    "spread": null,
    "total": null,
    "book": null,
-   "home_conf": "Big Ten",
-   "away_conf": "Big Ten",
-   "proj_home": 25.4,
-   "proj_away": 24.9,
+   "home_conf": "Mid-American",
+   "away_conf": "Mountain West",
+   "proj_home": 24.7,
+   "proj_away": 25.7,
    "home_rank": null,
    "away_rank": null
   },
@@ -6068,6 +4517,25 @@
    "away_conf": "Big Sky",
    "proj_home": 23.3,
    "proj_away": 27.3,
+   "home_rank": null,
+   "away_rank": null
+  },
+  {
+   "id": 401858458,
+   "league": "ncaaf",
+   "week": 3,
+   "start": "2026-09-20T03:00+00:00",
+   "home": "UCLA",
+   "away": "Purdue",
+   "fcs": false,
+   "neutral": false,
+   "spread": null,
+   "total": null,
+   "book": null,
+   "home_conf": "Big Ten",
+   "away_conf": "Big Ten",
+   "proj_home": 25.4,
+   "proj_away": 24.9,
    "home_rank": null,
    "away_rank": null
   },
@@ -6322,7 +4790,7 @@
    }
   }
  ],
- "lines_generated": "2026-09-13T02:17:50+00:00",
+ "lines_generated": "2026-09-13T03:17:44+00:00",
  "sim": {
   "sd": {
    "ncaaf": 15.2,
