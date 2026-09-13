@@ -9,4 +9,902 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-PLACEHOLDER_WILL_NOT_USE
+:root{
+  --field:#14312A; --field2:#0E241F; --rule:#26463D;
+  --chalk:#F2F0E9; --chalk2:#A9BDB4;
+  --slip:#FFFFFF; --paper:#F7F6F2; --tint:#F3F7F4;
+  --ink:#101815; --muted:#6B7A74; --line:#D8D5CC;
+  --good:#1C7C4A; --bad:#A32F2F; --mid:#8A6D00; --flag:#E8B93C;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--field);color:var(--ink);
+  font-family:Barlow,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 18px 110px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.cond{font-family:"Barlow Condensed",Barlow,sans-serif}
+.hidden{display:none !important}
+button{font-family:inherit;font-weight:500;cursor:pointer;border-radius:4px;border:1px solid transparent;padding:10px 14px;font-size:15px;min-height:44px}
+button:disabled{cursor:default;opacity:.6}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:4px;font-family:inherit;font-size:16px;background:#fff;color:var(--ink);min-height:44px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:3px}
+
+/* ---------- header + nav ---------- */
+header{color:var(--chalk);padding:4px 0 14px}
+h1{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:0}
+header p{margin:6px 0 0;color:var(--chalk2);font-size:15px;max-width:52ch}
+.tag{display:inline-block;margin-top:10px;font-size:13px;color:var(--chalk2);border:1px solid var(--rule);border-radius:3px;padding:3px 8px}
+.tag.stale{border-color:var(--flag);color:var(--flag)}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 12px;min-height:36px}
+.ghost.light{border-color:#3A5D53;color:var(--chalk2)}
+.primary{background:var(--flag);color:#3A2E06;font-weight:600;font-size:17px;font-family:"Barlow Condensed",sans-serif;letter-spacing:.02em;padding:13px 16px;width:100%}
+.tabs{display:flex;gap:6px;margin:6px 0 4px}
+.tab{flex:1;background:transparent;border:1px solid var(--rule);color:var(--chalk2);padding:10px;
+  font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;letter-spacing:.02em}
+.tab[aria-selected="true"]{background:var(--flag);color:#3A2E06;border-color:var(--flag)}
+.tab .n{display:inline-block;min-width:22px;padding:0 6px;border-radius:11px;background:rgba(0,0,0,.18);font-size:14px;margin-left:6px}
+
+/* ---------- league switch ---------- */
+.lg{display:flex;gap:6px;margin:10px 0 0;max-width:420px}
+.lg .chip{background:transparent;border-color:var(--rule);color:var(--chalk2);font-family:"Barlow Condensed",sans-serif;font-size:18px;letter-spacing:.02em}
+.lg .chip[aria-pressed="true"]{background:var(--chalk);color:var(--ink);border-color:var(--chalk)}
+.lg .chip .n{font-family:Barlow,sans-serif;font-weight:400;font-size:13px;margin-left:6px;opacity:.8}
+.gameHead .lgTag{border:1px solid var(--line);border-radius:3px;padding:0 5px;margin-left:6px;font-size:11px}
+
+/* ---------- panels ---------- */
+.slip{background:var(--slip);border-radius:6px;padding:14px;margin-top:14px;border-left:4px solid var(--field)}
+.slip h2{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:600;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.slip h2 .sub{font-family:Barlow,sans-serif;font-weight:400;font-size:13px;color:var(--muted)}
+.board{background:var(--field2);border:1px solid var(--rule);border-radius:6px;padding:16px;margin-top:14px;color:var(--chalk)}
+.board .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:64px;line-height:.9}
+.board .sub{color:var(--chalk2);font-size:14px;margin-top:4px}
+.verdict{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:24px;margin-top:12px}
+.pos{color:#7ED9A2}.neg{color:#F2A0A0}.mid{color:#E8D9A0}
+.slip .pos{color:var(--good)}.slip .neg{color:var(--bad)}.slip .mid{color:var(--mid)}
+.why{color:var(--chalk2);font-size:15px;margin-top:4px;line-height:1.45}
+.math{margin-top:12px;border-top:1px solid var(--rule);padding-top:10px}
+.math summary{cursor:pointer;color:var(--chalk2);font-size:14px;list-style:none;min-height:28px}
+.math summary::before{content:"▸ "}.math[open] summary::before{content:"▾ "}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:8px}
+.grid2 span{display:block;color:var(--chalk2);font-size:13px}
+.grid2 strong{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:24px}
+.note{color:var(--chalk2);font-size:14px;margin-top:14px;line-height:1.45}
+.note b{color:var(--chalk)}
+.small{font-size:13px;color:var(--muted)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.est{display:inline-block;font-size:12px;color:var(--mid);border:1px solid var(--mid);border-radius:3px;padding:0 6px;margin-left:6px;vertical-align:middle}
+.actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.actions button{flex:1}
+.chips{display:flex;gap:6px}
+.chip{flex:1;background:transparent;border:1px solid var(--line);color:var(--ink);padding:8px 0;font-size:17px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--field);color:var(--chalk);border-color:var(--field)}
+.warn{background:#FFF6DC;border-left:4px solid var(--flag);padding:10px 12px;font-size:14px;margin-top:10px;border-radius:0 4px 4px 0}
+.empty{color:var(--muted);font-size:15px;padding:8px 0}
+
+/* ---------- logos ---------- */
+.logo{width:44px;height:44px;border-radius:50%;background:var(--tint);border:1px solid var(--line);flex:none;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--ink)}
+.logo img{width:36px;height:36px;object-fit:contain}
+.logo.sm{width:28px;height:28px;font-size:11px}.logo.sm img{width:22px;height:22px}
+.logo.duo{position:relative;background:#fff}
+.logo.duo img{position:absolute;width:26px;height:26px}
+.logo.duo img:first-child{left:3px;top:3px}.logo.duo img:last-child{right:3px;bottom:3px}
+
+/* ---------- build your own ---------- */
+.day summary{cursor:pointer;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;padding:10px 0;border-bottom:1px solid var(--line);list-style:none;display:flex;justify-content:space-between}
+.day summary::after{content:"▸";color:var(--muted)}.day[open] summary::after{content:"▾"}
+.dayGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;padding:6px 0}
+@media(max-width:900px){.dayGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.dayGrid{grid-template-columns:1fr}}
+.game{padding:10px 0;border-bottom:1px solid #EEECE6}
+.gHead{display:flex;align-items:center;gap:8px;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px}
+.gHead .when{margin-left:auto;font-family:Barlow,sans-serif;font-weight:400;font-size:13px;color:var(--muted);white-space:nowrap}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.pick{background:#fff;border:1px solid var(--line);color:var(--ink);text-align:left;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:500}
+.pick b{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:17px;color:var(--muted)}
+.pick[aria-pressed="true"]{background:var(--field);color:var(--chalk);border-color:var(--field)}
+.pick.na{opacity:.45;text-decoration:line-through}
+.pick[aria-pressed="true"] b{color:var(--chalk)}
+
+/* ---------- legs (card + hot slips) ---------- */
+.gameHead{display:flex;justify-content:space-between;gap:8px;padding:10px 0 2px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.leg{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:start;padding:8px 0}
+.leg .right{text-align:right}
+.leg .rm{display:block;margin:6px 0 0 auto;font-size:13px;min-height:32px;padding:4px 8px;border:1px solid transparent;background:transparent;color:var(--bad)}
+.leg .pickName{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:21px;line-height:1.1}
+.leg .who{font-size:13px;color:var(--muted);margin-top:2px}
+.leg .pct{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:26px;text-align:right;line-height:1}
+.leg .pct small{display:block;font-family:Barlow,sans-serif;font-weight:400;font-size:11px;color:var(--muted);margin-top:2px}
+.leg .dk{font-size:12px;color:var(--muted);margin-top:4px}
+.nudge{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+.nudge button{padding:0;width:44px;height:44px;font-size:20px;line-height:1;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:600}
+.nudge .val{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px;min-width:64px;height:44px;padding:0 6px;text-align:center;
+  background:var(--paper);border:1px dashed var(--muted);color:var(--ink)}
+.nudge .val.moved{color:var(--mid);border-color:var(--mid)}
+.nudge .hint{font-size:12px;color:var(--muted)}
+.together{margin:2px 0 6px;padding:6px 10px;background:var(--tint);border-radius:4px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.together b{color:var(--ink)}
+.together button{padding:4px 9px;font-size:12px;min-height:32px;border:1px solid var(--bad);color:var(--bad);background:#fff}
+.together button.done{border-color:var(--line);color:var(--muted);background:var(--paper)}
+.leg .na{display:block;margin:6px 0 0 auto;font-size:12px;min-height:32px;padding:4px 8px;border:1px solid var(--line);background:var(--paper);color:var(--muted);white-space:nowrap}
+.leg .na:hover{border-color:var(--bad);color:var(--bad)}
+
+/* ---------- hot slips ---------- */
+#hotOut{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;align-items:start}
+@media(max-width:900px){#hotOut{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){#hotOut{grid-template-columns:1fr}}
+.hs{background:var(--slip);border-radius:6px;border-left:4px solid var(--field);overflow:hidden}
+.hs.open{border-left-color:var(--flag)}
+.hsHead{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:none;border-top:0;border-right:0;border-left:0;text-align:left;border-radius:0;font:inherit;color:inherit}
+.hsHead .rank{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 7px}
+.hsHead .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:34px;line-height:1}
+.hsHead .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.hsBody{padding:0 14px 6px}
+.hs:not(.open) .hsBody .nudge,.hs:not(.open) .hsFoot{display:none}
+.hs:not(.open) .hsBody .leg{padding:6px 0}
+.hsFoot{display:flex;gap:10px;padding:8px 14px 14px}
+.hsFoot button{flex:1}
+
+/* ---------- sticky slip bar ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--chalk);border-top:3px solid var(--flag);padding:10px 14px;z-index:5;box-shadow:0 -6px 20px rgba(0,0,0,.25)}
+.bar .in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.bar .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:28px;line-height:1}
+.bar .sub{font-size:13px;color:var(--muted)}
+.bar button{margin-left:auto;width:auto;padding:10px 18px}
+
+/* ---------- line sheet ---------- */
+dialog{border:0;border-radius:10px 10px 0 0;padding:0;width:100%;max-width:640px;margin:auto auto 0;background:var(--slip);color:var(--ink);max-height:88vh}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.sheet{padding:14px}
+.sheet h2{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:600;margin:0 0 4px;display:flex;justify-content:space-between;align-items:center}
+.sheet .close{width:44px;height:44px;padding:0;border:1px solid var(--line);background:#fff;font-size:20px}
+.ladder{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+.ladder th{color:var(--muted);font-weight:500;font-size:13px;text-align:right;padding:6px 4px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+.ladder td{text-align:right;padding:0 4px;border-bottom:1px solid #EEECE6}
+.ladder th:first-child,.ladder td:first-child{text-align:left}
+.ladder tr.base td{background:var(--tint);font-weight:600}
+.ladder tr.cur td{outline:2px solid var(--flag);outline-offset:-2px}
+.ladder td.p{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px}
+.ladder button.use{width:100%;text-align:left;background:none;border:0;padding:10px 4px;font:inherit;color:inherit;border-radius:0}
+.scroll{overflow:auto;max-height:60vh}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Clover</h1>
+  <p>Tap picks onto a slip. Clover tells you the true chance the whole thing hits and whether the payout is worth it — in one word.</p>
+  <div class="tag" id="ratingsTag">Loading lines…</div>
+  <button class="ghost light" id="reload" type="button" style="margin:10px 0 0 6px">Reload</button>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" id="tabSlips" aria-selected="true" aria-controls="viewSlips">Slips</button>
+  <button class="tab" role="tab" id="tabCard" aria-selected="false" aria-controls="viewCard">The Card<span class="n" id="tabCount">0</span></button>
+</div>
+
+<!-- ================= SLIPS ================= -->
+<section id="viewSlips" role="tabpanel">
+  <div class="lg" id="leagueChips" role="group" aria-label="League">
+    <button type="button" class="chip" data-league="ncaaf" aria-pressed="true">College<span class="n" id="nNcaaf"></span></button>
+    <button type="button" class="chip" data-league="nfl" aria-pressed="false">NFL<span class="n" id="nNfl"></span></button>
+  </div>
+
+  <div class="slip">
+    <h2>Filters</h2>
+    <div class="row">
+      <div><label for="fDate">Date</label><select id="fDate"></select></div>
+      <div><label for="fTime">Game time</label><select id="fTime">
+        <option value="all">All game times</option>
+        <option value="morning">Morning (before 12pm)</option>
+        <option value="afternoon">Afternoon (12&ndash;4pm)</option>
+        <option value="evening">Evening (4&ndash;8pm)</option>
+        <option value="primetime">Primetime (8pm+)</option>
+      </select></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div><label for="fConf">Conference</label><select id="fConf"></select></div>
+      <div id="fDivWrap" class="hidden"><label for="fDiv">Division</label><select id="fDiv"></select></div>
+    </div>
+    <div class="row" id="fRowNcaafExtra" style="margin-top:10px">
+      <div><label>Classification</label>
+        <div class="chips">
+          <button type="button" class="chip" id="fFbs" aria-pressed="false">FBS</button>
+          <button type="button" class="chip" id="fFcs" aria-pressed="false">FCS</button>
+        </div>
+      </div>
+      <div><label>&nbsp;</label>
+        <button type="button" class="chip" id="fTop25" aria-pressed="false" style="width:100%">Top 25 (AP)</button>
+      </div>
+    </div>
+    <p class="small" id="filterCount" style="margin:10px 0 0"></p>
+  </div>
+
+  <div class="slip">
+    <h2>Hot slips <span class="sub">most likely to hit, at market lines</span></h2>
+    <div class="row">
+      <div><label>How many picks?</label>
+        <div class="chips" id="chips" role="group" aria-label="Number of picks"></div></div>
+      <div><label>Pick types my app offers</label>
+        <div class="chips" id="markets" role="group" aria-label="Pick types offered"></div></div>
+    </div>
+    <p class="small" id="hotStatus" style="margin:10px 0 0"></p>
+  </div>
+  <div id="hotOut"></div>
+
+  <div class="slip">
+    <h2>Build your own <span class="sub">tap a pick to add it</span></h2>
+    <div id="games"></div>
+  </div>
+
+  <p class="note"><b>How this works.</b> Every game with a line is played out 20,000 times ahead of time, centered on the market line — nobody beats the line, so we don't try. Hot slips are the combinations most likely to hit, with same-game picks played out together so a favorite plus its own spread counts for what it really is. Tap any slip to nudge a line and watch the chance update. College and NFL each get their own hot slips; your own slip can mix both. <b>Not on my app</b> drops a pick your app doesn't offer and reshuffles around it — that's remembered until the game is off the board. <b>Prohibited</b> logs a pair your app wouldn't let you combine — it's a notebook, it doesn't change the picks.</p>
+  <div class="actions">
+    <button class="ghost light hidden" id="naClear" type="button">Not on my app (0) · clear</button>
+    <button class="ghost light hidden" id="prohibCopy" type="button">Copy Prohibited log (0)</button>
+    <button class="ghost light hidden" id="prohibClear" type="button">Clear log</button>
+  </div>
+</section>
+
+<!-- ================= THE CARD ================= -->
+<section id="viewCard" role="tabpanel" class="hidden"><div class="two"><div>
+  <div class="board">
+    <div class="big" id="bigProb">—</div>
+    <div class="sub" id="bigSub">Add picks from the Slips tab</div>
+    <div class="verdict" id="verdict"></div>
+    <div class="why" id="why"></div>
+    <details class="math" id="mathBox">
+      <summary>Show the math</summary>
+      <div class="grid2">
+        <div><span>$1 pays</span><strong id="oBook">—</strong></div>
+        <div><span>Needs to hit</span><strong id="oBreak">—</strong></div>
+        <div><span>Fair payout for this</span><strong id="oFair">—</strong></div>
+        <div><span>Edge per $1</span><strong id="oEv">—</strong></div>
+      </div>
+      <p class="note" style="font-size:13px;margin-top:10px">"Needs to hit" is the win rate you'd need at that payout just to break even. Above it, you're getting the better end. Below it, the app is.</p>
+    </details>
+  </div>
+
+  <div class="slip">
+    <h2>Payout</h2>
+    <div class="row">
+      <div><label for="pays">Your app pays, on $1 <span class="est" id="paysEst">est.</span></label>
+        <input id="pays" type="number" step="0.01" min="1" inputmode="decimal" placeholder="e.g. 6.00"></div>
+      <div><label for="who">Whose pick</label>
+        <select id="who"><option>Danny</option><option>Jaclyn</option></select></div>
+    </div>
+    <p class="small" id="paysNote" style="margin:8px 0 0">Type what your app shows for this slip. Until you do, this is a typical pick'em payout — an estimate.</p>
+  </div>
+</div><div>
+  <div class="slip" style="margin-top:14px">
+    <h2>Picks <button class="ghost" id="clearSlip" type="button">Clear</button></h2>
+    <div id="legs"></div>
+  </div>
+
+  <div class="board" id="stressBox">
+    <div class="sub" style="margin:0">How sure is this?</div>
+    <p id="stressOut" style="margin:6px 0 0;font-size:15px"></p>
+    <p class="note" style="font-size:13px;margin-top:8px">The line is never exact. This re-runs the slip with the total and the margin each nudged up to 3 points either way — 49 versions of the game. If the verdict holds, it's solid. If it flips, the slip is closer to a coin toss than it looks.</p>
+  </div>
+
+  <div class="actions">
+    <button class="ghost light" id="copy" type="button">Copy row for the log</button>
+    <button class="ghost light" id="backToSlips" type="button">Add more picks</button>
+  </div>
+  <p class="note">College lines auto-fill from DraftKings and NFL lines from ESPN BET — both run close to most pick'em apps. If your app shows a different number, tap the line and pick it from the list.</p>
+</div></div></section>
+
+</div>
+
+<div class="bar hidden" id="bar">
+  <div class="in">
+    <div><div class="big" id="barProb">—</div><div class="sub" id="barSub"></div></div>
+    <button class="primary" id="barGo" type="button">See the Card</button>
+  </div>
+</div>
+
+<dialog id="sheet" aria-label="Every line for this pick"><div class="sheet" id="sheetIn"></div></dialog>
+
+<script>
+/* ===================================================================
+   DATA — ratings.js is written by refresh.py. Every game with a line
+   carries a table of how often it ends with total T and margin M.
+   The page never simulates; it looks things up.
+   =================================================================== */
+let R=null, GAMES=[], BY_ID={}, LOGOS={}, COLORS={};
+const GRIDS={};                               // gi -> decoded table
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+/* leagues: every game carries league = "ncaaf" | "nfl" (college if missing) */
+const LEAGUES=["ncaaf","nfl"], LEAGUE_NAME={ncaaf:"College",nfl:"NFL"};
+let league="ncaaf";
+const lgOf=G=>G.league||"ncaaf";
+/* NFL names are long ("Kansas City Chiefs"); where space is tight use "Chiefs" */
+const shortName=(G,t)=>lgOf(G)==="nfl"?((t===G.home?G.home_short:G.away_short)||t):t;
+function loadLeague(){ try{ const v=localStorage.getItem("cloverLeague"); if(LEAGUES.includes(v)) league=v; }catch(e){} }
+function setLeague(v){
+  league=v; try{localStorage.setItem("cloverLeague",v);}catch(e){}
+  document.querySelectorAll("#leagueChips .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.league===v));
+  populateFilterOptions();
+  renderGames(); renderHot();
+}
+
+/* ===================================================================
+   FILTERS — Date, Game time (both leagues); Conference/FBS/FCS/Top25
+   (college); Conference/Division (NFL). Applied to both Build your own
+   and Hot Slips, so a filtered-out game can't be searched into a slip.
+   =================================================================== */
+const TIME_BUCKETS={morning:h=>h<12, afternoon:h=>h>=12&&h<16, evening:h=>h>=16&&h<20, primetime:h=>h>=20};
+function defaultFilters(){ return {date:"weekend", time:"all", conf:"all", div:"all", fbs:false, fcs:false, top25:false}; }
+let FILTERS={ncaaf:defaultFilters(), nfl:defaultFilters()};
+function loadFilters(){
+  try{
+    const s=JSON.parse(localStorage.getItem("cloverFilters")||"null");
+    if(s&&s.ncaaf) FILTERS.ncaaf=Object.assign(defaultFilters(),s.ncaaf);
+    if(s&&s.nfl) FILTERS.nfl=Object.assign(defaultFilters(),s.nfl);
+  }catch(e){}
+}
+function saveFilters(){ try{localStorage.setItem("cloverFilters",JSON.stringify(FILTERS));}catch(e){} }
+function dateKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function gameDateKey(G){ return dateKey(new Date(G.start)); }
+/* the Thu-Mon window we're either in, or heading into next (Tue/Wed = between weekends) */
+function weekendWindow(){
+  const now=new Date(), day=now.getDay(), sinceThu=(day-4+7)%7;      // Thu=0..Wed=6
+  const thu=new Date(now);
+  thu.setDate(now.getDate()+(sinceThu<=4 ? -sinceThu : 7-sinceThu));
+  thu.setHours(0,0,0,0);
+  const mon=new Date(thu); mon.setDate(thu.getDate()+4); mon.setHours(23,59,59,999);
+  return {thu,mon};
+}
+function gameInWeekend(G,win){ const t=new Date(G.start).getTime(); return t>=win.thu.getTime()&&t<=win.mon.getTime(); }
+function filterGame(G){
+  const lg=lgOf(G), f=FILTERS[lg]; if(!f) return true;
+  const d=new Date(G.start);
+  if(f.date==="weekend"){ if(!gameInWeekend(G,weekendWindow())) return false; }
+  else if(f.date!=="all"){ if(gameDateKey(G)!==f.date) return false; }
+  if(f.time!=="all"){ const test=TIME_BUCKETS[f.time]; if(test&&!test(d.getHours())) return false; }
+  if(f.conf!=="all" && G.home_conf!==f.conf && G.away_conf!==f.conf) return false;
+  if(lg==="ncaaf"){
+    if(f.fbs||f.fcs){ const isFcs=!!G.fcs; if(f.fbs&&!f.fcs&&isFcs) return false; if(f.fcs&&!f.fbs&&!isFcs) return false; }
+    if(f.top25 && !G.home_rank && !G.away_rank) return false;
+  } else {
+    if(f.div!=="all" && G.home_div!==f.div && G.away_div!==f.div) return false;
+  }
+  return true;
+}
+function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg&&filterGame(x.G)); }
+function populateFilterOptions(){
+  const lg=league, games=GAMES.filter(G=>G.sim&&lgOf(G)===lg), f=FILTERS[lg];
+  const lbl=d=>`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;
+  const dSel=document.getElementById("fDate"), win=weekendWindow();
+  const dates=[...new Set(games.map(gameDateKey))].sort();
+  dSel.innerHTML=`<option value="weekend">This weekend (${lbl(win.thu)}–${lbl(win.mon)})</option><option value="all">All upcoming dates</option>`
+    +dates.map(k=>{ const [y,m,dd]=k.split("-").map(Number); return `<option value="${k}">${esc(lbl(new Date(y,m-1,dd)))}</option>`; }).join("");
+  dSel.value=[...dSel.options].some(o=>o.value===f.date)?f.date:"weekend";
+  document.getElementById("fTime").value=f.time;
+
+  const cSel=document.getElementById("fConf");
+  if(lg==="ncaaf"){
+    const confs=[...new Set(games.flatMap(G=>[G.home_conf,G.away_conf]).filter(Boolean))].sort();
+    cSel.innerHTML=`<option value="all">All conferences</option>`+confs.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  } else {
+    cSel.innerHTML=`<option value="all">All conferences</option><option value="AFC">AFC</option><option value="NFC">NFC</option>`;
+  }
+  cSel.value=[...cSel.options].some(o=>o.value===f.conf)?f.conf:"all";
+
+  document.getElementById("fDivWrap").classList.toggle("hidden",lg!=="nfl");
+  if(lg==="nfl"){
+    const divs=[...new Set(games.flatMap(G=>[G.home_div,G.away_div]).filter(Boolean))].sort();
+    const dvSel=document.getElementById("fDiv");
+    dvSel.innerHTML=`<option value="all">All divisions</option>`+divs.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join("");
+    dvSel.value=[...dvSel.options].some(o=>o.value===f.div)?f.div:"all";
+  }
+  document.getElementById("fRowNcaafExtra").classList.toggle("hidden",lg!=="ncaaf");
+  if(lg==="ncaaf"){
+    document.getElementById("fFbs").setAttribute("aria-pressed",!!f.fbs);
+    document.getElementById("fFcs").setAttribute("aria-pressed",!!f.fcs);
+    document.getElementById("fTop25").setAttribute("aria-pressed",!!f.top25);
+  }
+}
+document.getElementById("fDate").onchange=e=>{FILTERS[league].date=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fTime").onchange=e=>{FILTERS[league].time=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fConf").onchange=e=>{FILTERS[league].conf=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fDiv").onchange=e=>{FILTERS[league].div=e.target.value;saveFilters();renderGames();renderHot();};
+document.getElementById("fFbs").onclick=()=>{FILTERS.ncaaf.fbs=!FILTERS.ncaaf.fbs;saveFilters();populateFilterOptions();renderGames();renderHot();};
+document.getElementById("fFcs").onclick=()=>{FILTERS.ncaaf.fcs=!FILTERS.ncaaf.fcs;saveFilters();populateFilterOptions();renderGames();renderHot();};
+document.getElementById("fTop25").onclick=()=>{FILTERS.ncaaf.top25=!FILTERS.ncaaf.top25;saveFilters();populateFilterOptions();renderGames();renderHot();};
+
+function gridFor(gi){
+  if(GRIDS[gi]) return GRIDS[gi];
+  const s=GAMES[gi]&&GAMES[gi].sim; if(!s) return null;
+  const raw=atob(s.c), vals=[]; let v=0, sh=0;
+  for(let i=0;i<raw.length;i++){ const b=raw.charCodeAt(i); v|=(b&0x7f)<<sh; if(b&0x80) sh+=7; else { vals.push(v); v=0; sh=0; } }
+  const k=vals.length>>1, T=new Int16Array(k), M=new Int16Array(k), C=new Int32Array(k);
+  let idx=-1;
+  for(let j=0;j<k;j++){ idx+=vals[2*j]+1; C[j]=vals[2*j+1]; T[j]=s.t0+Math.floor(idx/s.nm); M[j]=s.m0+idx%s.nm; }
+  return GRIDS[gi]={T,M,C,k,n:s.n};
+}
+/* positive = hits, 0 = push, negative = loses. Line is always the side's OWN number. */
+function legVal(type,line,t,m){
+  switch(type){
+    case "over":   return t-line;
+    case "under":  return line-t;
+    case "homeSp": return m+line;
+    case "awaySp": return line-m;
+    case "homeML": return m;
+    default:       return -m;                 // awayML
+  }
+}
+/* chance every leg (all from game gi) hits together, pushes thrown out.
+   dt/dm shift the whole game by that many points (stress test). */
+function prob(gi,legs,dt=0,dm=0){
+  const g=gridFor(gi); if(!g) return null;
+  let win=0, push=0;
+  for(let j=0;j<g.k;j++){
+    const t=g.T[j]+dt, m=g.M[j]+dm; let ok=true, pu=false;
+    for(let x=0;x<legs.length;x++){ const v=legVal(legs[x].type,legs[x].line,t,m); if(v===0){pu=true;break;} if(v<0){ok=false;break;} }
+    if(pu) push+=g.C[j]; else if(ok) win+=g.C[j];
+  }
+  const d=g.n-push; return d>0 ? win/d : 0;
+}
+/* the whole slip: legs grouped by game, same-game legs looked up together */
+function slipProb(legs,dt=0,dm=0){
+  const by={}; legs.forEach(l=>{(by[l.gi]=by[l.gi]||[]).push(l);});
+  let joint=1; const groups=[];
+  for(const gi in by){ const G=by[gi], p=prob(+gi,G,dt,dm); const indep=G.reduce((a,l)=>a*prob(+gi,[l],dt,dm),1); joint*=p; groups.push({gi:+gi,legs:G,p,indep}); }
+  return {joint,groups};
+}
+
+/* ---------- odds math ---------- */
+const amToP=a=>a<0?-a/(-a+100):100/(a+100);
+const toDec=a=>a>0?1+a/100:1+100/Math.abs(a);
+/* What DraftKings pays for this exact line, and their chance once the cut is removed. null if DK doesn't list it. */
+function dkQuote(G,type,line){
+  const A=G&&G.alt; if(!A||line==null) return null;
+  const find=(arr,pt)=>{const r=(arr||[]).find(x=>Math.abs(x[0]-pt)<1e-9);return r?r[1]:null;};
+  let mine=null, other=null;
+  if(type==="over"){mine=find(A.totals.over,line);other=find(A.totals.under,line);}
+  else if(type==="under"){mine=find(A.totals.under,line);other=find(A.totals.over,line);}
+  else if(type==="homeSp"){mine=find(A.spreads.home,line);other=find(A.spreads.away,-line);}
+  else if(type==="awaySp"){mine=find(A.spreads.away,line);other=find(A.spreads.home,-line);}
+  if(mine===null) return null;
+  const pa=amToP(mine), fair=other===null?null:pa/(pa+amToP(other));
+  return {am:(mine>0?"+":"")+mine, dec:toDec(mine), fair};
+}
+/* Typical pick'em multipliers - a STAND-IN until you type the real payout. */
+const PAYOUT={1:1.909,2:3,3:6,4:10,5:20,6:25};
+function grade(ev){
+  if(ev>=0.15) return {word:"Great",cls:"pos",why:"Pays well above what the odds deserve."};
+  if(ev>=0.05) return {word:"Good",cls:"pos",why:"You're getting a little better than fair."};
+  if(ev>=-0.05)return {word:"Coin toss",cls:"mid",why:"Roughly fair. Fun money, not smart money."};
+  if(ev>=-0.20)return {word:"Bad",cls:"neg",why:"Doesn't pay enough for how often it hits."};
+  return {word:"Terrible",cls:"neg",why:"Long shot that pays like a short one."};
+}
+const ORDER=["Great","Good","Coin toss","Bad","Terrible"];
+const pct=p=>p==null?"—":p>0.995?">99%":p<0.005?"<1%":(p*100).toFixed(p<0.1?1:0)+"%";
+const fmtSp=v=>(v>0?"+":"")+v;
+const money=d=>"$"+d.toFixed(2);
+
+/* ---------- labels ---------- */
+function marketLine(G,type){ return type==="over"||type==="under"?G.total:type==="homeSp"?G.spread:type==="awaySp"?-G.spread:null; }
+function hasLine(type){ return type!=="homeML"&&type!=="awayML"; }
+function legLabel(G,l){
+  switch(l.type){
+    case "homeML": return `${G.home} to win`;
+    case "awayML": return `${G.away} to win`;
+    case "homeSp": return `${G.home} ${fmtSp(l.line)}`;
+    case "awaySp": return `${G.away} ${fmtSp(l.line)}`;
+    case "over":   return `Over ${l.line}`;
+    default:       return `Under ${l.line}`;
+  }
+}
+function legTeam(G,type){ return type==="homeML"||type==="homeSp"?G.home:type==="awayML"||type==="awaySp"?G.away:null; }
+function legWho(G,l){ const t=legTeam(G,l.type); return t===null?`${shortName(G,G.away)} @ ${shortName(G,G.home)}`:t===G.home?`vs ${shortName(G,G.away)}`:`at ${shortName(G,G.home)}`; }
+function legMarket(type){ return hasLine(type)?(type==="over"||type==="under"?"Total":"Spread"):"Winner"; }
+function legSide(type){ return type==="homeML"||type==="homeSp"?"home":type==="awayML"||type==="awaySp"?"away":type; }
+function whenShort(G){ const d=new Date(G.start); return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`; }
+function initials(t){ return t.split(/\s+/).map(w=>w[0]).join("").replace(/[^A-Za-z]/g,"").slice(0,3).toUpperCase(); }
+function logoTile(team,sm){
+  const d=document.createElement("div"); d.className="logo"+(sm?" sm":"");
+  const u=LOGOS[team];
+  if(u){ const img=document.createElement("img"); img.src=u; img.alt=""; img.loading="lazy"; img.onerror=()=>{d.textContent=initials(team);}; d.appendChild(img); }
+  else { d.textContent=initials(team); const c=COLORS[team]; if(c){d.style.background=c;d.style.color="#fff";d.style.borderColor=c;} }
+  return d;
+}
+function duoTile(G){
+  const a=LOGOS[G.away], h=LOGOS[G.home], d=document.createElement("div");
+  if(a&&h){ d.className="logo duo"; [a,h].forEach(u=>{const i=document.createElement("img");i.src=u;i.alt="";i.loading="lazy";i.onerror=()=>{d.className="logo";d.textContent="O/U";};d.appendChild(i);}); }
+  else { d.className="logo"; d.textContent="O/U"; }
+  return d;
+}
+
+/* ===================================================================
+   STATE — one slip, shared by every screen. Legs are keyed by game id
+   (not index) so a refresh doesn't scramble them.
+   =================================================================== */
+const S={legs:[], pays:null, who:"Danny"};
+function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line})),pays:S.pays,who:S.who})); }catch(e){} }
+function loadSlip(){
+  try{
+    const s=JSON.parse(localStorage.getItem("cloverSlip")||"null"); if(!s) return;
+    S.pays=s.pays??null; S.who=s.who||"Danny";
+    S.legs=(s.legs||[]).map(l=>{ const gi=BY_ID[l.id]; return gi==null||!GAMES[gi].sim?null:{gi,type:l.type,line:l.line}; }).filter(Boolean);
+  }catch(e){}
+}
+function findLeg(gi,type){ return S.legs.findIndex(l=>l.gi===gi&&l.type===type); }
+function toggleLeg(gi,type){
+  const i=findLeg(gi,type);
+  if(i>=0) S.legs.splice(i,1);
+  else { const G=GAMES[gi]; S.legs.push({gi,type,line:hasLine(type)?marketLine(G,type):0}); }
+  render();
+}
+function setLegs(legs){ S.legs=legs.map(l=>({gi:l.gi,type:l.type,line:hasLine(l.type)?l.line:0})); render(); }
+function payoutFor(n){ return S.pays!=null&&S.pays>1 ? {dec:S.pays,est:false} : PAYOUT[n] ? {dec:PAYOUT[n],est:true} : null; }
+
+/* ===================================================================
+   RENDER
+   =================================================================== */
+let view="slips";
+function show(v){
+  view=v;
+  document.getElementById("viewSlips").classList.toggle("hidden",v!=="slips");
+  document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
+  document.getElementById("tabSlips").setAttribute("aria-selected",v==="slips");
+  document.getElementById("tabCard").setAttribute("aria-selected",v==="card");
+  document.getElementById("bar").classList.toggle("hidden",v!=="slips"||!S.legs.length);
+  window.scrollTo({top:0});
+}
+function render(){
+  saveSlip();
+  renderBar(); renderGames(); renderCard();
+  document.getElementById("tabCount").textContent=S.legs.length;
+}
+function renderBar(){
+  const bar=document.getElementById("bar"), n=S.legs.length;
+  bar.classList.toggle("hidden",view!=="slips"||!n);
+  if(!n) return;
+  const {joint}=slipProb(S.legs), pay=payoutFor(n);
+  const g=pay?grade(joint*pay.dec-1):null;
+  document.getElementById("barProb").textContent=pct(joint);
+  document.getElementById("barSub").textContent=`${n} pick${n>1?"s":""}${g?` · ${g.word}`:""}${pay&&pay.est?" (est. payout)":""}`;
+}
+
+/* ---- build your own: every lined game, grouped by day, six picks each ---- */
+function renderGames(){
+  const out=document.getElementById("games");
+  const all=GAMES.filter(G=>G.sim&&lgOf(G)===league).length, lined=filteredGames(league);
+  const cnt=document.getElementById("filterCount");
+  cnt.textContent = !all ? "" : lined.length===all
+    ? `${all} ${LEAGUE_NAME[league]} game${all===1?"":"s"} with a line`
+    : `Showing ${lined.length} of ${all} ${LEAGUE_NAME[league]} games with a line`;
+  const fkey=league+"|"+JSON.stringify(FILTERS[league]);
+  if(out.dataset.built!==fkey){
+    out.innerHTML="";
+    if(!all){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet — they load closer to game day.</p>`; out.dataset.built=fkey; return; }
+    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters.</p>`; out.dataset.built=fkey; return; }
+    const byDay={};
+    lined.forEach(x=>{ const d=new Date(x.G.start), k=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`; (byDay[k]=byDay[k]||[]).push(x); });
+    let first=true;
+    for(const day in byDay){
+      const det=document.createElement("details"); det.className="day"; det.open=first; first=false;
+      det.innerHTML=`<summary>${esc(day)} <span class="small">${byDay[day].length} games</span></summary><div class="dayGrid"></div>`;
+      const grid=det.querySelector(".dayGrid");
+      byDay[day].forEach(({G,gi})=>{
+        const g=document.createElement("div"); g.className="game";
+        const head=document.createElement("div"); head.className="gHead";
+        head.appendChild(logoTile(G.away,true)); head.appendChild(document.createTextNode(` ${shortName(G,G.away)} @ ${shortName(G,G.home)}`)); head.appendChild(logoTile(G.home,true));
+        const when=document.createElement("span"); when.className="when"; when.textContent=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}); head.appendChild(when);
+        g.appendChild(head);
+        const picks=document.createElement("div"); picks.className="picks";
+        [["awaySp",`${shortName(G,G.away)} ${fmtSp(-G.spread)}`],["homeSp",`${shortName(G,G.home)} ${fmtSp(G.spread)}`],["over",`Over ${G.total}`],["under",`Under ${G.total}`],["awayML",`${shortName(G,G.away)} wins`],["homeML",`${shortName(G,G.home)} wins`]]
+          .forEach(([type,label])=>{
+            const b=document.createElement("button"); b.type="button"; b.className="pick"; b.dataset.gi=gi; b.dataset.type=type;
+            const p=prob(gi,[{type,line:hasLine(type)?marketLine(G,type):0}]);
+            b.innerHTML=`<span>${esc(label)}</span><b>${pct(p)}</b>`;
+            b.onclick=()=>toggleLeg(gi,type);
+            picks.appendChild(b);
+          });
+        g.appendChild(picks); grid.appendChild(g);
+      });
+      out.appendChild(det);
+    }
+    out.dataset.built=fkey;
+  }
+  out.querySelectorAll(".pick").forEach(b=>{ b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0); b.classList.toggle("na",!offered(+b.dataset.gi,b.dataset.type)); b.title=offered(+b.dataset.gi,b.dataset.type)?"":"Marked as not on your app"; });
+}
+
+/* ---- one leg row (used by the Card and by hot slips) ---- */
+function legRow(l,opts){
+  const G=GAMES[l.gi], row=document.createElement("div"); row.className="leg";
+  row.appendChild(legTeam(G,l.type)?logoTile(legTeam(G,l.type)):duoTile(G));
+  const mid=document.createElement("div");
+  mid.innerHTML=`<div class="pickName">${esc(legLabel(G,l))}</div><div class="who">${esc(legWho(G,l))}</div>`;
+  if(hasLine(l.type)){
+    const base=marketLine(G,l.type), moved=l.line!==base, q=dkQuote(G,l.type,l.line);
+    const n=document.createElement("div"); n.className="nudge";
+    n.innerHTML=`<button type="button" data-n="-0.5" aria-label="Lower the line">−</button>
+      <button type="button" class="val${moved?" moved":""}" aria-label="Pick from every line">${legMarket(l.type)==="Spread"?fmtSp(l.line):l.line}</button>
+      <button type="button" data-n="0.5" aria-label="Raise the line">+</button>
+      <span class="hint">${moved?`market ${legMarket(l.type)==="Spread"?fmtSp(base):base}`:"tap number for all lines"}</span>`;
+    n.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{ l.line=Math.round((l.line+ +b.dataset.n)*2)/2; opts.onChange(); });
+    n.querySelector(".val").onclick=()=>openSheet(l,opts.onChange);
+    mid.appendChild(n);
+    const dk=document.createElement("div"); dk.className="dk";
+    dk.textContent=q?`DraftKings pays ${money(q.dec)} (${q.am})${q.fair!==null?` · their chance ${pct(q.fair)}`:""}`:(G.alt?"DraftKings doesn't list this exact line":lgOf(G)==="nfl"?"DK alternate lines load every other Thursday for NFL":"DK alternate lines load Thursdays");
+    mid.appendChild(dk);
+  }
+  row.appendChild(mid);
+  const right=document.createElement("div"); right.className="right";
+  right.innerHTML=`<div class="pct">${pct(prob(l.gi,[l]))}<small>this pick</small></div>`;
+  if(opts.remove){ const b=document.createElement("button"); b.type="button"; b.className="rm"; b.textContent="Remove"; b.setAttribute("aria-label","Remove this pick"); b.onclick=()=>opts.remove(); right.appendChild(b); }
+  if(opts.na){ const b=document.createElement("button"); b.type="button"; b.className="na"; b.textContent="Not on my app"; b.title="My app doesn't offer this pick — drop it and reshuffle"; b.onclick=()=>opts.na(l); right.appendChild(b); }
+  row.appendChild(right);
+  return row;
+}
+/* legs grouped by game with the same-game "together" line */
+function legGroups(container,legs,opts){
+  const {groups}=slipProb(legs);
+  groups.sort((a,b)=>GAMES[a.gi].start.localeCompare(GAMES[b.gi].start));
+  const mixed=new Set(groups.map(gr=>lgOf(GAMES[gr.gi]))).size>1;
+  groups.forEach(gr=>{
+    const G=GAMES[gr.gi];
+    const h=document.createElement("div"); h.className="gameHead"; h.innerHTML=`<span>${esc(shortName(G,G.away))} @ ${esc(shortName(G,G.home))}${mixed?`<span class="lgTag">${LEAGUE_NAME[lgOf(G)]}</span>`:""}</span><span>${esc(whenShort(G))}</span>`;
+    container.appendChild(h);
+    gr.legs.forEach(l=>container.appendChild(legRow(l,{onChange:opts.onChange,na:opts.na,remove:opts.removable?()=>{S.legs.splice(S.legs.indexOf(l),1);render();}:null})));
+    if(gr.legs.length>1){
+      const t=document.createElement("div"); t.className="together";
+      t.innerHTML=`<span>Same game · together <b>${pct(gr.p)}</b> vs ${pct(gr.indep)} if unrelated</span>`;
+      if(opts.prohib){
+        const wrap=document.createElement("span"), logged=new Set(prohibLog().map(r=>r.key));
+        for(let x=0;x<gr.legs.length;x++)for(let y=x+1;y<gr.legs.length;y++){
+          const a=gr.legs[x], c=gr.legs[y], key=prohibKey(G,a,c), done=logged.has(key);
+          const b=document.createElement("button"); b.type="button"; b.className=done?"done":""; b.disabled=done;
+          b.textContent=(done?"Logged ✓":"Prohibited")+(gr.legs.length>2?` · ${legMarket(a.type)} + ${legMarket(c.type)}`:"");
+          b.onclick=()=>{prohibAdd(G,a,c);opts.onChange();}; wrap.appendChild(b); wrap.appendChild(document.createTextNode(" "));
+        }
+        t.appendChild(wrap);
+      }
+      container.appendChild(t);
+    }
+  });
+}
+
+/* ---- The Card: live, no Analyze button ---- */
+function renderCard(){
+  const n=S.legs.length, legsEl=document.getElementById("legs");
+  legsEl.innerHTML="";
+  const paysIn=document.getElementById("pays"), pay=payoutFor(n);
+  document.getElementById("who").value=S.who;
+  if(document.activeElement!==paysIn) paysIn.value=S.pays!=null?S.pays:"";
+  paysIn.placeholder=PAYOUT[n]?PAYOUT[n].toFixed(2):"";
+  document.getElementById("paysEst").classList.toggle("hidden",!(pay&&pay.est));
+  document.getElementById("paysNote").textContent = pay&&!pay.est ? "Using the payout you typed." : pay ? "Type what your app shows for this slip. Until you do, this is a typical pick'em payout — an estimate." : n?"No typical payout on file for that many picks — type your app's.":"";
+  const set=(id,v)=>document.getElementById(id).textContent=v;
+  const v=document.getElementById("verdict");
+  if(!n){
+    set("bigProb","—"); set("bigSub","Add picks from the Slips tab"); v.textContent=""; set("why","");
+    ["oBook","oBreak","oFair","oEv"].forEach(id=>set(id,"—")); set("stressOut","");
+    legsEl.innerHTML=`<p class="empty">Nothing on the card yet.</p>`; return;
+  }
+  legGroups(legsEl,S.legs,{onChange:render,removable:true});
+  const {joint}=slipProb(S.legs);
+  set("bigProb",pct(joint));
+  set("bigSub",n===1?"chance this pick hits":n===2?"chance both picks hit":`chance all ${n} picks hit`);
+  if(!pay){ v.textContent=""; set("why","Type your app's payout above to get a verdict."); ["oBook","oBreak","oFair","oEv"].forEach(id=>set(id,"—")); set("stressOut",""); return; }
+  const dec=pay.dec, ev=joint*dec-1, g=grade(ev), cents=Math.round(Math.abs(ev)*100);
+  v.className="verdict "+g.cls; v.textContent=g.word+(pay.est?" (est. payout)":"");
+  set("why",`${g.why} Bet $1: it pays ${money(dec)} if it hits. On average you get back ${money(joint*dec)} — about ${cents}¢ ${ev>=0?"ahead":"lost"} per $1.`);
+  set("oBook",money(dec)); set("oBreak",(100/dec).toFixed(1)+"%"); set("oFair",joint>0?money(1/joint):"—"); set("oEv",(ev>=0?"+":"−")+cents+"¢");
+  /* stress: total AND margin each nudged -3..+3 → 49 versions of the game, all lookups */
+  const words=[];
+  for(let dt=-3;dt<=3;dt++)for(let dm=-3;dm<=3;dm++) words.push(grade(slipProb(S.legs,dt,dm).joint*dec-1).word);
+  const same=words.filter(w=>w===g.word).length, seen=ORDER.filter(w=>words.includes(w));
+  set("stressOut", same===49 ? `Solid. It stays "${g.word}" no matter which way the game drifts.`
+    : same>=35 ? `Mostly holds. It's "${g.word}" in ${same} of 49 versions, ranging from "${seen[0]}" to "${seen[seen.length-1]}".`
+    : `Shaky. Small changes in the game move it anywhere from "${seen[0]}" to "${seen[seen.length-1]}". Don't lean on this one.`);
+}
+
+/* ---- hot slips: built right here from the tables, so "Not on my app" can
+   reshuffle instantly. Same rules as before: up to 3 picks from one game,
+   ranked by chance the whole slip hits, top slips must actually differ. ---- */
+let hotN=3, HOT=[];
+const HOT_TOP=6, BEAM=600;
+function gameBlocks(gi){
+  const G=GAMES[gi], ok=t=>offered(gi,t);
+  const W=["homeML","awayML"].filter(ok).map(t=>({gi,type:t,line:0}));
+  const P=["homeSp","awaySp"].filter(ok).map(t=>({gi,type:t,line:marketLine(G,t)}));
+  const T=["over","under"].filter(ok).map(t=>({gi,type:t,line:G.total}));
+  const combos=[...W,...P,...T].map(l=>[l]);
+  W.forEach(w=>P.forEach(p=>combos.push([w,p])));
+  W.forEach(w=>T.forEach(t=>combos.push([w,t])));
+  P.forEach(p=>T.forEach(t=>combos.push([p,t])));
+  W.forEach(w=>P.forEach(p=>T.forEach(t=>combos.push([w,p,t]))));
+  return combos.map(legs=>({legs,p:prob(gi,legs)}));
+}
+function buildSlips(N){
+  const gis=filteredGames(league).map(x=>x.gi);
+  let beam=[{k:0,p:1,b:null,prev:null}];
+  gis.forEach(gi=>{
+    const blocks=gameBlocks(gi), by={};
+    const push=x=>{(by[x.k]=by[x.k]||[]).push(x);};
+    beam.forEach(ps=>{ push(ps); blocks.forEach(b=>{ const k=ps.k+b.legs.length; if(k<=N) push({k,p:ps.p*b.p,b,prev:ps}); }); });
+    beam=[]; for(const k in by){ by[k].sort((a,b)=>b.p-a.p); beam.push(...by[k].slice(0,BEAM)); }
+  });
+  const full=beam.filter(x=>x.k===N).sort((a,b)=>b.p-a.p);
+  const need=Math.max(2,Math.ceil(N/2)), out=[];        // no two slips share more than half their picks
+  for(const s of full){
+    const legs=[]; for(let x=s;x&&x.b;x=x.prev) legs.unshift(...x.b.legs);
+    const keys=new Set(legs.map(l=>l.gi+":"+l.type));
+    if(out.some(o=>{let sh=0;o.keys.forEach(k=>{if(keys.has(k))sh++;});return N-sh<need;})) continue;
+    out.push({keys,legs:legs.map(l=>({...l}))});
+    if(out.length===HOT_TOP) break;
+  }
+  return out;
+}
+function renderHot(){
+  const out=document.getElementById("hotOut"), st=document.getElementById("hotStatus");
+  out.innerHTML="";
+  const name=LEAGUE_NAME[league], all=GAMES.filter(G=>G.sim&&lgOf(G)===league).length, lined=filteredGames(league).length;
+  if(!all){ st.textContent=`No ${name} games with lines yet — lines load closer to game day.`; return; }
+  if(!lined){ st.textContent=`No ${name} games match these filters — loosen them to search for slips.`; return; }
+  st.textContent=`Searching ${lined} ${name} games for the best ${hotN}-pick slips…`;
+  setTimeout(()=>{
+    const t0=performance.now();
+    HOT=buildSlips(hotN);
+    if(!HOT.length){ st.textContent="Couldn't build a slip with the pick types your app offers — turn a type back on or clear \"Not on my app\"."; return; }
+    const na=[...NA].filter(k=>BY_ID[k.split("|")[0]]!=null).length;
+    st.textContent=`Top ${HOT.length} ${name} slips from ${lined} games, ranked by the chance the whole slip hits${na?` · skipping ${na} pick${na>1?"s":""} you marked not on your app`:""}. Tap one to adjust lines.`;
+    HOT.forEach((s,i)=>{ const d=document.createElement("div"); d.className="hs"; out.appendChild(d); paintHot(d,s,i); });
+  },20);
+}
+function paintHot(d,s,i){
+  const {joint}=slipProb(s.legs), n=s.legs.length, pay=PAYOUT[n];
+  const moved=s.legs.some(l=>hasLine(l.type)&&l.line!==marketLine(GAMES[l.gi],l.type));
+  const open=d.classList.contains("open");
+  d.innerHTML=`<button type="button" class="hsHead" aria-expanded="${open}">
+      <span class="rank">#${i+1}</span>
+      <span><span class="big">${pct(joint)}</span><span class="sub" style="display:block">chance all ${n} hit${pay?` · $1 pays ${money(pay)} <span class="est">est.</span>`:""}${moved?` · <b style="color:var(--mid)">lines moved</b>`:""}</span></span>
+      <span class="sub">${open?"":"tap to edit"}</span></button>
+    <div class="hsBody"></div>
+    <div class="hsFoot"><button class="primary" type="button" data-use="1">Use this slip</button>${moved?`<button class="ghost" type="button" data-reset="1">Back to market lines</button>`:""}</div>`;
+  const repaint=()=>paintHot(d,s,i);
+  legGroups(d.querySelector(".hsBody"),s.legs,{onChange:repaint,prohib:true,na:l=>{ naAdd(l.gi,l.type); renderGames(); renderHot(); }});
+  d.querySelector(".hsHead").onclick=()=>{ d.classList.toggle("open"); repaint(); };
+  d.querySelector("[data-use]").onclick=()=>{ setLegs(s.legs); show("card"); };
+  const rs=d.querySelector("[data-reset]"); if(rs) rs.onclick=()=>{ s.legs.forEach(l=>{ if(hasLine(l.type)) l.line=marketLine(GAMES[l.gi],l.type); }); repaint(); };
+}
+
+/* ---- line sheet: every rung for one pick (was the Line Mover tab) ---- */
+const MOVES=[]; for(let k=-10;k<=10;k+=0.5) MOVES.push(k);   // every half-point, DK quotes live on the .5s
+function openSheet(l,onChange){
+  const G=GAMES[l.gi], base=marketLine(G,l.type), sp=legMarket(l.type)==="Spread";
+  const side=l.type==="over"?"Over":l.type==="under"?"Under":legTeam(G,l.type);
+  const fmt=v=>sp?fmtSp(v):String(v);
+  const rows=MOVES.map(k=>{ const L=base+k, p=prob(l.gi,[{type:l.type,line:L}]), q=dkQuote(G,l.type,L); return {k,L,p,q}; });
+  const box=document.getElementById("sheetIn");
+  box.innerHTML=`<h2><span>${esc(side)} — every line</span><button type="button" class="close" aria-label="Close">×</button></h2>
+    <p class="small" style="margin:0 0 4px">${esc(shortName(G,G.away))} @ ${esc(shortName(G,G.home))} · market ${esc(fmt(base))}. Tap a line to use it.</p>
+    <div class="scroll"><table class="ladder">
+      <tr><th>Line</th><th>Our chance</th><th>Fair pays</th><th>DK pays</th><th>DK's chance</th></tr>
+      ${rows.map(r=>`<tr class="${r.k===0?"base":""}${r.L===l.line?" cur":""}" data-l="${r.L}">
+        <td><button type="button" class="use">${esc(fmt(r.L))}${r.k===0?" <span class='small'>(market)</span>":""}</button></td>
+        <td class="p">${pct(r.p)}</td><td>${r.p>0?money(1/r.p):"—"}</td>
+        <td>${r.q?`${money(r.q.dec)} <span class="small">${r.q.am}</span>`:"—"}</td>
+        <td class="p" style="color:var(--muted)">${r.q&&r.q.fair!==null?pct(r.q.fair):"—"}</td></tr>`).join("")}
+    </table></div>
+    <p class="small" style="margin:10px 0 0">"Fair pays" is what $1 on that line deserves to pay if it hits, by our numbers. "DK pays" is DraftKings' real price for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole numbers can push — prefer the half-point.${G.alt?"":` <b>No DraftKings alternate lines for this game yet</b> — ${lgOf(G)==="nfl"?"NFL ones load every other Thursday":"they load Thursdays"}.`}</p>`;
+  const dlg=document.getElementById("sheet");
+  box.querySelector(".close").onclick=()=>dlg.close();
+  box.querySelectorAll("tr[data-l]").forEach(tr=>tr.querySelector(".use").onclick=()=>{ l.line=+tr.dataset.l; dlg.close(); onChange(); });
+  dlg.showModal();
+  const cur=box.querySelector("tr.cur"); if(cur) cur.scrollIntoView({block:"center"});
+}
+document.getElementById("sheet").addEventListener("click",e=>{ if(e.target.id==="sheet") e.target.close(); });
+
+/* ---- "not on my app": picks the app doesn't offer. Keyed by game id so they
+   expire with the game. These DO change the hot slips (reshuffle). ---- */
+function naLoad(){ try{return new Set(JSON.parse(localStorage.getItem("cloverNA")||"[]"));}catch(e){return new Set();} }
+let NA=new Set();
+function naKey(gi,type){ return `${GAMES[gi].id}|${type}`; }
+function naHas(gi,type){ return NA.has(naKey(gi,type)); }
+function naSave(){ try{ localStorage.setItem("cloverNA",JSON.stringify([...NA].filter(k=>BY_ID[k.split("|")[0]]!=null))); }catch(e){} naButtons(); }
+function naAdd(gi,type){ NA.add(naKey(gi,type)); naSave(); }
+function naButtons(){
+  const b=document.getElementById("naClear"), n=[...NA].filter(k=>BY_ID[k.split("|")[0]]!=null).length;
+  b.textContent=`Not on my app (${n}) · clear`; b.classList.toggle("hidden",!n);
+}
+document.getElementById("naClear").onclick=()=>{ NA=new Set(); naSave(); renderHot(); renderGames(); };
+/* which pick types the app offers at all - a fast global lever */
+let MARKETS={Winner:true,Spread:true,Total:true};
+function marketsLoad(){ try{ Object.assign(MARKETS,JSON.parse(localStorage.getItem("cloverMarkets")||"{}")); }catch(e){} }
+function marketsSave(){ try{ localStorage.setItem("cloverMarkets",JSON.stringify(MARKETS)); }catch(e){} }
+function offered(gi,type){ return MARKETS[legMarket(type)] && !naHas(gi,type); }
+
+/* ---- prohibited log (notebook only — does not change the picks) ---- */
+function prohibLog(){ try{return JSON.parse(localStorage.getItem("udProhibited")||"[]");}catch(e){return [];} }
+function prohibKey(G,a,b){ return `${G.away} @ ${G.home}|${legLabel(G,a)}|${legLabel(G,b)}`; }
+function prohibPattern(a,b){
+  const m=[legMarket(a.type),legMarket(b.type)].sort().join(" + ");
+  if(legMarket(a.type)!=="Total"&&legMarket(b.type)!=="Total") return m+(legSide(a.type)===legSide(b.type)?", same team":", opposite teams");
+  return m;
+}
+function prohibAdd(G,a,b){
+  const L=prohibLog(), key=prohibKey(G,a,b);
+  if(L.some(r=>r.key===key)) return;
+  L.push({key,date:new Date().toISOString().slice(0,10),league:LEAGUE_NAME[lgOf(G)],game:`${G.away} @ ${G.home}`,a:legLabel(G,a),b:legLabel(G,b),pattern:prohibPattern(a,b)});
+  try{localStorage.setItem("udProhibited",JSON.stringify(L.slice(-500)));}catch(e){}
+  prohibButtons();
+}
+function prohibButtons(){
+  const n=prohibLog().length;
+  document.getElementById("prohibCopy").textContent=`Copy Prohibited log (${n})`;
+  document.getElementById("prohibCopy").classList.toggle("hidden",!n); document.getElementById("prohibClear").classList.toggle("hidden",!n);
+}
+document.getElementById("prohibCopy").onclick=()=>{
+  const L=prohibLog();
+  const tsv=["date\tleague\tgame\tpick A\tpick B\tpattern"].concat(L.map(r=>[r.date,r.league||"College",r.game,r.a,r.b,r.pattern].join("\t"))).join("\n");
+  navigator.clipboard.writeText(tsv).then(()=>{const b=document.getElementById("prohibCopy");b.textContent="Copied";setTimeout(prohibButtons,1800);});
+};
+document.getElementById("prohibClear").onclick=()=>{
+  const b=document.getElementById("prohibClear");
+  if(b.dataset.armed){ try{localStorage.removeItem("udProhibited");}catch(e){} delete b.dataset.armed; b.textContent="Clear log"; prohibButtons(); renderHot(); return; }
+  b.dataset.armed="1"; b.textContent="Sure? Tap again"; setTimeout(()=>{delete b.dataset.armed;b.textContent="Clear log";},2500);
+};
+
+/* ---- wiring ---- */
+document.getElementById("tabSlips").onclick=()=>show("slips");
+document.getElementById("tabCard").onclick=()=>show("card");
+document.getElementById("barGo").onclick=()=>show("card");
+document.getElementById("backToSlips").onclick=()=>show("slips");
+document.getElementById("clearSlip").onclick=()=>{S.legs=[];render();};
+document.getElementById("pays").addEventListener("input",e=>{ const v=parseFloat(e.target.value); S.pays=isNaN(v)||v<=1?null:v; render(); });
+document.getElementById("who").onchange=e=>{S.who=e.target.value;saveSlip();};
+document.getElementById("reload").onclick=()=>location.reload();
+document.getElementById("copy").onclick=()=>{
+  const n=S.legs.length; if(!n) return;
+  const {joint}=slipProb(S.legs), pay=payoutFor(n);
+  const desc=S.legs.map(l=>{const G=GAMES[l.gi];return `${lgOf(G)==="nfl"?"NFL ":""}${G.away} @ ${G.home} ${legLabel(G,l)}`;}).join(" | ");
+  const row=[new Date().toISOString().slice(0,10),S.who,desc,n,pay?money(pay.dec)+(pay.est?" est":""):"",pct(joint),pay?grade(joint*pay.dec-1).word:"",""].join("\t");
+  navigator.clipboard.writeText(row).then(()=>{const b=document.getElementById("copy");b.textContent="Copied — paste in the sheet";setTimeout(()=>b.textContent="Copy row for the log",2200);});
+};
+(function chips(){
+  const c=document.getElementById("chips");
+  for(let n=2;n<=6;n++){ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=n; b.setAttribute("aria-pressed",n===hotN);
+    b.onclick=()=>{hotN=n;c.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",+x.textContent===n));renderHot();}; c.appendChild(b); }
+})();
+function marketChips(){
+  const c=document.getElementById("markets"); c.innerHTML="";
+  ["Winner","Spread","Total"].forEach(m=>{ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=m; b.setAttribute("aria-pressed",!!MARKETS[m]);
+    b.onclick=()=>{ MARKETS[m]=!MARKETS[m]; marketsSave(); marketChips(); renderGames(); renderHot(); }; c.appendChild(b); });
+}
+
+function init(){
+  R=window.RATINGS||null;
+  GAMES=(R&&R.upcoming)||[]; LOGOS=(R&&R.logos)||{}; COLORS=(R&&R.colors)||{};
+  GAMES.forEach((G,i)=>{ BY_ID[G.id]=i; if(new Date(G.start).getTime()<Date.now()) delete G.sim; });   // kicked off = off the board
+  const tag=document.getElementById("ratingsTag");
+  const count=lg=>GAMES.filter(G=>G.sim&&lgOf(G)===lg).length, nC=count("ncaaf"), nN=count("nfl");
+  document.getElementById("nNcaaf").textContent=nC?`${nC}`:""; document.getElementById("nNfl").textContent=nN?`${nN}`:"";
+  if(!R){ tag.textContent="No lines file loaded — run refresh.py first"; tag.classList.add("stale"); }
+  else {
+    const gen=new Date(R.generated), lg=R.lines_generated?new Date(R.lines_generated):gen, mins=Math.round((Date.now()-lg)/60000);
+    const ago=mins<60?`${mins} min ago`:mins<2880?`${Math.round(mins/60)} hr ago`:`${Math.round(mins/1440)} days ago`;
+    const lined=nC+nN;
+    tag.textContent=`Lines as of ${lg.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago}) · ${nC} college + ${nN} NFL games with lines`;
+    if(R.alt_generated) tag.textContent+=` · DK alt lines ${new Date(R.alt_generated).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})}`;
+    if(mins>360||!lined) tag.classList.add("stale");
+    if(!lined) tag.textContent+=" — run refresh.py";
+  }
+  loadLeague();
+  if(!count(league)&&count(league==="ncaaf"?"nfl":"ncaaf")) league=league==="ncaaf"?"nfl":"ncaaf";   // open on whichever league has games
+  document.querySelectorAll("#leagueChips .chip").forEach(b=>{ b.setAttribute("aria-pressed",b.dataset.league===league); b.onclick=()=>setLeague(b.dataset.league); });
+  loadFilters(); populateFilterOptions();
+  NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); renderHot(); render(); show("slips");
+}
+/* ratings.js with a cache-buster, without document.write; works from file:// too */
+(function(){ const s=document.createElement("script"); s.src="ratings.js?v="+Date.now(); s.onload=init; s.onerror=init; document.head.appendChild(s); })();
+</script>
+</body>
+</html>
