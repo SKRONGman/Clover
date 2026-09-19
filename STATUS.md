@@ -32,7 +32,7 @@ The old rule ("all filters apply to both") is **split**. Hot Slips always search
 
 ### Known gaps in the shipped build
 - **The Game status filter is inert.** `refresh.py` still deletes kicked-off games, so there is nothing for it to show. `statusOf(G)` reads `G.status` and defaults to `upcoming`. It starts working the moment the pipeline ships finished games. **This is Open item 1.**
-- **"Build your own" still uses the old six-button layout.** The grid was only approved for the card. Open item 6.
+- **"Build your own" still uses the old six-button layout.** The grid was only approved for the card. Open item 5.
 - `legRow()` is now dead code in `preview2.js` — nothing calls it. Harmless; delete whenever that file is next touched.
 
 ## NFL data source (corrected 2026-09-19)
@@ -54,7 +54,7 @@ The old rule ("all filters apply to both") is **split**. Hot Slips always search
 ### Deploying changes (2026-09-19)
 Claude has **direct GitHub read/write** via the GitHub connector (authenticated as SKRONGman) and pushes straight to `main`. **Never ask Danny to run git or a terminal.**
 - **The write tool takes file contents inline** — it cannot read from Claude's workspace. Anything over roughly **25 KB must be split into multiple files** or it truncates mid-call, and a truncated file still commits successfully and silently breaks the app. That is why the app is three files.
-- **Always verify a push**: download it from `raw.githubusercontent.com/SKRONGman/Clover/<commit-sha>/<file>` and diff against the local copy. Every file shipped 2026-09-19 was md5-verified this way.
+- **Always verify a push**: download it from `raw.githubusercontent.com/SKRONGman/Clover/<commit-sha>/<file>` and diff against the local copy. Every file shipped 2026-09-19 was md5-verified this way. **Verification is not a formality — it caught a dropped settled rule in the first STATUS.md push of that day.**
 - **Claude cannot trigger or read GitHub Actions runs**, and cannot read or set Secrets. Running a refresh and reading its log is Danny (Actions → "Refresh lines" → Run workflow).
 - Claude **cannot reach `skrongman.github.io`** from its sandbox (egress allowlist) — it can never confirm the live page renders. Danny checks.
 - **File deletions require Danny's approval** in the UI; Claude's delete call is refused without it.
@@ -68,8 +68,11 @@ Claude has **direct GitHub read/write** via the GitHub connector (authenticated 
 - **Two leagues, one list.** Every game in `upcoming` carries `league: "ncaaf" | "nfl"`. College slate + lines from CFBD. **NFL slate + lines from the-odds-api (DraftKings)** — see "NFL data source". No NFL rating model — the sim centers on the line, so none is needed.
 - **The page never simulates.** `refresh.py` → `sim.py` plays every lined game out 20,000 times (centered on the market line; college SD 15.2, NFL total SD 13.1 / margin SD 11.7) and ships a sparse (total, margin) table per game in `ratings.js` (`g.sim`, ~5 KB/game, varint+base64). Every % on every screen is a lookup in that table — identical on every device, identical across screens, and it is the same code `calibrate.py` certifies.
 - **Hot slips are built in the page** (beam search over the tables) so N/A feedback reshuffles instantly. Top 6, no two share more than half their picks. Built per league.
+- `ratings.js` carries only what the page needs (slate, lines, alt lines, sims, logos, colors). `ratings.json` keeps everything incl. team ratings + accuracy (research).
 - Games with no line are not offered (nothing to center on).
 - One `slip` object in JS state (`cloverSlip`, keyed by game id). Every screen reads/writes it. Spread lines are always the side's OWN number, everywhere.
+- **ONE VERDICT SCALE EVERYWHERE — per $1 of expected value: Great ≥ +15¢ / Good ≥ +5¢ / Coin toss ≥ −5¢ / Bad ≥ −20¢ / Terrible.** Lives in `grade()` in `preview1.js`. Do not change it in one place only.
+- **Prohibited** logs a same-game pair the app wouldn't allow, to `udProhibited`. Notebook only — it does NOT change the picks.
 
 ## ⚠️ SETTLED FINDINGS — READ FIRST
 1. **No rating model beats the closing line** (2 models, ~5,000 games, 2019+2021–2025, out-of-sample): PPD log loss 0.802; Bayesian MCMC 0.754; market 0.6933 vs coin-flip 0.6931. **Do not retry.** Sims are centered on the market line.
@@ -79,7 +82,7 @@ Claude has **direct GitHub read/write** via the GitHub connector (authenticated 
 4. Weather / injuries / lineups / news / HFA / polls are already priced into the line. Adding them on top double-counts. Danny agreed.
 5. **The Odds API — updated 2026-09-19 from their published bookmaker list.**
    - **Underdog has NO game-level lines. Confirmed, not inferred:** Underdog is listed under **US DFS sites** (region `us_dfs`), which the API covers for **player props only**. It is not a sportsbook in this feed. This killed the "filter by sportsbook" idea per Danny's own condition.
-   - **Underdog player props ARE available** (region `us_dfs`, key `underdog`) — this flips the old "Underdog inconclusive" note. Their note: selections with non-default multipliers (not x1) land in `_alternate` markets. PrizePicks, DraftKings Pick6 and Dabble are in the same region.
+   - **Underdog player props ARE available** (region `us_dfs`, key `underdog`) — this supersedes the old "Underdog inconclusive" note. Their note: selections with non-default multipliers (not x1) land in `_alternate` markets. PrizePicks, DraftKings Pick6 and Dabble are in the same region.
    - **The 20K tier unlocked Caesars (`williamhill_us`) and Fanatics** — both are marked paid-only.
    - **Pinnacle is available** (region `eu`, "odds are from public website which may incur a delay"), and there is a **US exchange region** (`us_ex`): Novig, ProphetX, Kalshi, Polymarket. Exchanges run at near-zero vig, so their price is a cleaner read on true probability than DK devigged — a better yardstick for the tail-calibration idea (Open item 9).
    - **Alternate spreads + totals: YES** (DK 84 rungs), pulled weekly, DK only. The `alternate_*` markets do NOT include DK's main line, so `pull_alt_lines` also pulls `spreads,totals` for DK in one slate-wide call and merges them in.
