@@ -3166,5 +3166,93 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": "71b3b83747589efdc5baef2c5cf811bf",
+  "league": "nfl",
+  "start": "2026-09-20T20:05+00:00",
+  "home": "Los Angeles Chargers",
+  "away": "Las Vegas Raiders",
+  "hp": 14.0,
+  "ap": 26.0,
+  "spread": -6.5,
+  "total": 43.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.6986,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.3014,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -6.5,
+    "p": 0.5047,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 6.5,
+    "p": 0.4954,
+    "result": "hit"
+   },
+   "over": {
+    "line": 43.5,
+    "p": 0.482,
+    "result": "miss"
+   },
+   "under": {
+    "line": 43.5,
+    "p": 0.518,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": "68bc55903f50af4af4766adcc89fcc61",
+  "league": "nfl",
+  "start": "2026-09-20T20:26+00:00",
+  "home": "San Francisco 49ers",
+  "away": "Miami Dolphins",
+  "hp": 35.0,
+  "ap": 13.0,
+  "spread": -12.5,
+  "total": 44.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.8688,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.1312,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -12.5,
+    "p": 0.5089,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 12.5,
+    "p": 0.4911,
+    "result": "miss"
+   },
+   "over": {
+    "line": 44.5,
+    "p": 0.4843,
+    "result": "hit"
+   },
+   "under": {
+    "line": 44.5,
+    "p": 0.5157,
+    "result": "miss"
+   }
+  }
  }
 ]
