@@ -1670,5 +1670,181 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401856803,
+  "league": "ncaaf",
+  "start": "2026-09-19T23:00+00:00",
+  "home": "Oklahoma State",
+  "away": "Murray State",
+  "hp": 59.0,
+  "ap": 0.0,
+  "spread": -56.5,
+  "total": 70.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": null,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": null,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -56.5,
+    "p": null,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 56.5,
+    "p": null,
+    "result": "miss"
+   },
+   "over": {
+    "line": 70.5,
+    "p": null,
+    "result": "miss"
+   },
+   "under": {
+    "line": 70.5,
+    "p": null,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401864443,
+  "league": "ncaaf",
+  "start": "2026-09-19T23:00+00:00",
+  "home": "Middle Tennessee",
+  "away": "Nevada",
+  "hp": 27.0,
+  "ap": 20.0,
+  "spread": 3.5,
+  "total": 50.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": null,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": null,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 3.5,
+    "p": null,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -3.5,
+    "p": null,
+    "result": "miss"
+   },
+   "over": {
+    "line": 50.5,
+    "p": null,
+    "result": "miss"
+   },
+   "under": {
+    "line": 50.5,
+    "p": null,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401869948,
+  "league": "ncaaf",
+  "start": "2026-09-19T23:00+00:00",
+  "home": "Jacksonville State",
+  "away": "Georgia Southern",
+  "hp": 31.0,
+  "ap": 27.0,
+  "spread": -3.5,
+  "total": 51.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": null,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": null,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -3.5,
+    "p": null,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 3.5,
+    "p": null,
+    "result": "miss"
+   },
+   "over": {
+    "line": 51.5,
+    "p": null,
+    "result": "hit"
+   },
+   "under": {
+    "line": 51.5,
+    "p": null,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401858452,
+  "league": "ncaaf",
+  "start": "2026-09-19T23:15+00:00",
+  "home": "Nebraska",
+  "away": "North Dakota",
+  "hp": 34.0,
+  "ap": 7.0,
+  "spread": -27.5,
+  "total": 56.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": null,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": null,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -27.5,
+    "p": null,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 27.5,
+    "p": null,
+    "result": "hit"
+   },
+   "over": {
+    "line": 56.5,
+    "p": null,
+    "result": "miss"
+   },
+   "under": {
+    "line": 56.5,
+    "p": null,
+    "result": "hit"
+   }
+  }
  }
 ]
