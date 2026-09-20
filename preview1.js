@@ -3,7 +3,7 @@
    carries a table of how often it ends with total T and margin M.
    The page never simulates; it looks things up.
    =================================================================== */
-let R=null, GAMES=[], BY_ID={}, LOGOS={}, COLORS={};
+let R=null, GAMES=[], BY_ID={}, LOGOS={}, COLORS={}, COLORS2={};
 const GRIDS={};                               // gi -> decoded table
 const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -55,14 +55,47 @@ function weekendWindow(){
 }
 /* the day we show by default: today if it still has games, else the next day that does */
 function defaultDayKey(lg){
-  const games=GAMES.filter(G=>G.sim&&lgOf(G)===lg);
+  const games=GAMES.filter(G=>onBoard(G)&&lgOf(G)===lg);
   if(!games.length) return null;
   const today=dateKey(new Date());
   if(games.some(G=>gameDateKey(G)===today)) return today;
   const later=games.map(gameDateKey).filter(k=>k>=today).sort();
   return later.length?later[0]:null;
 }
-function statusOf(G){ return G.status||"upcoming"; }   /* refresh.py will start shipping live/final */
+/* refresh.py ships status on every game: upcoming / live / final. A finished game
+   keeps its closing line, its final score and the six percentages it was priced at,
+   but NOT its 20,000-run table - so it can be shown and graded, never re-priced. */
+function statusOf(G){ return G.status||"upcoming"; }
+const onBoard=G=>!!(G.sim||G.p);            /* shown on the page at all */
+const isOpen=G=>statusOf(G)==="upcoming";   /* still tappable */
+function scoreOf(G){ return (G.hp==null||G.ap==null)?null:{h:G.hp,a:G.ap}; }
+/* did this pick win, once the game is over? null while it is still being played. */
+function settleLeg(G,l){
+  const sc=scoreOf(G); if(!sc||statusOf(G)!=="final") return null;
+  const v=legVal(l.type,l.line,sc.h+sc.a,sc.h-sc.a);
+  return v===0?"push":(v>0?"won":"lost");
+}
+function splitLegs(legs){
+  const live=[],done=[];
+  legs.forEach(l=>{ const r=settleLeg(GAMES[l.gi],l); if(r) done.push({l,r}); else live.push(l); });
+  return {live,done};
+}
+/* team score chips: darker team color behind, lighter one as the text. Rivalry
+   games often share a color (Georgia/Alabama crimson), so the home chip darkens
+   when the two are too close to tell apart. */
+const hex2rgb=h=>{h=String(h||"").replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");const n=parseInt(h,16)||0;return [n>>16&255,n>>8&255,n&255];};
+const lumOf=c=>{const v=hex2rgb(c).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4);});return .2126*v[0]+.7152*v[1]+.0722*v[2];};
+const contrastOf=(a,b)=>{const x=lumOf(a),y=lumOf(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+const colDist=(a,b)=>{const A=hex2rgb(a),B=hex2rgb(b);return Math.abs(A[0]-B[0])+Math.abs(A[1]-B[1])+Math.abs(A[2]-B[2]);};
+const shade=(c,f)=>"#"+hex2rgb(c).map(v=>Math.round(v*f).toString(16).padStart(2,"0")).join("");
+function chipColors(G,team){
+  const other=team===G.home?G.away:G.home;
+  let bg=COLORS[team]||"#26463D";
+  if(team===G.home&&COLORS[other]&&colDist(bg,COLORS[other])<90) bg=shade(bg,.5);
+  let fg=COLORS2[team]||"#FFFFFF";
+  if(contrastOf(bg,fg)<3.5) fg=lumOf(bg)>.45?"#101815":"#FFFFFF";
+  return {bg,fg};
+}
 function gameInWeekend(G,win){ const t=new Date(G.start).getTime(); return t>=win.thu.getTime()&&t<=win.mon.getTime(); }
 function filterGame(G){
   const lg=lgOf(G), f=FILTERS[lg]; if(!f) return true;
@@ -81,7 +114,7 @@ function filterGame(G){
   }
   return true;
 }
-function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg&&filterGame(x.G)); }
+function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>onBoard(x.G)&&lgOf(x.G)===lg&&filterGame(x.G)); }
 /* Hot slips honour Game time / Conference / Division / Classification, but NEVER Date or
    Game status - they always search all upcoming games, so a thin day can't starve the search. */
 function hotGames(lg){
@@ -92,7 +125,7 @@ function hotGames(lg){
   return out;
 }
 function populateFilterOptions(){
-  const lg=league, games=GAMES.filter(G=>G.sim&&lgOf(G)===lg), f=FILTERS[lg];
+  const lg=league, games=GAMES.filter(G=>onBoard(G)&&lgOf(G)===lg), f=FILTERS[lg];
   const lbl=d=>`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;
   const keyLbl=k=>{ const [y,m,dd]=k.split("-").map(Number); return lbl(new Date(y,m-1,dd)); };
 
@@ -139,7 +172,7 @@ function populateFilterOptions(){
     }
     wrap.querySelectorAll("[data-div]").forEach(btn=>btn.setAttribute("aria-pressed",f.div===btn.dataset.div));
   }
-  document.getElementById("nNcaaf").textContent=GAMES.filter(G=>G.sim&&lgOf(G)==="ncaaf").length||"";
+  document.getElementById("nNcaaf").textContent=GAMES.filter(G=>G.sim&&lgOf(G)==="ncaaf").length||"";   /* tabs count what you can still bet */
   document.getElementById("nNfl").textContent=GAMES.filter(G=>G.sim&&lgOf(G)==="nfl").length||"";
 }
 const reFilter=()=>{saveFilters();populateFilterOptions();renderGames();renderHot();};
@@ -177,7 +210,13 @@ function legVal(type,line,t,m){
 /* chance every leg (all from game gi) hits together, pushes thrown out.
    dt/dm shift the whole game by that many points (stress test). */
 function prob(gi,legs,dt=0,dm=0){
-  const g=gridFor(gi); if(!g) return null;
+  const g=gridFor(gi);
+  if(!g){                                   /* game is over: no table, only the frozen six */
+    const G=GAMES[gi];
+    if(!dt&&!dm&&G&&G.p&&legs.length===1&&legs[0].line===(hasLine(legs[0].type)?marketLine(G,legs[0].type):0))
+      return G.p[legs[0].type]??null;
+    return null;
+  }
   let win=0, push=0;
   for(let j=0;j<g.k;j++){
     const t=g.T[j]+dt, m=g.M[j]+dm; let ok=true, pu=false;
@@ -186,9 +225,11 @@ function prob(gi,legs,dt=0,dm=0){
   }
   const d=g.n-push; return d>0 ? win/d : 0;
 }
-/* the whole slip: legs grouped by game, same-game legs looked up together */
+/* the whole slip: legs grouped by game, same-game legs looked up together.
+   A game with no table (it has finished) drops out - renderCard settles those
+   from the final score instead. */
 function slipProb(legs,dt=0,dm=0){
-  const by={}; legs.forEach(l=>{(by[l.gi]=by[l.gi]||[]).push(l);});
+  const by={}; legs.forEach(l=>{ if(!gridFor(l.gi)) return; (by[l.gi]=by[l.gi]||[]).push(l); });
   let joint=1; const groups=[];
   for(const gi in by){ const G=by[gi], p=prob(+gi,G,dt,dm); const indep=G.reduce((a,l)=>a*prob(+gi,[l],dt,dm),1); joint*=p; groups.push({gi:+gi,legs:G,p,indep}); }
   return {joint,groups};
@@ -262,22 +303,28 @@ function duoTile(G){
    (not index) so a refresh doesn't scramble them.
    =================================================================== */
 const S={legs:[], pays:null, who:"Danny"};
-function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line})),pays:S.pays,who:S.who})); }catch(e){} }
+function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line,p0:l.p0})),pays:S.pays,who:S.who})); }catch(e){} }
 function loadSlip(){
   try{
     const s=JSON.parse(localStorage.getItem("cloverSlip")||"null"); if(!s) return;
     S.pays=s.pays??null; S.who=s.who||"Danny";
-    S.legs=(s.legs||[]).map(l=>{ const gi=BY_ID[l.id]; return gi==null||!GAMES[gi].sim?null:{gi,type:l.type,line:l.line}; }).filter(Boolean);
+    S.legs=(s.legs||[]).map(l=>{ const gi=BY_ID[l.id]; return gi==null||!onBoard(GAMES[gi])?null:{gi,type:l.type,line:l.line,p0:l.p0}; }).filter(Boolean);
   }catch(e){}
 }
 function findLeg(gi,type){ return S.legs.findIndex(l=>l.gi===gi&&l.type===type); }
 function toggleLeg(gi,type){
   const i=findLeg(gi,type);
   if(i>=0) S.legs.splice(i,1);
-  else { const G=GAMES[gi]; S.legs.push({gi,type,line:hasLine(type)?marketLine(G,type):0}); }
+  else {
+    const G=GAMES[gi], line=hasLine(type)?marketLine(G,type):0;
+    /* p0 = what Clover said when you took it. Frozen here because the table is
+       thrown away when the game ends, and because a line that moves later must
+       not rewrite the number the pick was made on. */
+    S.legs.push({gi,type,line,p0:prob(gi,[{type,line}])});
+  }
   render();
 }
-function setLegs(legs){ S.legs=legs.map(l=>({gi:l.gi,type:l.type,line:hasLine(l.type)?l.line:0})); render(); }
+function setLegs(legs){ S.legs=legs.map(l=>({gi:l.gi,type:l.type,line:hasLine(l.type)?l.line:0,p0:l.p0??prob(l.gi,[{type:l.type,line:hasLine(l.type)?l.line:0}])})); render(); }
 function payoutFor(n){ return S.pays!=null&&S.pays>1 ? {dec:S.pays,est:false} : PAYOUT[n] ? {dec:PAYOUT[n],est:true} : null; }
 
 /* ===================================================================
@@ -316,48 +363,3 @@ function renderBar(){
   document.getElementById("barSub").textContent=`${n} pick${n>1?"s":""}${g?` · ${g.word}`:""}${pay&&pay.est?" (est. payout)":""}`;
 }
 
-/* ---- build your own: every lined game, grouped by day, six picks each ---- */
-function renderGames(){
-  const out=document.getElementById("games");
-  const all=GAMES.filter(G=>G.sim&&lgOf(G)===league).length, lined=filteredGames(league);
-  const cnt=document.getElementById("filterCount");
-  cnt.textContent = !all ? "" : lined.length===all
-    ? `${all} ${LEAGUE_NAME[league]} game${all===1?"":"s"} with a line`
-    : `Showing ${lined.length} of ${all} ${LEAGUE_NAME[league]} games with a line`;
-  const fkey=league+"|"+JSON.stringify(FILTERS[league]);
-  if(out.dataset.built!==fkey){
-    out.innerHTML="";
-    if(!all){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet — they load closer to game day.</p>`; out.dataset.built=fkey; return; }
-    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters.</p>`; out.dataset.built=fkey; return; }
-    const byDay={};
-    lined.forEach(x=>{ const d=new Date(x.G.start), k=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`; (byDay[k]=byDay[k]||[]).push(x); });
-    let first=true;
-    for(const day in byDay){
-      const det=document.createElement("details"); det.className="day"; det.open=first; first=false;
-      det.innerHTML=`<summary>${esc(day)} <span class="small">${byDay[day].length} games</span></summary><div class="dayGrid"></div>`;
-      const grid=det.querySelector(".dayGrid");
-      byDay[day].forEach(({G,gi})=>{
-        const g=document.createElement("div"); g.className="game";
-        const head=document.createElement("div"); head.className="gHead";
-        head.appendChild(logoTile(G.away,true)); head.appendChild(document.createTextNode(` ${shortName(G,G.away)} @ ${shortName(G,G.home)}`)); head.appendChild(logoTile(G.home,true));
-        const when=document.createElement("span"); when.className="when"; when.textContent=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}); head.appendChild(when);
-        g.appendChild(head);
-        const picks=document.createElement("div"); picks.className="picks";
-        [["awaySp",`${shortName(G,G.away)} ${fmtSp(-G.spread)}`],["homeSp",`${shortName(G,G.home)} ${fmtSp(G.spread)}`],["over",`Over ${G.total}`],["under",`Under ${G.total}`],["awayML",`${shortName(G,G.away)} wins`],["homeML",`${shortName(G,G.home)} wins`]]
-          .forEach(([type,label])=>{
-            const b=document.createElement("button"); b.type="button"; b.className="pick"; b.dataset.gi=gi; b.dataset.type=type;
-            const p=prob(gi,[{type,line:hasLine(type)?marketLine(G,type):0}]);
-            b.innerHTML=`<span>${esc(label)}</span><b>${pct(p)}</b>`;
-            b.onclick=()=>toggleLeg(gi,type);
-            picks.appendChild(b);
-          });
-        g.appendChild(picks); grid.appendChild(g);
-      });
-      out.appendChild(det);
-    }
-    out.dataset.built=fkey;
-  }
-  out.querySelectorAll(".pick").forEach(b=>{ b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0); b.classList.toggle("na",!offered(+b.dataset.gi,b.dataset.type)); b.title=offered(+b.dataset.gi,b.dataset.type)?"":"Marked as not on your app"; });
-}
-
-/* ---- one leg row (used by the Card and by hot slips) ---- */
