@@ -1628,6 +1628,50 @@
   }
  },
  {
+  "id": 401864574,
+  "league": "ncaaf",
+  "start": "2026-09-19T22:00+00:00",
+  "home": "App State",
+  "away": "Charlotte",
+  "hp": 26.0,
+  "ap": 21.0,
+  "spread": -15.5,
+  "total": 52.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": null,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": null,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -15.5,
+    "p": null,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 15.5,
+    "p": null,
+    "result": "hit"
+   },
+   "over": {
+    "line": 52.5,
+    "p": null,
+    "result": "miss"
+   },
+   "under": {
+    "line": 52.5,
+    "p": null,
+    "result": "hit"
+   }
+  }
+ },
+ {
   "id": 401871047,
   "league": "ncaaf",
   "start": "2026-09-19T22:30+00:00",
