@@ -91,6 +91,15 @@ ODDS_BOOK = "draftkings"
 ODDS_MIN_REMAINING = 40        # stop pulling when this few credits are left
 NFL_ALT_EVERY_OTHER_WEEK = True
 
+# Finished games stay on the board for a day so you can see how the slate went.
+# 24 hours from KICKOFF, not "today": the server runs on UTC, so a calendar-day
+# rule would drop Saturday night's games while it is still Saturday evening in
+# Texas. A finished game keeps the line it closed at, its final score, and the
+# six percentages Clover gave it before kickoff - but NOT its 20,000-run table,
+# which is 5 KB a game and answers questions the final score already answers.
+RECENT_HOURS = 24
+OUT_RESULTS = "results.json"   # every finished game graded against what Clover said (research)
+
 
 # ----------------------------------------------------------------------
 # API
@@ -220,10 +229,11 @@ def pull_nfl_from_odds():
         return [], None
     now = datetime.now(timezone.utc)
     horizon = now.timestamp() + DAYS_AHEAD * 86400
+    floor = now.timestamp() - RECENT_HOURS * 3600
     upcoming = {}
     for e in events:
         et = parse_dt(e.get("commence_time", "") or "")
-        if et is None or et.timestamp() > horizon or et.timestamp() < now.timestamp():
+        if et is None or et.timestamp() > horizon or et.timestamp() < floor:
             continue
         upcoming[e.get("id")] = e
     if not upcoming:
@@ -259,6 +269,8 @@ def pull_nfl_from_odds():
             "home_conf": nfl_conf(home), "away_conf": nfl_conf(away),
             "home_div": nfl_div(home), "away_div": nfl_div(away),
             "neutral": False,
+            "status": status_for(start, now, False),   # /scores fills in live and final below
+            "hp": None, "ap": None,
             "spread": spread, "total": total,
             "book": "DraftKings",
         })
@@ -267,6 +279,39 @@ def pull_nfl_from_odds():
     games.sort(key=lambda g: g["start"])
     return games, remaining
 
+
+
+def pull_nfl_scores(games):
+    """Final and in-progress scores for NFL games that have kicked off. CFBD hands
+    us college scores for free on the /games call; the NFL has no free feed that
+    works from Actions, so this is the-odds-api /scores: 1 credit normally, 2 with
+    daysFrom (which is what includes games that already ended). Only called when
+    there is actually a kicked-off NFL game to score, so a quiet Tuesday spends
+    nothing. Mutates `games`."""
+    live = [g for g in games if g.get("league") == "nfl" and g.get("status") in ("live", "final")]
+    if not live:
+        return
+    data, remaining = odds_get(f"/sports/{ODDS_SPORTS['nfl']}/scores", daysFrom=1)
+    if not data:
+        print("  NFL scores unavailable - leaving those games unscored")
+        return
+    by_id = {str(e.get("id")): e for e in data}
+    scored = 0
+    for g in live:
+        e = by_id.get(str(g.get("id")))
+        if not e:
+            continue
+        pts = {r.get("name"): r.get("score") for r in (e.get("scores") or []) if r.get("name")}
+        hp, ap = pts.get(g["home"]), pts.get(g["away"])
+        if hp is None or ap is None:
+            continue
+        try:
+            g["hp"], g["ap"] = float(hp), float(ap)
+        except (TypeError, ValueError):
+            continue
+        g["status"] = "final" if e.get("completed") else "live"
+        scored += 1
+    print(f"  NFL scores: {scored} of {len(live)} kicked-off games scored, {remaining} credits left")
 
 
 def pull_games(season):
@@ -345,22 +390,33 @@ def parse_dt(s):
         return None
 
 
+def status_for(start, now, completed):
+    """upcoming (hasn't kicked off) / live (started, not finished) / final."""
+    if start is None or start.timestamp() > now.timestamp():
+        return "upcoming"
+    return "final" if completed else "live"
+
+
 def pull_upcoming(season):
-    """Games with an FBS team that haven't been played yet, kicking off
-    within DAYS_AHEAD days, plus the book's spread and total for each."""
+    """Games with an FBS team kicking off within DAYS_AHEAD days, plus the ones
+    that kicked off in the last RECENT_HOURS so the page can show live scores and
+    finals. Scores ride along on this same /games call - CFBD fills in points as
+    the game goes, so a finished slate costs no extra API calls."""
     now = datetime.now(timezone.utc)
     horizon = now.timestamp() + DAYS_AHEAD * 86400
+    floor = now.timestamp() - RECENT_HOURS * 3600
     games = []
     for g in get("/games", year=season, seasonType="regular", classification="fbs"):
-        if pick(g, "home_points", "homePoints") is not None:
-            continue                                    # already played
         hc = pick(g, "home_classification", "homeClassification")
         ac = pick(g, "away_classification", "awayClassification")
         if hc != "fbs" and ac != "fbs":
             continue
         start = parse_dt(pick(g, "start_date", "startDate", default="") or "")
-        if start is None or start.timestamp() > horizon or start.timestamp() < now.timestamp():
-            continue                                    # kicked off already - pregame picks are moot
+        if start is None or start.timestamp() > horizon or start.timestamp() < floor:
+            continue
+        hp = pick(g, "home_points", "homePoints")
+        ap = pick(g, "away_points", "awayPoints")
+        done = bool(pick(g, "completed", default=False))
         games.append({
             "id": pick(g, "id"),
             "league": "ncaaf",
@@ -370,6 +426,9 @@ def pull_upcoming(season):
             "away": pick(g, "away_team", "awayTeam"),
             "fcs": hc != "fbs" or ac != "fbs",   # FBS-vs-FCS (pure FCS-vs-FCS was never pulled)
             "neutral": bool(pick(g, "neutral_site", "neutralSite", default=False)),
+            "status": status_for(start, now, done),
+            "hp": float(hp) if hp is not None else None,
+            "ap": float(ap) if ap is not None else None,
             "spread": None,        # home-team spread, negative = home favored
             "total": None,
             "book": None,
@@ -515,6 +574,8 @@ def pull_nfl_upcoming():
             "home_conf": nfl_conf(home["name"]), "away_conf": nfl_conf(away["name"]),
             "home_div": nfl_div(home["name"]), "away_div": nfl_div(away["name"]),
             "neutral": bool(comp.get("neutralSite", False)),
+            "status": "upcoming",          # this path only returns pre-game events
+            "hp": None, "ap": None,
             "spread": None,
             "total": None,
             "book": None,
@@ -841,7 +902,10 @@ def nfl_alt_week():
     return (not NFL_ALT_EVERY_OTHER_WEEK) or datetime.now(timezone.utc).isocalendar()[1] % 2 == 0
 
 
-NFL_ODDS_MIN_HOURS = 20        # don't spend odds credits on NFL more than ~once a day
+# Was 20 (free tier: 500 credits/month made a daily NFL pull the ceiling). On the
+# 20K tier an hourly pull is ~2 credits x ~14 runs/day x 5 days = ~140 a week.
+# 0 = no throttle, NFL refreshes on the same cadence as college.
+NFL_ODDS_MIN_HOURS = 0
 
 
 def pull_nfl(R):
@@ -852,8 +916,9 @@ def pull_nfl(R):
     NFL_DIAG.clear()
     NFL_DIAG.update({"status": "not attempted", "errors": []})
     now = datetime.now(timezone.utc)
+    floor = now.timestamp() - RECENT_HOURS * 3600
     prev = [g for g in R.get("upcoming", []) if g.get("league") == "nfl"
-            and (parse_dt(g.get("start") or "") or now) > now]     # drop games that kicked off
+            and (parse_dt(g.get("start") or "") or now).timestamp() > floor]   # keep yesterday's finals
     try:
         nfl, _ = pull_nfl_upcoming()               # ESPN, free
     except Exception as e:
@@ -885,6 +950,105 @@ def pull_nfl(R):
     return []
 
 
+# The six picks the page offers on every game, in one place.
+SIX = ("homeML", "awayML", "homeSp", "awaySp", "over", "under")
+
+
+def leg_line(g, typ):
+    """The number that pick is taken at. Always the side's OWN number."""
+    if typ in ("over", "under"):
+        return g.get("total")
+    if typ == "homeSp":
+        return g.get("spread")
+    if typ == "awaySp":
+        return -g["spread"] if g.get("spread") is not None else None
+    return 0
+
+
+def freeze_probs(games, grids):
+    """Save each game's six percentages onto the game itself. While a game is
+    upcoming the page reads these straight off its table; once it is over the
+    table is thrown away and these are all that's left - which is exactly what
+    you need to ask later whether Clover's 47% picks really land 47% of the time."""
+    for gi, g in enumerate(games):
+        grid = grids.get(gi)
+        if grid is None:
+            continue
+        g["p"] = {t: round(grid.prob([(t, leg_line(g, t))]), 4) for t in SIX}
+
+
+def grade_leg(typ, line, hp, ap):
+    """hit / miss / push, from the final score. Same rule as the page's legVal."""
+    t, m = hp + ap, hp - ap
+    v = {"over": t - line, "under": line - t, "homeSp": m + line,
+         "awaySp": line - m, "homeML": m, "awayML": -m}[typ]
+    return "push" if v == 0 else ("hit" if v > 0 else "miss")
+
+
+def record_results(up):
+    """Append every newly-finished game to results.json: what Clover said about
+    each of the six picks, and what actually happened. Never shipped to the page -
+    this is the calibration record, and it has to outlive ratings.json, which is
+    overwritten every refresh."""
+    rows = []
+    if os.path.exists(OUT_RESULTS):
+        try:
+            with open(OUT_RESULTS) as f:
+                rows = json.load(f)
+        except (ValueError, OSError):
+            rows = []
+    seen = {str(r.get("id")) for r in rows}
+    added = 0
+    for g in up:
+        if g.get("status") != "final" or str(g.get("id")) in seen:
+            continue
+        hp, ap = g.get("hp"), g.get("ap")
+        if hp is None or ap is None or g.get("spread") is None or g.get("total") is None:
+            continue
+        p = g.get("p") or {}
+        rows.append({
+            "id": g.get("id"),
+            "league": g.get("league", "ncaaf"),
+            "start": g.get("start"),
+            "home": g.get("home"), "away": g.get("away"),
+            "hp": hp, "ap": ap,
+            "spread": g.get("spread"), "total": g.get("total"), "book": g.get("book"),
+            "picks": {t: {"line": leg_line(g, t), "p": p.get(t),
+                          "result": grade_leg(t, leg_line(g, t), hp, ap)}
+                      for t in SIX},
+        })
+        added += 1
+    if added:
+        rows.sort(key=lambda r: (r.get("start") or "", str(r.get("id"))))
+        atomic_write(OUT_RESULTS, json.dumps(rows, indent=1))
+    print(f"  results.json: {added} newly finished game(s) graded, {len(rows)} on file")
+
+
+def carry_history(R, up):
+    """A game that has kicked off keeps the line it closed at and the percentages
+    Clover gave it - the feed's line can still drift after kickoff, and that is not
+    the number the picks were priced at. Also keeps a final from flipping back to
+    live if a later feed is briefly wrong."""
+    prev = {str(g.get("id")): g for g in R.get("upcoming", [])}
+    for g in up:
+        old = prev.get(str(g.get("id")))
+        if not old:
+            continue
+        if old.get("p"):
+            g.setdefault("p", old["p"])
+        if g.get("status", "upcoming") == "upcoming":
+            continue
+        for fld in ("spread", "total", "book"):
+            if g.get(fld) is None and old.get(fld) is not None:
+                g[fld] = old[fld]
+            elif fld != "book" and old.get(fld) is not None:
+                g[fld] = old[fld]                      # freeze at the closing number
+        if g.get("hp") is None and old.get("hp") is not None:
+            g["hp"], g["ap"] = old.get("hp"), old.get("ap")
+        if old.get("status") == "final":
+            g["status"] = "final"
+
+
 def write_upcoming(R, alt_lines=False):
     """Refresh the slate + lines (both leagues), project each college game,
     play everything out, write both output files."""
@@ -897,6 +1061,10 @@ def write_upcoming(R, alt_lines=False):
         print(f"    {g['start'][:16]}  {g['away']} @ {g['home']}  {line}")
     nfl_art = nfl_team_art()
     up = sorted(up + nfl, key=lambda g: g["start"])
+    carry_history(R, up)
+    pull_nfl_scores(up)          # college scores rode along on the /games call above
+    shown = {k: sum(1 for g in up if g.get("status", "upcoming") == k) for k in ("upcoming", "live", "final")}
+    print(f"  {shown['upcoming']} upcoming, {shown['live']} in progress, {shown['final']} final (kept {RECENT_HOURS}h)")
     # alt lines are pulled weekly; every other refresh keeps the last copy
     old = {g["id"]: g.get("alt") for g in R.get("upcoming", []) if g.get("alt")}
     for g in up:
@@ -916,6 +1084,7 @@ def write_upcoming(R, alt_lines=False):
     art.update(nfl_art)
     R["logos"] = {}
     R["colors"] = {}
+    R["colors2"] = {}
     for g in up:
         for team in (g["home"], g["away"]):
             a = art.get(team)
@@ -925,6 +1094,8 @@ def write_upcoming(R, alt_lines=False):
                 R["logos"][team] = a["logo"]
             if a.get("color"):
                 R["colors"][team] = a["color"]
+            if a.get("alt"):
+                R.setdefault("colors2", {})[team] = a["alt"]     # second color: text on the score chip
     for g in up:
         if g["league"] != "ncaaf":
             continue                                    # NFL has no ratings; sims center on the market
@@ -948,15 +1119,22 @@ def write_upcoming(R, alt_lines=False):
     R["upcoming"] = up
     R["nfl_diag"] = dict(NFL_DIAG, parsed=sum(1 for g in up if g.get("league") == "nfl"))
     R["lines_generated"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    lined = {lg: sum(1 for g in up if g["league"] == lg and g["spread"] is not None and g["total"] is not None)
+    lined = {lg: sum(1 for g in up if g["league"] == lg and g["spread"] is not None
+                     and g["total"] is not None and g.get("status", "upcoming") == "upcoming")
              for lg in sim.LEAGUES}
     print(f"  {len(up)} games in the next {DAYS_AHEAD} days: {lined['ncaaf']} college + {lined['nfl']} NFL with a line")
 
     # Play every lined game out once (sim.py) and store the result as a table
     # the page can look numbers up in. The page never simulates anything, so
     # every % it shows is the same on every device and matches calibrate.py.
-    print(f"Playing out {sum(lined.values())} games {sim.SIMS:,} times each…")
-    sim.attach_sims(up)
+    pre = [g for g in up if g.get("status", "upcoming") == "upcoming"]
+    print(f"Playing out {sum(1 for g in pre if g.get('spread') is not None and g.get('total') is not None)} "
+          f"upcoming games {sim.SIMS:,} times each…")
+    freeze_probs(pre, sim.attach_sims(pre))
+    for g in up:
+        if g.get("status", "upcoming") != "upcoming":
+            g.pop("sim", None)       # ~5 KB a game, and the final score answers everything it could
+    record_results(up)
     R.pop("hot", None)                 # hot slips are built in the page now (so feedback can reshuffle them)
     R["sim"] = {"sd": sim.SD_BY_LEAGUE, "margin_sd": sim.MARGIN_SD_BY_LEAGUE, "n": sim.SIMS}
 
