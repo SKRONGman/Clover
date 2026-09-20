@@ -192,6 +192,26 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
 .naBtn{background:var(--paper);border:1px solid var(--line);color:var(--muted);border-radius:4px;font-size:12px;font-weight:600;min-height:30px;padding:4px}
 .naBtn[aria-pressed="true"]{background:#EFE7E7;border-color:var(--bad);color:var(--bad)}
 .gMeta{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted);margin-top:12px}
+
+/* ---------- games that have kicked off ---------- */
+.gHead.hasScore{flex-wrap:wrap;gap:6px}
+.gHead.hasScore .when{margin-left:0}
+.tScore{font-family:Barlow,sans-serif;font-weight:600;font-size:12px;letter-spacing:.02em;background:var(--field);color:#fff;
+  border-radius:3px;padding:1px 7px;white-space:nowrap;display:inline-flex;gap:6px;align-items:baseline}
+.tScore .pts{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:14px}
+.tScore.off{background:#E4E2DB;border:1px solid var(--line);color:var(--muted)}
+.hChip{font-family:Barlow,sans-serif;font-weight:500;font-size:12px;background:#fff;
+  border:1px solid var(--line);color:var(--ink);border-radius:4px;padding:3px 9px;white-space:nowrap}
+.game.done .hChip{background:var(--paper);color:var(--muted)}
+.hChip.fin,.game.done .hChip.fin{background:#FDECEC;border-color:var(--bad);color:var(--bad);font-weight:600}
+.game.done{opacity:.78}
+.game.done .pick{cursor:default;background:var(--paper);color:var(--muted)}
+.gcard.locked .cell{cursor:default;background:var(--paper);opacity:.75}
+.gcard.locked .cell[aria-pressed="true"]{opacity:1;background:#E8F2EA}
+.gcard.locked .cell[aria-pressed="true"].lost{background:#FBECEC;border-color:var(--bad)}
+.gcard.locked .cell[aria-pressed="true"].lost .ln,.gcard.locked .cell[aria-pressed="true"].lost .pp{color:#5A1C1C}
+.cell .res{font-size:11px;font-weight:600;letter-spacing:.04em}
+.cell .res.w{color:var(--good)}.cell .res.l{color:var(--bad)}
 </style>
 </head>
 <body>
@@ -338,5 +358,6 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
 
 <script src="preview1.js"></script>
 <script src="preview2.js"></script>
+<script src="preview3.js"></script>
 </body>
 </html>
