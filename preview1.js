@@ -66,7 +66,10 @@ function defaultDayKey(lg){
    keeps its closing line, its final score and the six percentages it was priced at,
    but NOT its 20,000-run table - so it can be shown and graded, never re-priced. */
 function statusOf(G){ return G.status||"upcoming"; }
-const onBoard=G=>!!(G.sim||G.p);            /* shown on the page at all */
+/* shown on the page at all: still priceable (has a table), or kicked off with a
+   line to show. The frozen six are NOT required - a game that had already
+   finished before this feature shipped has no p, and must still appear. */
+const onBoard=G=>!!(G.sim||((G.p||G.hp!=null)&&G.spread!=null&&G.total!=null));
 const isOpen=G=>statusOf(G)==="upcoming";   /* still tappable */
 function scoreOf(G){ return (G.hp==null||G.ap==null)?null:{h:G.hp,a:G.ap}; }
 /* did this pick win, once the game is over? null while it is still being played. */
