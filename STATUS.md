@@ -1,6 +1,6 @@
 # Clover — project status
 
-Last updated: 2026-09-21. **Rows 1 and 2 are done and live. Row 3 (design direction) is decided; nothing on the live page changed.** Next chat: row 4.
+Last updated: 2026-09-21. **Rows 1 and 2 are done and live. Row 3 (design direction) is decided. Row 4's clickable mockup is up and waiting on Danny's calls; nothing on the live page changed.**
 
 **Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then `DESIGN.md` (the look, for any screen work), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
@@ -26,17 +26,18 @@ Last updated: 2026-09-21. **Rows 1 and 2 are done and live. Row 3 (design direct
 - `results.json`: 67 of 72 early rows have `p: null` (frozen before the feature existed). They grade hit/miss but cannot be used for calibration. **Still undecided: drop or keep.** Claude recommends dropping.
 
 ## Build order — one chat per row
-Kick off the next row with: **"Start row 4: front door."**
+Row 4 is in progress. Kick off the next chat with: **"Row 4: here are my calls"** and the four answers from "Waiting on Danny".
 1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Orphans deleted and NFL alt lines switched to weekly the same night. Leftovers: 3 unused imports (`calibrate.py` x2, `bayes.py` x1) - fold into the next change to those files (`calibrate.py` is 24.7 KB, split it then).
 2. **Truth pass - DONE 2026-09-20.** Details under "Where things stand" and in `CHANGELOG-2.md`. Last piece, shipped after Danny OK'd the mockup: finished games are grey in solid colors, never faded (`--done:#4F5C57` in `clover.css`, 5.4:1 or better; it had been 1.8:1).
 3. **Design direction - DONE 2026-09-21.** Danny picked "A. Board, dark" and approved three changes: hot slips show only their own picks, My Bet sits in a right rail on the front door, and spread/total buttons show the line only at the market line. Mockups only; no code shipped.
-4. **Front door (next).** In the dark Board look: folded filters, today's upcoming games, Hot Slips always open with picks-only tickets, My Bet rail, line-only spread/total buttons, line-moved flag (if Danny approves it). The mockup must also settle where the one-tap N/A and Prohibited buttons live now that tickets no longer show game grids, and the too-dark team color cutoff. Clickable mockup first.
+4. **Front door (mockup up 2026-09-21, no code yet).** Clickable mockup: https://claude.ai/artifact/PCbU7P1A4UbhYm4tmvcmCn - real lines and chances, the page's own slip search, and it pretends it is Saturday 9/26 10 AM so the busy slate shows. All **Proposed** until Danny rules (see Waiting on Danny). Found while building it: NFL teams have no `colors2` at all, and `ratings.js` keeps no first-seen line (the line-moved flag needs `refresh.py` to save one per game, DraftKings only). The row as planned: In the dark Board look: folded filters, today's upcoming games, Hot Slips always open with picks-only tickets, My Bet rail, line-only spread/total buttons, line-moved flag (if Danny approves it). The mockup must also settle where the one-tap N/A and Prohibited buttons live now that tickets no longer show game grids, and the too-dark team color cutoff. Clickable mockup first.
 5. **Build tab.** Own tab, grid layout, abbreviated team names (options in the mockup). Retires the six-button layout.
 6. **My Bet.** "Needs vs. has", full numbers reordered, verdict sized to match, "I placed this". Touch targets under 44 px (N/A, Prohibited, ghost buttons) and arrow keys on tabs. Mockup first.
 7. **The bet record.** Save to the Google Sheet, capture the closing line and closing chance (finished games drop their tables, so the closing chance for a pick on a moved line must be saved at kickoff — design detail open), automatic grading.
 8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn, and the overnight AI recap.
 
 ## Waiting on Danny
+- **Row 4 mockup, four calls:** (1) N/A and Prohibited live on the ticket and in the My Bet rail (Option 1, Claude's pick) or in the rail only (Option 2); (2) line-moved flag yes/no, and how big a move earns it (mockup shows 3 points: 17 of 53 college games); (3) team color rule: main color if it is 2:1 or better against the card, else the second color if it has real color, else the main color lightened; (4) tapping the other side of a pick type swaps the pick instead of holding both.
 - **Drop or keep the 67 `p: null` rows** in `results.json`.
 - At rows 7–8 only: the Google Sheet script (about 10 minutes, once) and an Anthropic API key stored as a GitHub secret.
 
