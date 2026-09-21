@@ -19,8 +19,8 @@ Last updated: 2026-09-20 (night). **Row 1, the safety net, is done and live**, w
 
 ## Build order — one chat per row
 Kick off the next row with: **"Start row 2: the truth pass."**
-1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Leftovers: orphan delete clicks; 3 unused imports (`calibrate.py` x2, `bayes.py` x1) and `index.html`'s 17 dead CSS rules are built but not pushed - fold into the next change to those files (`calibrate.py` is 24.5 KB, split it then).
-2. **Truth pass (next).** Stale words ("ESPN BET", "Slips tab", "See the Card", "Not on my app"/"not on your app", tab title "Clover — The Card", "run refresh.py", "every other Thursday") - `ci/checks.py` holds the list with today's counts; take each to 0 and lower the number there; ruling 1 (no verdict before a real payout); 6-pick returning 4 slips under "Top 6"; filter combinations that silently show 0 games; finished-game contrast (chip 3.48:1 under 78% opacity); hot-slip speed (cache the same-game combos; a narrower beam changed the order for 2- and 5-pick, so confirm that is tie-ordering before shipping it); hot slips stalling in a background tab; `buildSlips` can rank an impossible same-game combo (0%) when the slate is tiny - drop p=0 blocks.
+1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Orphans deleted and NFL alt lines switched to weekly the same night. Leftovers: 3 unused imports (`calibrate.py` x2, `bayes.py` x1) and `index.html`'s 17 dead CSS rules are built but not pushed - fold into the next change to those files (`calibrate.py` is 24.5 KB, split it then).
+2. **Truth pass (next).** Stale words ("ESPN BET", "Slips tab", "See the Card", "Not on my app"/"not on your app", tab title "Clover — The Card", "run refresh.py") - `ci/checks.py` holds the list with today's counts; take each to 0 and lower the number there; ruling 1 (no verdict before a real payout); 6-pick returning 4 slips under "Top 6"; filter combinations that silently show 0 games; finished-game contrast (chip 3.48:1 under 78% opacity); hot-slip speed (cache the same-game combos; a narrower beam changed the order for 2- and 5-pick, so confirm that is tie-ordering before shipping it); hot slips stalling in a background tab; `buildSlips` can rank an impossible same-game combo (0%) when the slate is tiny - drop p=0 blocks.
 3. **Design direction.** Compare Clover with 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks. Before any screen is rebuilt.
 4. **Front door.** Folded filters, today's upcoming games, Hot Slips always open, line-moved flag (if Danny approves it). Mockup first.
 5. **Build tab.** Own tab, grid layout, abbreviated team names (options in the mockup). Retires the six-button layout.
@@ -29,8 +29,6 @@ Kick off the next row with: **"Start row 2: the truth pass."**
 8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn, and the overnight AI recap.
 
 ## Waiting on Danny
-- **Approval clicks for the orphan deletes** (approved in chat 2026-09-20): `cache_teams_2026.json`, `probe_odds.py`, `probe_odds.json`, `preview.html`, `.github/workflows/probe.yml`. README rewrite is done.
-- **NFL alternate lines every week?** (about 35 credits a week; Claude recommends yes). Asked 2026-09-20, Danny asked what alt lines are, answer given, no decision yet. One flag: `NFL_ALT_EVERY_OTHER_WEEK` in `odds.py`, plus the "every other Thursday" sentence in `preview3.js`.
 - **Drop or keep the 67 `p: null` rows** in `results.json`.
 - At rows 7–8 only: the Google Sheet script (about 10 minutes, once) and an Anthropic API key stored as a GitHub secret.
 - One paste, once: the rewritten project instructions (Claude cannot edit the instructions box). Draft delivered in the row 1 chat.
@@ -41,9 +39,9 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 ## LIVE
 - **App:** https://skrongman.github.io/Clover/  (share this; works on phone)
 - **Repo (workshop):** https://github.com/SKRONGman/Clover
-- Schedules (`refresh.yml`): **full ratings weekly Tue 6am CT**; lines hourly **Thu–Mon** 10am–midnight CT; **DK alternate lines Thursdays 10:10am CT** (mode `alt`). Manual: Actions → "Refresh lines" → Run workflow, mode `full` / `lines` / `alt`.
+- Schedules (`refresh.yml`): **full ratings weekly Tue 6am CT**; lines hourly **Thu–Mon** 10am–midnight CT; **DK alternate lines Thursdays 10:10am CT, college and NFL** (mode `alt`). Manual: Actions → "Refresh lines" → Run workflow, mode `full` / `lines` / `alt`.
 - Secrets: `CFBD_KEY`, `ODDS_KEY`. **Danny upgraded the-odds-api to the 20K tier ($30/mo) on 2026-09-19** and updated `ODDS_KEY`. Credits **reset on the 1st of every month** (confirmed in their FAQ).
-- **Credit math, corrected:** cost = **markets × regions**. **Bookmakers do NOT multiply cost** — but **regions do**, and the US is split into four region keys: `us`, `us2`, `us_dfs`, `us_ex`. Adding FanDuel / BetMGM / Caesars is free (all `us`); adding theScore Bet or Hard Rock (`us2`) doubles that call. `NFL_ALT_EVERY_OTHER_WEEK` and `ODDS_MIN_REMAINING = 40` were free-tier guards and can be relaxed.
+- **Credit math, corrected:** cost = **markets × regions**. **Bookmakers do NOT multiply cost** — but **regions do**, and the US is split into four region keys: `us`, `us2`, `us_dfs`, `us_ex`. Adding FanDuel / BetMGM / Caesars is free (all `us`); adding theScore Bet or Hard Rock (`us2`) doubles that call. **NFL alternate lines are weekly since 2026-09-20** (Danny's call; `NFL_ALT_EVERY_OTHER_WEEK = False` in `odds.py`, about 35 credits a week). `ODDS_MIN_REMAINING = 40` stays as a hard stop.
 - Every refresh is a commit → full line history. Sim tables are seeded by game id, so a game whose line didn't move is byte-identical between commits.
 - Two workflows pushing at once collide (non-fast-forward) — re-run the loser.
 - **CFBD:** Patreon Tier 1, 5,000 calls per calendar month, since 2026-09-20. `CFBD_KEY` replaced the same day.
@@ -67,5 +65,4 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 - `health.json` — calls left, credits left, feeds down, today's alert state.
 - `calibrate.py`, `bayes.py` — research tools; `calibrate.py` imports `sim.py`.
 - `.github/workflows/refresh.yml` — the schedule; commits `ratings.js`, `ratings.json`, `results.json`, `cache_*.json` and `health.json`; boots the page against the fresh `ratings.js` before committing; last step is the health alarm. `.github/workflows/ci.yml` only runs `python ci/checks.py` on code pushes. `requirements.txt`: requests, numpy.
-- Orphans, safe to delete: `cache_teams_2026.json` (superseded by `cache_teaminfo_2026.json`), `probe_odds.py` / `probe_odds.json` (one-time probe, answered in finding 5), `preview.html` (stale duplicate of the pre-2026-09-20 `index.html`; deletion needs Danny's approval).
 - `STATUS.md`, `DECISIONS.md`, `CHANGELOG.md` — the three project docs (split 2026-09-20). Keep each under 20 KB.
