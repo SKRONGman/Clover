@@ -1,38 +1,56 @@
-/* ---- hot slips: built right here from the tables, so "Not on my app" can
+/* ---- hot slips: built right here from the tables, so an N/A tap can
    reshuffle instantly. Same rules as before: up to 3 picks from one game,
    ranked by chance the whole slip hits, top slips must actually differ. ---- */
 let hotN=3, HOT=[];
-const HOT_TOP=6, BEAM=600;
+const HOT_TOP=6, BLOCKS={};
+/* every same-game combination at market lines, priced once per page load (the
+   lookups are the slow part). p=0 blocks are impossible pairs - never offered. */
 function gameBlocks(gi){
-  const G=GAMES[gi], ok=t=>offered(gi,t);
-  const W=["homeML","awayML"].filter(ok).map(t=>({gi,type:t,line:0}));
-  const P=["homeSp","awaySp"].filter(ok).map(t=>({gi,type:t,line:marketLine(G,t)}));
-  const T=["over","under"].filter(ok).map(t=>({gi,type:t,line:G.total}));
-  const combos=[...W,...P,...T].map(l=>[l]);
-  W.forEach(w=>P.forEach(p=>combos.push([w,p])));
-  W.forEach(w=>T.forEach(t=>combos.push([w,t])));
-  P.forEach(p=>T.forEach(t=>combos.push([p,t])));
-  W.forEach(w=>P.forEach(p=>T.forEach(t=>combos.push([w,p,t]))));
-  return combos.map(legs=>({legs,p:prob(gi,legs)}));
+  if(!BLOCKS[gi]){
+    const G=GAMES[gi];
+    const W=["homeML","awayML"].map(t=>({gi,type:t,line:0}));
+    const P=["homeSp","awaySp"].map(t=>({gi,type:t,line:marketLine(G,t)}));
+    const T=["over","under"].map(t=>({gi,type:t,line:G.total}));
+    const combos=[...W,...P,...T].map(l=>[l]);
+    W.forEach(w=>P.forEach(p=>combos.push([w,p])));
+    W.forEach(w=>T.forEach(t=>combos.push([w,t])));
+    P.forEach(p=>T.forEach(t=>combos.push([p,t])));
+    W.forEach(w=>P.forEach(p=>T.forEach(t=>combos.push([w,p,t]))));
+    BLOCKS[gi]=combos.map(legs=>({legs,p:prob(gi,legs)})).filter(b=>b.p>0);
+  }
+  return BLOCKS[gi].filter(b=>b.legs.every(l=>offered(gi,l.type)));
+}
+/* The single most likely N-pick slip that shares at most `cap` picks with each slip
+   already chosen. Exact, not a beam: games are independent, so the best slip is a
+   knapsack over games. State = picks used + picks shared with each earlier slip. */
+function bestSlip(games,N,taken,cap){
+  const K=N+1, base=cap+1, m=taken.length, size=K*Math.pow(base,m);
+  const best=new Array(size); best[0]={p:1,b:null,prev:null};
+  games.forEach(blocks=>{
+    const use=blocks.map(b=>{ const sh=taken.map(o=>b.legs.filter(l=>o.keys.has(l.gi+":"+l.type)).length);
+      let d=0; sh.forEach((c,i)=>{ d+=c*Math.pow(base,i); }); return {b,sh,d:d*K,hit:d>0}; });
+    for(let idx=size-1;idx>=0;idx--){                    /* downward, so one game is never used twice */
+      const s=best[idx]; if(!s) continue;
+      const k=idx%K; let rest=(idx-k)/K; const have=[];
+      for(let i=0;i<m;i++){ have.push(rest%base); rest=(rest-have[i])/base; }
+      use.forEach(u=>{
+        if(k+u.b.legs.length>N) return;
+        if(u.hit&&u.sh.some((c,i)=>have[i]+c>cap)) return;
+        const to=idx+u.b.legs.length+u.d, p=s.p*u.b.p;
+        if(!best[to]||p>best[to].p) best[to]={p,b:u.b,prev:s};
+      });
+    }
+  });
+  let top=null;
+  for(let idx=N;idx<size;idx+=K) if(best[idx]&&(!top||best[idx].p>top.p)) top=best[idx];
+  if(!top) return null;
+  const legs=[]; for(let x=top;x&&x.b;x=x.prev) legs.unshift(...x.b.legs);
+  return {p:top.p,keys:new Set(legs.map(l=>l.gi+":"+l.type)),legs:legs.map(l=>({...l}))};
 }
 function buildSlips(N){
-  const gis=hotGames(league).map(x=>x.gi);
-  let beam=[{k:0,p:1,b:null,prev:null}];
-  gis.forEach(gi=>{
-    const blocks=gameBlocks(gi), by={};
-    const push=x=>{(by[x.k]=by[x.k]||[]).push(x);};
-    beam.forEach(ps=>{ push(ps); blocks.forEach(b=>{ const k=ps.k+b.legs.length; if(k<=N) push({k,p:ps.p*b.p,b,prev:ps}); }); });
-    beam=[]; for(const k in by){ by[k].sort((a,b)=>b.p-a.p); beam.push(...by[k].slice(0,BEAM)); }
-  });
-  const full=beam.filter(x=>x.k===N).sort((a,b)=>b.p-a.p);
-  const need=Math.max(2,Math.ceil(N/2)), out=[];        // no two slips share more than half their picks
-  for(const s of full){
-    const legs=[]; for(let x=s;x&&x.b;x=x.prev) legs.unshift(...x.b.legs);
-    const keys=new Set(legs.map(l=>l.gi+":"+l.type));
-    if(out.some(o=>{let sh=0;o.keys.forEach(k=>{if(keys.has(k))sh++;});return N-sh<need;})) continue;
-    out.push({keys,legs:legs.map(l=>({...l}))});
-    if(out.length===HOT_TOP) break;
-  }
+  const games=hotGames(league).map(x=>gameBlocks(x.gi)).filter(b=>b.length);
+  const cap=N-Math.max(2,Math.ceil(N/2)), out=[];       // no two slips share more than half their picks
+  while(out.length<HOT_TOP){ const s=bestSlip(games,N,out,cap); if(!s) break; out.push(s); }
   return out;
 }
 function renderHot(){
@@ -41,15 +59,12 @@ function renderHot(){
   const name=LEAGUE_NAME[league], all=GAMES.filter(G=>G.sim&&lgOf(G)===league).length, lined=hotGames(league).length;
   if(!all){ st.textContent=`No ${name} games with lines yet — lines load closer to game day.`; return; }
   if(!lined){ st.textContent=`No ${name} games match these filters — loosen them to search for slips.`; return; }
-  st.textContent=`Searching ${lined} ${name} games for the best ${hotN}-pick slips…`;
-  setTimeout(()=>{
-    const t0=performance.now();
-    HOT=buildSlips(hotN);
-    if(!HOT.length){ st.textContent="Couldn't build a slip with the pick types your app offers — turn a type back on or clear \"Not on my app\"."; return; }
-    const na=[...NA].filter(k=>BY_ID[k.split("|")[0]]!=null).length;
-    st.textContent=`Top ${HOT.length} ${name} slips from ${lined} games, ranked by the chance the whole slip hits${na?` · skipping ${na} pick${na>1?"s":""} you marked not on your app`:""}. Tap one to adjust lines.`;
-    HOT.forEach((s,i)=>{ const d=document.createElement("div"); d.className="hs"; out.appendChild(d); paintHot(d,s,i); });
-  },20);
+  /* built right here, not on a timer: a background tab throttles timers and the list would sit on "Searching" */
+  HOT=buildSlips(hotN);
+  if(!HOT.length){ st.textContent="Couldn't build a slip with the pick types your app offers — turn a pick type back on or tap \"Clear N/A\"."; return; }
+  const na=[...NA].filter(k=>BY_ID[k.split("|")[0]]!=null).length;
+  st.textContent=`Top ${HOT.length} ${name} slips from ${lined} games, ranked by the chance the whole slip hits${na?` · skipping ${na} pick${na>1?"s":""} you marked N/A`:""}. Tap one to adjust lines.`;
+  HOT.forEach((s,i)=>{ const d=document.createElement("div"); d.className="hs"; out.appendChild(d); paintHot(d,s,i); });
 }
 function paintHot(d,s,i){
   const {joint}=slipProb(s.legs), n=s.legs.length;
@@ -94,7 +109,7 @@ function openSheet(l,onChange){
 }
 document.getElementById("sheet").addEventListener("click",e=>{ if(e.target.id==="sheet") e.target.close(); });
 
-/* ---- "not on my app": picks the app doesn't offer. Keyed by game id so they
+/* ---- N/A: picks the app doesn't offer. Keyed by game id so they
    expire with the game. These DO change the hot slips (reshuffle). ---- */
 function naLoad(){ try{return new Set(JSON.parse(localStorage.getItem("cloverNA")||"[]"));}catch(e){return new Set();} }
 let NA=new Set();
@@ -163,9 +178,9 @@ document.getElementById("pays").addEventListener("input",e=>{ const v=parseFloat
 document.getElementById("who").onchange=e=>{S.who=e.target.value;saveSlip();};
 document.getElementById("copy").onclick=()=>{
   const n=S.legs.length; if(!n) return;
-  const {joint}=slipProb(S.legs), pay=payoutFor(n);
+  const {joint}=slipProb(S.legs), pay=payoutFor();
   const desc=S.legs.map(l=>{const G=GAMES[l.gi];return `${lgOf(G)==="nfl"?"NFL ":""}${G.away} @ ${G.home} ${legLabel(G,l)}`;}).join(" | ");
-  const row=[new Date().toISOString().slice(0,10),S.who,desc,n,pay?money(pay.dec)+(pay.est?" est":""):"",pct(joint),pay?grade(joint*pay.dec-1).word:"",""].join("\t");   /* result column stays blank for the sheet */
+  const row=[new Date().toISOString().slice(0,10),S.who,desc,n,pay?money(pay.dec):"",pct(joint),pay?grade(joint*pay.dec-1).word:"",""].join("\t");   /* result column stays blank for the sheet */
   navigator.clipboard.writeText(row).then(()=>{const b=document.getElementById("copy");b.textContent="Copied — paste in the sheet";setTimeout(()=>b.textContent="Copy row for the log",2200);});
 };
 (function chips(){
@@ -192,7 +207,7 @@ function init(){
   const tag=document.getElementById("ratingsTag");
   const count=lg=>GAMES.filter(G=>G.sim&&lgOf(G)===lg).length, nC=count("ncaaf"), nN=count("nfl");
   document.getElementById("nNcaaf").textContent=nC?`${nC}`:""; document.getElementById("nNfl").textContent=nN?`${nN}`:"";
-  if(!R){ tag.textContent="No lines file loaded — run refresh.py first"; tag.classList.add("stale"); }
+  if(!R){ tag.textContent="Couldn't load the lines file — reload the page"; tag.classList.add("stale"); }
   else {
     const gen=new Date(R.generated), lg=R.lines_generated?new Date(R.lines_generated):gen, mins=Math.round((Date.now()-lg)/60000);
     const ago=mins<60?`${mins} min ago`:mins<2880?`${Math.round(mins/60)} hr ago`:`${Math.round(mins/1440)} days ago`;
@@ -201,7 +216,7 @@ function init(){
     const newest=(alt&&alt>lg)?alt:lg;
     tag.textContent=`Last refresh — ${newest.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago})`;
     if(mins>360||!lined) tag.classList.add("stale");
-    if(!lined) tag.textContent+=" — run refresh.py";
+    if(!lined) tag.textContent+=" — no games with lines right now";
     /* a feed was down on the last refresh: that league is showing older lines (refresh.py sets R.stale) */
     const down=Object.keys(R.stale||{});
     if(down.length){
