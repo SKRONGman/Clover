@@ -4,215 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://cdn.collegefootballdata.com https://a.espncdn.com data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
-<title>Clover — The Card</title>
+<title>Clover</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --field:#14312A; --field2:#0E241F; --rule:#26463D;
-  --chalk:#F2F0E9; --chalk2:#A9BDB4;
-  --slip:#FFFFFF; --paper:#F7F6F2; --tint:#F3F7F4;
-  --ink:#101815; --muted:#6B7A74; --line:#D8D5CC;
-  --good:#1C7C4A; --bad:#A32F2F; --mid:#8A6D00; --flag:#E8B93C;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--field);color:var(--ink);
-  font-family:Barlow,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
-.wrap{max-width:1100px;margin:0 auto;padding:16px 18px 110px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
-@media(max-width:820px){.two{grid-template-columns:1fr}}
-.cond{font-family:"Barlow Condensed",Barlow,sans-serif}
-.hidden{display:none !important}
-button{font-family:inherit;font-weight:500;cursor:pointer;border-radius:4px;border:1px solid transparent;padding:10px 14px;font-size:15px;min-height:44px}
-button:disabled{cursor:default;opacity:.6}
-input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:4px;font-family:inherit;font-size:16px;background:#fff;color:var(--ink);min-height:44px}
-input:focus,select:focus,button:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
-label{display:block;font-size:13px;color:var(--muted);margin-bottom:3px}
-
-/* ---------- header + nav ---------- */
-header{color:var(--chalk);padding:4px 0 14px}
-h1{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:0}
-header p{margin:6px 0 0;color:var(--chalk2);font-size:15px;max-width:52ch}
-.tag{display:inline-block;margin-top:10px;font-size:13px;color:var(--chalk2);border:1px solid var(--rule);border-radius:3px;padding:3px 8px}
-.tag.stale{border-color:var(--flag);color:var(--flag)}
-.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 12px;min-height:36px}
-.ghost.light{border-color:#3A5D53;color:var(--chalk2)}
-.primary{background:var(--flag);color:#3A2E06;font-weight:600;font-size:17px;font-family:"Barlow Condensed",sans-serif;letter-spacing:.02em;padding:13px 16px;width:100%}
-.tabs{display:flex;gap:6px;margin:6px 0 4px}
-.tab{flex:1;background:transparent;border:1px solid var(--rule);color:var(--chalk2);padding:10px;
-  font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;letter-spacing:.02em}
-.tab[aria-selected="true"]{background:var(--flag);color:#3A2E06;border-color:var(--flag)}
-.tab .n{display:inline-block;min-width:22px;padding:0 6px;border-radius:11px;background:rgba(0,0,0,.18);font-size:14px;margin-left:6px}
-
-/* ---------- league switch ---------- */
-.lg{display:flex;gap:6px;margin:10px 0 0;max-width:420px}
-.lg .chip{background:transparent;border-color:var(--rule);color:var(--chalk2);font-family:"Barlow Condensed",sans-serif;font-size:18px;letter-spacing:.02em}
-.lg .chip[aria-pressed="true"]{background:var(--chalk);color:var(--ink);border-color:var(--chalk)}
-.lg .chip .n{font-family:Barlow,sans-serif;font-weight:400;font-size:13px;margin-left:6px;opacity:.8}
-.gameHead .lgTag{border:1px solid var(--line);border-radius:3px;padding:0 5px;margin-left:6px;font-size:11px}
-
-/* ---------- panels ---------- */
-.slip{background:var(--slip);border-radius:6px;padding:14px;margin-top:14px;border-left:4px solid var(--field)}
-.slip h2{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:600;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.slip h2 .sub{font-family:Barlow,sans-serif;font-weight:400;font-size:13px;color:var(--muted)}
-.board{background:var(--field2);border:1px solid var(--rule);border-radius:6px;padding:16px;margin-top:14px;color:var(--chalk)}
-.board .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:64px;line-height:.9}
-.board .sub{color:var(--chalk2);font-size:14px;margin-top:4px}
-.verdict{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:24px;margin-top:12px}
-.pos{color:#7ED9A2}.neg{color:#F2A0A0}.mid{color:#E8D9A0}
-.slip .pos{color:var(--good)}.slip .neg{color:var(--bad)}.slip .mid{color:var(--mid)}
-.why{color:var(--chalk2);font-size:15px;margin-top:4px;line-height:1.45}
-.math{margin-top:12px;border-top:1px solid var(--rule);padding-top:10px}
-.math summary{cursor:pointer;color:var(--chalk2);font-size:14px;list-style:none;min-height:28px}
-.math summary::before{content:"▸ "}.math[open] summary::before{content:"▾ "}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:8px}
-.grid2 span{display:block;color:var(--chalk2);font-size:13px}
-.grid2 strong{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:24px}
-.note{color:var(--chalk2);font-size:14px;margin-top:14px;line-height:1.45}
-.note b{color:var(--chalk)}
-.small{font-size:13px;color:var(--muted)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.est{display:inline-block;font-size:12px;color:var(--mid);border:1px solid var(--mid);border-radius:3px;padding:0 6px;margin-left:6px;vertical-align:middle}
-.actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.actions button{flex:1}
-.chips{display:flex;gap:6px}
-.chip{flex:1;background:transparent;border:1px solid var(--line);color:var(--ink);padding:8px 0;font-size:17px;font-weight:600}
-.chip[aria-pressed="true"]{background:var(--field);color:var(--chalk);border-color:var(--field)}
-.warn{background:#FFF6DC;border-left:4px solid var(--flag);padding:10px 12px;font-size:14px;margin-top:10px;border-radius:0 4px 4px 0}
-.empty{color:var(--muted);font-size:15px;padding:8px 0}
-
-/* ---------- logos ---------- */
-.logo{width:44px;height:44px;border-radius:50%;background:var(--tint);border:1px solid var(--line);flex:none;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--ink)}
-.logo img{width:36px;height:36px;object-fit:contain}
-.logo.sm{width:28px;height:28px;font-size:11px}.logo.sm img{width:22px;height:22px}
-.logo.duo{position:relative;background:#fff}
-.logo.duo img{position:absolute;width:26px;height:26px}
-.logo.duo img:first-child{left:3px;top:3px}.logo.duo img:last-child{right:3px;bottom:3px}
-
-/* ---------- build your own ---------- */
-.day summary{cursor:pointer;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px;padding:10px 0;border-bottom:1px solid var(--line);list-style:none;display:flex;justify-content:space-between}
-.day summary::after{content:"▸";color:var(--muted)}.day[open] summary::after{content:"▾"}
-.dayGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;padding:6px 0}
-@media(max-width:900px){.dayGrid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.dayGrid{grid-template-columns:1fr}}
-.game{padding:10px 0;border-bottom:1px solid #EEECE6}
-.gHead{display:flex;align-items:center;gap:8px;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:18px}
-.gHead .when{margin-left:auto;font-family:Barlow,sans-serif;font-weight:400;font-size:13px;color:var(--muted);white-space:nowrap}
-.picks{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
-.pick{background:#fff;border:1px solid var(--line);color:var(--ink);text-align:left;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:500}
-.pick b{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:17px;color:var(--muted)}
-.pick[aria-pressed="true"]{background:var(--field);color:var(--chalk);border-color:var(--field)}
-.pick.na{opacity:.45;text-decoration:line-through}
-.pick[aria-pressed="true"] b{color:var(--chalk)}
-
-/* ---------- legs (card + hot slips) ---------- */
-.gameHead{display:flex;justify-content:space-between;gap:8px;padding:10px 0 2px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.leg{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:start;padding:8px 0}
-.leg .right{text-align:right}
-.leg .rm{display:block;margin:6px 0 0 auto;font-size:13px;min-height:32px;padding:4px 8px;border:1px solid transparent;background:transparent;color:var(--bad)}
-.leg .pickName{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:21px;line-height:1.1}
-.leg .who{font-size:13px;color:var(--muted);margin-top:2px}
-.leg .pct{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:26px;text-align:right;line-height:1}
-.leg .pct small{display:block;font-family:Barlow,sans-serif;font-weight:400;font-size:11px;color:var(--muted);margin-top:2px}
-.leg .dk{font-size:12px;color:var(--muted);margin-top:4px}
-.nudge{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
-.nudge button{padding:0;width:44px;height:44px;font-size:20px;line-height:1;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:600}
-.nudge .val{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px;min-width:64px;height:44px;padding:0 6px;text-align:center;
-  background:var(--paper);border:1px dashed var(--muted);color:var(--ink)}
-.nudge .val.moved{color:var(--mid);border-color:var(--mid)}
-.nudge .hint{font-size:12px;color:var(--muted)}
-.together{margin:2px 0 6px;padding:6px 10px;background:var(--tint);border-radius:4px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.together b{color:var(--ink)}
-.together button{padding:4px 9px;font-size:12px;min-height:32px;border:1px solid var(--bad);color:var(--bad);background:#fff}
-.together button.done{border-color:var(--line);color:var(--muted);background:var(--paper)}
-.leg .na{display:block;margin:6px 0 0 auto;font-size:12px;min-height:32px;padding:4px 8px;border:1px solid var(--line);background:var(--paper);color:var(--muted);white-space:nowrap}
-.leg .na:hover{border-color:var(--bad);color:var(--bad)}
-
-/* ---------- hot slips ---------- */
-#hotOut{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;align-items:start}
-@media(max-width:900px){#hotOut{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){#hotOut{grid-template-columns:1fr}}
-.hs{background:var(--slip);border-radius:6px;border-left:4px solid var(--field);overflow:hidden}
-.hs.open{border-left-color:var(--flag)}
-.hsHead{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:none;border-top:0;border-right:0;border-left:0;text-align:left;border-radius:0;font:inherit;color:inherit}
-.hsHead .rank{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 7px}
-.hsHead .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:34px;line-height:1}
-.hsHead .sub{font-size:13px;color:var(--muted);margin-top:2px}
-.hsBody{padding:0 14px 6px}
-.hs:not(.open) .hsBody .nudge,.hs:not(.open) .hsFoot{display:none}
-.hs:not(.open) .hsBody .leg{padding:6px 0}
-.hsFoot{display:flex;gap:10px;padding:8px 14px 14px}
-.hsFoot button{flex:1}
-
-/* ---------- sticky slip bar ---------- */
-.bar{position:fixed;left:0;right:0;bottom:0;background:var(--chalk);border-top:3px solid var(--flag);padding:10px 14px;z-index:5;box-shadow:0 -6px 20px rgba(0,0,0,.25)}
-.bar .in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.bar .big{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:28px;line-height:1}
-.bar .sub{font-size:13px;color:var(--muted)}
-.bar button{margin-left:auto;width:auto;padding:10px 18px}
-
-/* ---------- line sheet ---------- */
-dialog{border:0;border-radius:10px 10px 0 0;padding:0;width:100%;max-width:640px;margin:auto auto 0;background:var(--slip);color:var(--ink);max-height:88vh}
-dialog::backdrop{background:rgba(0,0,0,.55)}
-.sheet{padding:14px}
-.sheet h2{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:600;margin:0 0 4px;display:flex;justify-content:space-between;align-items:center}
-.sheet .close{width:44px;height:44px;padding:0;border:1px solid var(--line);background:#fff;font-size:20px}
-.ladder{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
-.ladder th{color:var(--muted);font-weight:500;font-size:13px;text-align:right;padding:6px 4px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
-.ladder td{text-align:right;padding:0 4px;border-bottom:1px solid #EEECE6}
-.ladder th:first-child,.ladder td:first-child{text-align:left}
-.ladder tr.base td{background:var(--tint);font-weight:600}
-.ladder tr.cur td{outline:2px solid var(--flag);outline-offset:-2px}
-.ladder td.p{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px}
-.ladder button.use{width:100%;text-align:left;background:none;border:0;padding:10px 4px;font:inherit;color:inherit;border-radius:0}
-.scroll{overflow:auto;max-height:60vh}
-
-/* ---------- redesign ---------- */
-.hRow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.fHead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 14px}
-.fHead h2{margin:0}
-.fGrp{display:flex;align-items:center;gap:8px}
-.fGrp>label,.fGrp>span.lbl{font-size:13px;font-weight:600;color:#3F4E48;letter-spacing:.02em;margin:0}
-.fGrp select{width:210px}
-.fRow3{display:flex;align-items:center;gap:12px;margin-top:12px}
-.gcard{display:grid;grid-template-columns:minmax(150px,1.9fr) 1fr 1fr 1fr;gap:6px;align-items:stretch;margin:6px 0 2px}
-.gcard .colh{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-align:center;align-self:end}
-.gcard .team{display:flex;align-items:center;gap:10px;min-width:0}
-.gcard .team .ha{font-size:11px;font-weight:700;color:var(--muted);width:10px;flex:none}
-.gcard .team .nm{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cell{background:#fff;border:1px solid var(--line);border-radius:4px;min-height:48px;padding:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer}
-.cell .ln{font-size:13px;font-weight:600;color:var(--ink)}
-.cell .pp{font-size:12px;color:var(--muted)}
-.cell[aria-pressed="true"]{background:#E8F2EA;border:1.5px solid var(--good)}
-.cell[aria-pressed="true"] .ln,.cell[aria-pressed="true"] .pp{color:#14312A;font-weight:700}
-.cell.na{opacity:.45;text-decoration:line-through}
-.naBtn{background:var(--paper);border:1px solid var(--line);color:var(--muted);border-radius:4px;font-size:12px;font-weight:600;min-height:30px;padding:4px}
-.naBtn[aria-pressed="true"]{background:#EFE7E7;border-color:var(--bad);color:var(--bad)}
-.gMeta{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted);margin-top:12px}
-
-/* ---------- games that have kicked off ---------- */
-.gHead.hasScore{flex-wrap:wrap;gap:6px}
-.gHead.hasScore .when{margin-left:0}
-.tScore{font-family:Barlow,sans-serif;font-weight:600;font-size:12px;letter-spacing:.02em;background:var(--field);color:#fff;
-  border-radius:3px;padding:1px 7px;white-space:nowrap;display:inline-flex;gap:6px;align-items:baseline}
-.tScore .pts{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:14px}
-.tScore.off{background:#E4E2DB;border:1px solid var(--line);color:var(--muted)}
-.hChip{font-family:Barlow,sans-serif;font-weight:500;font-size:12px;background:#fff;
-  border:1px solid var(--line);color:var(--ink);border-radius:4px;padding:3px 9px;white-space:nowrap}
-.game.done .hChip{background:var(--paper);color:var(--muted)}
-.hChip.fin,.game.done .hChip.fin{background:#FDECEC;border-color:var(--bad);color:var(--bad);font-weight:600}
-.game.done{opacity:.78}
-.game.done .pick{cursor:default;background:var(--paper);color:var(--muted)}
-.gcard.locked .cell{cursor:default;background:var(--paper);opacity:.75}
-.gcard.locked .cell[aria-pressed="true"]{opacity:1;background:#E8F2EA}
-.gcard.locked .cell[aria-pressed="true"].lost{background:#FBECEC;border-color:var(--bad)}
-.gcard.locked .cell[aria-pressed="true"].lost .ln,.gcard.locked .cell[aria-pressed="true"].lost .pp{color:#5A1C1C}
-.cell .res{font-size:11px;font-weight:600;letter-spacing:.04em}
-.cell .res.w{color:var(--good)}.cell .res.l{color:var(--bad)}
-</style>
+<link rel="stylesheet" href="clover.css?v=20260920">
 </head>
 <body>
 <div class="wrap">
@@ -297,11 +93,11 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
   </div>
 </section>
 
-<!-- ================= THE CARD ================= -->
+<!-- ================= MY BET ================= -->
 <section id="viewCard" role="tabpanel" class="hidden"><div class="two"><div>
   <div class="board">
     <div class="big" id="bigProb">—</div>
-    <div class="sub" id="bigSub">Add picks from the Slips tab</div>
+    <div class="sub" id="bigSub">Add picks from NCAA Slips or NFL Slips</div>
     <div class="verdict" id="verdict"></div>
     <div class="why" id="why"></div>
     <details class="math" id="mathBox">
@@ -319,12 +115,12 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
   <div class="slip">
     <h2>Payout</h2>
     <div class="row">
-      <div><label for="pays">Your app pays, on $1 <span class="est" id="paysEst">est.</span></label>
+      <div><label for="pays">Your app pays, on $1</label>
         <input id="pays" type="number" step="0.01" min="1" inputmode="decimal" placeholder="e.g. 6.00"></div>
       <div><label for="who">Whose pick</label>
         <select id="who"><option>Danny</option><option>Jaclyn</option></select></div>
     </div>
-    <p class="small" id="paysNote" style="margin:8px 0 0">Type what your app shows for this slip. Until you do, this is a typical pick'em payout — an estimate.</p>
+    <p class="small" id="paysNote" style="margin:8px 0 0">Type what your app shows for this slip. Clover gives no verdict until you do — it won't guess a payout.</p>
   </div>
 </div><div>
   <div class="slip" style="margin-top:14px">
@@ -342,7 +138,7 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
     <button class="ghost light" id="copy" type="button">Copy row for the log</button>
     <button class="ghost light" id="backToSlips" type="button">Add more picks</button>
   </div>
-  <p class="note">College lines auto-fill from DraftKings and NFL lines from ESPN BET — both run close to most pick'em apps. If your app shows a different number, tap the line and pick it from the list.</p>
+  <p class="note">Lines auto-fill from DraftKings, college and NFL. If DraftKings has no line for a game, Clover uses the next book that does. If your app shows a different number, tap the line and pick it from the list.</p>
 </div></div></section>
 
 </div>
@@ -350,14 +146,15 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
 <div class="bar hidden" id="bar">
   <div class="in">
     <div><div class="big" id="barProb">—</div><div class="sub" id="barSub"></div></div>
-    <button class="primary" id="barGo" type="button">See the Card</button>
+    <button class="primary" id="barGo" type="button">Open My Bet</button>
   </div>
 </div>
 
 <dialog id="sheet" aria-label="Every line for this pick"><div class="sheet" id="sheetIn"></div></dialog>
 
-<script src="preview1.js"></script>
-<script src="preview2.js"></script>
-<script src="preview3.js"></script>
+<script src="preview1.js?v=20260920"></script>
+<script src="filters.js?v=20260920"></script>
+<script src="preview2.js?v=20260920"></script>
+<script src="preview3.js?v=20260920"></script>
 </body>
 </html>
