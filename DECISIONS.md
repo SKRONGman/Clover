@@ -32,7 +32,7 @@ Also decided 2026-09-20:
 ### Architecture (since the 2026-09-08 rebuild — "option B")
 - **Two leagues, one list.** Every game in `upcoming` carries `league: "ncaaf" | "nfl"`. College slate + lines from CFBD. **NFL slate + lines from the-odds-api (DraftKings)** — see "NFL data source". No NFL rating model — the sim centers on the line, so none is needed.
 - **The page never simulates.** `refresh.py` → `sim.py` plays every lined game out 20,000 times (centered on the market line; college SD 15.2, NFL total SD 13.1 / margin SD 11.7) and ships a sparse (total, margin) table per game in `ratings.js` (`g.sim`, ~5 KB/game, varint+base64). Every % on every screen is a lookup in that table — identical on every device, identical across screens, and it is the same code `calibrate.py` certifies. **A game that has kicked off carries no table** — only the six frozen percentages it was priced at.
-- **Hot slips are built in the page** (beam search over the tables) so N/A feedback reshuffles instantly. Top 6, no two share more than half their picks. Built per league.
+- **Hot slips are built in the page** from the tables so N/A feedback reshuffles instantly. Top 6, no two share more than half their picks. Built per league. **Exact search since 2026-09-20** (`bestSlip` in `preview3.js`): games are independent, so the best slip is a knapsack over games - no beam, no tie-order surprises, and it always finds all 6. Same-game combos are priced once per page load; 0% combos are never offered.
 - `ratings.js` carries only what the page needs (slate, lines, alt lines, sims, logos, colors). `ratings.json` keeps everything incl. team ratings + accuracy (research). `results.json` is the append-only grading record.
 - Games with no line are not offered (nothing to center on).
 - One `slip` object in JS state (`cloverSlip`, keyed by game id). Every screen reads/writes it. Spread lines are always the side's OWN number, everywhere.
@@ -63,7 +63,7 @@ Also decided 2026-09-20:
 - **Mock up before building.** For any change to a screen area (header, filters, hot slips, card), show a mockup and get agreement first. The 2026-09-19 redesign was agreed on a Design canvas before a line of code was written, and it saved rework.
 - **Don't hand Danny GitHub chores Claude can do itself** (2026-09-20, emphatically). Claude has write access: push, verify, and report. Only the three limits under "Deploying changes" — oversized files, `.github/workflows/`, and triggering Actions — are his, and each should be named with the reason, not as a to-do list.
 - Novice coder — never ask him to run git or a terminal.
-- `PAYOUT` table (1→1.909, 2→3x, 3→6x, 4→10x, 5→20x, 6→25x) is a stand-in — the page asks for the real payout on My Bet.
+- ~~`PAYOUT` stand-in table~~ **deleted 2026-09-20 under ruling 1.** A payout exists only once it is typed on My Bet; until then there is no verdict on My Bet, the bottom bar or the copied row.
 - Streamlit rejected. GitHub Actions + Pages chosen instead.
 - Skip the "Odds API Automation" MCP wrapper (Composio middleman) — asked twice, answered twice.
 - `theoddsapi.com` (no hyphens) is a look-alike service — ignore that account.
@@ -76,7 +76,7 @@ The old rule ("all filters apply to both") is **split**. Hot Slips always search
 
 | Filter | Build Your Own | Hot Slips |
 | --- | --- | --- |
-| Date | applies | **ignored** |
+| Date | applies ("Today" = the nearest day with games in the chosen Game status, since 2026-09-20) | **ignored** |
 | Game status | applies | **ignored** (upcoming only) |
 | Game time | applies | applies |
 | Conference | applies | applies |
@@ -85,10 +85,12 @@ The old rule ("all filters apply to both") is **split**. Hot Slips always search
 
 ### Deploying changes (updated 2026-09-20)
 Claude has **direct GitHub read/write** via the GitHub connector (authenticated as SKRONGman) and pushes straight to `main`. **Never ask Danny to run git or a terminal.** Three hard limits, all confirmed by hitting them:
-- **The write tool takes file contents inline** — it cannot read from Claude's workspace. Anything over roughly **25 KB must be split into multiple files** or it truncates mid-call, and a truncated file still commits successfully and silently breaks the app. That is why the app is four files. **`refresh.py` is 56 KB and therefore cannot be pushed at all** — splitting it into modules under 25 KB each is the fix (open item 3). Until then, changes to it are a manual upload.
+- **The write tool takes file contents inline** — it cannot read from Claude's workspace. Anything over roughly **25 KB must be split into multiple files** or it truncates mid-call, and a truncated file still commits successfully and silently breaks the app. That is why the page is four scripts (`preview1.js`, `filters.js`, `preview2.js`, `preview3.js`) plus `clover.css`, and why `refresh.py` is six modules. **Every code file is now pushable** (split 2026-09-20); `ci/checks.py` fails any hand-edited file at 24.8 KB.
 - **`.github/workflows/` is refused with 403** — "Resource not accessible by integration". The connector token lacks the `workflow` scope, and no phrasing gets around it. Workflow edits are a manual upload, every time.
 - **Claude cannot trigger or read GitHub Actions runs**, and cannot read or set Secrets. Running a refresh is Danny. **But the committed output is better evidence than the log anyway** — `ratings.js` and `results.json` are in the repo after every run, and Claude can read and analyse them directly. Do that before asking Danny for a log.
-- **Always verify a push.** `git clone` the repo into the workspace (public read works from the sandbox), edit and test there, push via the connector, then `git fetch` and md5 the pushed file against the local one. Used on every file shipped 2026-09-20. **Verification is not a formality — it caught a dropped settled rule in the first STATUS.md push of 2026-09-19.**
+- **Run `python ci/checks.py` before every push; don't push on a failure.**
+- **Always verify a push.** `git clone` the repo into the workspace (public read works from the sandbox), edit and test there, push via the connector, then compare `git hash-object <file>` with the blob `sha` the push returns (same bytes = same sha), or `git fetch` and md5. Finish by running the checks on a fresh clone. Used on every file shipped 2026-09-20. **Verification is not a formality — it caught a dropped settled rule in the first STATUS.md push of 2026-09-19.**
+- **One file per push means the page passes through mixed states.** Push order that keeps the live page working: new files first, then the scripts that only *use* new things, `index.html`, and last the script that *removes* things. Expect one red Checks run in the middle.
 - **Test the page headlessly before pushing.** A Node stub of `document`/`localStorage` plus the real `ratings.js` runs `init()` and every render path in about a second, and catches exactly the class of bug that shipped tonight.
 - Claude **cannot reach `skrongman.github.io`** from its sandbox (egress allowlist) — it can never confirm the live page renders. Danny checks.
 - **File deletions require Danny's approval** in the UI; Claude's delete call is refused without it.
