@@ -1,6 +1,6 @@
 # Clover — project status
 
-Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live**, except one visual item from row 2 (finished-game contrast) that is waiting on a mockup OK. Next chat: row 3.
+Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live.** Next chat: row 3.
 
 **Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
@@ -19,7 +19,7 @@ Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live**, excep
   - **"Today" follows Game status.** Before, Sunday night's NFL default (Today + Upcoming only) showed nothing. An empty list now names the filter hiding the games.
   - **Ruling 1 is in:** the stand-in payout table is deleted; no verdict on My Bet, the bar or the copied row until a payout is typed.
   - **Every stale word is at 0** and the list in `ci/checks.py` says so. The ESPN BET note now says DraftKings for both leagues; the unmeasured claim "both run close to most pick'em apps" was cut.
-  - Page files: CSS moved to `clover.css` (25 dead rules removed), filters moved to `filters.js`. `index.html` 24.8 -> 8.7 KB, `preview1.js` 21.7 -> 13.6 KB. Script tags carry `?v=20260920` - bump it when a script changes.
+  - Page files: CSS moved to `clover.css` (25 dead rules removed), filters moved to `filters.js`. `index.html` 24.8 -> 8.7 KB, `preview1.js` 21.7 -> 13.6 KB. Script and stylesheet tags carry `?v=<date>` - bump the tag of any file that changes (`clover.css` is at `20260921`).
   - New checks: page wiring (files `index.html` loads exist; ids the scripts ask for exist), 6 slips from a full slate, none at 0%, order, overlap, no verdict before a payout, default view never empty, one-game slate. `smoke.js` loads whatever `index.html` loads.
   - `health.json` confirmed after the first scheduled run on the new workflow (02:17 UTC): 4,982 CFBD calls and 19,954 odds credits left, nothing stale.
 - **Open, found in row 2:** NFL games drop off the slate once final (they are graded in `results.json`), so "Final (today)" is always empty for the NFL. `CHANGELOG.md` reached the 20 KB house limit, so history from row 2 on goes in `CHANGELOG-2.md`.
@@ -28,7 +28,7 @@ Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live**, excep
 ## Build order — one chat per row
 Kick off the next row with: **"Start row 3: design direction."**
 1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Orphans deleted and NFL alt lines switched to weekly the same night. Leftovers: 3 unused imports (`calibrate.py` x2, `bayes.py` x1) - fold into the next change to those files (`calibrate.py` is 24.7 KB, split it then).
-2. **Truth pass - DONE 2026-09-20**, except **finished-game contrast**: pick text on a finished card is effectively 1.77:1 (78% card fade x 60% disabled-button fade), score chips 2.46:1. Proposed fix: drop both fades, keep the grey look with solid colors, text `#4F5C57` (5.4:1 or better). CSS only (`clover.css`). Needs a before/after mockup and Danny's OK first.
+2. **Truth pass - DONE 2026-09-20.** Details under "Where things stand" and in `CHANGELOG-2.md`. Last piece, shipped after Danny OK'd the mockup: finished games are grey in solid colors, never faded (`--done:#4F5C57` in `clover.css`, 5.4:1 or better; it had been 1.8:1).
 3. **Design direction (next).** Compare Clover with 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks. Before any screen is rebuilt.
 4. **Front door.** Folded filters, today's upcoming games, Hot Slips always open, line-moved flag (if Danny approves it). Mockup first.
 5. **Build tab.** Own tab, grid layout, abbreviated team names (options in the mockup). Retires the six-button layout.
@@ -37,7 +37,6 @@ Kick off the next row with: **"Start row 3: design direction."**
 8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn, and the overnight AI recap.
 
 ## Waiting on Danny
-- **OK the finished-game contrast mockup** (row 2 leftover, above).
 - **Drop or keep the 67 `p: null` rows** in `results.json`.
 - At rows 7–8 only: the Google Sheet script (about 10 minutes, once) and an Anthropic API key stored as a GitHub secret.
 - One paste, once: the rewritten project instructions (Claude cannot edit the instructions box). Draft delivered in the row 1 chat.
