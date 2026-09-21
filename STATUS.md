@@ -1,6 +1,6 @@
 # Clover — project status
 
-Last updated: 2026-09-20 (night). **Row 1, the safety net, is done and live**, workflow files included. Next chat: row 2. Small leftovers are under "Waiting on Danny".
+Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live**, except one visual item from row 2 (finished-game contrast) that is waiting on a mockup OK. Next chat: row 3.
 
 **Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then the end-state doc. `CHANGELOG.md` is history — read it only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
@@ -10,18 +10,26 @@ Last updated: 2026-09-20 (night). **Row 1, the safety net, is done and live**, w
 - The live app is the 2026-09-19 redesign plus the 2026-09-20 pipeline (scores, statuses, `results.json`) plus tonight's safety net. History is in `CHANGELOG.md`.
 - **`refresh.py` is split** into `refresh.py` (18.8 KB, the conductor) + `cfbd.py` + `nfl.py` + `odds.py` + `ratings_math.py` + `common.py`. All under 20 KB, all pushed by Claude and md5-verified. Old and new code were run against the same fake feeds and produced a byte-identical slate.
 - **A dead feed no longer stops the other league.** CFBD down -> college games carry forward at their last good line, NFL still refreshes, `R.stale` names the league, and the page's Last refresh tag adds **"API ISSUE — College lines last updated <time>"** in red (Danny's wording). Same for the NFL if the-odds-api dies. `lines_generated` only moves on a fresh pull, so the clock never lies.
-- **`health.json`** (new, written every run): CFBD calls left (asked from CFBD's `/info` every 6 h, Clover's own count as fallback), odds credits left, which feeds are down. Under 500 CFBD calls, under 1,000 odds credits, or a stale league turns the run red **once a day, after the data is saved** - GitHub emails Danny. The new `refresh.yml` went in at 8:30 PM CT (`6c3550f`); **the first scheduled run on it had not happened when this was written - check that `health.json` exists in the repo and the run was green.**
+- **`health.json`** (new, written every run): CFBD calls left (asked from CFBD's `/info` every 6 h, Clover's own count as fallback), odds credits left, which feeds are down. Under 500 CFBD calls, under 1,000 odds credits, or a stale league turns the run red **once a day, after the data is saved** - GitHub emails Danny. The new `refresh.yml` went in at 8:30 PM CT (`6c3550f`).
 - **Tests exist now:** `python ci/checks.py` = file-size guard (fail 24.8 KB, warn 20 KB), stale-word check, 12 Python tests (one replays the 2026-09-20 outage), and a headless page test that proves the page's % equals Python's % and fails on a truncated file. All pass on the exact GitHub copy, and **the `Checks` workflow ran green on GitHub twice** (`bbd0453`, `6c3550f`). First real refresh on the split code (01:17 UTC) was clean: both leagues fresh, no stale flag, `nfl_diag.errors` = `["ESPN 403"]`.
 - Fewer CFBD calls: AP poll fetched once per week's poll (kept in `ratings.json`), not hourly. ESPN tried once, not three times; its error page no longer ships in `nfl_diag`.
 - **Bug found and fixed:** the Tuesday full refresh started from a blank record, so alt lines and frozen percentages vanished until Thursday. It now carries them over (`CARRY_KEYS` in `refresh.py`).
-- **Doc debt (fix first thing next chat):** `DECISIONS.md` > Deploying changes still says `refresh.py` is 56 KB and cannot be pushed. No longer true - every code file is now pushable. Also add there: run `python ci/checks.py` before every push.
+- **Row 2, the truth pass (2026-09-20):**
+  - Hot slips use an **exact search** now, not a 600-wide beam: 6 slips at every size (5- and 6-pick used to return 4), same order as before in every slot the old search filled, about 10x faster (college 6-pick 1,261 ms -> 132 ms in the sandbox). Same-game combos are priced once per page load, 0% combos are dropped, and there is no timer, so a background tab cannot stall on "Searching".
+  - **"Today" follows Game status.** Before, Sunday night's NFL default (Today + Upcoming only) showed nothing. An empty list now names the filter hiding the games.
+  - **Ruling 1 is in:** the stand-in payout table is deleted; no verdict on My Bet, the bar or the copied row until a payout is typed.
+  - **Every stale word is at 0** and the list in `ci/checks.py` says so. The ESPN BET note now says DraftKings for both leagues; the unmeasured claim "both run close to most pick'em apps" was cut.
+  - Page files: CSS moved to `clover.css` (25 dead rules removed), filters moved to `filters.js`. `index.html` 24.8 -> 8.7 KB, `preview1.js` 21.7 -> 13.6 KB. Script tags carry `?v=20260920` - bump it when a script changes.
+  - New checks: page wiring (files `index.html` loads exist; ids the scripts ask for exist), 6 slips from a full slate, none at 0%, order, overlap, no verdict before a payout, default view never empty, one-game slate. `smoke.js` loads whatever `index.html` loads.
+  - `health.json` confirmed after the first scheduled run on the new workflow (02:17 UTC): 4,982 CFBD calls and 19,954 odds credits left, nothing stale.
+- **Open, found in row 2:** NFL games drop off the slate once final (they are graded in `results.json`), so "Final (today)" is always empty for the NFL. `CHANGELOG.md` is at the 20 KB house limit - start `CHANGELOG-2.md` on the next entry.
 - `results.json`: 67 of 72 early rows have `p: null` (frozen before the feature existed). They grade hit/miss but cannot be used for calibration. **Still undecided: drop or keep.** Claude recommends dropping.
 
 ## Build order — one chat per row
-Kick off the next row with: **"Start row 2: the truth pass."**
-1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Orphans deleted and NFL alt lines switched to weekly the same night. Leftovers: 3 unused imports (`calibrate.py` x2, `bayes.py` x1) and `index.html`'s 17 dead CSS rules are built but not pushed - fold into the next change to those files (`calibrate.py` is 24.5 KB, split it then).
-2. **Truth pass (next).** Stale words ("ESPN BET", "Slips tab", "See the Card", "Not on my app"/"not on your app", tab title "Clover — The Card", "run refresh.py") - `ci/checks.py` holds the list with today's counts; take each to 0 and lower the number there; ruling 1 (no verdict before a real payout); 6-pick returning 4 slips under "Top 6"; filter combinations that silently show 0 games; finished-game contrast (chip 3.48:1 under 78% opacity); hot-slip speed (cache the same-game combos; a narrower beam changed the order for 2- and 5-pick, so confirm that is tie-ordering before shipping it); hot slips stalling in a background tab; `buildSlips` can rank an impossible same-game combo (0%) when the slate is tiny - drop p=0 blocks.
-3. **Design direction.** Compare Clover with 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks. Before any screen is rebuilt.
+Kick off the next row with: **"Start row 3: design direction."**
+1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Orphans deleted and NFL alt lines switched to weekly the same night. Leftovers: 3 unused imports (`calibrate.py` x2, `bayes.py` x1) - fold into the next change to those files (`calibrate.py` is 24.7 KB, split it then).
+2. **Truth pass - DONE 2026-09-20**, except **finished-game contrast**: pick text on a finished card is effectively 1.77:1 (78% card fade x 60% disabled-button fade), score chips 2.46:1. Proposed fix: drop both fades, keep the grey look with solid colors, text `#4F5C57` (5.4:1 or better). CSS only (`clover.css`). Needs a before/after mockup and Danny's OK first.
+3. **Design direction (next).** Compare Clover with 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks. Before any screen is rebuilt.
 4. **Front door.** Folded filters, today's upcoming games, Hot Slips always open, line-moved flag (if Danny approves it). Mockup first.
 5. **Build tab.** Own tab, grid layout, abbreviated team names (options in the mockup). Retires the six-button layout.
 6. **My Bet.** "Needs vs. has", full numbers reordered, verdict sized to match, "I placed this". Touch targets under 44 px (N/A, Prohibited, ghost buttons) and arrow keys on tabs. Mockup first.
@@ -29,6 +37,7 @@ Kick off the next row with: **"Start row 2: the truth pass."**
 8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn, and the overnight AI recap.
 
 ## Waiting on Danny
+- **OK the finished-game contrast mockup** (row 2 leftover, above).
 - **Drop or keep the 67 `p: null` rows** in `results.json`.
 - At rows 7–8 only: the Google Sheet script (about 10 minutes, once) and an Anthropic API key stored as a GitHub secret.
 - One paste, once: the rewritten project instructions (Claude cannot edit the instructions box). Draft delivered in the row 1 chat.
@@ -56,8 +65,8 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 
 ## Components (in repo)
 - **This file lives at the repo ROOT (`STATUS.md`)**, not `claude/STATUS.md`. The project instructions say `claude/STATUS.md`; the root file is the real one.
-- `index.html` — markup + CSS only. Loads `preview1.js`, `preview2.js`, `preview3.js` (classic scripts, shared global scope), and `ratings.js?v=<timestamp>` via a created script tag. CSP meta restricts scripts to self, images to the CFBD logo CDN + `a.espncdn.com`.
-- `preview1.js` / `preview2.js` / `preview3.js` — the app logic, split for the transmit limit. See "The app is now FOUR files".
+- `index.html` — markup only. Loads `clover.css` (all styles) and `preview1.js`, `filters.js`, `preview2.js`, `preview3.js` (classic scripts, shared global scope, that order), and `ratings.js?v=<timestamp>` via a created script tag. CSP meta restricts scripts to self, images to the CFBD logo CDN + `a.espncdn.com`.
+- `preview1.js` (data, lookups, slip state) / `filters.js` (filters, what "Today" means) / `preview2.js` (Build your own, the game grid, My Bet) / `preview3.js` (hot slips, line sheet, N/A, wiring, `init`) — split for the transmit limit.
 - `sim.py` — **the one football.** `SD_BY_LEAGUE` / `MARGIN_SD_BY_LEAGUE`, `sd_for`, `game_grid`, `Grid.prob`, `Grid.encode/decode`, `attach_sims`. `python sim.py` self-checks the encode/decode round trip.
 - `refresh.py` — the conductor: `write_upcoming`, `carry_college`, `note_freshness`, `rankings_for`, `carry_history`, `freeze_probs`, `record_results`, `build_ratings`; flags `--lines-only`, `--alt-lines`, `--health-gate`, `--check`, `--check-nfl`. Re-exports the names `calibrate.py` uses.
 - `cfbd.py` (college feed; `get` retries + counts calls; raises `CFBDDown`, never exits) · `nfl.py` (ESPN once → odds-api → carry forward; scores) · `odds.py` (`odds_get`, `team_match`, `pull_alt_lines`) · `ratings_math.py` (research-only ratings) · `common.py` (file names, dates, `atomic_write`, `health.json`).
