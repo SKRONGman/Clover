@@ -21,7 +21,7 @@ ODDS_BASE = "https://api.the-odds-api.com/v4"
 ODDS_SPORTS = {"ncaaf": "americanfootball_ncaaf", "nfl": "americanfootball_nfl"}
 ODDS_BOOK = "draftkings"
 ODDS_MIN_REMAINING = 40        # hard stop: no alt-line pulls with this few credits left
-NFL_ALT_EVERY_OTHER_WEEK = True
+NFL_ALT_EVERY_OTHER_WEEK = False      # was a free-tier saver; weekly since 2026-09-20 (Danny: ~35 credits a week on a 20K plan)
 
 
 def odds_get(path, **params):
@@ -169,5 +169,6 @@ def pull_alt_lines(up, league="ncaaf"):
 
 
 def nfl_alt_week():
-    """NFL alt lines run on even ISO weeks (see the credit math in CONFIG)."""
+    """True when this week's Thursday pull should include the NFL. Every week now;
+    with NFL_ALT_EVERY_OTHER_WEEK back on it would be even ISO weeks only."""
     return (not NFL_ALT_EVERY_OTHER_WEEK) or datetime.now(timezone.utc).isocalendar()[1] % 2 == 0

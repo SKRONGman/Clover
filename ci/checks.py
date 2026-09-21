@@ -34,7 +34,7 @@ MACHINE_WRITTEN = {"ratings.js"}            # refresh.py writes it; nobody pushe
 # may only go DOWN. Row 2 (the truth pass) takes every one of these to 0.
 PAGE_FILES = ("index.html", "preview1.js", "preview2.js", "preview3.js")
 STALE_WORDS = {"ESPN BET": 1, "Slips tab": 2, "See the Card": 1, "Not on my app": 2,
-               "not on your app": 2, "The Card": 2, "run refresh.py": 2, "every other Thursday": 1}
+               "not on your app": 2, "The Card": 2, "run refresh.py": 2, "every other Thursday": 0}
 
 
 def tracked_files():
