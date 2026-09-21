@@ -8,7 +8,7 @@
 #     (Monday added for Monday Night Football; college + NFL refresh together)
 #   Alt lines (DraftKings alternate spreads/totals via the-odds-api.com,
 #   spends ODDS_KEY credits, ~2 per game): Thursdays 15:10 UTC = 10:10am CDT.
-#     College every week; NFL every other week (even ISO weeks) - refresh.py decides.
+#     College and NFL every week (NFL was every other week until 2026-09-20; the switch is in odds.py).
 # Change the cron lines below to adjust. You can also run it any time from
 # the Actions tab -> "Refresh lines" -> "Run workflow".
 
