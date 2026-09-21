@@ -202,6 +202,15 @@ function init(){
     tag.textContent=`Last refresh — ${newest.toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})} (${ago})`;
     if(mins>360||!lined) tag.classList.add("stale");
     if(!lined) tag.textContent+=" — run refresh.py";
+    /* a feed was down on the last refresh: that league is showing older lines (refresh.py sets R.stale) */
+    const down=Object.keys(R.stale||{});
+    if(down.length){
+      const when=t=>t?new Date(t).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"}):"unknown";
+      const who=down.length>1?"All":(down[0]==="nfl"?"NFL":"College");
+      tag.textContent+=` · API ISSUE — ${who} lines last updated ${when(R.stale[down[0]].since)}`;
+      tag.title=down.map(k=>`${k==="nfl"?"NFL":"College"}: ${R.stale[k].reason}`).join(" | ");
+      tag.classList.add("stale");
+    }
   }
   loadLeague();
   if(!count(league)&&count(league==="ncaaf"?"nfl":"ncaaf")) league=league==="ncaaf"?"nfl":"ncaaf";   // open on whichever league has games
