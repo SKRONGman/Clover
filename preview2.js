@@ -10,7 +10,7 @@ function renderGames(){
   if(out.dataset.built!==fkey){
     out.innerHTML="";
     if(!all){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet — they load closer to game day.</p>`; out.dataset.built=fkey; return; }
-    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters.</p>`; out.dataset.built=fkey; return; }
+    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters. ${esc(filterBlame(league))}</p>`; out.dataset.built=fkey; return; }
     const byDay={};
     lined.forEach(x=>{ const d=new Date(x.G.start), k=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`; (byDay[k]=byDay[k]||[]).push(x); });
     let first=true;
@@ -38,7 +38,7 @@ function renderGames(){
     }
     out.dataset.built=fkey;
   }
-  out.querySelectorAll(".pick").forEach(b=>{ b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0); b.classList.toggle("na",!offered(+b.dataset.gi,b.dataset.type)); b.title=offered(+b.dataset.gi,b.dataset.type)?"":"Marked as not on your app"; });
+  out.querySelectorAll(".pick").forEach(b=>{ b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0); b.classList.toggle("na",!offered(+b.dataset.gi,b.dataset.type)); b.title=offered(+b.dataset.gi,b.dataset.type)?"":"Marked N/A — your app doesn't offer this pick"; });
 }
 
 /* ---- the line above a game: matchup, or score chips once it has kicked off ---- */
@@ -179,22 +179,20 @@ function legGroups(container,legs,opts){
   });
 }
 
-/* ---- The Card: live, no Analyze button ---- */
+/* ---- My Bet: live, no Analyze button ---- */
 function renderCard(){
   const n=S.legs.length, legsEl=document.getElementById("legs");
   legsEl.innerHTML="";
-  const paysIn=document.getElementById("pays"), pay=payoutFor(n);
+  const paysIn=document.getElementById("pays"), pay=payoutFor();
   document.getElementById("who").value=S.who;
   if(document.activeElement!==paysIn) paysIn.value=S.pays!=null?S.pays:"";
-  paysIn.placeholder=PAYOUT[n]?PAYOUT[n].toFixed(2):"";
-  document.getElementById("paysEst").classList.toggle("hidden",!(pay&&pay.est));
-  document.getElementById("paysNote").textContent = pay&&!pay.est ? "Using the payout you typed." : pay ? "Type what your app shows for this slip. Until you do, this is a typical pick'em payout — an estimate." : n?"No typical payout on file for that many picks — type your app's.":"";
+  document.getElementById("paysNote").textContent = pay ? "Using the payout you typed." : "Type what your app shows for this slip. Clover gives no verdict until you do — it won't guess a payout.";
   const set=(id,v)=>document.getElementById(id).textContent=v;
   const v=document.getElementById("verdict");
   if(!n){
-    set("bigProb","—"); set("bigSub","Add picks from the Slips tab"); v.textContent=""; set("why","");
+    set("bigProb","—"); set("bigSub","Add picks from NCAA Slips or NFL Slips"); v.textContent=""; set("why","");
     ["oBook","oBreak","oFair","oEv"].forEach(id=>set(id,"—")); set("stressOut","");
-    legsEl.innerHTML=`<p class="empty">Nothing on the card yet.</p>`; return;
+    legsEl.innerHTML=`<p class="empty">No picks yet.</p>`; return;
   }
   legGroups(legsEl,S.legs,{onChange:render,removable:true});
   /* legs whose game has finished are settled facts, not probabilities. They come
@@ -222,9 +220,9 @@ function renderCard(){
   }
   set("bigProb",pct(joint));
   set("bigSub",n===1?"chance this pick hits":n===2?"chance both picks hit":`chance all ${n} picks hit`);
-  if(!pay){ v.textContent=""; set("why","Type your app's payout above to get a verdict."); ["oBook","oBreak","oFair","oEv"].forEach(id=>set(id,"—")); set("stressOut",""); return; }
+  if(!pay){ v.textContent=""; set("why","Type your app's payout below to get a verdict."); ["oBook","oBreak","oFair","oEv"].forEach(id=>set(id,"—")); set("stressOut","Needs the payout first."); return; }
   const dec=pay.dec, ev=joint*dec-1, g=grade(ev), cents=Math.round(Math.abs(ev)*100);
-  v.className="verdict "+g.cls; v.textContent=g.word+(pay.est?" (est. payout)":"");
+  v.className="verdict "+g.cls; v.textContent=g.word;
   set("why",`${g.why} Bet $1: it pays ${money(dec)} if it hits. On average you get back ${money(joint*dec)} — about ${cents}¢ ${ev>=0?"ahead":"lost"} per $1.`);
   set("oBook",money(dec)); set("oBreak",(100/dec).toFixed(1)+"%"); set("oFair",joint>0?money(1/joint):"—"); set("oEv",(ev>=0?"+":"−")+cents+"¢");
   /* stress: total AND margin each nudged -3..+3 → 49 versions of the game, all lookups */
