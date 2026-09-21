@@ -1,10 +1,10 @@
 # Clover — project status
 
-Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live.** Next chat: row 3.
+Last updated: 2026-09-21. **Rows 1 and 2 are done and live. Row 3 (design direction) is decided; nothing on the live page changed.** Next chat: row 4.
 
-**Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
+**Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then `DESIGN.md` (the look, for any screen work), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
-- This file lives at the repo ROOT, not `claude/STATUS.md`. The project instructions still say `claude/`; the root files are the real ones.
+- The look for every screen from row 4 on: **"A. Board, dark"** - https://claude.ai/artifact/S5HiPEgQ8Kys9uuApeKoTq . Rules and colors are in `DESIGN.md`.
 
 ## Where things stand
 - The live app is the 2026-09-19 redesign plus the 2026-09-20 pipeline (scores, statuses, `results.json`) plus tonight's safety net. History is in `CHANGELOG.md` and `CHANGELOG-2.md`.
@@ -26,11 +26,11 @@ Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live.** Next 
 - `results.json`: 67 of 72 early rows have `p: null` (frozen before the feature existed). They grade hit/miss but cannot be used for calibration. **Still undecided: drop or keep.** Claude recommends dropping.
 
 ## Build order — one chat per row
-Kick off the next row with: **"Start row 3: design direction."**
+Kick off the next row with: **"Start row 4: front door."**
 1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Orphans deleted and NFL alt lines switched to weekly the same night. Leftovers: 3 unused imports (`calibrate.py` x2, `bayes.py` x1) - fold into the next change to those files (`calibrate.py` is 24.7 KB, split it then).
 2. **Truth pass - DONE 2026-09-20.** Details under "Where things stand" and in `CHANGELOG-2.md`. Last piece, shipped after Danny OK'd the mockup: finished games are grey in solid colors, never faded (`--done:#4F5C57` in `clover.css`, 5.4:1 or better; it had been 1.8:1).
-3. **Design direction (next).** Compare Clover with 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks. Before any screen is rebuilt.
-4. **Front door.** Folded filters, today's upcoming games, Hot Slips always open, line-moved flag (if Danny approves it). Mockup first.
+3. **Design direction - DONE 2026-09-21.** Danny picked "A. Board, dark" and approved three changes: hot slips show only their own picks, My Bet sits in a right rail on the front door, and spread/total buttons show the line only at the market line. Mockups only; no code shipped.
+4. **Front door (next).** In the dark Board look: folded filters, today's upcoming games, Hot Slips always open with picks-only tickets, My Bet rail, line-only spread/total buttons, line-moved flag (if Danny approves it). The mockup must also settle where the one-tap N/A and Prohibited buttons live now that tickets no longer show game grids, and the too-dark team color cutoff. Clickable mockup first.
 5. **Build tab.** Own tab, grid layout, abbreviated team names (options in the mockup). Retires the six-button layout.
 6. **My Bet.** "Needs vs. has", full numbers reordered, verdict sized to match, "I placed this". Touch targets under 44 px (N/A, Prohibited, ghost buttons) and arrow keys on tabs. Mockup first.
 7. **The bet record.** Save to the Google Sheet, capture the closing line and closing chance (finished games drop their tables, so the closing chance for a pick on a moved line must be saved at kickoff — design detail open), automatic grading.
@@ -39,7 +39,6 @@ Kick off the next row with: **"Start row 3: design direction."**
 ## Waiting on Danny
 - **Drop or keep the 67 `p: null` rows** in `results.json`.
 - At rows 7–8 only: the Google Sheet script (about 10 minutes, once) and an Anthropic API key stored as a GitHub secret.
-- One paste, once: the rewritten project instructions (Claude cannot edit the instructions box). Draft delivered in the row 1 chat.
 
 ## Parked
 Player props (needs new math, not just new data) · multi-book and Kalshi prices · second truth for tail calibration past 83% (Pinnacle or a `us_ex` exchange) · mobile polish · renaming `preview1/2/3.js` · neutral-site toggle · helmet art · Cowork background-task rule (Danny parked it 2026-09-19).
@@ -63,7 +62,7 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 - `refresh.py --check-nfl` prints the raw feed record next to what we parsed.
 
 ## Components (in repo)
-- **This file lives at the repo ROOT (`STATUS.md`)**, not `claude/STATUS.md`. The project instructions say `claude/STATUS.md`; the root file is the real one.
+- **This file lives at the repo ROOT (`STATUS.md`).** The project instructions say the same since 2026-09-21.
 - `index.html` — markup only. Loads `clover.css` (all styles) and `preview1.js`, `filters.js`, `preview2.js`, `preview3.js` (classic scripts, shared global scope, that order), and `ratings.js?v=<timestamp>` via a created script tag. CSP meta restricts scripts to self, images to the CFBD logo CDN + `a.espncdn.com`.
 - `preview1.js` (data, lookups, slip state) / `filters.js` (filters, what "Today" means) / `preview2.js` (Build your own, the game grid, My Bet) / `preview3.js` (hot slips, line sheet, N/A, wiring, `init`) — split for the transmit limit.
 - `sim.py` — **the one football.** `SD_BY_LEAGUE` / `MARGIN_SD_BY_LEAGUE`, `sd_for`, `game_grid`, `Grid.prob`, `Grid.encode/decode`, `attach_sims`. `python sim.py` self-checks the encode/decode round trip.
@@ -73,4 +72,4 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 - `health.json` — calls left, credits left, feeds down, today's alert state.
 - `calibrate.py`, `bayes.py` — research tools; `calibrate.py` imports `sim.py`.
 - `.github/workflows/refresh.yml` — the schedule; commits `ratings.js`, `ratings.json`, `results.json`, `cache_*.json` and `health.json`; boots the page against the fresh `ratings.js` before committing; last step is the health alarm. `.github/workflows/ci.yml` only runs `python ci/checks.py` on code pushes. `requirements.txt`: requests, numpy.
-- `STATUS.md`, `DECISIONS.md`, `CHANGELOG.md` + `CHANGELOG-2.md` — the project docs (split 2026-09-20). Keep each under 20 KB; new history goes in `CHANGELOG-2.md`.
+- `STATUS.md`, `DECISIONS.md`, `CHANGELOG.md` + `CHANGELOG-2.md` — the project docs (split 2026-09-20). Keep each under 20 KB; new history goes in `CHANGELOG-2.md`. `DESIGN.md` (new 2026-09-21) holds the look, because `DECISIONS.md` is at 16.8 KB and the design rules would have pushed it to the limit.
