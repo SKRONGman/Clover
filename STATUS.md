@@ -24,7 +24,6 @@ Kick off row 1 with: **"Start row 1: the safety net."**
 8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn, and the overnight AI recap.
 
 ## Waiting on Danny
-- **Delete the old GitHub PAT** (profile → Settings → Developer settings → Personal access tokens). It was pasted in an old chat. Nothing uses it. Do not replace it.
 - **Approve deleting the orphans** when asked: `cache_teams_2026.json`, `probe_odds.py`, `probe_odds.json`, `preview.html`, `.github/workflows/probe.yml`, and a `README.md` that describes an app that no longer exists (rewrite rather than delete).
 - **Drop or keep the 67 `p: null` rows** in `results.json`.
 - **NFL alt lines weekly and a lower credit floor?** `NFL_ALT_EVERY_OTHER_WEEK = True` and `ODDS_MIN_REMAINING = 40` are free-tier guards; he is on the 20K tier.
@@ -43,6 +42,7 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 - Every refresh is a commit → full line history. Sim tables are seeded by game id, so a game whose line didn't move is byte-identical between commits.
 - Two workflows pushing at once collide (non-fast-forward) — re-run the loser.
 - **CFBD:** Patreon Tier 1, 5,000 calls per calendar month, since 2026-09-20. `CFBD_KEY` replaced the same day.
+- **Old GitHub PAT (`ClaudeCloverToken`) deleted by Danny 2026-09-20.** Not replaced; nothing uses one. All three exposed secrets are now dealt with.
 
 ## NFL data source (corrected 2026-09-19)
 - **ESPN is blocked on GitHub Actions.** `site.api.espn.com/.../nfl/scoreboard` returns `403 Access Denied` on every attempt — all three retries, every hourly run, confirmed again on 2026-09-20. It refuses datacenter IPs. `pull_nfl_upcoming()` still tries first (free, harmless) but has never succeeded on Actions.
