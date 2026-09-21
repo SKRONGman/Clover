@@ -1,27 +1,24 @@
-# Clover — The Card
+# Clover
 
-A one-page app that tells you the true chance a college football or NFL pick (or slip of picks) hits, and whether the payout is worth it.
+A personal betting tool for Danny and Jaclyn. It shows the true chance a parlay slip hits and, once you type your app's real payout, whether the slip is worth it. College football (FBS) and NFL: winners, spreads, totals. It never predicts winners on its own and never places bets.
 
-**Live page:** turn on GitHub Pages (Settings → Pages → Branch: main, folder: / root) and the link appears there.
+**Live:** https://skrongman.github.io/Clover/
+
+## How it works
+- The market line is the prediction. Clover plays every lined game out 20,000 times centered on that line (`sim.py`) and ships the result as lookup tables in `ratings.js`.
+- The page (`index.html` + `preview1-3.js`) never simulates. Every % on every screen is a lookup in those tables.
+- GitHub Actions refreshes the lines hourly Thu-Mon and commits the result, so the repo is also the line history.
 
 ## Files
-- `index.html` — the app. Loads `ratings.js`.
-- `ratings.js` / `ratings.json` — this week's games, lines, and team ratings. Rewritten automatically by the refresh job.
-- `refresh.py` — pulls games and betting lines (college from CollegeFootballData, NFL from ESPN's scoreboard feed) and writes the two files above.
-- `.github/workflows/refresh.yml` — the schedule that runs `refresh.py` on GitHub's servers.
-- `bayes.py`, `calibrate.py` — research tools (model calibration). Not needed to run the app.
-- `cache_*.json` — last season's data, cached so the refresh doesn't re-download it.
+| File | Job |
+| --- | --- |
+| `refresh.py` | The conductor. Pulls both leagues, runs the sims, writes the data files. |
+| `cfbd.py` · `nfl.py` · `odds.py` | The feeds: CollegeFootballData, NFL (the-odds-api), DraftKings alternate lines. |
+| `sim.py` | The one football. Nothing else does game math. |
+| `common.py` | Shared helpers and `health.json` (calls left, credits left, feeds down). |
+| `ratings_math.py` · `calibrate.py` · `bayes.py` | Research only. No model beat the closing line; nothing on the page uses them. |
+| `ci/` | The safety net: `python ci/checks.py` runs every test. |
+| `ratings.js` · `ratings.json` · `results.json` · `health.json` · `cache_*.json` | Written by the refresh. Don't edit by hand. |
 
-## Setup (once)
-1. Settings → Secrets and variables → Actions → New repository secret → name `CFBD_KEY`, value = your key.
-2. Actions tab → "Refresh lines" → Run workflow → mode `full`. Wait ~1 minute. `ratings.js` updates.
-3. Settings → Pages → Source: Deploy from a branch → Branch `main`, folder `/ (root)` → Save. Your link appears at the top of that page in a minute or two.
-
-## Every week after that
-Nothing. Lines refresh hourly on game days and ratings daily. Open the page; the header says how old the lines are. Tap "Refresh lines" to reload.
-
-## Updating the app
-Upload a new `index.html` (Add file → Upload files, drop it in, Commit). The live page updates within a couple of minutes.
-
-## History
-Every refresh is a commit. Click any file → History to see what the lines were at any point in time.
+## Project docs
+Read in this order: `STATUS.md` (where things stand), `DECISIONS.md` (rules and settled findings), `CHANGELOG.md` (history).
