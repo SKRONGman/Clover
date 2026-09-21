@@ -1,5 +1,5 @@
 # Refreshes the lines on GitHub's servers so the page is always current.
-# Your CFBD_KEY lives in Settings -> Secrets and variables -> Actions. Never in a file.
+# Your CFBD_KEY and ODDS_KEY live in Settings -> Secrets and variables -> Actions. Never in a file.
 #
 # Times are UTC. Central time is UTC-5 (CDT) / UTC-6 (CST).
 #   Full refresh (ratings + lines): Tuesdays 11:00 UTC = 6am CDT (the page runs
@@ -37,9 +37,9 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262        # v4.4.0 (pinned)
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065    # v5.6.0 (pinned)
         with:
           python-version: "3.12"
 
@@ -71,14 +71,20 @@ jobs:
             python refresh.py --lines-only
           fi
 
+      - name: Boot the page against the new lines (a bad file never goes live)
+        run: node ci/smoke.js . ratings.js --live
+
       - name: Save the new lines to the repo (this is the history)
         run: |
           git config user.name "refresh-bot"
           git config user.email "refresh-bot@users.noreply.github.com"
-          git add ratings.js ratings.json results.json cache_*.json || true
+          git add ratings.js ratings.json results.json health.json cache_*.json || true
           if git diff --cached --quiet; then
             echo "No change."
           else
             git commit -m "Lines refresh ($(date -u +'%Y-%m-%d %H:%M UTC'), ${{ steps.mode.outputs.mode }})"
-            git push
+            git push || (git pull --rebase origin main && git push)    # someone pushed code mid-run: replay on top
           fi
+
+      - name: Anything Danny should look at? (red run = GitHub emails him, once a day)
+        run: python refresh.py --health-gate
