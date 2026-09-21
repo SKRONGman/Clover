@@ -2,12 +2,12 @@
 
 Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live**, except one visual item from row 2 (finished-game contrast) that is waiting on a mockup OK. Next chat: row 3.
 
-**Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then the end-state doc. `CHANGELOG.md` is history — read it only when you need the why.
+**Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
 - This file lives at the repo ROOT, not `claude/STATUS.md`. The project instructions still say `claude/`; the root files are the real ones.
 
 ## Where things stand
-- The live app is the 2026-09-19 redesign plus the 2026-09-20 pipeline (scores, statuses, `results.json`) plus tonight's safety net. History is in `CHANGELOG.md`.
+- The live app is the 2026-09-19 redesign plus the 2026-09-20 pipeline (scores, statuses, `results.json`) plus tonight's safety net. History is in `CHANGELOG.md` and `CHANGELOG-2.md`.
 - **`refresh.py` is split** into `refresh.py` (18.8 KB, the conductor) + `cfbd.py` + `nfl.py` + `odds.py` + `ratings_math.py` + `common.py`. All under 20 KB, all pushed by Claude and md5-verified. Old and new code were run against the same fake feeds and produced a byte-identical slate.
 - **A dead feed no longer stops the other league.** CFBD down -> college games carry forward at their last good line, NFL still refreshes, `R.stale` names the league, and the page's Last refresh tag adds **"API ISSUE — College lines last updated <time>"** in red (Danny's wording). Same for the NFL if the-odds-api dies. `lines_generated` only moves on a fresh pull, so the clock never lies.
 - **`health.json`** (new, written every run): CFBD calls left (asked from CFBD's `/info` every 6 h, Clover's own count as fallback), odds credits left, which feeds are down. Under 500 CFBD calls, under 1,000 odds credits, or a stale league turns the run red **once a day, after the data is saved** - GitHub emails Danny. The new `refresh.yml` went in at 8:30 PM CT (`6c3550f`).
@@ -22,7 +22,7 @@ Last updated: 2026-09-20 (late night). **Rows 1 and 2 are done and live**, excep
   - Page files: CSS moved to `clover.css` (25 dead rules removed), filters moved to `filters.js`. `index.html` 24.8 -> 8.7 KB, `preview1.js` 21.7 -> 13.6 KB. Script tags carry `?v=20260920` - bump it when a script changes.
   - New checks: page wiring (files `index.html` loads exist; ids the scripts ask for exist), 6 slips from a full slate, none at 0%, order, overlap, no verdict before a payout, default view never empty, one-game slate. `smoke.js` loads whatever `index.html` loads.
   - `health.json` confirmed after the first scheduled run on the new workflow (02:17 UTC): 4,982 CFBD calls and 19,954 odds credits left, nothing stale.
-- **Open, found in row 2:** NFL games drop off the slate once final (they are graded in `results.json`), so "Final (today)" is always empty for the NFL. `CHANGELOG.md` is at the 20 KB house limit - start `CHANGELOG-2.md` on the next entry.
+- **Open, found in row 2:** NFL games drop off the slate once final (they are graded in `results.json`), so "Final (today)" is always empty for the NFL. `CHANGELOG.md` reached the 20 KB house limit, so history from row 2 on goes in `CHANGELOG-2.md`.
 - `results.json`: 67 of 72 early rows have `p: null` (frozen before the feature existed). They grade hit/miss but cannot be used for calibration. **Still undecided: drop or keep.** Claude recommends dropping.
 
 ## Build order — one chat per row
@@ -74,4 +74,4 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 - `health.json` — calls left, credits left, feeds down, today's alert state.
 - `calibrate.py`, `bayes.py` — research tools; `calibrate.py` imports `sim.py`.
 - `.github/workflows/refresh.yml` — the schedule; commits `ratings.js`, `ratings.json`, `results.json`, `cache_*.json` and `health.json`; boots the page against the fresh `ratings.js` before committing; last step is the health alarm. `.github/workflows/ci.yml` only runs `python ci/checks.py` on code pushes. `requirements.txt`: requests, numpy.
-- `STATUS.md`, `DECISIONS.md`, `CHANGELOG.md` — the three project docs (split 2026-09-20). Keep each under 20 KB.
+- `STATUS.md`, `DECISIONS.md`, `CHANGELOG.md` + `CHANGELOG-2.md` — the project docs (split 2026-09-20). Keep each under 20 KB; new history goes in `CHANGELOG-2.md`.
