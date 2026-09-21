@@ -26,42 +26,6 @@ function setLeague(v){
   renderGames(); renderHot();
 }
 
-/* ===================================================================
-   FILTERS — Date, Game time (both leagues); Conference/FBS/FCS/Top25
-   (college); Conference/Division (NFL). Applied to both Build your own
-   and Hot Slips, so a filtered-out game can't be searched into a slip.
-   =================================================================== */
-const TIME_BUCKETS={morning:h=>h<12, afternoon:h=>h>=12&&h<16, evening:h=>h>=16&&h<20, primetime:h=>h>=20};
-function defaultFilters(){ return {date:"today", time:"all", status:"upcoming", conf:"all", div:"all", fbs:false, fcs:false, top25:false}; }
-let FILTERS={ncaaf:defaultFilters(), nfl:defaultFilters()};
-function loadFilters(){
-  try{
-    const s=JSON.parse(localStorage.getItem("cloverFilters")||"null");
-    if(s&&s.ncaaf) FILTERS.ncaaf=Object.assign(defaultFilters(),s.ncaaf);
-    if(s&&s.nfl) FILTERS.nfl=Object.assign(defaultFilters(),s.nfl);
-  }catch(e){}
-}
-function saveFilters(){ try{localStorage.setItem("cloverFilters",JSON.stringify(FILTERS));}catch(e){} }
-function dateKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
-function gameDateKey(G){ return dateKey(new Date(G.start)); }
-/* the Thu-Mon window we're either in, or heading into next (Tue/Wed = between weekends) */
-function weekendWindow(){
-  const now=new Date(), day=now.getDay(), sinceThu=(day-4+7)%7;      // Thu=0..Wed=6
-  const thu=new Date(now);
-  thu.setDate(now.getDate()+(sinceThu<=4 ? -sinceThu : 7-sinceThu));
-  thu.setHours(0,0,0,0);
-  const mon=new Date(thu); mon.setDate(thu.getDate()+4); mon.setHours(23,59,59,999);
-  return {thu,mon};
-}
-/* the day we show by default: today if it still has games, else the next day that does */
-function defaultDayKey(lg){
-  const games=GAMES.filter(G=>onBoard(G)&&lgOf(G)===lg);
-  if(!games.length) return null;
-  const today=dateKey(new Date());
-  if(games.some(G=>gameDateKey(G)===today)) return today;
-  const later=games.map(gameDateKey).filter(k=>k>=today).sort();
-  return later.length?later[0]:null;
-}
 /* refresh.py ships status on every game: upcoming / live / final. A finished game
    keeps its closing line, its final score and the six percentages it was priced at,
    but NOT its 20,000-run table - so it can be shown and graded, never re-priced. */
@@ -99,96 +63,6 @@ function chipColors(G,team){
   if(contrastOf(bg,fg)<3.5) fg=lumOf(bg)>.45?"#101815":"#FFFFFF";
   return {bg,fg};
 }
-function gameInWeekend(G,win){ const t=new Date(G.start).getTime(); return t>=win.thu.getTime()&&t<=win.mon.getTime(); }
-function filterGame(G){
-  const lg=lgOf(G), f=FILTERS[lg]; if(!f) return true;
-  const d=new Date(G.start);
-  if(f.date==="today"){ const k=defaultDayKey(lg); if(k&&gameDateKey(G)!==k) return false; }
-  else if(f.date==="weekend"){ if(!gameInWeekend(G,weekendWindow())) return false; }
-  else if(f.date!=="all"){ if(gameDateKey(G)!==f.date) return false; }
-  if(f.status!=="all" && statusOf(G)!==f.status) return false;
-  if(f.time!=="all"){ const test=TIME_BUCKETS[f.time]; if(test&&!test(d.getHours())) return false; }
-  if(f.conf!=="all" && G.home_conf!==f.conf && G.away_conf!==f.conf) return false;
-  if(lg==="ncaaf"){
-    if(f.fbs||f.fcs){ const isFcs=!!G.fcs; if(f.fbs&&!f.fcs&&isFcs) return false; if(f.fcs&&!f.fbs&&!isFcs) return false; }
-    if(f.top25 && !G.home_rank && !G.away_rank) return false;
-  } else {
-    if(f.div!=="all"){ const tail=d2=>String(d2||"").split(" ").pop(); if(tail(G.home_div)!==f.div && tail(G.away_div)!==f.div) return false; }
-  }
-  return true;
-}
-function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>onBoard(x.G)&&lgOf(x.G)===lg&&filterGame(x.G)); }
-/* Hot slips honour Game time / Conference / Division / Classification, but NEVER Date or
-   Game status - they always search all upcoming games, so a thin day can't starve the search. */
-function hotGames(lg){
-  const f=FILTERS[lg], saved={date:f.date,status:f.status};
-  f.date="all"; f.status="upcoming";
-  const out=GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg&&filterGame(x.G));
-  f.date=saved.date; f.status=saved.status;
-  return out;
-}
-function populateFilterOptions(){
-  const lg=league, games=GAMES.filter(G=>onBoard(G)&&lgOf(G)===lg), f=FILTERS[lg];
-  const lbl=d=>`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;
-  const keyLbl=k=>{ const [y,m,dd]=k.split("-").map(Number); return lbl(new Date(y,m-1,dd)); };
-
-  /* Date: "today, else the next day with games" is the default */
-  const dSel=document.getElementById("fDate"), win=weekendWindow();
-  const dates=[...new Set(games.map(gameDateKey))].sort();
-  const dk=defaultDayKey(lg), isToday=dk===dateKey(new Date());
-  const dLbl=dk?(isToday?`Today (${keyLbl(dk)})`:keyLbl(dk)):"Today";
-  dSel.innerHTML=`<option value="today">${esc(dLbl)}</option>`
-    +`<option value="weekend">This weekend (${lbl(win.thu)}–${lbl(win.mon)})</option>`
-    +`<option value="all">Any date</option>`
-    +dates.map(k=>`<option value="${k}">${esc(keyLbl(k))}</option>`).join("");
-  dSel.value=[...dSel.options].some(o=>o.value===f.date)?f.date:"today";
-  document.getElementById("fTime").value=f.time;
-  document.getElementById("fStatus").value=f.status||"upcoming";
-
-  /* Conference: a dropdown for college (too many to be buttons), AFC/NFC buttons for the NFL */
-  const ncaaf=lg==="ncaaf";
-  document.getElementById("fConfSel").classList.toggle("hidden",!ncaaf);
-  document.getElementById("fConfChips").classList.toggle("hidden",ncaaf);
-  document.getElementById("fRowNcaafExtra").classList.toggle("hidden",!ncaaf);
-  document.getElementById("fDivWrap").classList.toggle("hidden",ncaaf);
-  if(ncaaf){
-    const cSel=document.getElementById("fConf");
-    const confs=[...new Set(games.flatMap(G=>[G.home_conf,G.away_conf]).filter(Boolean))].sort();
-    cSel.innerHTML=`<option value="all">All conferences</option>`+confs.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
-    cSel.value=[...cSel.options].some(o=>o.value===f.conf)?f.conf:"all";
-    document.getElementById("fFbs").setAttribute("aria-pressed",!!f.fbs);
-    document.getElementById("fFcs").setAttribute("aria-pressed",!!f.fcs);
-    document.getElementById("fTop25").setAttribute("aria-pressed",!!f.top25);
-  }else{
-    document.getElementById("fAfc").setAttribute("aria-pressed",f.conf==="AFC");
-    document.getElementById("fNfc").setAttribute("aria-pressed",f.conf==="NFC");
-    /* Division buttons are North/South/East/West; they combine with the conference picked above */
-    const wrap=document.getElementById("fDivChips");
-    if(!wrap.dataset.built){
-      wrap.innerHTML=["North","South","East","West"].map(d=>`<button type="button" class="chip" data-div="${d}" aria-pressed="false">${d}</button>`).join("");
-      wrap.querySelectorAll("[data-div]").forEach(btn=>btn.onclick=()=>{
-        const cur=FILTERS.nfl.div;
-        FILTERS.nfl.div = cur===btn.dataset.div ? "all" : btn.dataset.div;
-        saveFilters(); populateFilterOptions(); renderGames(); renderHot();
-      });
-      wrap.dataset.built="1";
-    }
-    wrap.querySelectorAll("[data-div]").forEach(btn=>btn.setAttribute("aria-pressed",f.div===btn.dataset.div));
-  }
-  document.getElementById("nNcaaf").textContent=GAMES.filter(G=>G.sim&&lgOf(G)==="ncaaf").length||"";   /* tabs count what you can still bet */
-  document.getElementById("nNfl").textContent=GAMES.filter(G=>G.sim&&lgOf(G)==="nfl").length||"";
-}
-const reFilter=()=>{saveFilters();populateFilterOptions();renderGames();renderHot();};
-document.getElementById("fDate").onchange=e=>{FILTERS[league].date=e.target.value;reFilter();};
-document.getElementById("fTime").onchange=e=>{FILTERS[league].time=e.target.value;reFilter();};
-document.getElementById("fStatus").onchange=e=>{FILTERS[league].status=e.target.value;reFilter();};
-document.getElementById("fConf").onchange=e=>{FILTERS[league].conf=e.target.value;reFilter();};
-document.getElementById("fAfc").onclick=()=>{FILTERS.nfl.conf=FILTERS.nfl.conf==="AFC"?"all":"AFC";reFilter();};
-document.getElementById("fNfc").onclick=()=>{FILTERS.nfl.conf=FILTERS.nfl.conf==="NFC"?"all":"NFC";reFilter();};
-document.getElementById("fFbs").onclick=()=>{FILTERS.ncaaf.fbs=!FILTERS.ncaaf.fbs;reFilter();};
-document.getElementById("fFcs").onclick=()=>{FILTERS.ncaaf.fcs=!FILTERS.ncaaf.fcs;reFilter();};
-document.getElementById("fTop25").onclick=()=>{FILTERS.ncaaf.top25=!FILTERS.ncaaf.top25;reFilter();};
-
 function gridFor(gi){
   if(GRIDS[gi]) return GRIDS[gi];
   const s=GAMES[gi]&&GAMES[gi].sim; if(!s) return null;
@@ -254,8 +128,6 @@ function dkQuote(G,type,line){
   const pa=amToP(mine), fair=other===null?null:pa/(pa+amToP(other));
   return {am:(mine>0?"+":"")+mine, dec:toDec(mine), fair};
 }
-/* Typical pick'em multipliers - a STAND-IN until you type the real payout. */
-const PAYOUT={1:1.909,2:3,3:6,4:10,5:20,6:25};
 function grade(ev){
   if(ev>=0.15) return {word:"Great",cls:"pos",why:"Pays well above what the odds deserve."};
   if(ev>=0.05) return {word:"Good",cls:"pos",why:"You're getting a little better than fair."};
@@ -328,7 +200,8 @@ function toggleLeg(gi,type){
   render();
 }
 function setLegs(legs){ S.legs=legs.map(l=>({gi:l.gi,type:l.type,line:hasLine(l.type)?l.line:0,p0:l.p0??prob(l.gi,[{type:l.type,line:hasLine(l.type)?l.line:0}])})); render(); }
-function payoutFor(n){ return S.pays!=null&&S.pays>1 ? {dec:S.pays,est:false} : PAYOUT[n] ? {dec:PAYOUT[n],est:true} : null; }
+/* Ruling 1 (2026-09-20): no verdict on a made-up payout. There is a payout only once a real one is typed. */
+function payoutFor(){ return S.pays!=null&&S.pays>1 ? {dec:S.pays} : null; }
 
 /* ===================================================================
    RENDER
@@ -360,9 +233,9 @@ function renderBar(){
   const bar=document.getElementById("bar"), n=S.legs.length;
   bar.classList.toggle("hidden",view!=="slips"||!n);
   if(!n) return;
-  const {joint}=slipProb(S.legs), pay=payoutFor(n);
+  const {joint}=slipProb(S.legs), pay=payoutFor();
   const g=pay?grade(joint*pay.dec-1):null;
   document.getElementById("barProb").textContent=pct(joint);
-  document.getElementById("barSub").textContent=`${n} pick${n>1?"s":""}${g?` · ${g.word}`:""}${pay&&pay.est?" (est. payout)":""}`;
+  document.getElementById("barSub").textContent=`${n} pick${n>1?"s":""}${g?` · ${g.word}`:""}`;
 }
 
