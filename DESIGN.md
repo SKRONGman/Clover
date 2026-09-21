@@ -1,0 +1,14 @@
+# Clover — design direction
+
+The look and the screen rules for every screen from row 4 on. Decided 2026-09-21 (row 3). Read before any mockup. Lives here, not in `DECISIONS.md`, because that file is at its size limit; the same tags apply (Decided / Proposed).
+
+**The look is "A. Board, dark."** Danny picked it from three looks (A Board, B Ticket, C Ledger) drawn with real slips and lines. Canvas, with the live page next to it: https://claude.ai/artifact/S5HiPEgQ8Kys9uuApeKoTq (frame "A. Board, dark"). Rows 4-6 each start with a mockup in this look. B and C stay on the canvas for reference only.
+- **Why it was needed:** a 3-pick hot slip drew three whole game grids (about 30 numbers, 9 N/A buttons, 9 column labels to say three things); "selected" was gold on tabs, dark green on chips and pale green on picks; the same game was drawn two ways; names were cut off.
+- **Layout (Decided):** the sportsbook pattern. One row per game with Winner / Spread / Total columns. **My Bet is visible on the front door in a right rail** (picks, chance, payout box, whose bet, Open My Bet). Filters are one folded button. Text tabs with an underline.
+- **Hot slips show only their own picks (Decided):** headline chance, the picks (team, pick, chance), kickoff window, "Use this slip". Moving a line or swapping a pick happens after "Use this slip".
+- **At the market line, spread and total buttons show the line only (Decided).** Winner always shows its chance. A spread or total shows its chance once its number differs from the market line. Why: at market every spread and total sits at 48-52%, so those numbers were noise, and hiding them makes a stale number (Under 40.5 at 61% when the market is 37.5) stand out. Every % still comes from the tables.
+- **Colors:** ground `#14171B`, card `#1D2127`, line `#333A44`, text `#F1EFE8`, muted text `#A9AFBC`, accent `#57D68D`, selected fill `#1B4632`, text on accent `#0E1A13`.
+- **One of each:** one selected look everywhere (selected fill + 1.5px accent border). One main button (accent, dark text). One secondary button (outline). Buttons 8px corners, cards 12px, nothing under 44px tall.
+- **Type:** Archivo only (Google Fonts, already allowed by the page's CSP). Big numbers at 88% width, tabular figures. No all-caps labels.
+- **Team colors on dark:** use the team's main color unless it is too dark to see, then `colors2` (both already in `ratings.js`). The exact cutoff is a row 4 detail.
+- **Open for row 4's mockup:** the hot-slip card no longer carries the N/A and Prohibited buttons. Ruling 4 in `DECISIONS.md` stands (one tap, one pick type, one game, resets when the game ends), so the mockup must give N/A a one-tap home in the new layout. Logos were dots on the canvas only because the canvas cannot load the logo site; the real page keeps logos.
