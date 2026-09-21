@@ -1,0 +1,28 @@
+# Clover's safety net. Runs the checks every time code is pushed.
+# This file only calls ci/checks.py - change the checks there, never here.
+name: Checks
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:            # the hourly refresh only touches data; no need to re-test the code
+      - "ratings.js"
+      - "ratings.json"
+      - "results.json"
+      - "health.json"
+      - "cache_*.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262        # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065    # v5.6.0
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python ci/checks.py
