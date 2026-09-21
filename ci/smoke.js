@@ -4,6 +4,8 @@
    page's own logic: table lookups, hot slips, the slip, My Bet, the line sheet. */
 const fs=require("fs"), path=require("path"), vm=require("vm");
 const [root,ratingsFile]=process.argv.slice(2), live=process.argv.includes("--live");   /* --live: real data, may be an empty off-season slate */
+/* load exactly the scripts index.html loads, in its order - so a script the page forgot to load fails here too */
+const PAGE_JS=[...fs.readFileSync(path.join(root,"index.html"),"utf8").matchAll(/<script src="([^"?]+)[^"]*"/g)].map(m=>m[1]);
 const fails=[]; const check=(ok,msg)=>{ if(!ok) fails.push(msg); };
 
 function el(tag){
@@ -32,7 +34,7 @@ const flush=()=>{ while(timers.length) timers.shift()(); };
 const js=code=>vm.runInContext(code,ctx);
 
 try{
-  for(const f of ["preview1.js","preview2.js","preview3.js"]) vm.runInContext(fs.readFileSync(path.join(root,f),"utf8"),ctx,{filename:f});
+  for(const f of PAGE_JS) vm.runInContext(fs.readFileSync(path.join(root,f),"utf8"),ctx,{filename:f});
   flush();
   const n=js("GAMES.length"); check(live||n>0,"no games loaded");
 
@@ -55,7 +57,12 @@ try{
   for(const lg of ["ncaaf","nfl"]){ js(`setLeague("${lg}")`); flush();
     for(let N=2;N<=6;N++){ js(`hotN=${N}; renderHot()`); flush();
       const bad=js(`HOT.filter(s=>s.legs.length!==${N}||!(slipProb(s.legs).joint>=0&&slipProb(s.legs).joint<=1)).length`);
-      check(bad===0,`${lg} ${N}-pick: ${bad} malformed hot slips`); }
+      check(bad===0,`${lg} ${N}-pick: ${bad} malformed hot slips`);
+      check(js("HOT.every(s=>slipProb(s.legs).joint>0)"),`${lg} ${N}-pick: a hot slip that cannot hit (0%)`);
+      check(js("HOT.every((s,i)=>!i||slipProb(HOT[i-1].legs).joint>=slipProb(s.legs).joint-1e-12)"),`${lg} ${N}-pick: hot slips out of order`);
+      const half=N-Math.max(2,Math.ceil(N/2));
+      check(js(`HOT.every((a,i)=>HOT.every((b,j)=>j<=i||[...a.keys].filter(k=>b.keys.has(k)).length<=${half}))`),`${lg} ${N}-pick: two hot slips share more than half their picks`);
+      if(js(`hotGames("${lg}").length`)>=12) check(js("HOT.length")===6,`${lg} ${N}-pick: ${js("HOT.length")} slips from a full slate, expected 6`); }
     js("hotN=3; renderHot()"); flush(); check(live||js("HOT.length>0&&slipProb(HOT[0].legs).joint>0.1"),lg+": no believable 3-pick hot slip"); }
 
   /* 5. build a slip by hand, open My Bet, type a payout, open the line sheet */
@@ -65,9 +72,23 @@ try{
   check(js("S.legs.length")===4,"slip should hold 4 picks");
   const sp=js("slipProb(S.legs)"); check(sp.joint>0&&sp.joint<1&&sp.groups.length===3,"slip chance out of range");
   check(js("S.legs.find(l=>l.type==='homeSp').line===GAMES[S.legs[0].gi].spread"),"spread must be the side's OWN number");
-  js(`show("card"); renderCard(); S.pays=11; renderCard();`); flush();
+  /* ruling 1: no verdict, anywhere, until a real payout is typed */
+  js(`S.pays=null; show("card"); render();`); flush();
+  const words=/Great|Good|Coin toss|Bad|Terrible|est\./;
+  check(byId.verdict.textContent===""&&!words.test(byId.barSub.textContent)&&!words.test(byId.why.textContent),"a verdict is showing before any payout was typed");
+  js(`S.pays=11; render();`); flush();
+  check(words.test(byId.verdict.textContent)&&words.test(byId.barSub.textContent),"no verdict after a payout was typed");
   js(`openSheet(S.legs[0],()=>{}); show("slips"); render();`); flush();
   }
+
+  /* 5b. "Today" follows Game status: the default view is never empty while there are games still to come */
+  for(const lg of ["ncaaf","nfl"]){ js(`FILTERS["${lg}"]=defaultFilters()`);
+    if(js(`GAMES.some(G=>G.sim&&lgOf(G)==="${lg}")`)) check(js(`filteredGames("${lg}").length`)>0,lg+": default filters show no games though some are still to come"); }
+
+  /* 5c. a one-game slate: no slip may be built from picks that cannot both happen */
+  js(`(()=>{ let kept=false; GAMES.forEach((G,gi)=>{ if(G.sim&&!kept){kept=true;return;} delete G.sim; delete GRIDS[gi]; }); for(const k in BLOCKS) delete BLOCKS[k]; })()`);
+  for(const lg of ["ncaaf","nfl"]){ js(`setLeague("${lg}")`); for(let N=2;N<=3;N++){ js(`hotN=${N}; renderHot()`); flush();
+    check(js("HOT.every(s=>slipProb(s.legs).joint>0)"),`${lg} one-game slate, ${N}-pick: offered a slip that cannot hit`); } }
 
   /* 6. one verdict scale: +15c / +5c / -5c / -20c */
   const words=js(`[0.15,0.05,-0.05,-0.20,-0.21].map(v=>JSON.stringify(grade(v)))`);
@@ -75,4 +96,4 @@ try{
 }catch(e){ fails.push("page threw: "+(e&&e.stack||e)); }
 
 if(fails.length){ console.log("  FAIL  page smoke test"); fails.forEach(f=>console.log("        "+f)); process.exit(1); }
-console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, slip, My Bet, line sheet, verdict scale)");
+console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale)");
