@@ -11,19 +11,14 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const LEAGUES=["ncaaf","nfl"], LEAGUE_NAME={ncaaf:"College",nfl:"NFL"};
 let league="ncaaf";
 const lgOf=G=>G.league||"ncaaf";
+const TABS={ncaaf:"slips",nfl:"slips",build:"build",card:"card",history:"history"};
 /* NFL names are long ("Kansas City Chiefs"); where space is tight use "Chiefs" */
 const shortName=(G,t)=>lgOf(G)==="nfl"?((t===G.home?G.home_short:G.away_short)||t):t;
 function loadLeague(){ try{ const v=localStorage.getItem("cloverLeague"); if(LEAGUES.includes(v)) league=v; }catch(e){} }
 function setLeague(v){
-  view="slips";
   league=v; try{localStorage.setItem("cloverLeague",v);}catch(e){}
-  document.getElementById("tabNcaaf").setAttribute("aria-selected",v==="ncaaf");
-  document.getElementById("tabNfl").setAttribute("aria-selected",v==="nfl");
-  document.getElementById("tabCard").setAttribute("aria-selected","false");
-  document.getElementById("viewSlips").classList.remove("hidden");
-  document.getElementById("viewCard").classList.add("hidden");
   populateFilterOptions();
-  renderGames(); renderHot();
+  renderGames(); renderHot(); show("slips");
 }
 
 /* refresh.py ships status on every game: upcoming / live / final. A finished game
@@ -55,6 +50,20 @@ const lumOf=c=>{const v=hex2rgb(c).map(x=>{x/=255;return x<=.03928?x/12.92:Math.
 const contrastOf=(a,b)=>{const x=lumOf(a),y=lumOf(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
 const colDist=(a,b)=>{const A=hex2rgb(a),B=hex2rgb(b);return Math.abs(A[0]-B[0])+Math.abs(A[1]-B[1])+Math.abs(A[2]-B[2]);};
 const shade=(c,f)=>"#"+hex2rgb(c).map(v=>Math.round(v*f).toString(16).padStart(2,"0")).join("");
+/* DESIGN.md, team colors on dark (2026-09-21): the main color if it reads 2:1 or better
+   on the card; else the second color if it has real color in it; else the main color
+   lightened toward white until it reaches 3:1. Only matters when a logo fails to load. */
+const CARD_BG="#1D2127";
+const isColorful=c=>{const v=hex2rgb(c);return Math.max(...v)-Math.min(...v)>40;};
+const lighten=(c,f)=>"#"+hex2rgb(c).map(v=>Math.round(v+(255-v)*f).toString(16).padStart(2,"0")).join("");
+function teamColor(team){
+  const main=COLORS[team], alt=COLORS2[team];
+  if(!main) return "#3A4350";
+  if(contrastOf(main,CARD_BG)>=2) return main;
+  if(alt&&isColorful(alt)) return alt;
+  let c=main; for(let i=0;i<30&&contrastOf(c,CARD_BG)<3;i++) c=lighten(c,.12);
+  return c;
+}
 function chipColors(G,team){
   const other=team===G.home?G.away:G.home;
   let bg=COLORS[team]||"#26463D";
@@ -162,8 +171,9 @@ function initials(t){ return t.split(/\s+/).map(w=>w[0]).join("").replace(/[^A-Z
 function logoTile(team,sm){
   const d=document.createElement("div"); d.className="logo"+(sm?" sm":"");
   const u=LOGOS[team];
-  if(u){ const img=document.createElement("img"); img.src=u; img.alt=""; img.loading="lazy"; img.onerror=()=>{d.textContent=initials(team);}; d.appendChild(img); }
-  else { d.textContent=initials(team); const c=COLORS[team]; if(c){d.style.background=c;d.style.color="#fff";d.style.borderColor=c;} }
+  const fallback=()=>{ d.innerHTML=""; d.textContent=initials(team); const c=teamColor(team); d.style.background=c; d.style.borderColor=c; d.style.color=lumOf(c)>.45?"#0E1A13":"#F1EFE8"; };
+  if(u){ const img=document.createElement("img"); img.src=u; img.alt=""; img.loading="lazy"; img.onerror=fallback; d.appendChild(img); }
+  else fallback();
   return d;
 }
 function duoTile(G){
@@ -187,16 +197,19 @@ function loadSlip(){
   }catch(e){}
 }
 function findLeg(gi,type){ return S.legs.findIndex(l=>l.gi===gi&&l.type===type); }
+/* Ruling 4 (2026-09-21): a game holds at most one pick per pick type. Tapping the other
+   side swaps it - Over then Under holds only the Under. Works on any legs list. */
+function swapIn(legs,gi,type,line){
+  for(let i=legs.length-1;i>=0;i--) if(legs[i].gi===gi&&legMarket(legs[i].type)===legMarket(type)) legs.splice(i,1);
+  /* p0 = what Clover said when you took it. Frozen here because the table is
+     thrown away when the game ends, and because a line that moves later must
+     not rewrite the number the pick was made on. */
+  legs.push({gi,type,line,p0:prob(gi,[{type,line}])});
+}
 function toggleLeg(gi,type){
   const i=findLeg(gi,type);
   if(i>=0) S.legs.splice(i,1);
-  else {
-    const G=GAMES[gi], line=hasLine(type)?marketLine(G,type):0;
-    /* p0 = what Clover said when you took it. Frozen here because the table is
-       thrown away when the game ends, and because a line that moves later must
-       not rewrite the number the pick was made on. */
-    S.legs.push({gi,type,line,p0:prob(gi,[{type,line}])});
-  }
+  else swapIn(S.legs,gi,type,hasLine(type)?marketLine(GAMES[gi],type):0);
   render();
 }
 function setLegs(legs){ S.legs=legs.map(l=>({gi:l.gi,type:l.type,line:hasLine(l.type)?l.line:0,p0:l.p0??prob(l.gi,[{type:l.type,line:hasLine(l.type)?l.line:0}])})); render(); }
@@ -207,35 +220,24 @@ function payoutFor(){ return S.pays!=null&&S.pays>1 ? {dec:S.pays} : null; }
    RENDER
    =================================================================== */
 let view="slips";
+/* five tabs: NCAA Slips / NFL Slips share the front door; Build (row 5) and History (row 8)
+   open a placeholder card until they ship. The My Bet rail rides along on every view except
+   the full My Bet screen, which takes the whole width. */
+const COMING={build:"Build is row 5 of the build order - it is not built yet.",history:"History is row 8 of the build order - it is not built yet."};
 function show(v){
   view=v;
   document.getElementById("viewSlips").classList.toggle("hidden",v!=="slips");
   document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
-  document.getElementById("tabNcaaf").setAttribute("aria-selected",v==="slips"&&league==="ncaaf");
-  document.getElementById("tabNfl").setAttribute("aria-selected",v==="slips"&&league==="nfl");
-  document.getElementById("tabCard").setAttribute("aria-selected",v==="card");
-  document.getElementById("bar").classList.toggle("hidden",v!=="slips"||!S.legs.length);
+  document.getElementById("viewOther").classList.toggle("hidden",!COMING[v]);
+  document.getElementById("otherTxt").textContent=COMING[v]||"";
+  document.getElementById("rail").classList.toggle("hidden",v==="card");
+  document.getElementById("main").classList.toggle("full",v==="card");
+  for(const k in TABS) document.getElementById("tab"+k[0].toUpperCase()+k.slice(1)).setAttribute("aria-selected",TABS[k]===v&&(TABS[k]!=="slips"||k===league));
   window.scrollTo({top:0});
-}
-function restoreHotOpen(){
-  let open=true; try{ open=localStorage.getItem("cloverHotOpen")!=="0"; }catch(e){}
-  const b=document.getElementById("hotToggle");
-  b.setAttribute("aria-expanded",open); b.textContent=open?"Hide":"Show";
-  document.getElementById("hotBody").classList.toggle("hidden",!open);
-  document.getElementById("hotOut").classList.toggle("hidden",!open);
 }
 function render(){
   saveSlip();
-  renderBar(); renderGames(); renderCard();
-  document.getElementById("tabCount").textContent=S.legs.length;
-}
-function renderBar(){
-  const bar=document.getElementById("bar"), n=S.legs.length;
-  bar.classList.toggle("hidden",view!=="slips"||!n);
-  if(!n) return;
-  const {joint}=slipProb(S.legs), pay=payoutFor();
-  const g=pay?grade(joint*pay.dec-1):null;
-  document.getElementById("barProb").textContent=pct(joint);
-  document.getElementById("barSub").textContent=`${n} pick${n>1?"s":""}${g?` · ${g.word}`:""}`;
+  renderGames(); renderCard(); renderRail(); paintHotAll();
+  document.getElementById("tabCount").textContent=S.legs.length||"";
 }
 
