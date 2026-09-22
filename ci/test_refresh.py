@@ -194,6 +194,24 @@ def test_results_are_append_only():
     assert refresh.grade_leg("homeSp", -11.0, 31, 20) == "push"
 
 
+def test_opening_line_is_saved_once():
+    """Ruling 2 of 2026-09-21: the first DraftKings line is kept for good."""
+    prev = fixture.previous_file()
+    for g in prev["upcoming"]:
+        g.pop("open", None)
+    R, feeds, H = run(prev=prev)
+    tx = next(g for g in R["upcoming"] if g["home"] == "Texas")
+    assert tx["open"] == {"spread": -7.5, "total": 52.5}, "first DK line seen becomes the opening line"
+    again, feeds2, H2 = run(prev=R)        # the fake feed moves every college spread by 1 each run
+    tx2 = next(g for g in again["upcoming"] if g["home"] == "Texas")
+    assert tx2["spread"] == -8.5 and tx2["open"] == {"spread": -7.5, "total": 52.5}, "never rewritten"
+    assert '"open"' in open(common.OUT_JS).read(), "the page reads it"
+    g = fixture.game(5, "ncaaf", "A", "B", -3.0, 40.0, common.now_utc())
+    g["book"] = "Bovada"
+    refresh.note_opening(g, None)
+    assert "open" not in g, "only a DraftKings line counts"
+
+
 def test_names_and_lines():
     assert odds.team_match("Florida State", "Florida State Seminoles")
     assert not odds.team_match("Miami", "Miami (OH) RedHawks")
