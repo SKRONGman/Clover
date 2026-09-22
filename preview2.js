@@ -1,74 +1,46 @@
-/* ---- build your own: every lined game, grouped by day, six picks each ---- */
-function renderGames(){
-  const out=document.getElementById("games");
-  const all=GAMES.filter(G=>onBoard(G)&&lgOf(G)===league).length, lined=filteredGames(league);
-  const cnt=document.getElementById("filterCount");
-  cnt.textContent = !all ? "" : lined.length===all
-    ? `${all} ${LEAGUE_NAME[league]} game${all===1?"":"s"} with a line`
-    : `Showing ${lined.length} of ${all} ${LEAGUE_NAME[league]} games with a line`;
-  const fkey=league+"|"+JSON.stringify(FILTERS[league]);
-  if(out.dataset.built!==fkey){
-    out.innerHTML="";
-    if(!all){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet — they load closer to game day.</p>`; out.dataset.built=fkey; return; }
-    if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters. ${esc(filterBlame(league))}</p>`; out.dataset.built=fkey; return; }
-    const byDay={};
-    lined.forEach(x=>{ const d=new Date(x.G.start), k=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`; (byDay[k]=byDay[k]||[]).push(x); });
-    let first=true;
-    for(const day in byDay){
-      const det=document.createElement("details"); det.className="day"; det.open=first; first=false;
-      det.innerHTML=`<summary>${esc(day)} <span class="small">${byDay[day].length} games</span></summary><div class="dayGrid"></div>`;
-      const grid=det.querySelector(".dayGrid");
-      byDay[day].forEach(({G,gi})=>{
-        const open=isOpen(G);
-        const g=document.createElement("div"); g.className="game"+(open?"":" done");
-        g.appendChild(gameHead(G));
-        const picks=document.createElement("div"); picks.className="picks";
-        [["awaySp",`${shortName(G,G.away)} ${fmtSp(-G.spread)}`],["homeSp",`${shortName(G,G.home)} ${fmtSp(G.spread)}`],["over",`Over ${G.total}`],["under",`Under ${G.total}`],["awayML",`${shortName(G,G.away)} wins`],["homeML",`${shortName(G,G.home)} wins`]]
-          .forEach(([type,label])=>{
-            const b=document.createElement("button"); b.type="button"; b.className="pick"; b.dataset.gi=gi; b.dataset.type=type;
-            const p=prob(gi,[{type,line:hasLine(type)?marketLine(G,type):0}]);
-            b.innerHTML=`<span>${esc(label)}</span><b>${pct(p)}</b>`;
-            if(open) b.onclick=()=>toggleLeg(gi,type);
-            else { b.disabled=true; b.title="This game has started — picks are closed"; }
-            picks.appendChild(b);
-          });
-        g.appendChild(picks); grid.appendChild(g);
-      });
-      out.appendChild(det);
-    }
-    out.dataset.built=fkey;
-  }
-  out.querySelectorAll(".pick").forEach(b=>{ b.setAttribute("aria-pressed",findLeg(+b.dataset.gi,b.dataset.type)>=0); b.classList.toggle("na",!offered(+b.dataset.gi,b.dataset.type)); b.title=offered(+b.dataset.gi,b.dataset.type)?"":"Marked N/A — your app doesn't offer this pick"; });
+/* ---- the board: one row per game, Winner / Spread / Total, away team on top.
+   Spread and total buttons show the LINE at market (every spread and total sits at
+   48-52% there, so the % was noise); the chance appears once the number differs
+   from the market line - a held pick that was moved on the line sheet. Winner
+   always shows its chance. Every % is a table lookup (DESIGN.md, row 3). ---- */
+function boardCell(gi,type){
+  const G=GAMES[gi], held=S.legs.find(l=>l.gi===gi&&l.type===type), open=isOpen(G), ok=offered(gi,type);
+  const line=held?held.line:(hasLine(type)?marketLine(G,type):0), p=prob(gi,[{type,line}]);
+  const moved=held&&hasLine(type)&&line!==marketLine(G,type);
+  let main=!hasLine(type)?pct(p):legMarket(type)==="Spread"?fmtSp(line):(type==="over"?"O ":"U ")+line;
+  if(moved) main+=`<small>${pct(p)}</small>`;
+  const res=held?settleLeg(G,held):null;
+  return `<button type="button" class="bc${ok?"":" na"}${res?" "+res:""}" data-gi="${gi}" data-type="${type}" aria-pressed="${!!held}"`
+    +` aria-label="${esc(legLabel(G,{type,line}))} - ${pct(p)}"${open?"":" disabled"}>${main}${res?`<small>${res.toUpperCase()}</small>`:""}</button>`;
 }
-
-/* ---- the line above a game: matchup, or score chips once it has kicked off ---- */
-function gameHead(G){
-  const head=document.createElement("div"); head.className="gHead";
-  const st=statusOf(G), sc=scoreOf(G);
-  if(st==="upcoming"||!sc){
-    head.appendChild(logoTile(G.away,true));
-    head.appendChild(document.createTextNode(` ${shortName(G,G.away)} @ ${shortName(G,G.home)}`));
-    head.appendChild(logoTile(G.home,true));
-    const when=document.createElement("span"); when.className="when";
-    when.textContent=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
-    head.appendChild(when);
-    if(st!=="upcoming"){ const c=document.createElement("span"); c.className="hChip"+(st==="final"?" fin":""); c.textContent=st==="final"?"Final":"In Progress"; head.appendChild(c); }
-    return head;
-  }
-  head.classList.add("hasScore");
-  [[G.away,sc.a],[G.home,sc.h]].forEach(([team,pts])=>{
-    const c=document.createElement("span"); c.className="tScore";
-    if(st==="final"){ c.classList.add("off"); }                  /* grey once it is over */
-    else { const col=chipColors(G,team); c.style.background=col.bg; c.style.color=col.fg; }
-    c.innerHTML=`${esc(shortName(G,team))} <span class="pts">${pts}</span>`;
-    head.appendChild(c);
-  });
-  const t=document.createElement("span"); t.className="hChip";
-  t.textContent=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
-  head.appendChild(t);
-  const c=document.createElement("span"); c.className="hChip"+(st==="final"?" fin":"");
-  c.textContent=st==="final"?"Final":"In Progress"; head.appendChild(c);
-  return head;
+function teamCell(G,team){
+  const rank=team===G.home?G.home_rank:G.away_rank, sc=scoreOf(G), pts=sc?(team===G.home?sc.h:sc.a):null;
+  const c=teamColor(team), tile=LOGOS[team]?`<img src="${esc(LOGOS[team])}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><i style="background:${c};display:none">${esc(initials(team))}</i>`:`<i style="background:${c}">${esc(initials(team))}</i>`;
+  return `<div class="tm"><span class="lg">${tile}</span>${rank?`<span class="rk">${rank}</span>`:""}<span class="nm">${esc(team)}</span>${pts!=null?`<b class="sc">${pts}</b>`:""}</div>`;
+}
+function boardRow(G,gi){
+  const st=statusOf(G), when=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+  const tag=st==="final"?`<span class="fin">Final</span>`:st==="live"?`<span class="fin live">Live</span>`:"";
+  return `<div class="gr${st==="upcoming"?"":" done"}" data-gi="${gi}"><div class="tt">${esc(when)}${tag}</div><div class="lines">`
+    +`<div class="tl">${teamCell(G,G.away)}${boardCell(gi,"awayML")}${boardCell(gi,"awaySp")}${boardCell(gi,"over")}</div>`
+    +`<div class="tl">${teamCell(G,G.home)}${boardCell(gi,"homeML")}${boardCell(gi,"homeSp")}${boardCell(gi,"under")}</div></div></div>`;
+}
+function boardTitle(){
+  const f=FILTERS[league], k=f.date==="today"?defaultDayKey(league):f.date;
+  if(f.date==="weekend") return "This weekend";
+  if(f.date==="all") return "All games";
+  if(!k) return "Games";
+  const [y,m,d]=k.split("-").map(Number), dt=new Date(y,m-1,d);
+  return dt.toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"});
+}
+function renderGames(){
+  const out=document.getElementById("games"), all=GAMES.filter(G=>onBoard(G)&&lgOf(G)===league).length, lined=filteredGames(league);
+  document.getElementById("gamesTitle").textContent=boardTitle();
+  document.getElementById("gamesCount").textContent=all?`${lined.length} game${lined.length===1?"":"s"}`:"";
+  if(!all){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet - they load closer to game day.</p>`; return; }
+  if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters. ${esc(filterBlame(league))}</p>`; return; }
+  out.innerHTML=`<div class="bh"><span class="tt"></span><div class="tl"><span></span><span>Winner</span><span>Spread</span><span>Total</span></div></div>`+lined.map(x=>boardRow(x.G,x.gi)).join("");
+  out.querySelectorAll(".bc").forEach(b=>{ b.onclick=()=>toggleLeg(+b.dataset.gi,b.dataset.type); });
 }
 
 /* legs grouped by game, drawn as a Winner / Spread / Total grid with the two teams as rows.
@@ -97,7 +69,7 @@ function cellFor(gi,type,legs,opts){
   if(open){
     b.onclick=()=>{
       const i=legs.findIndex(l=>l.gi===gi&&l.type===type);
-      if(i>=0) legs.splice(i,1); else legs.push({gi,type,line,p0:prob(gi,[{type,line}])});
+      if(i>=0) legs.splice(i,1); else swapIn(legs,gi,type,line);          /* ruling 4: one pick per pick type per game */
       opts.onChange();
     };
   }else{
@@ -133,18 +105,6 @@ function legGroups(container,legs,opts){
       grid.appendChild(t);
       MARKETS3.forEach(m=>grid.appendChild(cellFor(gi,m[ix],legs,opts)));
     });
-    if(opts.na&&st==="upcoming"){
-      grid.appendChild(document.createElement("span"));
-      MARKETS3.forEach(m=>{
-        const blocked=!offered(gi,m[0])&&!offered(gi,m[1]);
-        const b=document.createElement("button"); b.type="button"; b.className="naBtn"; b.textContent="N/A";
-        b.setAttribute("aria-pressed",blocked);
-        b.title=`My app doesn't offer ${legMarket(m[0])} on this game`;
-        b.setAttribute("aria-label",`Mark ${legMarket(m[0])} as not available on this game`);
-        b.onclick=()=>{ naAdd(gi,m[0]); naAdd(gi,m[1]); opts.na(); };
-        grid.appendChild(b);
-      });
-    }
     container.appendChild(grid);
 
     /* line sheet stays reachable for any selected spread/total */
@@ -164,22 +124,12 @@ function legGroups(container,legs,opts){
     if(gr.legs.length>1){
       const t=document.createElement("div"); t.className="together";
       t.innerHTML=`<span>Same game · together <b>${pct(gr.p)}</b> vs ${pct(gr.indep)} if unrelated</span>`;
-      if(opts.prohib){
-        const wrap=document.createElement("span"), logged=new Set(prohibLog().map(r=>r.key));
-        for(let x=0;x<gr.legs.length;x++)for(let y=x+1;y<gr.legs.length;y++){
-          const a1=gr.legs[x], c1=gr.legs[y], key=prohibKey(G,a1,c1), done=logged.has(key);
-          const b=document.createElement("button"); b.type="button"; b.className=done?"done":""; b.disabled=done;
-          b.textContent=(done?"Logged ✓":"Prohibited")+(gr.legs.length>2?` · ${legMarket(a1.type)} + ${legMarket(c1.type)}`:"");
-          b.onclick=()=>{prohibAdd(G,a1,c1);opts.onChange();}; wrap.appendChild(b); wrap.appendChild(document.createTextNode(" "));
-        }
-        t.appendChild(wrap);
-      }
       container.appendChild(t);
     }
   });
 }
 
-/* ---- My Bet: live, no Analyze button ---- */
+/* ---- the full My Bet screen (row 6 rebuilds it; restyled only, no function change) ---- */
 function renderCard(){
   const n=S.legs.length, legsEl=document.getElementById("legs");
   legsEl.innerHTML="";
@@ -233,4 +183,32 @@ function renderCard(){
     : same>=35 ? `Mostly holds. It's "${g.word}" in ${same} of 49 versions, ranging from "${seen[0]}" to "${seen[seen.length-1]}".`
     : `Shaky. Small changes in the game move it anywhere from "${seen[0]}" to "${seen[seen.length-1]}". Don't lean on this one.`);
 }
+
+
+/* ---- line sheet: every rung for one pick (was the Line Mover tab) ---- */
+const MOVES=[]; for(let k=-10;k<=10;k+=0.5) MOVES.push(k);   // every half-point, DK quotes live on the .5s
+function openSheet(l,onChange){
+  const G=GAMES[l.gi], base=marketLine(G,l.type), sp=legMarket(l.type)==="Spread";
+  const side=l.type==="over"?"Over":l.type==="under"?"Under":legTeam(G,l.type);
+  const fmt=v=>sp?fmtSp(v):String(v);
+  const rows=MOVES.map(k=>{ const L=base+k, p=prob(l.gi,[{type:l.type,line:L}]), q=dkQuote(G,l.type,L); return {k,L,p,q}; });
+  const box=document.getElementById("sheetIn");
+  box.innerHTML=`<h2><span>${esc(side)} — every line</span><button type="button" class="close" aria-label="Close">×</button></h2>
+    <p class="small" style="margin:0 0 4px">${esc(shortName(G,G.away))} @ ${esc(shortName(G,G.home))} · market ${esc(fmt(base))}. Tap a line to use it.</p>
+    <div class="scroll"><table class="ladder">
+      <tr><th>Line</th><th>Our chance</th><th>Fair pays</th><th>DK pays</th><th>DK's chance</th></tr>
+      ${rows.map(r=>`<tr class="${r.k===0?"base":""}${r.L===l.line?" cur":""}" data-l="${r.L}">
+        <td><button type="button" class="use">${esc(fmt(r.L))}${r.k===0?" <span class='small'>(market)</span>":""}</button></td>
+        <td class="p">${pct(r.p)}</td><td>${r.p>0?money(1/r.p):"—"}</td>
+        <td>${r.q?`${money(r.q.dec)} <span class="small">${r.q.am}</span>`:"—"}</td>
+        <td class="p" style="color:var(--muted)">${r.q&&r.q.fair!==null?pct(r.q.fair):"—"}</td></tr>`).join("")}
+    </table></div>
+    <p class="small" style="margin:10px 0 0">"Fair pays" is what $1 on that line deserves to pay if it hits, by our numbers. "DK pays" is DraftKings' real price for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole numbers can push — prefer the half-point.${G.alt?"":` <b>No DraftKings alternate lines for this game yet</b> — they load Thursdays.`}</p>`;
+  const dlg=document.getElementById("sheet");
+  box.querySelector(".close").onclick=()=>dlg.close();
+  box.querySelectorAll("tr[data-l]").forEach(tr=>tr.querySelector(".use").onclick=()=>{ l.line=+tr.dataset.l; dlg.close(); onChange(); });
+  dlg.showModal();
+  const cur=box.querySelector("tr.cur"); if(cur) cur.scrollIntoView({block:"center"});
+}
+document.getElementById("sheet").addEventListener("click",e=>{ if(e.target.id==="sheet") e.target.close(); });
 
