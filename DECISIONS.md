@@ -25,9 +25,15 @@ Also decided 2026-09-20:
 - **Screens:** filters folded on load, one click to open; default view is today's upcoming games; Hot Slips always open, no Hide button; Build Your Own moves to its own tab; long team names are abbreviated, never wrapped; full numbers on My Bet, not one word alone. End-state tabs: NCAA Slips · NFL Slips · Build · My Bet · History.
 - **Open to changing the UI** so it stops feeling clunky. A design-direction step (compare against 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks) comes before any screen is rebuilt.
 - **One bet record** follows a bet from tap to result (picks and numbers taken, market line and Clover's chance at placement, payout, whose bet, closing line and closing chance, scores and hit/miss). History is that table read back.
-- **Proposed, not yet ruled on:** "line moved" flag (first-seen line vs. now); Build tab uses the grid layout and retires the six-button layout.
+- **Proposed, not yet ruled on:** Build tab uses the grid layout and retires the six-button layout. (The "line moved" flag was ruled on 2026-09-21, below.)
 - **Do not write a proposal into a doc as "decided."** Danny called this out on 2026-09-20. Tag every line Decided / Earlier call / Proposed, and name the data that feeds a feature before proposing it. **When options are hard to picture, show a visual instead of describing them.**
 - **Rejected 2026-09-20:** a rule based on what "most pick'em apps" offer — no feed reports that for game picks. Syncing betting accounts the way paid trackers do — needs stored passwords.
+
+## Rulings of 2026-09-21 (row 4, from the approved mockup)
+1. **N/A is the edit button.** Every hot-slip ticket carries one small N/A in its corner. Tapping it opens the ticket: an N/A button beside each pick, a "Prohibited" button under any same-game pair, and Done to close. One tap on a pick's N/A hides that pick type for that game and the slips rebuild (ruling 4 of 2026-09-20 stands). The My Bet rail uses the same pattern: one N/A next to Clear reveals the per-pick buttons. Tickets and the rail show no N/A or Prohibited until opened.
+2. **Line-moved flag: yes, in My Bet only, at 3 points or more.** It is a final check on the bet being built, never on the game rows or hot slips. It watches the pick's own number: spread and winner picks watch the spread, total picks watch the total. Wording: "Line moved. Total opened 51.5, now 57.5." Data: `refresh.py` saves the first DraftKings line it sees per game; the page only reads it.
+3. **Team color rule** as drawn on the canvas: see `DESIGN.md`.
+4. **Tapping the other side of a pick type swaps the pick.** Over then Under holds only the Under; a game holds at most one pick per pick type. Replaces today's behaviour, where both sides could sit in the slip at 0%.
 
 ### Architecture (since the 2026-09-08 rebuild — "option B")
 - **Two leagues, one list.** Every game in `upcoming` carries `league: "ncaaf" | "nfl"`. College slate + lines from CFBD. **NFL slate + lines from the-odds-api (DraftKings)** — see "NFL data source". No NFL rating model — the sim centers on the line, so none is needed.
