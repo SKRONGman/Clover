@@ -113,14 +113,27 @@ def record_results(up):
     print(f"  results.json: {added} newly finished game(s) graded, {len(rows)} on file")
 
 
+def note_opening(g, old):
+    """The first DraftKings line Clover ever saw for this game, kept for good
+    (ruling 2 of 2026-09-21). The page compares the current line against it and
+    says "Line moved" in the My Bet rail once a pick's own number is 3+ points off.
+    Set once, never rewritten; only a DraftKings line counts."""
+    if old and old.get("open"):
+        g["open"] = old["open"]
+    elif "open" not in g and g.get("book") == "DraftKings" \
+            and g.get("spread") is not None and g.get("total") is not None:
+        g["open"] = {"spread": g["spread"], "total": g["total"]}
+
+
 def carry_history(R, up):
     """A game that has kicked off keeps the line it closed at and the percentages
     Clover gave it - the feed's line can still drift after kickoff, and that is not
     the number the picks were priced at. Also keeps a final from flipping back to
-    live if a later feed is briefly wrong."""
+    live if a later feed is briefly wrong. Also carries the opening line."""
     prev = {str(g.get("id")): g for g in R.get("upcoming", [])}
     for g in up:
         old = prev.get(str(g.get("id")))
+        note_opening(g, old)
         if not old:
             continue
         if old.get("p"):
