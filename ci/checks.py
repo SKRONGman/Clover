@@ -33,7 +33,7 @@ MACHINE_WRITTEN = {"ratings.js"}            # refresh.py writes it; nobody pushe
 
 # Words the page must not say. All at 0 since the truth pass (row 2, 2026-09-20);
 # the number is how many are allowed and may only go DOWN.
-PAGE_FILES = ("index.html", "preview1.js", "filters.js", "preview2.js", "preview3.js")
+PAGE_FILES = ("index.html", "preview1.js", "filters.js", "preview2.js", "rail.js", "preview3.js")
 STALE_WORDS = {"ESPN BET": 0, "Slips tab": 0, "See the Card": 0, "Not on my app": 0, "not on my app": 0,
                "not on your app": 0, "The Card": 0, "run refresh.py": 0, "every other Thursday": 0,
                "est. payout": 0, "typical pick'em payout": 0}
