@@ -128,7 +128,18 @@ function populateFilterOptions(){
   }
   document.getElementById("nNcaaf").textContent=GAMES.filter(G=>G.sim&&lgOf(G)==="ncaaf").length||"";   /* tabs count what you can still bet */
   document.getElementById("nNfl").textContent=GAMES.filter(G=>G.sim&&lgOf(G)==="nfl").length||"";
+  /* the folded button says how many filters are on (Date and Game status count once they leave their defaults) */
+  const on=["time","conf","div"].filter(k=>f[k]!=="all").length+["fbs","fcs","top25"].filter(k=>f[k]).length+(f.date!=="today"?1:0)+(f.status!=="upcoming"?1:0);
+  document.getElementById("fState").textContent=on?`${on} on`:"none on";
 }
+/* filters start folded; one click opens them. Not remembered - a fresh load is a clean board. */
+let F_OPEN=false;
+function setFiltersOpen(open){
+  F_OPEN=open;
+  document.getElementById("fPanel").classList.toggle("hidden",!open);
+  document.getElementById("fToggle").setAttribute("aria-expanded",open);
+}
+document.getElementById("fToggle").onclick=()=>setFiltersOpen(!F_OPEN);
 const reFilter=()=>{saveFilters();populateFilterOptions();renderGames();renderHot();};
 document.getElementById("fDate").onchange=e=>{FILTERS[league].date=e.target.value;reFilter();};
 document.getElementById("fTime").onchange=e=>{FILTERS[league].time=e.target.value;reFilter();};
