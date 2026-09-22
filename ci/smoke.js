@@ -72,13 +72,47 @@ try{
   check(js("S.legs.length")===4,"slip should hold 4 picks");
   const sp=js("slipProb(S.legs)"); check(sp.joint>0&&sp.joint<1&&sp.groups.length===3,"slip chance out of range");
   check(js("S.legs.find(l=>l.type==='homeSp').line===GAMES[S.legs[0].gi].spread"),"spread must be the side's OWN number");
-  /* ruling 1: no verdict, anywhere, until a real payout is typed */
+  /* ruling 1: no verdict, anywhere (full screen or rail), until a real payout is typed */
   js(`S.pays=null; show("card"); render();`); flush();
   const words=/Great|Good|Coin toss|Bad|Terrible|est\./;
-  check(byId.verdict.textContent===""&&!words.test(byId.barSub.textContent)&&!words.test(byId.why.textContent),"a verdict is showing before any payout was typed");
+  check(byId.verdict.textContent===""&&!words.test(byId.rail.innerHTML)&&!words.test(byId.why.textContent),"a verdict is showing before any payout was typed");
   js(`S.pays=11; render();`); flush();
-  check(words.test(byId.verdict.textContent)&&words.test(byId.barSub.textContent),"no verdict after a payout was typed");
+  check(words.test(byId.verdict.textContent)&&words.test(byId.rail.innerHTML)&&/Needs \d/.test(byId.rail.innerHTML),"no verdict after a payout was typed");
   js(`openSheet(S.legs[0],()=>{}); show("slips"); render();`); flush();
+
+  /* row 4 (rulings of 2026-09-21) */
+  js(`S.legs=[]; S.pays=null; render();`); flush();
+  const gi=js("GAMES.findIndex(G=>G.sim)");
+  /* 4: tapping the other side swaps the pick - one pick per pick type per game */
+  js(`toggleLeg(${gi},"over"); toggleLeg(${gi},"under"); toggleLeg(${gi},"homeSp"); toggleLeg(${gi},"awaySp"); toggleLeg(${gi},"homeML");`); flush();
+  check(js("S.legs.length")===3&&js(`S.legs.map(l=>l.type).sort().join()`)==="awaySp,homeML,under","swap rule: expected under+awaySp+homeML, got "+js("S.legs.map(l=>l.type).join()"));
+  /* 1: N/A is the edit button - closed tickets show one N/A and no Prohibited; opened ones show one per pick */
+  js("renderHot()"); flush();
+  if(js("HOT.length")){
+    const closed=js("hotTicketHtml(HOT[0],0)"), open=js("HOT_EDIT=0; hotTicketHtml(HOT[0],0)"); js("HOT_EDIT=null");
+    check((closed.match(/>N\/A</g)||[]).length===1&&!/Prohibited/.test(closed),"a closed ticket must show exactly one N/A and no Prohibited");
+    check((open.match(/>N\/A</g)||[]).length===js("HOT[0].legs.length")&&/Done/.test(open),"an opened ticket must show N/A beside every pick and Done");
+    const pi=js("HOT.findIndex(s=>new Set(s.legs.map(l=>l.gi)).size<s.legs.length)");
+    if(pi>=0) check(/Prohibited|Logged as prohibited/.test(js(`HOT_EDIT=${pi}; hotTicketHtml(HOT[${pi}],${pi})`)),"an opened ticket with a same-game pair must offer Prohibited");
+    js("HOT_EDIT=null");
+  }
+  const rail0=js("RAIL_EDIT=false; renderRail(); document.getElementById('rail').innerHTML");
+  check((rail0.match(/>N\/A</g)||[]).length===1,"the rail must show one N/A next to Clear until opened");
+  check((js("RAIL_EDIT=true; renderRail(); document.getElementById('rail').innerHTML").match(/>N\/A</g)||[]).length===js("S.legs.length"),"an opened rail must show N/A on every pick (header says Done)");
+  js("RAIL_EDIT=false");
+  /* 2: the moved flag - My Bet rail only, and only at 3 points or more, on the pick's own number */
+  js(`GAMES[${gi}].open={spread:GAMES[${gi}].spread+3,total:GAMES[${gi}].total-2}; render();`); flush();
+  check(js(`movedNote(S.legs.find(l=>l.type==="under"))===null`),"total moved 2: must not flag");
+  check(js(`/opened/.test(movedNote(S.legs.find(l=>l.type==="awaySp"))||"")&&/opened/.test(movedNote(S.legs.find(l=>l.type==="homeML"))||"")`),"spread moved 3: spread and winner picks must flag");
+  check(/Line moved\./.test(byId.rail.innerHTML),"the rail must show the Line moved flag");
+  check(!/Line moved/.test(byId.games.innerHTML)&&!/Line moved/.test(js("hotTicketHtml(HOT[0]||{legs:[]},0)")),"Line moved must never appear on the board or a ticket");
+  js(`delete GAMES[${gi}].open;`);
+  /* the board: at market a spread or total shows the line only; winner shows its chance */
+  const row=js(`boardRow(GAMES[${gi}],${gi})`);
+  check(!/[OU] \d[\d.]*<small>/.test(row)&&/O \d/.test(row)&&/%/.test(row),"board: totals at market must show the line only, winner its chance");
+  js(`S.legs.find(l=>l.type==="under").line+=3; render();`); flush();
+  check(/U \d[\d.]*<small>[\d.<>]+%/.test(js(`boardRow(GAMES[${gi}],${gi})`)),"board: a moved total must show its chance");
+  js(`S.legs=[]; S.pays=null; render();`); flush();
   }
 
   /* 5b. "Today" follows Game status: the default view is never empty while there are games still to come */
@@ -96,4 +130,4 @@ try{
 }catch(e){ fails.push("page threw: "+(e&&e.stack||e)); }
 
 if(fails.length){ console.log("  FAIL  page smoke test"); fails.forEach(f=>console.log("        "+f)); process.exit(1); }
-console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale)");
+console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale, swap, N/A hidden until edit, moved flag rail-only at 3+, line-only at market)");
