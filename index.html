@@ -4,98 +4,95 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://cdn.collegefootballdata.com https://a.espncdn.com data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="dark">
 <title>Clover</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="clover.css?v=20260921">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="clover.css?v=20260922">
 </head>
 <body>
-<div class="wrap">
 
-<header>
-  <div class="hRow">
-    <h1>Clover</h1>
-    <div class="tag" id="ratingsTag">Loading lines…</div>
-  </div>
-</header>
+<header><div class="hIn">
+  <div class="brand"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="5.2"/><circle cx="16" cy="8" r="5.2"/><circle cx="8" cy="16" r="5.2"/><circle cx="16" cy="16" r="5.2"/></svg><h1>Clover</h1></div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tabNcaaf" aria-selected="true">NCAA Slips<span class="n" id="nNcaaf"></span></button>
+    <button class="tab" role="tab" id="tabNfl" aria-selected="false">NFL Slips<span class="n" id="nNfl"></span></button>
+    <button class="tab" role="tab" id="tabBuild" aria-selected="false">Build</button>
+    <button class="tab" role="tab" id="tabCard" aria-selected="false">My Bet<span class="n" id="tabCount"></span></button>
+    <button class="tab" role="tab" id="tabHistory" aria-selected="false">History</button>
+  </nav>
+  <div class="tag" id="ratingsTag">Loading lines…</div>
+</div></header>
 
-<div class="tabs" role="tablist">
-  <button class="tab" role="tab" id="tabNcaaf" aria-selected="true" aria-controls="viewSlips">NCAA Slips<span class="n" id="nNcaaf"></span></button>
-  <button class="tab" role="tab" id="tabNfl" aria-selected="false" aria-controls="viewSlips">NFL Slips<span class="n" id="nNfl"></span></button>
-  <button class="tab" role="tab" id="tabCard" aria-selected="false" aria-controls="viewCard">My Bet<span class="n" id="tabCount">0</span></button>
-</div>
+<div class="wrap" id="main">
+<div class="col">
 
-<!-- ================= SLIPS ================= -->
+<!-- ================= FRONT DOOR ================= -->
 <section id="viewSlips" role="tabpanel">
-  <div class="slip">
-    <div class="fHead">
-      <h2>Filters</h2>
-      <div class="fGrp" id="fConfSel"><label for="fConf">Conference</label><select id="fConf"></select></div>
-      <div class="fGrp hidden" id="fConfChips"><span class="lbl">Conference</span><div class="chips">
-        <button type="button" class="chip" id="fAfc" aria-pressed="false">AFC</button>
-        <button type="button" class="chip" id="fNfc" aria-pressed="false">NFC</button>
-      </div></div>
-      <div class="fGrp" id="fRowNcaafExtra"><span class="lbl">Classification</span><div class="chips">
-        <button type="button" class="chip" id="fFbs" aria-pressed="false">FBS</button>
-        <button type="button" class="chip" id="fFcs" aria-pressed="false">FCS</button>
-        <button type="button" class="chip" id="fTop25" aria-pressed="false">Top 25 (AP)</button>
-      </div></div>
-      <div class="fGrp hidden" id="fDivWrap"><span class="lbl">Division</span><div class="chips" id="fDivChips"></div></div>
+  <div class="hot">
+    <div class="hHead"><h2>Hot slips</h2><p class="sub" id="hotStatus"></p></div>
+    <div class="hCtl">
+      <div class="fld"><span class="sub">Picks per slip</span><div class="chips" id="chips" role="group" aria-label="Number of picks"></div></div>
+      <div class="fld"><span class="sub">Pick types my app offers</span><div class="chips" id="markets" role="group" aria-label="Pick types offered"></div></div>
+      <div class="fld naWrap hidden" id="naWrap"><span class="sub" id="naTxt"></span><button type="button" class="sec" id="naClear">Clear N/A</button></div>
     </div>
-    <div class="row">
-      <div><label for="fDate">Date</label><select id="fDate"></select></div>
-      <div><label for="fTime">Game time</label><select id="fTime">
+    <div id="hotOut"></div>
+  </div>
+
+  <div class="gHead">
+    <div><h2 id="gamesTitle">Games</h2><span class="sub" id="gamesCount"></span></div>
+    <button type="button" class="sec" id="fToggle" aria-expanded="false" aria-controls="fPanel"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 3h12l-4.6 5.4v4.1l-2.8 1.3V8.4L2 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Filters <span class="sub" id="fState">none on</span></button>
+  </div>
+  <div class="card fPanel hidden" id="fPanel">
+    <div class="fRow">
+      <div class="fld"><label for="fDate">Date</label><select id="fDate"></select></div>
+      <div class="fld"><label for="fTime">Game time</label><select id="fTime">
         <option value="all">All game times</option>
         <option value="morning">Morning (before 12pm)</option>
-        <option value="afternoon">Afternoon (12&ndash;4pm)</option>
-        <option value="evening">Evening (4&ndash;8pm)</option>
-        <option value="primetime">Primetime (8pm+)</option>
+        <option value="afternoon">Afternoon (12 to 4pm)</option>
+        <option value="evening">Evening (4 to 8pm)</option>
+        <option value="primetime">Primetime (8pm and later)</option>
       </select></div>
-      <div><label for="fStatus">Game status</label><select id="fStatus">
+      <div class="fld"><label for="fStatus">Game status</label><select id="fStatus">
         <option value="upcoming">Upcoming only</option>
         <option value="live">In progress</option>
         <option value="final">Final (today)</option>
         <option value="all">All statuses</option>
       </select></div>
+      <div class="fld" id="fConfSel"><label for="fConf">Conference</label><select id="fConf"></select></div>
     </div>
-    <div class="fRow3">
-      <button type="button" class="chip" id="fClear">Clear All Filters</button>
-      <button type="button" class="chip hidden" id="naClear">Clear N/A</button>
+    <div class="fRow2">
+      <div class="fld" id="fRowNcaafExtra"><span class="sub">Classification</span><div class="chips">
+        <button type="button" class="chip" id="fFbs" aria-pressed="false">FBS</button>
+        <button type="button" class="chip" id="fFcs" aria-pressed="false">FCS</button>
+        <button type="button" class="chip" id="fTop25" aria-pressed="false">Top 25 (AP)</button>
+      </div></div>
+      <div class="fld hidden" id="fConfChips"><span class="sub">Conference</span><div class="chips">
+        <button type="button" class="chip" id="fAfc" aria-pressed="false">AFC</button>
+        <button type="button" class="chip" id="fNfc" aria-pressed="false">NFC</button>
+      </div></div>
+      <div class="fld hidden" id="fDivWrap"><span class="sub">Division</span><div class="chips" id="fDivChips"></div></div>
+      <button type="button" class="sec" id="fClear">Clear all filters</button>
     </div>
-    <p class="small" id="filterCount" style="margin:10px 0 0"></p>
+    <p class="hint">Hot slips ignore Date and Game status. They always search every upcoming game.</p>
   </div>
-
-  <div class="slip">
-    <h2>Hot slips <span class="sub">most likely to hit, at market lines &middot; searches all upcoming games</span>
-      <button type="button" class="chip" id="hotToggle" aria-expanded="true" style="margin-left:auto">Hide</button></h2>
-    <div id="hotBody">
-    <div class="row">
-      <div><label>How many picks?</label>
-        <div class="chips" id="chips" role="group" aria-label="Number of picks"></div></div>
-      <div><label>Pick types my app offers</label>
-        <div class="chips" id="markets" role="group" aria-label="Pick types offered"></div></div>
-    </div>
-    <p class="small" id="hotStatus" style="margin:10px 0 0"></p>
-    </div>
-  </div>
-  <div id="hotOut"></div>
-
-  <div class="slip">
-    <h2>Build your own <span class="sub">tap a pick to add it</span></h2>
-    <div id="games"></div>
-  </div>
-
-  <p class="note"><b>How this works.</b> Every game with a line is played out 20,000 times ahead of time, centered on the market line — nobody beats the line, so we don't try. Hot slips are the combinations most likely to hit, with same-game picks played out together so a favorite plus its own spread counts for what it really is. Tap any slip to nudge a line and watch the chance update. College and NFL each get their own hot slips; your own slip can mix both. <b>N/A</b> marks a pick type your app doesn't offer for that game and reshuffles around it — that's remembered until the game is off the board. <b>Prohibited</b> logs a pair your app wouldn't let you combine — it's a notebook, it doesn't change the picks.</p>
+  <div class="card board" id="games"></div>
   <div class="actions">
-    <button class="ghost light hidden" id="prohibCopy" type="button">Copy Prohibited log (0)</button>
-    <button class="ghost light hidden" id="prohibClear" type="button">Clear log</button>
+    <button class="sec hidden" id="prohibCopy" type="button">Copy Prohibited log (0)</button>
+    <button class="sec hidden" id="prohibClear" type="button">Clear log</button>
   </div>
 </section>
 
-<!-- ================= MY BET ================= -->
+<!-- ================= BUILD / HISTORY (rows 5 and 8) ================= -->
+<section id="viewOther" role="tabpanel" class="card other hidden">
+  <p id="otherTxt"></p>
+  <button type="button" class="sec" id="otherBack">Back to slips</button>
+</section>
+
+<!-- ================= MY BET, the full screen (row 6 rebuilds it) ================= -->
 <section id="viewCard" role="tabpanel" class="hidden"><div class="two"><div>
-  <div class="board">
+  <div class="card">
     <div class="big" id="bigProb">—</div>
     <div class="sub" id="bigSub">Add picks from NCAA Slips or NFL Slips</div>
     <div class="verdict" id="verdict"></div>
@@ -108,53 +105,46 @@
         <div><span>Fair payout for this</span><strong id="oFair">—</strong></div>
         <div><span>Edge per $1</span><strong id="oEv">—</strong></div>
       </div>
-      <p class="note" style="font-size:13px;margin-top:10px">"Needs to hit" is the win rate you'd need at that payout just to break even. Above it, you're getting the better end. Below it, the app is.</p>
+      <p class="hint">"Needs to hit" is the win rate you'd need at that payout just to break even. Above it, you're getting the better end. Below it, the app is.</p>
     </details>
   </div>
-
-  <div class="slip">
+  <div class="card">
     <h2>Payout</h2>
-    <div class="row">
-      <div><label for="pays">Your app pays, on $1</label>
+    <div class="fRow">
+      <div class="fld"><label for="pays">Your app pays, on $1</label>
         <input id="pays" type="number" step="0.01" min="1" inputmode="decimal" placeholder="e.g. 6.00"></div>
-      <div><label for="who">Whose pick</label>
+      <div class="fld"><label for="who">Whose bet</label>
         <select id="who"><option>Danny</option><option>Jaclyn</option></select></div>
     </div>
-    <p class="small" id="paysNote" style="margin:8px 0 0">Type what your app shows for this slip. Clover gives no verdict until you do — it won't guess a payout.</p>
+    <p class="hint" id="paysNote">Type what your app shows for this slip. Clover gives no verdict until you do - it won't guess a payout.</p>
   </div>
 </div><div>
-  <div class="slip" style="margin-top:14px">
-    <h2>Picks <button class="ghost" id="clearSlip" type="button">Clear</button></h2>
+  <div class="card">
+    <div class="rhead"><h2>Picks</h2><button class="ghost" id="clearSlip" type="button">Clear</button></div>
     <div id="legs"></div>
   </div>
-
-  <div class="board" id="stressBox">
-    <div class="sub" style="margin:0">How sure is this?</div>
-    <p id="stressOut" style="margin:6px 0 0;font-size:15px"></p>
-    <p class="note" style="font-size:13px;margin-top:8px">The line is never exact. This re-runs the slip with the total and the margin each nudged up to 3 points either way — 49 versions of the game. If the verdict holds, it's solid. If it flips, the slip is closer to a coin toss than it looks.</p>
+  <div class="card" id="stressBox">
+    <div class="sub">How sure is this?</div>
+    <p id="stressOut"></p>
+    <p class="hint">The line is never exact. This re-runs the slip with the total and the margin each nudged up to 3 points either way - 49 versions of the game. If the verdict holds, it's solid. If it flips, the slip is closer to a coin toss than it looks.</p>
   </div>
-
   <div class="actions">
-    <button class="ghost light" id="copy" type="button">Copy row for the log</button>
-    <button class="ghost light" id="backToSlips" type="button">Add more picks</button>
+    <button class="sec" id="copy" type="button">Copy row for the log</button>
+    <button class="sec" id="backToSlips" type="button">Add more picks</button>
   </div>
-  <p class="note">Lines auto-fill from DraftKings, college and NFL. If DraftKings has no line for a game, Clover uses the next book that does. If your app shows a different number, tap the line and pick it from the list.</p>
+  <p class="hint">Lines auto-fill from DraftKings, college and NFL. If DraftKings has no line for a game, Clover uses the next book that does. If your app shows a different number, tap the line and pick it from the list.</p>
 </div></div></section>
 
 </div>
-
-<div class="bar hidden" id="bar">
-  <div class="in">
-    <div><div class="big" id="barProb">—</div><div class="sub" id="barSub"></div></div>
-    <button class="primary" id="barGo" type="button">Open My Bet</button>
-  </div>
+<aside class="card" id="rail"></aside>
 </div>
 
 <dialog id="sheet" aria-label="Every line for this pick"><div class="sheet" id="sheetIn"></div></dialog>
 
-<script src="preview1.js?v=20260920"></script>
-<script src="filters.js?v=20260920"></script>
-<script src="preview2.js?v=20260920"></script>
-<script src="preview3.js?v=20260920"></script>
+<script src="preview1.js?v=20260922"></script>
+<script src="filters.js?v=20260922"></script>
+<script src="preview2.js?v=20260922"></script>
+<script src="rail.js?v=20260922"></script>
+<script src="preview3.js?v=20260922"></script>
 </body>
 </html>
