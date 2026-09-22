@@ -3254,5 +3254,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": "32367f882fac1a0c20a6335619922025",
+  "league": "nfl",
+  "start": "2026-09-22T00:16+00:00",
+  "home": "Los Angeles Rams",
+  "away": "New York Giants",
+  "hp": 28.0,
+  "ap": 6.0,
+  "spread": -6.5,
+  "total": 47.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.7203,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.2797,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -6.5,
+    "p": 0.4989,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 6.5,
+    "p": 0.5011,
+    "result": "miss"
+   },
+   "over": {
+    "line": 47.5,
+    "p": 0.4767,
+    "result": "miss"
+   },
+   "under": {
+    "line": 47.5,
+    "p": 0.5233,
+    "result": "hit"
+   }
+  }
  }
 ]
