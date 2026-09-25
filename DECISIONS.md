@@ -22,12 +22,17 @@ How Clover thinks, in the words agreed with Danny:
 6. **Keys:** see `STATUS.md` open items.
 
 Also decided 2026-09-20:
-- **Screens:** filters folded on load, one click to open; default view is today's upcoming games; Hot Slips always open, no Hide button; Build Your Own moves to its own tab; long team names are abbreviated, never wrapped; full numbers on My Bet, not one word alone. End-state tabs: NCAA Slips · NFL Slips · Build · My Bet · History.
+- **Screens:** filters folded on load, one click to open; default view is today's upcoming games; Hot Slips always open, no Hide button; ~~Build Your Own moves to its own tab~~ **superseded 2026-09-24 (Danny, option A): no Build tab - building happens on the front-door board, with the ladder in the side column** (the board already was build-your-own after row 4; a tab would have drawn the same game a fourth way); long team names are abbreviated, never wrapped (built 2026-09-24: full name where it fits, abbreviation under 800px); full numbers on My Bet, not one word alone. End-state tabs: NCAA Slips · NFL Slips · My Bet · History.
 - **Open to changing the UI** so it stops feeling clunky. A design-direction step (compare against 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks) comes before any screen is rebuilt.
 - **One bet record** follows a bet from tap to result (picks and numbers taken, market line and Clover's chance at placement, payout, whose bet, closing line and closing chance, scores and hit/miss). History is that table read back.
-- **Proposed, not yet ruled on:** Build tab uses the grid layout and retires the six-button layout. (The "line moved" flag was ruled on 2026-09-21, below.)
+- ~~**Proposed, not yet ruled on:** Build tab uses the grid layout and retires the six-button layout.~~ Overtaken: row 4's board retired the six-button layout; row 5 dropped the tab (above). (The "line moved" flag was ruled on 2026-09-21, below.)
 - **Do not write a proposal into a doc as "decided."** Danny called this out on 2026-09-20. Tag every line Decided / Earlier call / Proposed, and name the data that feeds a feature before proposing it. **When options are hard to picture, show a visual instead of describing them.**
 - **Rejected 2026-09-20:** a rule based on what "most pick'em apps" offer — no feed reports that for game picks. Syncing betting accounts the way paid trackers do — needs stored passwords.
+
+## Rulings of 2026-09-24 (row 5)
+1. **No Build tab** (Danny picked A of A/B). The ladder - every line for a game with Clover's chance at each - lives in the side column above My Bet, opened by a "Lines" button on the board row; on the full My Bet screen it opens in the dialog. One drawing (`ladder.js`), two homes. The old line sheet is gone.
+2. **"This weekend" rolls forward** once the ending weekend has no game left that has not kicked off. Proposed in the row-5 mockup, built the same day; Danny's A covered the whole row.
+3. **Abbreviations come from the feeds** - CFBD `/teams` `abbreviation` for college, ESPN's code for the NFL - never typed by hand. The board shows the full name where it fits and the abbreviation only where it would not.
 
 ## Rulings of 2026-09-21 (row 4, from the approved mockup)
 1. **N/A is the edit button.** Every hot-slip ticket carries one small N/A in its corner. Tapping it opens the ticket: an N/A button beside each pick, a "Prohibited" button under any same-game pair, and Done to close. One tap on a pick's N/A hides that pick type for that game and the slips rebuild (ruling 4 of 2026-09-20 stands). The My Bet rail uses the same pattern: one N/A next to Clear reveals the per-pick buttons. Tickets and the rail show no N/A or Prohibited until opened.
