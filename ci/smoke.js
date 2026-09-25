@@ -77,18 +77,30 @@ try{
   /* ruling 1: no verdict, anywhere (full screen or rail), until a real payout is typed */
   js(`S.pays=null; show("card"); render();`); flush();
   const words=/Great|Good|Coin toss|Bad|Terrible|est\./;
-  check(byId.verdict.textContent===""&&!words.test(byId.rail.innerHTML)&&!words.test(byId.why.textContent),"a verdict is showing before any payout was typed");
+  check(byId.verdict.textContent===""&&!words.test(byId.rail.innerHTML)&&!words.test(byId.why.textContent)&&byId.needV.textContent==="—"&&byId.place.disabled,"a verdict (or Needs, or I placed this) is showing before any payout was typed");
   js(`S.pays=11; render();`); flush();
   check(words.test(byId.verdict.textContent)&&words.test(byId.rail.innerHTML)&&/Needs \d/.test(byId.rail.innerHTML),"no verdict after a payout was typed");
-  /* row 5 (2026-09-24): the ladder replaces the line sheet - one drawing, in the side column on the
-     front door and in the dialog on the full My Bet screen. Tapping a rung holds that line. */
+  /* row 5 (2026-09-24): the ladder replaces the line sheet - one drawing, in the side column
+     (on the full My Bet screen too since row 6). Tapping a rung holds that line. */
+  /* row 6 (2026-09-24): the full My Bet screen - needs vs has, the numbers, the stress grid, the stamp */
+  check(/^\d/.test(byId.needV.textContent)&&/to break even at \$11\.00/.test(byId.needS.textContent),"My Bet: Needs must show once a payout is typed");
+  check((byId.sGrid.innerHTML.match(/class="c[ "]/g)||[]).length===49&&/Solid|Mostly holds|Shaky/.test(byId.sWord.textContent),"My Bet: the stress grid must draw 49 squares and one word");
+  check(/data-lad=/.test(byId.legs.innerHTML)&&/class="bc/.test(byId.legs.innerHTML)&&!/gcard|class="cell/.test(byId.legs.innerHTML),"My Bet: picks must be board rows (boardRow), not the old grid");
+  check(js("typeof legGroups")==="undefined"&&js("typeof cellFor")==="undefined","the old third drawing of a game must be gone");
+  js(`placeSlip();`); flush();
+  check(js("!!S.placed&&S.placed.who===S.who&&S.placed.pays===11")&&!byId.placedBox.classList.contains("hidden")&&/Placed ·/.test(byId.placedTxt.textContent),"I placed this: the stamp must show who, the payout and the time");
+  js(`toggleLeg(S.legs[S.legs.length-1].gi,S.legs[S.legs.length-1].type);`); flush();
+  check(js("!!S.placed")&&/changed since/.test(byId.placedSub.textContent),"a placed slip stays editable (stamp, not lock) and says when it changed");
+  js(`S.placed=null; render();`); flush();
   js(`openLadder(S.legs[0].gi,S.legs[0].type);`); flush();
-  check(js("!!LADDER")&&byId.sheet.open&&/<table class="ladder"/.test(byId.sheetIn.innerHTML)&&byId.ladder.classList.contains("hidden"),"on the full My Bet screen the ladder must open in the dialog");
-  js(`closeLadder(); show("slips"); render();`); flush();
-  check(!byId.sheet.open,"closing the ladder must close the dialog");
+  check(js("!!LADDER")&&/<table class="ladder"/.test(byId.ladder.innerHTML)&&!byId.ladder.classList.contains("hidden")&&byId.rail.classList.contains("hidden")&&byId.ladHint.classList.contains("hidden"),"on the full My Bet screen the ladder must open in the side column, with the rail hidden");
+  js(`closeLadder();`); flush();
+  check(!byId.ladHint.classList.contains("hidden"),"My Bet with no ladder open: the side column says what goes there");
+  js(`show("slips"); render();`); flush();
+  check(!byId.rail.classList.contains("hidden"),"the rail must come back on the front door");
   const g0=js("S.legs[0].gi"), base=js("marketLine(GAMES[S.legs[0].gi],'homeSp')");
   js(`openLadder(${g0});`); flush();
-  check(js("LADDER&&LADDER.type")==="homeSp"&&!byId.ladder.classList.contains("hidden")&&!byId.sheet.open,"on the front door the ladder must open in the side column, on the held pick's type");
+  check(js("LADDER&&LADDER.type")==="homeSp"&&!byId.ladder.classList.contains("hidden"),"on the front door the ladder must open in the side column, on the held pick's type");
   const lad=byId.ladder.innerHTML;
   check((lad.match(/data-use=/g)||[]).length===21&&/market/.test(lad)&&/ cur"/.test(lad),"ladder: 21 rungs (±5 by the half point), the market marked, the held line marked");
   check(/DK pays/.test(lad)&&/DK's %/.test(lad),"ladder: DK's price and DK's chance columns");
@@ -120,11 +132,11 @@ try{
   check((rail0.match(/>N\/A</g)||[]).length===1,"the rail must show one N/A next to Clear until opened");
   check((js("RAIL_EDIT=true; renderRail(); document.getElementById('rail').innerHTML").match(/>N\/A</g)||[]).length===js("S.legs.length"),"an opened rail must show N/A on every pick (header says Done)");
   js("RAIL_EDIT=false");
-  /* 2: the moved flag - My Bet rail only, and only at 3 points or more, on the pick's own number */
+  /* 2: the moved flag - My Bet only (rail + full screen), and only at 3 points or more, on the pick's own number */
   js(`GAMES[${gi}].open={spread:GAMES[${gi}].spread+3,total:GAMES[${gi}].total-2}; render();`); flush();
   check(js(`movedNote(S.legs.find(l=>l.type==="under"))===null`),"total moved 2: must not flag");
   check(js(`/opened/.test(movedNote(S.legs.find(l=>l.type==="awaySp"))||"")&&/opened/.test(movedNote(S.legs.find(l=>l.type==="homeML"))||"")`),"spread moved 3: spread and winner picks must flag");
-  check(/Line moved\./.test(byId.rail.innerHTML),"the rail must show the Line moved flag");
+  check(/Line moved\./.test(byId.rail.innerHTML)&&/Line moved\./.test(byId.legs.innerHTML),"the rail and the full My Bet screen must show the Line moved flag");
   check(!/Line moved/.test(byId.games.innerHTML)&&!/Line moved/.test(js("hotTicketHtml(HOT[0]||{legs:[]},0)")),"Line moved must never appear on the board or a ticket");
   js(`delete GAMES[${gi}].open;`);
   /* the board: at market a spread or total shows the line only; winner shows its chance */
