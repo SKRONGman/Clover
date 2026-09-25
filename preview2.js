@@ -1,4 +1,4 @@
-/* ---- the board: one row per game, Winner / Spread / Total, away team on top.
+/* ---- the board: one row per game, Winner / Spread / Total, away team on top, Lines at the end.
    Spread and total buttons show the LINE at market (every spread and total sits at
    48-52% there, so the % was noise); the chance appears once the number differs
    from the market line - a held pick that was moved on the line sheet. Winner
@@ -16,14 +16,17 @@ function boardCell(gi,type){
 function teamCell(G,team){
   const rank=team===G.home?G.home_rank:G.away_rank, sc=scoreOf(G), pts=sc?(team===G.home?sc.h:sc.a):null;
   const c=teamColor(team), tile=LOGOS[team]?`<img src="${esc(LOGOS[team])}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><i style="background:${c};display:none">${esc(initials(team))}</i>`:`<i style="background:${c}">${esc(initials(team))}</i>`;
-  return `<div class="tm"><span class="lg">${tile}</span>${rank?`<span class="rk">${rank}</span>`:""}<span class="nm">${esc(team)}</span>${pts!=null?`<b class="sc">${pts}</b>`:""}</div>`;
+  /* the full name where it fits, the abbreviation where it would not (clover.css swaps them at 800px) - never wrapped */
+  return `<div class="tm"><span class="lg">${tile}</span>${rank?`<span class="rk">${rank}</span>`:""}<span class="nm" title="${esc(team)}">${esc(team)}</span><span class="ab" aria-hidden="true">${esc(abbrOf(G,team))}</span>${pts!=null?`<b class="sc">${pts}</b>`:""}</div>`;
 }
 function boardRow(G,gi){
   const st=statusOf(G), when=new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
   const tag=st==="final"?`<span class="fin">Final</span>`:st==="live"?`<span class="fin live">Live</span>`:"";
+  /* the Lines button opens the ladder for this game (row 5); a game that has kicked off has no table to ladder */
+  const lad=st==="upcoming"?`<button type="button" class="lnB" data-lad="${gi}" aria-label="Every line for ${esc(shortName(G,G.away))} at ${esc(shortName(G,G.home))}"><span>Lines</span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h12M2 8h12M2 13h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>`:`<span class="lnB"></span>`;
   return `<div class="gr${st==="upcoming"?"":" done"}" data-gi="${gi}"><div class="tt">${esc(when)}${tag}</div><div class="lines">`
     +`<div class="tl">${teamCell(G,G.away)}${boardCell(gi,"awayML")}${boardCell(gi,"awaySp")}${boardCell(gi,"over")}</div>`
-    +`<div class="tl">${teamCell(G,G.home)}${boardCell(gi,"homeML")}${boardCell(gi,"homeSp")}${boardCell(gi,"under")}</div></div></div>`;
+    +`<div class="tl">${teamCell(G,G.home)}${boardCell(gi,"homeML")}${boardCell(gi,"homeSp")}${boardCell(gi,"under")}</div></div>${lad}</div>`;
 }
 function boardTitle(){
   const f=FILTERS[league], k=f.date==="today"?defaultDayKey(league):f.date;
@@ -39,8 +42,9 @@ function renderGames(){
   document.getElementById("gamesCount").textContent=all?`${lined.length} game${lined.length===1?"":"s"}`:"";
   if(!all){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games with lines yet - they load closer to game day.</p>`; return; }
   if(!lined.length){ out.innerHTML=`<p class="empty">No ${LEAGUE_NAME[league]} games match these filters. ${esc(filterBlame(league))}</p>`; return; }
-  out.innerHTML=`<div class="bh"><span class="tt"></span><div class="tl"><span></span><span>Winner</span><span>Spread</span><span>Total</span></div></div>`+lined.map(x=>boardRow(x.G,x.gi)).join("");
+  out.innerHTML=`<div class="bh"><span class="tt"></span><div class="tl"><span></span><span>Winner</span><span>Spread</span><span>Total</span></div><span class="lnB"></span></div>`+lined.map(x=>boardRow(x.G,x.gi)).join("");
   out.querySelectorAll(".bc").forEach(b=>{ b.onclick=()=>toggleLeg(+b.dataset.gi,b.dataset.type); });
+  out.querySelectorAll("[data-lad]").forEach(b=>{ b.onclick=()=>openLadder(+b.dataset.lad); b.classList.toggle("on",!!LADDER&&LADDER.gi===+b.dataset.lad); });
 }
 
 /* legs grouped by game, drawn as a Winner / Spread / Total grid with the two teams as rows.
@@ -116,7 +120,7 @@ function legGroups(container,legs,opts){
         const base=marketLine(G,l.type), moved=l.line!==base;
         const b=document.createElement("button"); b.type="button";
         b.textContent=`${legLabel(G,l)} · all lines${moved?` (market ${legMarket(l.type)==="Spread"?fmtSp(base):base})`:""}`;
-        b.onclick=()=>openSheet(l,opts.onChange); wrap.appendChild(b); wrap.appendChild(document.createTextNode(" "));
+        b.onclick=()=>openLadder(l.gi,l.type); wrap.appendChild(b); wrap.appendChild(document.createTextNode(" "));
       });
       row.appendChild(wrap); container.appendChild(row);
     }
@@ -183,32 +187,3 @@ function renderCard(){
     : same>=35 ? `Mostly holds. It's "${g.word}" in ${same} of 49 versions, ranging from "${seen[0]}" to "${seen[seen.length-1]}".`
     : `Shaky. Small changes in the game move it anywhere from "${seen[0]}" to "${seen[seen.length-1]}". Don't lean on this one.`);
 }
-
-
-/* ---- line sheet: every rung for one pick (was the Line Mover tab) ---- */
-const MOVES=[]; for(let k=-10;k<=10;k+=0.5) MOVES.push(k);   // every half-point, DK quotes live on the .5s
-function openSheet(l,onChange){
-  const G=GAMES[l.gi], base=marketLine(G,l.type), sp=legMarket(l.type)==="Spread";
-  const side=l.type==="over"?"Over":l.type==="under"?"Under":legTeam(G,l.type);
-  const fmt=v=>sp?fmtSp(v):String(v);
-  const rows=MOVES.map(k=>{ const L=base+k, p=prob(l.gi,[{type:l.type,line:L}]), q=dkQuote(G,l.type,L); return {k,L,p,q}; });
-  const box=document.getElementById("sheetIn");
-  box.innerHTML=`<h2><span>${esc(side)} — every line</span><button type="button" class="close" aria-label="Close">×</button></h2>
-    <p class="small" style="margin:0 0 4px">${esc(shortName(G,G.away))} @ ${esc(shortName(G,G.home))} · market ${esc(fmt(base))}. Tap a line to use it.</p>
-    <div class="scroll"><table class="ladder">
-      <tr><th>Line</th><th>Our chance</th><th>Fair pays</th><th>DK pays</th><th>DK's chance</th></tr>
-      ${rows.map(r=>`<tr class="${r.k===0?"base":""}${r.L===l.line?" cur":""}" data-l="${r.L}">
-        <td><button type="button" class="use">${esc(fmt(r.L))}${r.k===0?" <span class='small'>(market)</span>":""}</button></td>
-        <td class="p">${pct(r.p)}</td><td>${r.p>0?money(1/r.p):"—"}</td>
-        <td>${r.q?`${money(r.q.dec)} <span class="small">${r.q.am}</span>`:"—"}</td>
-        <td class="p" style="color:var(--muted)">${r.q&&r.q.fair!==null?pct(r.q.fair):"—"}</td></tr>`).join("")}
-    </table></div>
-    <p class="small" style="margin:10px 0 0">"Fair pays" is what $1 on that line deserves to pay if it hits, by our numbers. "DK pays" is DraftKings' real price for that exact line, and "DK's chance" is what their price implies once their cut is removed — a second opinion from a real book. If your app pays more than DK for the same move, that's a good deal. Whole numbers can push — prefer the half-point.${G.alt?"":` <b>No DraftKings alternate lines for this game yet</b> — they load Thursdays.`}</p>`;
-  const dlg=document.getElementById("sheet");
-  box.querySelector(".close").onclick=()=>dlg.close();
-  box.querySelectorAll("tr[data-l]").forEach(tr=>tr.querySelector(".use").onclick=()=>{ l.line=+tr.dataset.l; dlg.close(); onChange(); });
-  dlg.showModal();
-  const cur=box.querySelector("tr.cur"); if(cur) cur.scrollIntoView({block:"center"});
-}
-document.getElementById("sheet").addEventListener("click",e=>{ if(e.target.id==="sheet") e.target.close(); });
-
