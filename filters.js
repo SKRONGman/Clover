@@ -16,14 +16,21 @@ function loadFilters(){
 function saveFilters(){ try{localStorage.setItem("cloverFilters",JSON.stringify(FILTERS));}catch(e){} }
 function dateKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
 function gameDateKey(G){ return dateKey(new Date(G.start)); }
-/* the Thu-Mon window we're either in, or heading into next (Tue/Wed = between weekends) */
-function weekendWindow(){
-  const now=new Date(), day=now.getDay(), sinceThu=(day-4+7)%7;      // Thu=0..Wed=6
+/* the Thu-Mon window we're either in, or heading into next (Tue/Wed = between weekends).
+   Since 2026-09-24 (row 5): a window we are in rolls forward once no game left in it has yet
+   to kick off - Monday at 8 PM, after MNF kicks off, "This weekend" means the coming one, not
+   an empty board. Monday at 6 PM still shows this weekend's last game. */
+function weekendWindow(now=new Date()){
+  const day=now.getDay(), sinceThu=(day-4+7)%7;      // Thu=0..Wed=6
   const thu=new Date(now);
   thu.setDate(now.getDate()+(sinceThu<=4 ? -sinceThu : 7-sinceThu));
   thu.setHours(0,0,0,0);
   const mon=new Date(thu); mon.setDate(thu.getDate()+4); mon.setHours(23,59,59,999);
-  return {thu,mon};
+  const win={thu,mon};
+  if(sinceThu<=4&&!GAMES.some(G=>onBoard(G)&&isOpen(G)&&gameInWeekend(G,win))){
+    thu.setDate(thu.getDate()+7); mon.setDate(mon.getDate()+7);
+  }
+  return win;
 }
 /* what "Today" means: today if it has games in the chosen Game status, else the nearest
    day that does - forward for games still to come, backward for finished ones. It has to
