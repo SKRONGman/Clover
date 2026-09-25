@@ -29,11 +29,11 @@ small{display:block;font-size:12px;font-weight:500;color:var(--muted)}
 .ghost{color:var(--muted);padding:0 12px;font-size:14px}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{min-width:44px;background:var(--card);border-color:var(--line);font-weight:500}
-.chip[aria-pressed="true"],.bc[aria-pressed="true"],.cell[aria-pressed="true"]{background:var(--sel);border:1.5px solid var(--acc);font-weight:700}
+.chip[aria-pressed="true"],.bc[aria-pressed="true"]{background:var(--sel);border:1.5px solid var(--acc);font-weight:700}
 .edit{color:var(--muted);font-weight:700;padding:0 10px}
 .edit.on{color:var(--acc)}
-.na{color:var(--muted);font-size:13px;width:40px;padding:0;flex:none}
-.rm{width:32px;padding:0;flex:none;color:var(--muted);font-size:20px;font-weight:400}
+.na{color:var(--muted);font-size:13px;min-width:44px;padding:0;flex:none}
+.rm{width:44px;padding:0;flex:none;color:var(--muted);font-size:20px;font-weight:400}
 
 /* ---------- header + tabs ---------- */
 header{background:var(--card);border-bottom:1px solid var(--line)}
@@ -51,7 +51,6 @@ h1{font-size:26px;font-stretch:112%;letter-spacing:-.01em}
 
 /* ---------- layout ---------- */
 .wrap{max-width:1280px;margin:0 auto;padding:32px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px;align-items:start}
-.wrap.full{grid-template-columns:minmax(0,1fr)}
 .col{display:flex;flex-direction:column;gap:24px;min-width:0}
 #viewSlips{display:flex;flex-direction:column;gap:24px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
@@ -153,55 +152,74 @@ span.lnB{border:0}
 .verdict .needs{width:100%;font-size:15px;font-variant-numeric:tabular-nums;color:var(--text)}
 .pos{color:var(--acc)}.neg{color:var(--bad)}.mid{color:var(--text)}
 
-/* ---------- the full My Bet screen (row 6 rebuilds it) ---------- */
-#viewCard .big{font-size:64px;line-height:1}
-#viewCard .verdict{display:block;border:0;padding:0;font-size:24px;font-weight:800;margin-top:12px}
-.why{color:var(--muted);font-size:15px;margin-top:4px;line-height:1.45}
-.math{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
-.math summary{cursor:pointer;color:var(--muted);font-size:14px;list-style:none;min-height:28px}
-.math summary::before{content:"\25B8  "}.math[open] summary::before{content:"\25BE  "}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin:8px 0 10px}
-.grid2 span{display:block;color:var(--muted);font-size:13px}
-.grid2 strong{font-size:24px;font-weight:700}
-#stressOut{margin:6px 0 8px;font-size:15px}
-.gMeta{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted);margin-top:12px}
-.gcard{display:grid;grid-template-columns:minmax(150px,1.9fr) 1fr 1fr 1fr;gap:6px;align-items:stretch;margin:6px 0 2px}
-.gcard .colh{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-align:center;align-self:end}
-.gcard .team{display:flex;align-items:center;gap:10px;min-width:0}
-.gcard .team .ha{font-size:11px;font-weight:700;color:var(--muted);width:10px;flex:none}
-.gcard .team .nm{font-size:16px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.logo{width:28px;height:28px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;overflow:hidden;font-weight:700;font-size:11px;border:1px solid var(--line)}
-.logo img{width:22px;height:22px;object-fit:contain}
-.cell{background:var(--card);border:1px solid var(--line);min-height:48px;padding:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.cell .ln{font-size:13px;font-weight:600}
-.cell .pp{font-size:12px;color:var(--muted)}
-.cell.na{opacity:.45;text-decoration:line-through}
-.cell .res{font-size:11px;font-weight:600;letter-spacing:.04em}
-.cell .res.w{color:var(--acc)}.cell .res.l{color:var(--bad)}
-.gcard.locked .cell{cursor:default;color:var(--muted)}
-.gcard.locked .cell[aria-pressed="true"].lost{border-color:var(--bad)}
-.together{margin:2px 0 6px;padding:6px 10px;background:var(--bg);border-radius:8px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.together b{color:var(--text)}
-.together button{padding:0 9px;font-size:12px;min-height:32px;border:1px solid var(--line);color:var(--text)}
-.hChip{font-size:12px;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:3px 9px;white-space:nowrap}
-.hChip.fin{color:var(--bad);border-color:var(--bad)}
+/* ---------- the full My Bet screen (row 6, mybet.js) ---------- */
+:root{--great:#57D68D;--good:#9ED9A8;--coin:#E3C170;--badv:#F09A7A;--terr:#F2707A}
+.mb{display:flex;flex-direction:column;gap:24px}
+.mbBet{padding:20px}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.fig{display:flex;flex-direction:column;gap:2px;min-width:0}
+.fig .k{font-size:13px;color:var(--muted)}
+.fig .v{font-size:48px;line-height:1.05;font-weight:800;font-stretch:88%;font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap}
+.fig .s{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.fig.vd .v{color:var(--vc)}
+#verdict:empty::before{content:"—";color:var(--muted)}
+.meter{position:relative;height:14px;background:var(--bg);border-radius:7px;margin:30px 0 6px}
+.mHas{position:absolute;inset:0 auto 0 0;border-radius:7px;background:var(--vc)}
+.mNeed{position:absolute;top:-6px;bottom:-6px;width:3px;margin-left:-1px;background:var(--text);border-radius:2px}
+.mNeed::after{content:"needs";position:absolute;top:-19px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted)}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.why{margin:14px 0 0;font-size:15px;max-width:64ch}
+.why:empty{display:none}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:16px}
+.nums div{background:var(--card);padding:10px 12px}
+.nums span{display:block;font-size:12px;color:var(--muted)}
+.nums strong{font-size:20px;font-stretch:88%;font-variant-numeric:tabular-nums}
+.mbForm{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.mbForm input{width:130px;font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.mbForm .go{margin-left:auto;display:flex;gap:8px}
+.mbForm .primary{width:auto;padding:0 24px}
+.primary:disabled{opacity:.45}
+.placed{margin-top:18px;padding:14px 16px;border-radius:8px;background:var(--sel);border:1.5px solid var(--acc);display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.placed.hidden{display:none}
+.placed b{display:block;margin-bottom:2px}
+.stamp{margin:0;font-size:14px;font-weight:600;color:var(--acc)}
+.mbHead{padding:12px 16px 4px}
+.mbHead h2 .sub{display:inline;font-size:18px}
+.mbPicks .gw{border-top:1px solid var(--line)}
+.mbPicks .gw .gr{border-top:0}
+.notes{display:flex;flex-direction:column;gap:6px;padding:0 16px 12px 96px}
+.flag{font-size:14px;border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--muted)}
+.flag b{color:var(--text)}
+.flag.mv{color:var(--text);box-shadow:inset 3px 0 0 var(--coin)}
+.flag.ed{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--text);padding:0 0 0 10px}
+.notes .pair{border:0;padding:0 0 0 10px;background:var(--bg);border-radius:8px}
+.sWord{font-size:24px;font-weight:800}
+#sGrid{margin-top:8px}
+.axT{font-size:11px;color:var(--muted);margin:0 0 4px 54px}
+.axW{display:flex;align-items:center;gap:6px}
+.axL{font-size:11px;color:var(--muted);writing-mode:vertical-rl;transform:rotate(180deg)}
+.sgrid{display:grid;grid-template-columns:auto repeat(7,30px);gap:4px;align-items:center;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sgrid .c{width:30px;height:30px;border-radius:6px}
+.sgrid .c.mid{outline:2px solid var(--text);outline-offset:1px}
+.sgrid .ax{text-align:center}.sgrid .ay{text-align:right;padding-right:4px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);margin-top:12px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+#ladHint{padding:20px;font-size:14px}
+@media(max-width:800px){.notes{padding:0 10px 12px}}
+@media(max-width:620px){.trio{grid-template-columns:1fr 1fr}.fig.vd{grid-column:1/-1}.fig .v{font-size:38px}.nums{grid-template-columns:1fr 1fr}.mbForm .go{margin-left:0}}
 
-/* ---------- the ladder (ladder.js): a card in the side column, the dialog on the full My Bet screen ---------- */
-#ladder .rhead h2,.sheet .rhead h2{font-size:18px}
+/* ---------- the ladder (ladder.js): a card in the side column, on every screen ---------- */
+#ladder .rhead h2{font-size:18px}
 .close{width:44px;padding:0;border:1px solid var(--line);font-size:20px}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.seg .chip{min-height:40px;font-size:14px;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#ladder .hint,.sheet .hint{margin-top:-8px}
+.seg .chip{min-height:44px;font-size:14px;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ladder .hint{margin-top:-8px}
 .lfoot{display:flex;align-items:center;gap:10px}
 .lfoot .ghost{flex:none;padding:0 8px}
 .lfoot .hint{margin:0}
 .ladder td.dk{color:var(--muted)}
 
-/* ---------- line sheet (the dialog frame; ladder.js fills it) ---------- */
-dialog{border:1px solid var(--line);border-radius:12px 12px 0 0;padding:0;width:100%;max-width:640px;margin:auto auto 0;background:var(--card);color:var(--text);max-height:88vh}
-dialog::backdrop{background:rgba(0,0,0,.6)}
-.sheet{padding:16px}
-.sheet h2{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+/* ---------- the ladder table ---------- */
 .ladder{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
 .ladder th{color:var(--muted);font-weight:500;font-size:13px;text-align:right;padding:6px 4px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card)}
 .ladder td{text-align:right;padding:0 4px;border-bottom:1px solid var(--line)}
