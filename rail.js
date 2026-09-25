@@ -41,8 +41,9 @@ function railHtml(){
     +`<div class="joint"><span class="sub">Chance all ${n} hit</span><span class="big">${ch.txt}</span></div>`
     +`<div class="fld"><label for="railPay">Your app pays on $1</label><input id="railPay" type="number" step="0.01" min="1" inputmode="decimal" placeholder="6.00" value="${S.pays!=null?S.pays:""}"></div>`
     +`<div class="fld"><span class="sub">Whose bet</span><div class="chips">${["Danny","Jaclyn"].map(w=>`<button type="button" class="chip" data-who="${w}" aria-pressed="${S.who===w}">${w}</button>`).join("")}</div></div>`
-    +(g?`<div class="verdict ${g.cls}"><span class="word">${g.word}</span><span class="ev">${ev>=0?"+":"\u2212"}${Math.round(Math.abs(ev)*100)}\u00a2 per $1</span><span class="needs">Needs ${pct(1/pay.dec)}, has ${ch.txt}</span></div>`
+    +(g?`<div class="verdict ${g.cls}"><span class="word">${g.word}</span><span class="ev">${ev>=0?"+":"−"}${Math.round(Math.abs(ev)*100)}¢ per $1</span><span class="needs">Needs ${pct(1/pay.dec)}, has ${ch.txt}</span></div>`
       :`<p class="hint">Type the payout to get a verdict. Clover never guesses one.</p>`)
+    +(S.placed?`<p class="stamp">Placed · ${esc(S.placed.who)} · ${money(S.placed.pays)} on $1</p>`:"")
     +`<button type="button" class="primary" id="railGo">Open My Bet</button>`;
 }
 function renderRail(){
@@ -57,7 +58,7 @@ function renderRail(){
   box.querySelectorAll("[data-who]").forEach(b=>b.onclick=()=>{ S.who=b.dataset.who; render(); });
   box.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>{ const L=S.legs.filter(l=>l.gi===+b.dataset.gi); prohibAdd(GAMES[+b.dataset.gi],L[+b.dataset.x],L[+b.dataset.y]); render(); });
   const e=box.querySelector("#railEdit"); if(e) e.onclick=()=>{ RAIL_EDIT=!RAIL_EDIT; renderRail(); };
-  const c=box.querySelector("#railClear"); if(c) c.onclick=()=>{ S.legs=[]; S.pays=null; RAIL_EDIT=false; render(); };
+  const c=box.querySelector("#railClear"); if(c) c.onclick=()=>{ S.legs=[]; S.pays=null; S.placed=null; RAIL_EDIT=false; render(); };
   const go=box.querySelector("#railGo"); if(go) go.onclick=()=>show("card");
   const p=box.querySelector("#railPay"); if(p) p.oninput=ev=>{ const v=parseFloat(ev.target.value); S.pays=isNaN(v)||v<=1?null:v; render(); };
 }
