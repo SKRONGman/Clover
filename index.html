@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="clover.css?v=20260922">
+<link rel="stylesheet" href="clover.css?v=20260924">
 </head>
 <body>
 
@@ -18,7 +18,6 @@
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" id="tabNcaaf" aria-selected="true">NCAA Slips<span class="n" id="nNcaaf"></span></button>
     <button class="tab" role="tab" id="tabNfl" aria-selected="false">NFL Slips<span class="n" id="nNfl"></span></button>
-    <button class="tab" role="tab" id="tabBuild" aria-selected="false">Build</button>
     <button class="tab" role="tab" id="tabCard" aria-selected="false">My Bet<span class="n" id="tabCount"></span></button>
     <button class="tab" role="tab" id="tabHistory" aria-selected="false">History</button>
   </nav>
@@ -84,7 +83,7 @@
   </div>
 </section>
 
-<!-- ================= BUILD / HISTORY (rows 5 and 8) ================= -->
+<!-- ================= HISTORY (row 8) ================= -->
 <section id="viewOther" role="tabpanel" class="card other hidden">
   <p id="otherTxt"></p>
   <button type="button" class="sec" id="otherBack">Back to slips</button>
@@ -132,19 +131,23 @@
     <button class="sec" id="copy" type="button">Copy row for the log</button>
     <button class="sec" id="backToSlips" type="button">Add more picks</button>
   </div>
-  <p class="hint">Lines auto-fill from DraftKings, college and NFL. If DraftKings has no line for a game, Clover uses the next book that does. If your app shows a different number, tap the line and pick it from the list.</p>
+  <p class="hint">Lines auto-fill from DraftKings, college and NFL. If DraftKings has no line for a game, Clover uses the next book that does. If your app shows a different number, tap "all lines" under the pick and choose it.</p>
 </div></div></section>
 
 </div>
-<aside class="card" id="rail"></aside>
+<aside id="side">
+  <div class="card hidden" id="ladder"></div>
+  <div class="card" id="rail"></div>
+</aside>
 </div>
 
-<dialog id="sheet" aria-label="Every line for this pick"><div class="sheet" id="sheetIn"></div></dialog>
+<dialog id="sheet" aria-label="Every line for this game"><div class="sheet" id="sheetIn"></div></dialog>
 
-<script src="preview1.js?v=20260922"></script>
-<script src="filters.js?v=20260922"></script>
-<script src="preview2.js?v=20260922"></script>
-<script src="rail.js?v=20260922"></script>
-<script src="preview3.js?v=20260922"></script>
+<script src="preview1.js?v=20260924"></script>
+<script src="filters.js?v=20260924"></script>
+<script src="preview2.js?v=20260924"></script>
+<script src="rail.js?v=20260924"></script>
+<script src="ladder.js?v=20260924"></script>
+<script src="preview3.js?v=20260924"></script>
 </body>
 </html>
