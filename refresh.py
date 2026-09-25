@@ -95,6 +95,8 @@ def record_results(up):
         if hp is None or ap is None or g.get("spread") is None or g.get("total") is None:
             continue
         p = g.get("p") or {}
+        if not p:
+            continue        # never priced before kickoff: nothing to calibrate (Danny dropped 67 such rows 2026-09-24)
         rows.append({
             "id": g.get("id"),
             "league": g.get("league", "ncaaf"),
