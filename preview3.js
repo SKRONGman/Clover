@@ -174,12 +174,16 @@ document.getElementById("tabNcaaf").onclick=()=>setLeague("ncaaf");
 document.getElementById("tabNfl").onclick=()=>setLeague("nfl");
 document.getElementById("tabCard").onclick=()=>show("card");
 document.getElementById("tabHistory").onclick=()=>show("history");
+/* arrow keys on the tabs (row 6): Left/Right move and open, Home/End jump to the ends */
+document.querySelector(".tabs").addEventListener("keydown",e=>{
+  const t=[...document.querySelectorAll(".tabs [role=tab]")], i=t.indexOf(document.activeElement), n=t.length;
+  const k={ArrowRight:(i+1)%n,ArrowLeft:(i-1+n)%n,Home:0,End:n-1}[e.key];
+  if(i<0||k===undefined) return; e.preventDefault(); t[k].click(); t[k].focus();
+});
 document.getElementById("otherBack").onclick=()=>show("slips");
 document.getElementById("fClear").onclick=()=>{ FILTERS[league]=defaultFilters(); reFilter(); };
 document.getElementById("backToSlips").onclick=()=>show("slips");
-document.getElementById("clearSlip").onclick=()=>{S.legs=[];render();};
 document.getElementById("pays").addEventListener("input",e=>{ const v=parseFloat(e.target.value); S.pays=isNaN(v)||v<=1?null:v; render(); });
-document.getElementById("who").onchange=e=>{S.who=e.target.value;render();};
 document.getElementById("copy").onclick=()=>{
   const n=S.legs.length; if(!n) return;
   const {joint}=slipProb(S.legs), pay=payoutFor();
