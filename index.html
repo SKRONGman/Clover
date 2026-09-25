@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="clover.css?v=20260924">
+<link rel="stylesheet" href="clover.css?v=20260924r6">
 </head>
 <body>
 
@@ -89,65 +89,59 @@
   <button type="button" class="sec" id="otherBack">Back to slips</button>
 </section>
 
-<!-- ================= MY BET, the full screen (row 6 rebuilds it) ================= -->
-<section id="viewCard" role="tabpanel" class="hidden"><div class="two"><div>
-  <div class="card">
-    <div class="big" id="bigProb">—</div>
-    <div class="sub" id="bigSub">Add picks from NCAA Slips or NFL Slips</div>
-    <div class="verdict" id="verdict"></div>
-    <div class="why" id="why"></div>
-    <details class="math" id="mathBox">
-      <summary>Show the math</summary>
-      <div class="grid2">
-        <div><span>$1 pays</span><strong id="oBook">—</strong></div>
-        <div><span>Needs to hit</span><strong id="oBreak">—</strong></div>
-        <div><span>Fair payout for this</span><strong id="oFair">—</strong></div>
-        <div><span>Edge per $1</span><strong id="oEv">—</strong></div>
-      </div>
-      <p class="hint">"Needs to hit" is the win rate you'd need at that payout just to break even. Above it, you're getting the better end. Below it, the app is.</p>
-    </details>
-  </div>
-  <div class="card">
-    <h2>Payout</h2>
-    <div class="fRow">
-      <div class="fld"><label for="pays">Your app pays, on $1</label>
-        <input id="pays" type="number" step="0.01" min="1" inputmode="decimal" placeholder="e.g. 6.00"></div>
-      <div class="fld"><label for="who">Whose bet</label>
-        <select id="who"><option>Danny</option><option>Jaclyn</option></select></div>
+<!-- ================= MY BET, the full screen (row 6, mybet.js) ================= -->
+<section id="viewCard" role="tabpanel" class="hidden"><div class="mb">
+  <div class="card mbBet" id="mbBet" aria-label="The bet">
+    <div class="trio">
+      <div class="fig"><span class="k">Has</span><span class="v" id="hasV">—</span><span class="s" id="hasS"></span></div>
+      <div class="fig"><span class="k">Needs</span><span class="v" id="needV">—</span><span class="s" id="needS"></span></div>
+      <div class="fig vd"><span class="k">Verdict</span><span class="v" id="verdict"></span><span class="s" id="evSub"></span></div>
     </div>
-    <p class="hint" id="paysNote">Type what your app shows for this slip. Clover gives no verdict until you do - it won't guess a payout.</p>
+    <div id="meter"><div class="meter" aria-hidden="true"><div class="mHas" id="mHas"></div><div class="mNeed hidden" id="mNeed"></div></div>
+      <div class="scale" aria-hidden="true"><span id="sc0"></span><span id="sc1"></span><span id="sc2"></span></div></div>
+    <p class="why" id="why"></p>
+    <div class="nums">
+      <div><span>Your app pays</span><strong id="nPay">—</strong></div>
+      <div><span>Fair pay</span><strong id="nFair">—</strong></div>
+      <div><span>Back on average</span><strong id="nBack">—</strong></div>
+      <div><span>Per $1</span><strong id="nEv">—</strong></div>
+    </div>
+    <div class="mbForm">
+      <div class="fld"><label for="pays">Your app pays on $1</label><input id="pays" type="number" step="0.01" min="1" inputmode="decimal" placeholder="6.00"></div>
+      <div class="fld"><span class="sub" id="whoLab">Whose bet</span><div class="chips" id="whoChips" role="group" aria-labelledby="whoLab"><button type="button" class="chip" data-who="Danny">Danny</button><button type="button" class="chip" data-who="Jaclyn">Jaclyn</button></div></div>
+      <div class="go"><button type="button" class="sec sm" id="clearSlip">Clear</button><button type="button" class="primary" id="place">I placed this</button></div>
+    </div>
+    <div class="placed hidden" id="placedBox" role="status"><div><b id="placedTxt"></b><span class="hint" id="placedSub"></span></div><button type="button" class="sec sm" id="unplace">Unmark</button></div>
   </div>
-</div><div>
-  <div class="card">
-    <div class="rhead"><h2>Picks</h2><button class="ghost" id="clearSlip" type="button">Clear</button></div>
+  <div class="card board mbPicks">
+    <div class="rhead mbHead"><h2>Your picks <span class="sub" id="mbCount"></span></h2><button type="button" class="edit" id="mbEdit" aria-expanded="false">N/A</button></div>
+    <div class="bh"><span class="tt"></span><div class="tl"><span></span><span>Winner</span><span>Spread</span><span>Total</span></div><span class="lnB"></span></div>
     <div id="legs"></div>
   </div>
-  <div class="card" id="stressBox">
-    <div class="sub">How sure is this?</div>
-    <p id="stressOut"></p>
-    <p class="hint">The line is never exact. This re-runs the slip with the total and the margin each nudged up to 3 points either way - 49 versions of the game. If the verdict holds, it's solid. If it flips, the slip is closer to a coin toss than it looks.</p>
+  <div class="card hidden" id="stressBox">
+    <div class="rhead"><h2>How solid is it</h2><span class="sWord" id="sWord"></span></div>
+    <div id="sGrid"></div>
   </div>
   <div class="actions">
     <button class="sec" id="copy" type="button">Copy row for the log</button>
     <button class="sec" id="backToSlips" type="button">Add more picks</button>
   </div>
-  <p class="hint">Lines auto-fill from DraftKings, college and NFL. If DraftKings has no line for a game, Clover uses the next book that does. If your app shows a different number, tap "all lines" under the pick and choose it.</p>
-</div></div></section>
+</div></section>
 
 </div>
 <aside id="side">
   <div class="card hidden" id="ladder"></div>
+  <div class="card hint hidden" id="ladHint">Tap <b>Lines</b> on any of your games to see every line with Clover's chance. Tap a line to hold it.</div>
   <div class="card" id="rail"></div>
 </aside>
 </div>
 
-<dialog id="sheet" aria-label="Every line for this game"><div class="sheet" id="sheetIn"></div></dialog>
-
-<script src="preview1.js?v=20260924"></script>
-<script src="filters.js?v=20260924"></script>
-<script src="preview2.js?v=20260924"></script>
-<script src="rail.js?v=20260924"></script>
-<script src="ladder.js?v=20260924"></script>
-<script src="preview3.js?v=20260924"></script>
+<script src="preview1.js?v=20260924r6"></script>
+<script src="filters.js?v=20260924r6"></script>
+<script src="preview2.js?v=20260924r6"></script>
+<script src="rail.js?v=20260924r6"></script>
+<script src="mybet.js?v=20260924r6"></script>
+<script src="ladder.js?v=20260924r6"></script>
+<script src="preview3.js?v=20260924r6"></script>
 </body>
 </html>
