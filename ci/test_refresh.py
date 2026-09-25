@@ -192,6 +192,11 @@ def test_results_are_append_only():
     assert picks["awaySp"]["line"] == 10.0 and picks["awaySp"]["result"] == "miss", "spread is the side's OWN number"
     assert picks["over"]["result"] == "hit" and picks["under"]["result"] == "miss"
     assert refresh.grade_leg("homeSp", -11.0, 31, 20) == "push"
+    # a game that was never priced before kickoff has nothing to calibrate - it is not recorded (2026-09-24)
+    u = fixture.game(8, "ncaaf", "Baylor", "Tulsa", -3.0, 55.0, now - timedelta(hours=5), "final")
+    u.update(hp=24.0, ap=21.0)
+    refresh.record_results([u])
+    assert not [r for r in json.load(open(common.OUT_RESULTS)) if r["id"] == 8], "unpriced games are never recorded"
 
 
 def test_opening_line_is_saved_once():
