@@ -1,8 +1,8 @@
 /* ===================================================================
    THE LADDER - every line for one game, with Clover's chance at each
-   (row 5, 2026-09-24). One drawing, two homes: a card in the side
-   column above My Bet on the front door, and the dialog on the full
-   My Bet screen (which has no side column until row 6 rebuilds it).
+   (row 5, 2026-09-24). One drawing, one home: a card in the side
+   column - above the rail on the front door, alone on the full My Bet
+   screen (row 6 retired the dialog).
    Tap a line to hold it; the board and the rail show the held line
    with its chance (line-only-at-market rule, DESIGN.md). Every % is
    a table lookup. Replaces the old line sheet.
@@ -43,19 +43,16 @@ function wireLadder(box){
   box.querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>{ swapIn(S.legs,LADDER.gi,LADDER.type,+b.dataset.use); render(); });
   const w=box.querySelector("[data-lwide]"); if(w) w.onclick=()=>{ LADDER.wide=!LADDER.wide; renderLadder(); };
   const c=box.querySelector("[data-lclose]"); if(c) c.onclick=closeLadder;
-  const cur=box.querySelector("tr.cur")||box.querySelector("tr.base"); if(cur&&cur.scrollIntoView) cur.scrollIntoView({block:"center"});
+  /* centre the held (else market) rung inside the ladder's own scroll box - never scroll the page (row 6) */
+  const cur=box.querySelector("tr.cur")||box.querySelector("tr.base"), sc=box.querySelector(".scroll"); if(cur&&sc&&sc.clientHeight) sc.scrollTop=cur.offsetTop-sc.clientHeight/2;
 }
 function renderLadder(){
-  const card=document.getElementById("ladder"), dlg=document.getElementById("sheet"), inDlg=view==="card";
+  const card=document.getElementById("ladder");
   if(LADDER&&(!GAMES[LADDER.gi]||!GAMES[LADDER.gi].sim)) LADDER=null;   /* the game kicked off or left the slate */
-  card.classList.toggle("hidden",!LADDER||inDlg);
-  card.innerHTML=LADDER&&!inDlg?ladderHtml():"";
-  if(!inDlg) wireLadder(card);
-  const box=document.getElementById("sheetIn");
-  box.innerHTML=LADDER&&inDlg?ladderHtml():"";
-  if(LADDER&&inDlg){ if(!dlg.open) dlg.showModal(); wireLadder(box); }
-  else if(dlg.open) dlg.close();
+  card.classList.toggle("hidden",!LADDER);
+  card.innerHTML=LADDER?ladderHtml():"";
+  wireLadder(card);
+  /* the full My Bet screen has no rail beside it, so an empty side column says what goes there */
+  document.getElementById("ladHint").classList.toggle("hidden",!!LADDER||view!=="card");
   document.querySelectorAll("[data-lad]").forEach(b=>b.classList.toggle("on",!!LADDER&&+b.dataset.lad===LADDER.gi));
 }
-document.getElementById("sheet").addEventListener("click",e=>{ if(e.target.id==="sheet") closeLadder(); });
-document.getElementById("sheet").addEventListener("close",()=>{ if(LADDER&&view==="card") LADDER=null; });
