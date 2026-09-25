@@ -21,16 +21,15 @@ How Clover thinks, in the words agreed with Danny:
 5. **Apps in use: Underdog, PrizePicks, Kalshi.** Underdog is the main target (typed payout). Kalshi prices are in the odds feed (`us_ex`), so auto-filled Kalshi payouts are possible at the cost of a second region per pull — parked with multi-book. PrizePicks is believed to be player props only (unverified) — no help until the props phase.
 6. **Keys:** see `STATUS.md` open items.
 
-Also decided 2026-09-20:
-- **Screens:** filters folded on load, one click to open; default view is today's upcoming games; Hot Slips always open, no Hide button; ~~Build Your Own moves to its own tab~~ **superseded 2026-09-24 (Danny, option A): no Build tab - building happens on the front-door board, with the ladder in the side column** (the board already was build-your-own after row 4; a tab would have drawn the same game a fourth way); long team names are abbreviated, never wrapped (built 2026-09-24: full name where it fits, abbreviation under 800px); full numbers on My Bet, not one word alone. End-state tabs: NCAA Slips · NFL Slips · My Bet · History.
-- **Open to changing the UI** so it stops feeling clunky. A design-direction step (compare against 4–5 betting apps, mock up 2–3 looks for one screen, Danny picks) comes before any screen is rebuilt.
-- **One bet record** follows a bet from tap to result (picks and numbers taken, market line and Clover's chance at placement, payout, whose bet, closing line and closing chance, scores and hit/miss). History is that table read back.
-- ~~**Proposed, not yet ruled on:** Build tab uses the grid layout and retires the six-button layout.~~ Overtaken: row 4's board retired the six-button layout; row 5 dropped the tab (above). (The "line moved" flag was ruled on 2026-09-21, below.)
-- **Do not write a proposal into a doc as "decided."** Danny called this out on 2026-09-20. Tag every line Decided / Earlier call / Proposed, and name the data that feeds a feature before proposing it. **When options are hard to picture, show a visual instead of describing them.**
-- **Rejected 2026-09-20:** a rule based on what "most pick'em apps" offer — no feed reports that for game picks. Syncing betting accounts the way paid trackers do — needs stored passwords.
+Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and two rejections - moved word for word to `DESIGN.md` on 2026-09-24 (this file hit its size limit). Still in force.
+
+## Rulings of 2026-09-24 (row 6, from the approved mockup https://claude.ai/artifact/7VoHDPSoVXQ4oWpqefsVT1)
+1. **"I placed this" is a stamp, not a lock** (Danny). It records who, the payout, the time, the chance and the picks; picks stay editable, and the stamp says so when they change. Saving it anywhere is row 7.
+2. **"How solid is it" = the 49-version grid + one word** (Danny picked C of A grid+sentence / B sentence / C grid+word). Solid / Mostly holds / Shaky; no sentence.
+3. **The full My Bet screen draws picks as board rows** and opens the ladder in the side column. The old grid (`gcard`/`cellFor`/`legGroups`) and the dialog are gone - one drawing of a game.
 
 ## Rulings of 2026-09-24 (row 5)
-1. **No Build tab** (Danny picked A of A/B). The ladder - every line for a game with Clover's chance at each - lives in the side column above My Bet, opened by a "Lines" button on the board row; on the full My Bet screen it opens in the dialog. One drawing (`ladder.js`), two homes. The old line sheet is gone.
+1. **No Build tab** (Danny picked A of A/B). The ladder - every line for a game with Clover's chance at each - lives in the side column above My Bet, opened by a "Lines" button on the board row; on the full My Bet screen it opened in the dialog until row 6 moved it to the side column there too. One drawing (`ladder.js`). The old line sheet is gone.
 2. **"This weekend" rolls forward** once the ending weekend has no game left that has not kicked off. Proposed in the row-5 mockup, built the same day; Danny's A covered the whole row.
 3. **Abbreviations come from the feeds** - CFBD `/teams` `abbreviation` for college, ESPN's code for the NFL - never typed by hand. The board shows the full name where it fits and the abbreviation only where it would not.
 
@@ -103,7 +102,8 @@ Claude has **direct GitHub read/write** via the GitHub connector (authenticated 
 - **Always verify a push.** `git clone` the repo into the workspace (public read works from the sandbox), edit and test there, push via the connector, then compare `git hash-object <file>` with the blob `sha` the push returns (same bytes = same sha), or `git fetch` and md5. Finish by running the checks on a fresh clone. Used on every file shipped 2026-09-20. **Verification is not a formality — it caught a dropped settled rule in the first STATUS.md push of 2026-09-19.**
 - **One file per push means the page passes through mixed states.** Push order that keeps the live page working: new files first, then the scripts that only *use* new things, `index.html`, and last the script that *removes* things. Expect one red Checks run in the middle.
 - **Test the page headlessly before pushing.** A Node stub of `document`/`localStorage` plus the real `ratings.js` runs `init()` and every render path in about a second, and catches exactly the class of bug that shipped tonight.
-- Claude **cannot reach `skrongman.github.io`** from its sandbox (egress allowlist) — it can never confirm the live page renders. Danny checks.
+- Claude **cannot reach `skrongman.github.io`** from its sandbox (egress allowlist). **Since 2026-09-24 the desktop app's built-in browser can** (Danny allowed the site for it) whenever this chat is linked to his computer; otherwise Danny checks.
+- The write tool turns `\uXXXX` escapes in a file into the characters themselves, so that push's sha will not match `git hash-object`. Same code; take GitHub's copy locally and move on (hit on `rail.js`, 2026-09-24).
 - **File deletions require Danny's approval** in the UI; Claude's delete call is refused without it.
 - The connector must be toggled on for each chat session, not just authorized at the account level.
 - Anything that needs CFBD / ESPN / the-odds-api.com runs on Actions only.
