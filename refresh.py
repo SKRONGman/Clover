@@ -247,7 +247,7 @@ def write_upcoming(R, alt_lines=False, full=False):
         odds.pull_alt_lines(up, "ncaaf")
     R["alt_generated"] = max([g["alt"]["asof"] for g in up if g.get("alt")], default=None)
     # Logos, colors, conferences: one CFBD call per SEASON, then read from disk.
-    art = dict(cfbd.cached(f"teaminfo_{SEASON}", lambda: cfbd.pull_team_art(SEASON)))
+    art = dict(cfbd.cached(f"teaminfo_{SEASON}", lambda: cfbd.pull_team_art(SEASON), needs="abbr"))
     art.update(nfl_art)
     R["logos"] = {}
     R["colors"] = {}
@@ -264,6 +264,8 @@ def write_upcoming(R, alt_lines=False, full=False):
             if a.get("alt"):
                 R["colors2"][team] = a["alt"]     # second color: text on the score chip
     for g in up:
+        g["home_abbr"] = (art.get(g["home"]) or {}).get("abbr")    # the board's short name (row 5)
+        g["away_abbr"] = (art.get(g["away"]) or {}).get("abbr")
         if g["league"] != "ncaaf":
             continue                                    # NFL has no ratings; sims center on the market
         g["home_conf"] = (art.get(g["home"]) or {}).get("conference")
