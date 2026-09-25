@@ -133,21 +133,25 @@ def pull_games(season):
     return rows
 
 
-def cached(name, builder):
+def cached(name, builder, needs=None):
     """Prior seasons never change, so keep them on disk and skip the API.
     An EMPTY answer is never saved - a CFBD hiccup on the first call of a season
-    would otherwise leave the page without logos until someone deleted the file."""
+    would otherwise leave the page without logos until someone deleted the file.
+    needs: a field every entry must carry; a cache written before that field
+    existed is rebuilt once (and kept as-is if the rebuild comes back empty)."""
     path = f"cache_{name}.json"
+    old = None
     if os.path.exists(path):
         with open(path) as f:
-            data = json.load(f)
-        if data:
-            return data
+            old = json.load(f)
+        if old and (not needs or all(needs in v for v in old.values())):
+            return old
     data = builder()
     if data:
         with open(path, "w") as f:
             json.dump(data, f)
-    return data
+        return data
+    return old or data
 
 
 def pull_drive_counts(season, max_week=None):
@@ -253,9 +257,10 @@ def pull_upcoming(season):
 
 
 def pull_team_art(season):
-    """Logo + primary color + conference per school, from CFBD /teams (one call,
-    then cached on disk). Logos are ESPN CDN URLs; the page shows initials if
-    one is missing. Conference feeds the page's Conference filter."""
+    """Logo + primary color + conference + abbreviation per school, from CFBD
+    /teams (one call, then cached on disk). Logos are ESPN CDN URLs; the page
+    shows initials if one is missing. Conference feeds the page's Conference
+    filter; the abbreviation ("MTSU") is the board's name where space is tight."""
     out = {}
     try:
         teams = get("/teams", year=season)
@@ -270,6 +275,7 @@ def pull_team_art(season):
         out[name] = {"logo": logos[0] if logos else None,
                      "color": pick(t, "color"),
                      "alt": pick(t, "alt_color", "alternateColor"),
+                     "abbr": pick(t, "abbreviation"),
                      "conference": pick(t, "conference")}
     return out
 
