@@ -73,7 +73,9 @@ function filterBlame(lg){
     const was=f[k]; f[k]=off[k]; const n=filteredGames(lg).length; f[k]=was;
     if(n) return `Opening up ${names[k]} would show ${n} game${n===1?"":"s"}.`;
   }
-  return "No single filter is hiding them — Clear All Filters starts over.";
+  /* two or more filters together: say so, and how many clearing them would bring back */
+  const was={...f}; Object.assign(f,off); const all=filteredGames(lg).length; Object.assign(f,was);
+  return all?`Two or more filters are hiding them together. Clear all filters to see all ${all}.`:"Nothing matches even with every filter off.";
 }
 function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>onBoard(x.G)&&lgOf(x.G)===lg&&filterGame(x.G)); }
 /* Hot slips honour Game time / Conference / Division / Classification, but NEVER Date or
