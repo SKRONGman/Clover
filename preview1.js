@@ -11,9 +11,12 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const LEAGUES=["ncaaf","nfl"], LEAGUE_NAME={ncaaf:"College",nfl:"NFL"};
 let league="ncaaf";
 const lgOf=G=>G.league||"ncaaf";
-const TABS={ncaaf:"slips",nfl:"slips",build:"build",card:"card",history:"history"};
+const TABS={ncaaf:"slips",nfl:"slips",card:"card",history:"history"};
 /* NFL names are long ("Kansas City Chiefs"); where space is tight use "Chiefs" */
 const shortName=(G,t)=>lgOf(G)==="nfl"?((t===G.home?G.home_short:G.away_short)||t):t;
+/* the board's short name on a narrow screen: CFBD's / ESPN's abbreviation ("MTSU", "KC"),
+   shipped by refresh.py since row 5; initials until the first refresh that carries it */
+const abbrOf=(G,t)=>(t===G.home?G.home_abbr:G.away_abbr)||initials(t);
 function loadLeague(){ try{ const v=localStorage.getItem("cloverLeague"); if(LEAGUES.includes(v)) league=v; }catch(e){} }
 function setLeague(v){
   league=v; try{localStorage.setItem("cloverLeague",v);}catch(e){}
@@ -220,24 +223,24 @@ function payoutFor(){ return S.pays!=null&&S.pays>1 ? {dec:S.pays} : null; }
    RENDER
    =================================================================== */
 let view="slips";
-/* five tabs: NCAA Slips / NFL Slips share the front door; Build (row 5) and History (row 8)
-   open a placeholder card until they ship. The My Bet rail rides along on every view except
-   the full My Bet screen, which takes the whole width. */
-const COMING={build:"Build is row 5 of the build order - it is not built yet.",history:"History is row 8 of the build order - it is not built yet."};
+/* four tabs: NCAA Slips / NFL Slips share the front door; History (row 8) opens a placeholder
+   card until it ships. Build has no tab (2026-09-24): building happens on the board, with the
+   ladder in the side column. The side column (ladder + My Bet rail) rides along on every view
+   except the full My Bet screen, which takes the whole width. */
+const COMING={history:"History is row 8 of the build order - it is not built yet."};
 function show(v){
   view=v;
   document.getElementById("viewSlips").classList.toggle("hidden",v!=="slips");
   document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
   document.getElementById("viewOther").classList.toggle("hidden",!COMING[v]);
   document.getElementById("otherTxt").textContent=COMING[v]||"";
-  document.getElementById("rail").classList.toggle("hidden",v==="card");
+  document.getElementById("side").classList.toggle("hidden",v==="card");
   document.getElementById("main").classList.toggle("full",v==="card");
   for(const k in TABS) document.getElementById("tab"+k[0].toUpperCase()+k.slice(1)).setAttribute("aria-selected",TABS[k]===v&&(TABS[k]!=="slips"||k===league));
   window.scrollTo({top:0});
 }
 function render(){
   saveSlip();
-  renderGames(); renderCard(); renderRail(); paintHotAll();
+  renderGames(); renderCard(); renderRail(); renderLadder(); paintHotAll();
   document.getElementById("tabCount").textContent=S.legs.length||"";
 }
-
