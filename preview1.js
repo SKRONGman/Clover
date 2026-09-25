@@ -171,31 +171,16 @@ function legMarket(type){ return hasLine(type)?(type==="over"||type==="under"?"T
 function legSide(type){ return type==="homeML"||type==="homeSp"?"home":type==="awayML"||type==="awaySp"?"away":type; }
 function whenShort(G){ const d=new Date(G.start); return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`; }
 function initials(t){ return t.split(/\s+/).map(w=>w[0]).join("").replace(/[^A-Za-z]/g,"").slice(0,3).toUpperCase(); }
-function logoTile(team,sm){
-  const d=document.createElement("div"); d.className="logo"+(sm?" sm":"");
-  const u=LOGOS[team];
-  const fallback=()=>{ d.innerHTML=""; d.textContent=initials(team); const c=teamColor(team); d.style.background=c; d.style.borderColor=c; d.style.color=lumOf(c)>.45?"#0E1A13":"#F1EFE8"; };
-  if(u){ const img=document.createElement("img"); img.src=u; img.alt=""; img.loading="lazy"; img.onerror=fallback; d.appendChild(img); }
-  else fallback();
-  return d;
-}
-function duoTile(G){
-  const a=LOGOS[G.away], h=LOGOS[G.home], d=document.createElement("div");
-  if(a&&h){ d.className="logo duo"; [a,h].forEach(u=>{const i=document.createElement("img");i.src=u;i.alt="";i.loading="lazy";i.onerror=()=>{d.className="logo";d.textContent="O/U";};d.appendChild(i);}); }
-  else { d.className="logo"; d.textContent="O/U"; }
-  return d;
-}
-
 /* ===================================================================
    STATE — one slip, shared by every screen. Legs are keyed by game id
    (not index) so a refresh doesn't scramble them.
    =================================================================== */
-const S={legs:[], pays:null, who:"Danny"};
-function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line,p0:l.p0})),pays:S.pays,who:S.who})); }catch(e){} }
+const S={legs:[], pays:null, who:"Danny", placed:null};   /* placed: the "I placed this" stamp (row 6) - never a lock */
+function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line,p0:l.p0})),pays:S.pays,who:S.who,placed:S.placed})); }catch(e){} }
 function loadSlip(){
   try{
     const s=JSON.parse(localStorage.getItem("cloverSlip")||"null"); if(!s) return;
-    S.pays=s.pays??null; S.who=s.who||"Danny";
+    S.pays=s.pays??null; S.who=s.who||"Danny"; S.placed=s.placed||null;
     S.legs=(s.legs||[]).map(l=>{ const gi=BY_ID[l.id]; return gi==null||!onBoard(GAMES[gi])?null:{gi,type:l.type,line:l.line,p0:l.p0}; }).filter(Boolean);
   }catch(e){}
 }
@@ -225,8 +210,8 @@ function payoutFor(){ return S.pays!=null&&S.pays>1 ? {dec:S.pays} : null; }
 let view="slips";
 /* four tabs: NCAA Slips / NFL Slips share the front door; History (row 8) opens a placeholder
    card until it ships. Build has no tab (2026-09-24): building happens on the board, with the
-   ladder in the side column. The side column (ladder + My Bet rail) rides along on every view
-   except the full My Bet screen, which takes the whole width. */
+   ladder in the side column. The side column rides along on every view; on the full My Bet
+   screen it holds only the ladder (row 6), since the rail would repeat the screen itself. */
 const COMING={history:"History is row 8 of the build order - it is not built yet."};
 function show(v){
   view=v;
@@ -234,9 +219,11 @@ function show(v){
   document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
   document.getElementById("viewOther").classList.toggle("hidden",!COMING[v]);
   document.getElementById("otherTxt").textContent=COMING[v]||"";
-  document.getElementById("side").classList.toggle("hidden",v==="card");
-  document.getElementById("main").classList.toggle("full",v==="card");
-  for(const k in TABS) document.getElementById("tab"+k[0].toUpperCase()+k.slice(1)).setAttribute("aria-selected",TABS[k]===v&&(TABS[k]!=="slips"||k===league));
+  document.getElementById("rail").classList.toggle("hidden",v==="card");
+  /* roving tabindex: only the selected tab is in the Tab order; arrow keys move between them (preview3.js) */
+  for(const k in TABS){ const t=document.getElementById("tab"+k[0].toUpperCase()+k.slice(1)), on=TABS[k]===v&&(TABS[k]!=="slips"||k===league);
+    t.setAttribute("aria-selected",on); t.tabIndex=on?0:-1; }
+  renderLadder();
   window.scrollTo({top:0});
 }
 function render(){
