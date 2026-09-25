@@ -7,6 +7,8 @@ const [root,ratingsFile]=process.argv.slice(2), live=process.argv.includes("--li
 /* load exactly the scripts index.html loads, in its order - so a script the page forgot to load fails here too */
 const PAGE_JS=[...fs.readFileSync(path.join(root,"index.html"),"utf8").matchAll(/<script src="([^"?]+)[^"]*"/g)].map(m=>m[1]);
 const fails=[]; const check=(ok,msg)=>{ if(!ok) fails.push(msg); };
+const fmtEsc=v=>String(v>0?"+"+v:v).replace(/[+.]/g,"\\$&");
+const INDEX=fs.readFileSync(path.join(root,"index.html"),"utf8");
 
 function el(tag){
   const kids=[], cls=new Set(), store={tagName:tag||"div",dataset:{},style:{},children:kids,options:[],value:"",textContent:"",innerHTML:"",disabled:false};
@@ -78,7 +80,25 @@ try{
   check(byId.verdict.textContent===""&&!words.test(byId.rail.innerHTML)&&!words.test(byId.why.textContent),"a verdict is showing before any payout was typed");
   js(`S.pays=11; render();`); flush();
   check(words.test(byId.verdict.textContent)&&words.test(byId.rail.innerHTML)&&/Needs \d/.test(byId.rail.innerHTML),"no verdict after a payout was typed");
-  js(`openSheet(S.legs[0],()=>{}); show("slips"); render();`); flush();
+  /* row 5 (2026-09-24): the ladder replaces the line sheet - one drawing, in the side column on the
+     front door and in the dialog on the full My Bet screen. Tapping a rung holds that line. */
+  js(`openLadder(S.legs[0].gi,S.legs[0].type);`); flush();
+  check(js("!!LADDER")&&byId.sheet.open&&/<table class="ladder"/.test(byId.sheetIn.innerHTML)&&byId.ladder.classList.contains("hidden"),"on the full My Bet screen the ladder must open in the dialog");
+  js(`closeLadder(); show("slips"); render();`); flush();
+  check(!byId.sheet.open,"closing the ladder must close the dialog");
+  const g0=js("S.legs[0].gi"), base=js("marketLine(GAMES[S.legs[0].gi],'homeSp')");
+  js(`openLadder(${g0});`); flush();
+  check(js("LADDER&&LADDER.type")==="homeSp"&&!byId.ladder.classList.contains("hidden")&&!byId.sheet.open,"on the front door the ladder must open in the side column, on the held pick's type");
+  const lad=byId.ladder.innerHTML;
+  check((lad.match(/data-use=/g)||[]).length===21&&/market/.test(lad)&&/ cur"/.test(lad),"ladder: 21 rungs (±5 by the half point), the market marked, the held line marked");
+  check(/DK pays/.test(lad)&&/DK's %/.test(lad),"ladder: DK's price and DK's chance columns");
+  js(`LADDER.wide=true; renderLadder();`); flush();
+  check((byId.ladder.innerHTML.match(/data-use=/g)||[]).length===41,"ladder: ±10 shows 41 rungs");
+  js(`swapIn(S.legs,${g0},"homeSp",${base}+3); render();`); flush();
+  check(js(`S.legs.filter(l=>l.gi===${g0}&&legMarket(l.type)==="Spread").length`)===1&&js(`S.legs.find(l=>l.gi===${g0}&&l.type==="homeSp").line`)===base+3,"holding a rung must replace the game's spread pick, not add one");
+  check(new RegExp(`${fmtEsc(base+3)}<small>[\\d.<>]+%`).test(js(`boardRow(GAMES[${g0}],${g0})`)),"board: the held rung must show with its chance");
+  check(/data-lad=/.test(js(`boardRow(GAMES[${g0}],${g0})`))&&!/data-lad=/.test(js(`boardRow(Object.assign({},GAMES[${g0}],{status:"final",sim:null}),${g0})`)),"board: a Lines button on upcoming games only");
+  js(`closeLadder();`); flush();
 
   /* row 4 (rulings of 2026-09-21) */
   js(`S.legs=[]; S.pays=null; render();`); flush();
@@ -123,6 +143,23 @@ try{
   js(`(()=>{ let kept=false; GAMES.forEach((G,gi)=>{ if(G.sim&&!kept){kept=true;return;} delete G.sim; delete GRIDS[gi]; }); for(const k in BLOCKS) delete BLOCKS[k]; })()`);
   for(const lg of ["ncaaf","nfl"]){ js(`setLeague("${lg}")`); for(let N=2;N<=3;N++){ js(`hotN=${N}; renderHot()`); flush();
     check(js("HOT.every(s=>slipProb(s.legs).joint>0)"),`${lg} one-game slate, ${N}-pick: offered a slip that cannot hit`); } }
+
+  /* 5d. "This weekend" on a Monday night (row 5): the window rolls forward once no game left in it
+     has yet to kick off. Fake slate: one Monday-night game; the clock is Monday 6 PM, then 8 PM. */
+  {
+    const saved=js("GAMES"); const mon=new Date(2026,8,21,19,15);   /* Mon 2026-09-21 7:15 PM local */
+    const mk=st=>js(`GAMES=[{league:"nfl",start:${JSON.stringify(mon.toISOString())},status:"${st}",hp:0,ap:0,spread:-3,total:44,home:"A",away:"B",id:"w"}]`);
+    mk("upcoming"); const w1=js(`weekendWindow(new Date(2026,8,21,18,0))`);
+    check(w1.thu.getDate()===17&&w1.mon.getDate()===21,"weekend: Monday 6 PM with MNF still to come must stay on this weekend");
+    mk("live");     const w2=js(`weekendWindow(new Date(2026,8,21,20,0))`);
+    check(w2.thu.getDate()===24&&w2.mon.getDate()===28,"weekend: Monday 8 PM with MNF under way must roll to next weekend");
+    const w3=js(`weekendWindow(new Date(2026,8,23,12,0))`);
+    check(w3.thu.getDate()===24,"weekend: Wednesday must point at the coming weekend");
+    ctx.__saved=saved; js("GAMES=__saved");
+  }
+  /* 5e. no Build tab, no old line sheet (row 5) */
+  check(!/tabBuild/.test(INDEX)&&/id="ladder"/.test(INDEX)&&/ladder\.js/.test(INDEX),"index.html: Build tab gone, ladder card and ladder.js present");
+  check(js("typeof openSheet")==="undefined","the old line sheet must be gone (ladder.js is the one drawing)");
 
   /* 6. one verdict scale: +15c / +5c / -5c / -20c */
   const words=js(`[0.15,0.05,-0.05,-0.20,-0.21].map(v=>JSON.stringify(grade(v)))`);
