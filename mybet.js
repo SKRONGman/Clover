@@ -32,7 +32,7 @@ function mbRowsHtml(){
       L.forEach(l=>{ notes+=`<div class="flag ed"><span>${esc(legLabel(G,l))}</span><button type="button" class="na" data-mna="${findLeg(l.gi,l.type)}" aria-label="My app does not offer ${legMarket(l.type)} on this game">N/A</button></div>`; });
       notes+=pairsHtml(L,"mb");
     }
-    return `<div class="gw">${boardRow(G,gi)}${notes?`<div class="notes">${notes}</div>`:""}</div>`;
+    return `<div class="gw">${boardRow(G,gi,true)}${notes?`<div class="notes">${notes}</div>`:""}</div>`;
   }).join("");
 }
 
