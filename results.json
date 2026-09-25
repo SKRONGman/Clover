@@ -179,7 +179,7 @@
   "id": 401860888,
   "league": "ncaaf",
   "start": "2026-09-20T03:00+00:00",
-  "home": "San José State",
+  "home": "San Jos\u00e9 State",
   "away": "Fresno State",
   "hp": 10.0,
   "ap": 26.0,
@@ -348,6 +348,50 @@
     "line": 47.5,
     "p": 0.5233,
     "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401869941,
+  "league": "ncaaf",
+  "start": "2026-09-24T23:30+00:00",
+  "home": "Coastal Carolina",
+  "away": "Liberty",
+  "hp": 17.0,
+  "ap": 34.0,
+  "spread": 2.5,
+  "total": 49.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.435,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.565,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 2.5,
+    "p": 0.4974,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -2.5,
+    "p": 0.5026,
+    "result": "hit"
+   },
+   "over": {
+    "line": 49.5,
+    "p": 0.4821,
+    "result": "hit"
+   },
+   "under": {
+    "line": 49.5,
+    "p": 0.5179,
+    "result": "miss"
    }
   }
  }
