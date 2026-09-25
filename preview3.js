@@ -172,7 +172,6 @@ document.getElementById("prohibClear").onclick=()=>{
 /* ---- wiring ---- */
 document.getElementById("tabNcaaf").onclick=()=>setLeague("ncaaf");
 document.getElementById("tabNfl").onclick=()=>setLeague("nfl");
-document.getElementById("tabBuild").onclick=()=>show("build");
 document.getElementById("tabCard").onclick=()=>show("card");
 document.getElementById("tabHistory").onclick=()=>show("history");
 document.getElementById("otherBack").onclick=()=>show("slips");
