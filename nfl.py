@@ -83,8 +83,9 @@ NFL_DIVISIONS = {
 
 
 def nfl_team_art():
-    """{full name: {logo, color}} for all 32 teams - no network."""
-    return {name: {"logo": NFL_LOGO.format(abbr=a[0]), "color": a[2]}
+    """{full name: {logo, color, abbr}} for all 32 teams - no network.
+    abbr is ESPN's ("KC", "WSH"), the same code the logo URL uses."""
+    return {name: {"logo": NFL_LOGO.format(abbr=a[0]), "color": a[2], "abbr": a[0].upper()}
             for name, a in NFL_TEAMS.items()}
 
 
