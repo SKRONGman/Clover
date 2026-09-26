@@ -526,5 +526,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401858461,
+  "league": "ncaaf",
+  "start": "2026-09-26T00:00+00:00",
+  "home": "Indiana",
+  "away": "Northwestern",
+  "hp": 29.0,
+  "ap": 23.0,
+  "spread": -20.5,
+  "total": 49.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.9129,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.0871,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -20.5,
+    "p": 0.4933,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 20.5,
+    "p": 0.5067,
+    "result": "hit"
+   },
+   "over": {
+    "line": 49.5,
+    "p": 0.4931,
+    "result": "hit"
+   },
+   "under": {
+    "line": 49.5,
+    "p": 0.5069,
+    "result": "miss"
+   }
+  }
  }
 ]
