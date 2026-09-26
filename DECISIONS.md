@@ -84,7 +84,7 @@ Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and tw
 - Hot Slips = highest win probability, no payout floor. He manages bankroll.
 - Prohibited feedback = notate only until many confirmed examples.
 - **Mock up before building.** For any change to a screen area (header, filters, hot slips, card), show a mockup and get agreement first. The 2026-09-19 redesign was agreed on a Design canvas before a line of code was written, and it saved rework.
-- **Don't hand Danny GitHub chores Claude can do itself** (2026-09-20, emphatically). Claude has write access: push, verify, and report. Only the three limits under "Deploying changes" — oversized files, `.github/workflows/`, and triggering Actions — are his, and each should be named with the reason, not as a to-do list.
+- **Don't hand Danny GitHub chores Claude can do itself** (2026-09-20, emphatically). Claude has write access: push, verify, and report. Only the three limits in `DEPLOY.md` — oversized files, `.github/workflows/`, and triggering Actions — are his, and each should be named with the reason, not as a to-do list.
 - Novice coder — never ask him to run git or a terminal.
 - ~~`PAYOUT` stand-in table~~ **deleted 2026-09-20 under ruling 1.** A payout exists only once it is typed on My Bet; until then there is no verdict on My Bet, the bottom bar or the copied row.
 - Streamlit rejected. GitHub Actions + Pages chosen instead.
