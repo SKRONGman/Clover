@@ -1,6 +1,6 @@
 # Clover — project status
 
-Last updated: 2026-09-25 (late night). **Rows 1-6 are live. Row 7 (the bet record) is live and fully wired: saving, closing numbers and grades. Only a live test is left. Then row 8 (History), the last row.**
+Last updated: 2026-09-26. **Rows 1-6 are live. Row 7 (the bet record) is live and fully wired: saving, closing numbers and grades. Only a live test is left. Then row 8 (History), the last row.**
 
 **Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then `DESIGN.md` (the look, for any screen work), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
@@ -26,7 +26,7 @@ Last updated: 2026-09-25 (late night). **Rows 1-6 are live. Row 7 (the bet recor
 - **`results.json` cleaned (Danny, 2026-09-24):** the 67 rows graded before pricing existed are dropped; 8 calibratable rows remain. `record_results` now skips any game that was never priced before kickoff, so that kind of row cannot come back (test in `ci/test_refresh.py`).
 
 ## Build order — one chat per row
-Kick off the next chat with: **"Row 7: finish and check live"** if the setup items below are done and not yet checked, else **"Row 8: History."** Row 8 reads `bets` + `picks` from Supabase (signed in, like Save bet) and needs an Anthropic API key as a GitHub secret for the overnight recap.
+Kick off the next chat with: **"Row 7: finish and check live"** if the setup items below are done and not yet checked, else **"Row 8: History."** Row 8 reads `bets` + `picks` from Supabase (signed in, like Save bet) Numbers only - the written recap is skipped for now (Danny, 2026-09-26).
 1. **Safety net - DONE 2026-09-20.** `ci.yml` and the new `refresh.yml` were created through Danny's Chrome (GitHub web editor; new-file link with `?filename=&value=` for `ci.yml`, `execCommand("insertText")` into the editor for `refresh.yml`), both md5-verified against the reviewed copies. Actions pinned by SHA. Orphans deleted and NFL alt lines switched to weekly the same night. Leftovers: 3 unused imports (`calibrate.py` x2, `bayes.py` x1) - fold into the next change to those files (`calibrate.py` is 24.7 KB, split it then).
 2. **Truth pass - DONE 2026-09-20.** Details under "Where things stand" and in `CHANGELOG-2.md`. Last piece, shipped after Danny OK'd the mockup: finished games are grey in solid colors, never faded (`--done:#4F5C57` in `clover.css`, 5.4:1 or better; it had been 1.8:1).
 3. **Design direction - DONE 2026-09-21.** Danny picked "A. Board, dark" and approved three changes: hot slips show only their own picks, My Bet sits in a right rail on the front door, and spread/total buttons show the line only at the market line. Mockups only; no code shipped.
@@ -34,11 +34,11 @@ Kick off the next chat with: **"Row 7: finish and check live"** if the setup ite
 5. **Build on the board - DONE 2026-09-24.** Danny dropped the Build tab (option A): the board already was build-your-own. Shipped instead: the ladder in the side column (`ladder.js`), feed-sourced abbreviations, the Monday-night weekend rule. Details under "Where things stand" and in `CHANGELOG-2.md`; rulings of 2026-09-24 in `DECISIONS.md`. (`DECISIONS.md` size leftover handled in row 6: the 2026-09-20 "Also decided" block moved to `DESIGN.md`.)
 6. **My Bet - DONE 2026-09-24.** Details under "Where things stand" and in `CHANGELOG-2.md`; rulings of 2026-09-24 (row 6) in `DECISIONS.md`. Mockup it was built from: https://claude.ai/artifact/7VoHDPSoVXQ4oWpqefsVT1 .
 7. **The bet record - BUILT 2026-09-25**, setup done; live test left. Supabase, email sign-in, Save bet / Void, closing chance at the pick's own line, grading on GitHub. Open: how Underdog pays a slip with a pushed pick (graded "push" until answered).
-8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn, and the overnight AI recap.
+8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn. The overnight AI recap is deferred (open item below); build so it can be added later without rework.
 
 ## Waiting on Danny
 - **Row 7 setup: all done 2026-09-25.** `members` = riveramd@gmail.com + jaclynk094@gmail.com; Site URL / Redirect URL set; secrets `SUPABASE_URL` + `SUPABASE_SECRET_KEY` added by Danny; `refresh.yml` passes them (`538b1ef`, via Danny's Chrome, md5-verified). Left: one live test (save a real bet, then confirm the next refresh filled in the closing chance).
-- **Row 8:** an Anthropic API key stored as a GitHub secret.
+- **Open - overnight written recap (deferred by Danny 2026-09-26):** needs a paid Anthropic API account and key stored as GitHub secret `ANTHROPIC_API_KEY`. Not a blocker for row 8; History ships numbers-only until Danny adds the key. Ruling 2b of 2026-09-20 still stands, just later.
 - **Open:** how Underdog pays a slip when one pick pushes (Danny unsure, 2026-09-25) - graded "push" until known.
 
 ## Parked
