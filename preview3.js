@@ -184,13 +184,6 @@ document.getElementById("otherBack").onclick=()=>show("slips");
 document.getElementById("fClear").onclick=()=>{ FILTERS[league]=defaultFilters(); reFilter(); };
 document.getElementById("backToSlips").onclick=()=>show("slips");
 document.getElementById("pays").addEventListener("input",e=>{ const v=parseFloat(e.target.value); S.pays=isNaN(v)||v<=1?null:v; render(); });
-document.getElementById("copy").onclick=()=>{
-  const n=S.legs.length; if(!n) return;
-  const {joint}=slipProb(S.legs), pay=payoutFor();
-  const desc=S.legs.map(l=>{const G=GAMES[l.gi];return `${lgOf(G)==="nfl"?"NFL ":""}${G.away} @ ${G.home} ${legLabel(G,l)}`;}).join(" | ");
-  const row=[new Date().toISOString().slice(0,10),S.who,desc,n,pay?money(pay.dec):"",pct(joint),pay?grade(joint*pay.dec-1).word:"",""].join("\t");   /* result column stays blank for the sheet */
-  navigator.clipboard.writeText(row).then(()=>{const b=document.getElementById("copy");b.textContent="Copied - paste in the sheet";setTimeout(()=>b.textContent="Copy row for the log",2200);});
-};
 (function chips(){
   const c=document.getElementById("chips");
   for(let n=2;n<=6;n++){ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=n; b.setAttribute("aria-pressed",n===hotN);
