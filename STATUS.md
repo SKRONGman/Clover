@@ -1,6 +1,6 @@
 # Clover — project status
 
-Last updated: 2026-09-25 (night). **Rows 1-6 are live. Row 7 (the bet record) is pushed: Danny can sign in and save bets now; closing numbers and grades start once the two GitHub secrets and the `refresh.yml` edit are in ("Waiting on Danny"). Not yet checked on the live page. Then row 8 (History), the last row.**
+Last updated: 2026-09-25 (night). **Rows 1-6 are live. Row 7 (the bet record) is live and fully wired: saving, closing numbers and grades. Only a live test is left. Then row 8 (History), the last row.**
 
 **Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then `DESIGN.md` (the look, for any screen work), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
@@ -32,11 +32,11 @@ Kick off the next chat with: **"Row 7: finish and check live"** if the setup ite
 4. **Front door - DONE 2026-09-22.** Details under "Where things stand" and in `CHANGELOG-2.md`. Mockup it was built from: https://claude.ai/artifact/PCbU7P1A4UbhYm4tmvcmCn . Danny's four rulings are in `DECISIONS.md` (2026-09-21); the team-color rule in `DESIGN.md`. Found while mocking, still true: NFL teams have no `colors2` (only matters for a failed logo).
 5. **Build on the board - DONE 2026-09-24.** Danny dropped the Build tab (option A): the board already was build-your-own. Shipped instead: the ladder in the side column (`ladder.js`), feed-sourced abbreviations, the Monday-night weekend rule. Details under "Where things stand" and in `CHANGELOG-2.md`; rulings of 2026-09-24 in `DECISIONS.md`. (`DECISIONS.md` size leftover handled in row 6: the 2026-09-20 "Also decided" block moved to `DESIGN.md`.)
 6. **My Bet - DONE 2026-09-24.** Details under "Where things stand" and in `CHANGELOG-2.md`; rulings of 2026-09-24 (row 6) in `DECISIONS.md`. Mockup it was built from: https://claude.ai/artifact/7VoHDPSoVXQ4oWpqefsVT1 .
-7. **The bet record - BUILT 2026-09-25**, live once Danny's setup is done. Supabase, email sign-in, Save bet / Void, closing chance at the pick's own line, grading on GitHub. Open: how Underdog pays a slip with a pushed pick (graded "push" until answered).
+7. **The bet record - BUILT 2026-09-25**, setup done; live test left. Supabase, email sign-in, Save bet / Void, closing chance at the pick's own line, grading on GitHub. Open: how Underdog pays a slip with a pushed pick (graded "push" until answered).
 8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn, and the overnight AI recap.
 
 ## Waiting on Danny
-- **Row 7 setup:** done 2026-09-25 - Danny's email (`riveramd@gmail.com`) is in `members`, and he set the Supabase Site URL + Redirect URL. Still to do: (1) **Jaclyn's email** - Claude adds it to `members`; (2) GitHub Secrets `SUPABASE_URL` = `https://ptictqwxdqfzykpgwiqf.supabase.co` and `SUPABASE_SECRET_KEY` (Supabase -> Project Settings -> API Keys -> secret key); (3) `refresh.yml`: under the refresh step's `env:`, after `ODDS_KEY`, add `SUPABASE_URL: ${{ secrets.SUPABASE_URL }}` and `SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}` (Claude does it in his Chrome once he's reviewed it). Without (2)/(3) refreshes skip `bets.py` quietly; saving from the page works without them.
+- **Row 7 setup: all done 2026-09-25.** `members` = riveramd@gmail.com + jaclynk094@gmail.com; Site URL / Redirect URL set; secrets `SUPABASE_URL` + `SUPABASE_SECRET_KEY` added by Danny; `refresh.yml` passes them (`538b1ef`, via Danny's Chrome, md5-verified). Left: one live test (save a real bet, then confirm the next refresh filled in the closing chance).
 - **Row 8:** an Anthropic API key stored as a GitHub secret.
 - **Open:** how Underdog pays a slip when one pick pushes (Danny unsure, 2026-09-25) - graded "push" until known.
 
