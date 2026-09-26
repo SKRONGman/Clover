@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://cdn.collegefootballdata.com https://a.espncdn.com data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://cdn.collegefootballdata.com https://a.espncdn.com data:; connect-src 'self' https://ptictqwxdqfzykpgwiqf.supabase.co; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="dark">
 <title>Clover</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="clover.css?v=20260924r6">
+<link rel="stylesheet" href="clover.css?v=20260925r7">
 </head>
 <body>
 
@@ -111,7 +111,7 @@
       <div class="fld"><span class="sub" id="whoLab">Whose bet</span><div class="chips" id="whoChips" role="group" aria-labelledby="whoLab"><button type="button" class="chip" data-who="Danny">Danny</button><button type="button" class="chip" data-who="Jaclyn">Jaclyn</button></div></div>
       <div class="go"><button type="button" class="sec sm" id="clearSlip">Clear</button><button type="button" class="primary" id="place">I placed this</button></div>
     </div>
-    <div class="placed hidden" id="placedBox" role="status"><div><b id="placedTxt"></b><span class="hint" id="placedSub"></span></div><button type="button" class="sec sm" id="unplace">Unmark</button></div>
+    <div class="placed hidden" id="placedBox" role="status" aria-live="polite"></div>
   </div>
   <div class="card board mbPicks">
     <div class="rhead mbHead"><h2>Your picks <span class="sub" id="mbCount"></span></h2><button type="button" class="edit" id="mbEdit" aria-expanded="false">N/A</button></div>
@@ -123,7 +123,6 @@
     <div id="sGrid"></div>
   </div>
   <div class="actions">
-    <button class="sec" id="copy" type="button">Copy row for the log</button>
     <button class="sec" id="backToSlips" type="button">Add more picks</button>
   </div>
 </div></section>
@@ -136,12 +135,13 @@
 </aside>
 </div>
 
-<script src="preview1.js?v=20260924r6"></script>
-<script src="filters.js?v=20260924r6"></script>
-<script src="preview2.js?v=20260924r6"></script>
-<script src="rail.js?v=20260924r6"></script>
-<script src="mybet.js?v=20260924r6"></script>
-<script src="ladder.js?v=20260924r6"></script>
-<script src="preview3.js?v=20260924r6"></script>
+<script src="preview1.js?v=20260925r7"></script>
+<script src="filters.js?v=20260925r7"></script>
+<script src="preview2.js?v=20260925r7"></script>
+<script src="rail.js?v=20260925r7"></script>
+<script src="mybet.js?v=20260925r7"></script>
+<script src="record.js?v=20260925r7"></script>
+<script src="ladder.js?v=20260925r7"></script>
+<script src="preview3.js?v=20260925r7"></script>
 </body>
 </html>
