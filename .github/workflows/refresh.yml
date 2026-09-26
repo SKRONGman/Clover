@@ -1,5 +1,5 @@
 # Refreshes the lines on GitHub's servers so the page is always current.
-# Your CFBD_KEY and ODDS_KEY live in Settings -> Secrets and variables -> Actions. Never in a file.
+# Your CFBD_KEY, ODDS_KEY, SUPABASE_URL and SUPABASE_SECRET_KEY live in Settings -> Secrets and variables -> Actions. Never in a file.
 #
 # Times are UTC. Central time is UTC-5 (CDT) / UTC-6 (CST).
 #   Full refresh (ratings + lines): Tuesdays 11:00 UTC = 6am CDT (the page runs
@@ -62,6 +62,8 @@ jobs:
         env:
           CFBD_KEY: ${{ secrets.CFBD_KEY }}
           ODDS_KEY: ${{ secrets.ODDS_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}                # row 7: bets.py adds closing numbers + grades
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: |
           if [ "${{ steps.mode.outputs.mode }}" = "full" ] || [ ! -f ratings.json ]; then
             python refresh.py
