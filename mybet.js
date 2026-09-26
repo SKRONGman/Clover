@@ -56,8 +56,11 @@ function stressHtml(dec){
 
 function renderCard(){
   const n=S.legs.length, pay=payoutFor(), box=document.getElementById("mbBet"), v=document.getElementById("verdict");
-  const paysIn=document.getElementById("pays");
-  if(document.activeElement!==paysIn) paysIn.value=S.pays!=null?S.pays:"";
+  /* Bet Amount + Pays Out as the app shows them (2026-09-26); an older slip saved with only "pays on $1" shows as a $1 bet */
+  const stIn=document.getElementById("stake"), poIn=document.getElementById("payout");
+  if(document.activeElement!==stIn) stIn.value=S.stake!=null?S.stake:S.pays!=null?"1.00":"";
+  if(document.activeElement!==poIn) poIn.value=S.payout!=null?S.payout:S.pays!=null?S.pays.toFixed(2):"";
+  setT("moneyNote",moneyNote()||(pay?`That's ${money(pay.dec)} back per $1.`:""));
   document.querySelectorAll("#whoChips [data-who]").forEach(b=>b.setAttribute("aria-pressed",S.who===b.dataset.who));
   setT("mbCount",n?`· ${n}`:"");
   const edit=document.getElementById("mbEdit"); edit.textContent=MB_EDIT?"Done":"N/A"; edit.setAttribute("aria-expanded",MB_EDIT); edit.classList.toggle("hidden",!n);
@@ -81,7 +84,7 @@ function renderCard(){
     else { has=1; setT("hasV","Hit"); setT("hasS","every pick landed"); v.textContent="Won"; vc="--great"; setT("why",pay?`$1 on this paid ${money(pay.dec)}.`:""); }
   } else {
     setT("hasV",pct1(joint)); setT("hasS",n===1?"chance this pick hits":n===2?"chance both picks hit":`chance all ${n} picks hit`);
-    if(!pay){ nums("—",joint>0?money(1/joint):"—","—","—"); setT("why","Type what your app pays on $1. Clover never guesses a payout, so there is no verdict until you do."); stress=`<p class="hint">Type the payout to see how solid it is.</p>`; }
+    if(!pay){ nums("—",joint>0?money(1/joint):"—","—","—"); setT("why","Type your bet amount and what your app pays out. Clover never guesses a payout, so there is no verdict until you do."); stress=`<p class="hint">Type the payout to see how solid it is.</p>`; }
     else {
       const dec=pay.dec, ev=joint*dec-1, g=grade(ev), c=`${ev>=0?"+":"−"}${Math.round(Math.abs(ev)*100)}¢`;
       need=1/dec; vc=VCOLOR[g.word];
@@ -113,10 +116,10 @@ function placeSlip(){
   const pay=payoutFor(); if(!S.legs.length||!pay) return;
   const live=splitLegs(S.legs).live;
   /* id made here, so a retried save can never make a second copy (row 7); picks frozen as they were at the stamp */
-  S.placed={id:newId(),who:S.who,pays:pay.dec,at:new Date().toISOString(),sig:slipSig(S.legs),p:slipProb(live).joint,picks:snapPicks(live)};
+  S.placed={id:newId(),who:S.who,pays:pay.dec,stake:S.stake,payout:S.payout,at:new Date().toISOString(),sig:slipSig(S.legs),p:slipProb(live).joint,picks:snapPicks(live)};
   REC.ui=""; render();
 }
 document.getElementById("place").onclick=placeSlip;
 document.getElementById("mbEdit").onclick=()=>{ MB_EDIT=!MB_EDIT; renderCard(); };
-document.getElementById("clearSlip").onclick=()=>{ S.legs=[]; S.pays=null; S.placed=null; REC.ui=""; MB_EDIT=false; render(); };
+document.getElementById("clearSlip").onclick=()=>{ S.legs=[]; S.pays=null; S.stake=null; S.payout=null; S.placed=null; REC.ui=""; MB_EDIT=false; RAIL_PK=null; render(); };
 document.querySelectorAll("#whoChips [data-who]").forEach(b=>{ b.onclick=()=>{ S.who=b.dataset.who; render(); }; });

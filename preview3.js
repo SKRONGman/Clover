@@ -183,7 +183,7 @@ document.querySelector(".tabs").addEventListener("keydown",e=>{
 document.getElementById("otherBack").onclick=()=>show("slips");
 document.getElementById("fClear").onclick=()=>{ FILTERS[league]=defaultFilters(); reFilter(); };
 document.getElementById("backToSlips").onclick=()=>show("slips");
-document.getElementById("pays").addEventListener("input",e=>{ const v=parseFloat(e.target.value); S.pays=isNaN(v)||v<=1?null:v; render(); });
+document.querySelectorAll("#stake,#payout").forEach(i=>i.addEventListener("input",()=>{ setMoney(i.dataset.money,i.value.trim()); render(); }));
 (function chips(){
   const c=document.getElementById("chips");
   for(let n=2;n<=6;n++){ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=n; b.setAttribute("aria-pressed",n===hotN);

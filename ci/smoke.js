@@ -80,9 +80,10 @@ try{
   /* ruling 1: no verdict, anywhere (full screen or rail), until a real payout is typed */
   js(`S.pays=null; show("card"); render();`); flush();
   const words=/Great|Good|Coin toss|Bad|Terrible|est\./;
-  check(byId.verdict.textContent===""&&!words.test(byId.rail.innerHTML)&&!words.test(byId.why.textContent)&&byId.needV.textContent==="—"&&byId.place.disabled,"a verdict (or Needs, or I placed this) is showing before any payout was typed");
+  const railNoLabels=()=>byId.rail.innerHTML.replace(/Good Bet Minimum|Coin Toss Line/g,"");   /* the rail labels its numbers with verdict words */
+  check(byId.verdict.textContent===""&&!words.test(railNoLabels())&&!words.test(byId.why.textContent)&&byId.needV.textContent==="—"&&byId.place.disabled,"a verdict (or Needs, or I placed this) is showing before any payout was typed");
   js(`S.pays=11; render();`); flush();
-  check(words.test(byId.verdict.textContent)&&words.test(byId.rail.innerHTML)&&/Needs \d/.test(byId.rail.innerHTML),"no verdict after a payout was typed");
+  check(words.test(byId.verdict.textContent)&&words.test(railNoLabels())&&/Coin Toss Line<\/span><b>\d/.test(byId.rail.innerHTML),"no verdict after a payout was typed");
   /* row 5 (2026-09-24): the ladder replaces the line sheet - one drawing, in the side column
      (on the full My Bet screen too since row 6). Tapping a rung holds that line. */
   /* row 6 (2026-09-24): the full My Bet screen - needs vs has, the numbers, the stress grid, the stamp */
@@ -187,7 +188,8 @@ try{
 }catch(e){ fails.push("page threw: "+(e&&e.stack||e)); }
 
 (async()=>{
+try{ await require("./smoke_rail.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("rail threw: "+(e&&e.stack||e)); }
 try{ await require("./smoke_record.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("bet record threw: "+(e&&e.stack||e)); }
 if(fails.length){ console.log("  FAIL  page smoke test"); fails.forEach(f=>console.log("        "+f)); process.exit(1); }
-console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale, swap, N/A hidden until edit, moved flag rail-only at 3+, line-only at market, bet record)");
+console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale, swap, N/A hidden until edit, moved flag rail-only at 3+, line-only at market, bet record, rail option B)");
 })();

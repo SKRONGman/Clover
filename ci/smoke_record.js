@@ -27,7 +27,7 @@ module.exports=async function recordTests({ctx,sandbox,byId,js,flush,check,live}
   check(b1.bet.id===b2.bet.id&&b1.bet.id===js("S.placed.id"),"row 7: a retry must send the same bet id (no double save)");
   check(/rest\/v1\/rpc\/save_bet$/.test(sent[1].u)&&/Bearer x\./.test(sent[1].o.headers.Authorization)&&b2.picks.length>0,"row 7: save goes to save_bet with the user's token and the picks");
   check(js("S.placed.saved&&S.placed.saved.no")===7&&/Saved · Bet #7/.test(byId.placedBox.innerHTML)&&/data-rec="void"/.test(byId.placedBox.innerHTML)&&!/data-rec="unplace"/.test(byId.placedBox.innerHTML),"row 7: a saved bet shows its number and Void, and no Unmark");
-  check(/Saved #7/.test(byId.rail.innerHTML)||js("view")==="card","row 7: the rail stamp says Saved");
+  check(/Saved (&#183;|·) Bet #7/.test(byId.rail.innerHTML)||js("view")==="card","row 7: the rail stamp says Saved");
   sent=[]; sandbox.FETCH=(u,o)=>{ sent.push({u,o}); return reply(204,null); };
   js("voidBet()"); await settle();
   check(sent[0]&&sent[0].o.method==="PATCH"&&/bets\?id=eq\./.test(sent[0].u)&&"voided_at" in JSON.parse(sent[0].o.body)&&/Voided · Bet #7/.test(byId.placedBox.innerHTML),"row 7: Void marks the bet voided, never deletes it");

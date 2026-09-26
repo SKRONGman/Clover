@@ -175,12 +175,12 @@ function initials(t){ return t.split(/\s+/).map(w=>w[0]).join("").replace(/[^A-Z
    STATE — one slip, shared by every screen. Legs are keyed by game id
    (not index) so a refresh doesn't scramble them.
    =================================================================== */
-const S={legs:[], pays:null, who:"Danny", placed:null};   /* placed: the "I placed this" stamp (row 6) - never a lock */
-function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line,p0:l.p0})),pays:S.pays,who:S.who,placed:S.placed})); }catch(e){} }
+const S={legs:[], pays:null, stake:null, payout:null, who:"Danny", placed:null};   /* placed: the "I placed this" stamp (row 6) - never a lock; pays = payout / stake */
+function saveSlip(){ try{ localStorage.setItem("cloverSlip",JSON.stringify({legs:S.legs.map(l=>({id:GAMES[l.gi].id,type:l.type,line:l.line,p0:l.p0})),pays:S.pays,stake:S.stake,payout:S.payout,who:S.who,placed:S.placed})); }catch(e){} }
 function loadSlip(){
   try{
     const s=JSON.parse(localStorage.getItem("cloverSlip")||"null"); if(!s) return;
-    S.pays=s.pays??null; S.who=s.who||"Danny"; S.placed=s.placed||null;
+    S.pays=s.pays??null; S.stake=s.stake??null; S.payout=s.payout??null; S.who=s.who||"Danny"; S.placed=s.placed||null;
     S.legs=(s.legs||[]).map(l=>{ const gi=BY_ID[l.id]; return gi==null||!onBoard(GAMES[gi])?null:{gi,type:l.type,line:l.line,p0:l.p0}; }).filter(Boolean);
   }catch(e){}
 }

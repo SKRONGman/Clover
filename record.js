@@ -58,7 +58,7 @@ async function saveBet(){
   const P=S.placed; if(!P||P.saved) return;
   if(!sbSession()){ REC.ui="signin"; REC.msg=""; renderStamp(); return; }
   REC.ui="saving"; renderStamp();
-  const needs=1/P.pays, bet={id:P.id,placed_at:P.at,who:P.who,pays:P.pays,chance:+P.p.toFixed(4),needs:+needs.toFixed(4),verdict:grade(P.p*P.pays-1).word};
+  const needs=1/P.pays, bet={id:P.id,placed_at:P.at,who:P.who,pays:P.pays,stake:P.stake?+P.stake:null,payout:P.payout?+P.payout:null,chance:+P.p.toFixed(4),needs:+needs.toFixed(4),verdict:grade(P.p*P.pays-1).word};
   try{
     const r=await sbCall("/rest/v1/rpc/save_bet",{method:"POST",body:JSON.stringify({bet,picks:P.picks})});
     if(r.signin){ REC.ui="signin"; REC.msg="Sign in again on this device to save."; }
@@ -93,10 +93,10 @@ function renderStamp(){
   const P=S.placed, box=document.getElementById("placedBox"); if(!box) return;
   box.classList.toggle("hidden",!P); if(!P) return;
   const same=P.sig===slipSig(S.legs), t=new Date(P.at).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"});
-  let head=`Placed · ${esc(P.who)} · ${money(P.pays)} on $1 · ${t}`, sub, acts="", extra="", cls="placed";
+  let head=`Placed · ${esc(P.who)} · ${payText(P)} · ${t}`, sub, acts="", extra="", cls="placed";
   if(P.voided){ cls+=" void"; head=`Voided · Bet #${P.saved.no}`; sub="Still saved, marked void. Clover leaves it out of your record and History."; }
   else if(P.saved){ head=`<span class="check">&#10003;</span>Saved · Bet #${P.saved.no}`;
-    sub=same?`${esc(P.who)} · ${money(P.pays)} on $1 · ${P.picks.length} pick${P.picks.length>1?"s":""} at ${pct1(P.p)}. GitHub adds the closing numbers before kickoff and the grade after the final.`
+    sub=same?`${esc(P.who)} · ${payText(P)} · ${P.picks.length} pick${P.picks.length>1?"s":""} at ${pct1(P.p)}. GitHub adds the closing numbers before kickoff and the grade after the final.`
             :`Picks changed since you saved it. Those changes are not saved. Place the new slip to save it as a new bet.`;
     acts=`<button type="button" class="sec sm" data-rec="void">Void</button>`; }
   else if(!same){ sub="Picks changed since you placed it. Unmark it, or place the new slip."; acts=`<button type="button" class="sec sm" data-rec="unplace">Unmark</button>`; }
