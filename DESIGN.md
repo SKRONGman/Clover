@@ -24,3 +24,19 @@ The look and the screen rules for every screen from row 4 on. Decided 2026-09-21
 ## The full My Bet screen (row 6, 2026-09-24)
 - **Decided:** Has / Needs / Verdict in one row at the same size (Has and Needs to one decimal - the verdict lives in the gap), a bar with a "needs" marker, then pays -> fair pay -> back on average -> per $1. Verdict colors: Great `#57D68D`, Good `#9ED9A8`, Coin toss `#E3C170`, Bad `#F09A7A`, Terrible `#F2707A` (the grid uses the same five). "Shaky" is drawn in the Coin toss color, "Solid" in accent.
 - **Decided:** every button 44px or taller, N/A and the remove x included. Tabs move with the arrow keys, Home and End.
+
+## The bet record on My Bet (row 7, 2026-09-25)
+- **Decided** (mockup https://claude.ai/artifact/SSRQRBwgm5aBZYk49jE1Gk): the stamp box under the bet card carries every state - Placed (Unmark + **Save bet**), first save on a device (email box + "Email me a link"), Check your email, Saved · Bet #N (+ Void), Voided (dashed border), Couldn't save (red border + Try again). Never says Saved until Supabase confirms. "Copy row for the log" is gone.
+
+## Moved from `DECISIONS.md` on 2026-09-25, word for word
+#### Filters: which ones Hot Slips obey — CONFIRMED 2026-09-19
+The old rule ("all filters apply to both") is **split**. Hot Slips always search all **upcoming** games so a thin Thursday or a bowl-season Tuesday can't starve the search (`hotGames()`).
+
+| Filter | Build Your Own | Hot Slips |
+| --- | --- | --- |
+| Date | applies ("Today" = the nearest day with games in the chosen Game status, since 2026-09-20) | **ignored** |
+| Game status | applies | **ignored** (upcoming only) |
+| Game time | applies | applies |
+| Conference | applies | applies |
+| Division | applies | applies |
+| FBS / FCS / Top 25 | applies | applies |
