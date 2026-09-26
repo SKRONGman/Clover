@@ -16,12 +16,21 @@ How Clover thinks, in the words agreed with Danny:
 1. **No verdict on a made-up payout.** Hot Slips show the chance only. The verdict and a "needs X%, has Y%" line appear after the real payout is typed. The verdict scale itself is unchanged.
 2. **History grades, it never steers.** Every placed bet is graded. Any day with a bet gets a recap at four levels: the slip, each pick (which one sank it, by how many points), the price (did the bet beat the closing line), and running habits (pick type, slip size, Danny vs. Jaclyn). Each pick is sorted good bet / bad bet separately from good luck / bad luck. **History never changes the suggested slips.**
 2b. **The written recap is automatic**, produced overnight on Actions with a paid Anthropic API key that Danny creates and stores as a GitHub secret. The numbers also live in a History tab.
-3. **Bets are saved to the shared Google Sheet** (leaning, 2026-09-20; runner-up is a private GitHub repo). Browser-only storage is out because Actions cannot see a browser. The Apps Script stays tiny and final (add a row, return all rows) so it never needs redeploying. The Sheet link is pasted into Clover once per device and never goes in the public code; Actions gets it as a secret.
+3. ~~Bets are saved to the shared Google Sheet~~ **Superseded 2026-09-25 (Danny): bets live in Supabase** - see the rulings of 2026-09-25. Still true from this ruling: browser-only storage is out, because Actions cannot see a browser.
 4. **N/A stays exactly as it is.** One tap hides one pick type for one game and resets when the game ends. No standing hide rules, no cutoff slider. Heavy-favorite slips will keep topping Hot Slips; that is accepted.
 5. **Apps in use: Underdog, PrizePicks, Kalshi.** Underdog is the main target (typed payout). Kalshi prices are in the odds feed (`us_ex`), so auto-filled Kalshi payouts are possible at the cost of a second region per pull — parked with multi-book. PrizePicks is believed to be player props only (unverified) — no help until the props phase.
 6. **Keys:** see `STATUS.md` open items.
 
 Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and two rejections - moved word for word to `DESIGN.md` on 2026-09-24 (this file hit its size limit). Still in force.
+
+## Rulings of 2026-09-25 (row 7, from the approved mockup https://claude.ai/artifact/SSRQRBwgm5aBZYk49jE1Gk)
+1. **Bets live in Supabase, not the Google Sheet** (Danny). Project `clover` (ref `ptictqwxdqfzykpgwiqf`, free plan, us-east-1), tables `bets` + `picks`. Row rules: only emails in `members` can read or save; the page can add and void, never grade (column grants); GitHub writes closing numbers and grades with the secret key.
+2. **Sign-in is an emailed link, once per device** (Danny). The publishable key in the page is public by design; the row rules keep strangers out.
+3. **"Save bet" is its own tap** (Danny); "I placed this" stays the row-6 stamp. The bet id is made at the stamp, so a retried save can never make a second copy.
+4. **Closing chance only for placed bets** (Danny). Every refresh re-prices each open saved pick at its OWN line from the sim table (`bets.py`) and overwrites; once the game kicks off the table is gone, so the last run before kickoff stands. "Closing" = the last line Clover saw.
+5. **GitHub grades** (proposed in the mockup, approved with it): same `grade_leg` as `results.json`. Beat the close = the closing chance at your line is higher than the chance when saved. Slip = won / lost / push once every pick is graded.
+6. **Void, never delete** (approved with the mockup). Voided bets are skipped by grading and History.
+- **Open (asked 2026-09-25, Danny unsure):** how Underdog pays a slip with a pushed pick. Until known a no-miss slip with a push is graded "push".
 
 ## Rulings of 2026-09-24 (row 6, from the approved mockup https://claude.ai/artifact/7VoHDPSoVXQ4oWpqefsVT1)
 1. **"I placed this" is a stamp, not a lock** (Danny). It records who, the payout, the time, the chance and the picks; picks stay editable, and the stamp says so when they change. Saving it anywhere is row 7.
@@ -81,17 +90,8 @@ Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and tw
 - **Parked:** a standing rule that recurring, well-defined tasks get reviewed as Cowork background candidates. Danny added it 2026-09-19 then parked it until the redesign shipped. Revisit when he raises it.
 - **Superseded 2026-09-20:** "Rookie weekend gamblers" and "professional-grade for strangers" are replaced by *personal use for Danny and Jaclyn*. "Simple beats complete" and "likes 3-pick slips" stand. "One word" is replaced by full numbers with the verdict among them.
 
-### Filters: which ones Hot Slips obey — CONFIRMED 2026-09-19
-The old rule ("all filters apply to both") is **split**. Hot Slips always search all **upcoming** games so a thin Thursday or a bowl-season Tuesday can't starve the search (`hotGames()`).
-
-| Filter | Build Your Own | Hot Slips |
-| --- | --- | --- |
-| Date | applies ("Today" = the nearest day with games in the chosen Game status, since 2026-09-20) | **ignored** |
-| Game status | applies | **ignored** (upcoming only) |
-| Game time | applies | applies |
-| Conference | applies | applies |
-| Division | applies | applies |
-| FBS / FCS / Top 25 | applies | applies |
+### Filters: which ones Hot Slips obey
+Confirmed 2026-09-19; the table moved word for word to `DESIGN.md` on 2026-09-25 (size limit). Still in force: Hot Slips ignore Date and Game status (upcoming only) and obey every other filter.
 
 ### Deploying changes (updated 2026-09-20)
 Claude has **direct GitHub read/write** via the GitHub connector (authenticated as SKRONGman) and pushes straight to `main`. **Never ask Danny to run git or a terminal.** Three hard limits, all confirmed by hitting them:
@@ -102,6 +102,7 @@ Claude has **direct GitHub read/write** via the GitHub connector (authenticated 
 - **Always verify a push.** `git clone` the repo into the workspace (public read works from the sandbox), edit and test there, push via the connector, then compare `git hash-object <file>` with the blob `sha` the push returns (same bytes = same sha), or `git fetch` and md5. Finish by running the checks on a fresh clone. Used on every file shipped 2026-09-20. **Verification is not a formality — it caught a dropped settled rule in the first STATUS.md push of 2026-09-19.**
 - **One file per push means the page passes through mixed states.** Push order that keeps the live page working: new files first, then the scripts that only *use* new things, `index.html`, and last the script that *removes* things. Expect one red Checks run in the middle.
 - **Test the page headlessly before pushing.** A Node stub of `document`/`localStorage` plus the real `ratings.js` runs `init()` and every render path in about a second, and catches exactly the class of bug that shipped tonight.
+- **Supabase (since 2026-09-25):** Claude creates tables, rules and SQL through the Supabase connector (must be on for the chat). The sandbox cannot reach `*.supabase.co` directly, so the page's calls are tested against a fake (`ci/smoke_record.js`) and live through the built-in browser. Secrets `SUPABASE_URL` + `SUPABASE_SECRET_KEY` are Danny's to set.
 - Claude **cannot reach `skrongman.github.io`** from its sandbox (egress allowlist). **Since 2026-09-24 the desktop app's built-in browser can** (Danny allowed the site for it) whenever this chat is linked to his computer; otherwise Danny checks.
 - The write tool turns `\uXXXX` escapes in a file into the characters themselves, so that push's sha will not match `git hash-object`. Same code; take GitHub's copy locally and move on (hit on `rail.js`, 2026-09-24).
 - **File deletions require Danny's approval** in the UI; Claude's delete call is refused without it.
