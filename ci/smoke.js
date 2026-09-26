@@ -58,9 +58,10 @@ try{
   if(js("!!(R&&R.stale)")) check(/API ISSUE/.test(tag)&&byId.ratingsTag.classList.contains("stale"),"stale data but no API ISSUE alert: "+tag);
   else check(!/API ISSUE/.test(tag),"API ISSUE shown on healthy data");
 
-  /* 4. hot slips, both leagues, every size */
-  for(const lg of ["ncaaf","nfl"]){ js(`setLeague("${lg}")`); flush();
+  /* 4. hot slips, both leagues, every size (the League chip picks the league, 2026-09-26) */
+  for(const lg of ["ncaaf","nfl"]){ js(`HOT_LG="${lg}"`); flush();
     for(let N=2;N<=6;N++){ js(`hotN=${N}; renderHot()`); flush();
+      check(js(`HOT.every(s=>s.league==="${lg}"&&s.legs.every(l=>lgOf(GAMES[l.gi])==="${lg}"))`),`${lg} ${N}-pick: a hot slip from the other league`);
       const bad=js(`HOT.filter(s=>s.legs.length!==${N}||!(slipProb(s.legs).joint>=0&&slipProb(s.legs).joint<=1)).length`);
       check(bad===0,`${lg} ${N}-pick: ${bad} malformed hot slips`);
       check(js("HOT.every(s=>slipProb(s.legs).joint>0)"),`${lg} ${N}-pick: a hot slip that cannot hit (0%)`);
@@ -69,6 +70,15 @@ try{
       check(js(`HOT.every((a,i)=>HOT.every((b,j)=>j<=i||[...a.keys].filter(k=>b.keys.has(k)).length<=${half}))`),`${lg} ${N}-pick: two hot slips share more than half their picks`);
       if(js(`hotGames("${lg}").length`)>=12) check(js("HOT.length")===6,`${lg} ${N}-pick: ${js("HOT.length")} slips from a full slate, expected 6`); }
     js("hotN=3; renderHot()"); flush(); check(live||js("HOT.length>0&&slipProb(HOT[0].legs).joint>0.1"),lg+": no believable 3-pick hot slip"); }
+  /* "All" (the default): college's top six, then the NFL's; never a mixed slip */
+  js(`HOT_LG="all"; renderHot()`); flush();
+  if(js(`hotGames("ncaaf").length>=12&&hotGames("nfl").length>=12`)) check(js("HOT.length")===12&&js(`HOT.slice(0,6).every(s=>s.league==="ncaaf")&&HOT.slice(6).every(s=>s.league==="nfl")`),"All: expected six college slips then six NFL slips");
+  check(js("HOT.every(s=>new Set(s.legs.map(l=>lgOf(GAMES[l.gi]))).size===1)"),"a hot slip must never mix leagues");
+  /* hot slips ignore every board filter (2026-09-26) */
+  const nBefore=js(`hotGames("ncaaf").length`);
+  js(`FILTERS.ncaaf.conf="SEC"; FILTERS.ncaaf.time="morning"; FILTERS.ncaaf.status="final";`);
+  check(js(`hotGames("ncaaf").length`)===nBefore,"hot slips must ignore the board's filters");
+  js(`FILTERS.ncaaf=defaultFilters();`);
 
   /* 5. build a slip by hand, open My Bet, type a payout, open the line sheet */
   if(js("GAMES.filter(G=>G.sim).length")>=3){
@@ -126,16 +136,19 @@ try{
   /* 4: tapping the other side swaps the pick - one pick per pick type per game */
   js(`toggleLeg(${gi},"over"); toggleLeg(${gi},"under"); toggleLeg(${gi},"homeSp"); toggleLeg(${gi},"awaySp"); toggleLeg(${gi},"homeML");`); flush();
   check(js("S.legs.length")===3&&js(`S.legs.map(l=>l.type).sort().join()`)==="awaySp,homeML,under","swap rule: expected under+awaySp+homeML, got "+js("S.legs.map(l=>l.type).join()"));
-  /* 1: N/A is the edit button - closed tickets show one N/A and no Prohibited; opened ones show one per pick */
-  js("renderHot()"); flush();
+  /* the v3 ticket (2026-09-26): no N/A button; a tap on a pick opens its menu (N/A, Prohibited for a
+     same-game pair). Every pick draws both teams, the favored one first, the pick lit. */
+  js("HOT_LG='all'; renderHot()"); flush();
   if(js("HOT.length")){
-    const closed=js("hotTicketHtml(HOT[0],0)"), open=js("HOT_EDIT=0; hotTicketHtml(HOT[0],0)"); js("HOT_EDIT=null");
-    check(js("HOT.every((h,i)=>{ const x=hotTicketHtml(h,i); return h.legs.every(l=>x.includes(esc(legWho(GAMES[l.gi],l)))); })"),"every hot-slip pick must name its game (a total alone says nothing)");
-    check((closed.match(/>N\/A</g)||[]).length===1&&!/Prohibited/.test(closed),"a closed ticket must show exactly one N/A and no Prohibited");
-    check((open.match(/>N\/A</g)||[]).length===js("HOT[0].legs.length")&&/Done/.test(open),"an opened ticket must show N/A beside every pick and Done");
+    const closed=js("hotTicketHtml(HOT[0],0)"), open=js("HOT_MENU={i:0,k:0}; hotTicketHtml(HOT[0],0)"); js("HOT_MENU=null");
+    check(!/N\/A/.test(closed)&&!/Prohibited/.test(closed)&&/Use this slip/.test(closed),"a ticket must carry no N/A button and no Prohibited until a pick is tapped");
+    check((open.match(/data-na=/g)||[]).length===1&&/data-close=/.test(open),"an opened pick menu must offer exactly one N/A and Cancel");
+    check(js("HOT.every((h,i)=>{ const x=hotTicketHtml(h,i); return h.legs.every(l=>{ const G=GAMES[l.gi]; return x.includes(esc(abbrOf(G,G.home)))&&x.includes(esc(abbrOf(G,G.away))); }); })"),"every hot-slip pick must draw both teams of its game");
+    check(js("HOT.every((h,i)=>(hotTicketHtml(h,i).match(/class=\"r on\"/g)||[]).length===h.legs.length)"),"every pick's table must light exactly one row");
+    check(js(`HOT.every(h=>h.legs.every(l=>{ const G=GAMES[l.gi], rows=hotRows(G,l.gi,l); return legMarket(l.type)==="Total"?rows[0].p>=rows[1].p:(rows[0].t===G.home)===(prob(l.gi,[{type:"homeML",line:0}])>=0.5); }))`),"the favored team (better chance, for a total) must be the top row");
     const pi=js("HOT.findIndex(s=>new Set(s.legs.map(l=>l.gi)).size<s.legs.length)");
-    if(pi>=0) check(/Prohibited|Logged as prohibited/.test(js(`HOT_EDIT=${pi}; hotTicketHtml(HOT[${pi}],${pi})`)),"an opened ticket with a same-game pair must offer Prohibited");
-    js("HOT_EDIT=null");
+    if(pi>=0) check(/Prohibited|Logged as prohibited/.test(js(`HOT_MENU={i:${pi},k:0}; hotTicketHtml(HOT[${pi}],${pi})`)),"a pick menu on a same-game pair must offer Prohibited");
+    js("HOT_MENU=null");
   }
   const rail0=js("RAIL_EDIT=false; renderRail(); document.getElementById('rail').innerHTML");
   check((rail0.match(/>N\/A</g)||[]).length===1,"the rail must show one N/A next to Clear until opened");

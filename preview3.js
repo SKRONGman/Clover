@@ -1,7 +1,7 @@
 /* ---- hot slips: built right here from the tables, so an N/A tap can
    reshuffle instantly. Same rules as before: up to 3 picks from one game,
    ranked by chance the whole slip hits, top slips must actually differ. ---- */
-let hotN=3, HOT=[];
+let hotN=3, HOT=[], HOT_MENU=null;   /* HOT_MENU: {i,k} = the ticket and pick whose N/A menu is open */
 const HOT_TOP=6, BLOCKS={};
 /* every same-game combination at market lines, priced once per page load (the
    lookups are the slow part). p=0 blocks are impossible pairs - never offered. */
@@ -47,37 +47,33 @@ function bestSlip(games,N,taken,cap){
   const legs=[]; for(let x=top;x&&x.b;x=x.prev) legs.unshift(...x.b.legs);
   return {p:top.p,keys:new Set(legs.map(l=>l.gi+":"+l.type)),legs:legs.map(l=>({...l}))};
 }
-function buildSlips(N){
-  const games=hotGames(league).map(x=>gameBlocks(x.gi)).filter(b=>b.length);
+/* one league at a time: the search is a knapsack over that league's games */
+function buildSlips(N,lg){
+  const games=hotGames(lg).map(x=>gameBlocks(x.gi)).filter(b=>b.length);
   const cap=N-Math.max(2,Math.ceil(N/2)), out=[];       // no two slips share more than half their picks
-  while(out.length<HOT_TOP){ const s=bestSlip(games,N,out,cap); if(!s) break; out.push(s); }
+  while(out.length<HOT_TOP){ const s=bestSlip(games,N,out,cap); if(!s) break; s.league=lg; out.push(s); }
   return out;
 }
-let HOT_EDIT=null;                    /* index of the ticket that is open for N/A / Prohibited, or null */
+/* Hot Slips page (2026-09-26): both leagues, college first then the NFL, each its own top six.
+   HOT_LG is the page's League chip: "all" | "ncaaf" | "nfl". The drawing lives in hot.js. */
+let HOT_LG="all";
 function renderHot(){
   const out=document.getElementById("hotOut"), st=document.getElementById("hotStatus");
-  out.innerHTML=""; HOT=[]; HOT_EDIT=null;
-  const name=LEAGUE_NAME[league], all=GAMES.filter(G=>G.sim&&lgOf(G)===league).length, lined=hotGames(league).length;
-  if(!all){ st.textContent=`No ${name} games with lines yet - lines load closer to game day.`; return; }
-  if(!lined){ st.textContent=`No ${name} games match these filters. Loosen them to search for slips.`; return; }
+  out.innerHTML=""; HOT=[]; HOT_MENU=null;
+  const lgs=LEAGUES.filter(lg=>HOT_LG==="all"||lg===HOT_LG), lined=lgs.filter(lg=>hotGames(lg).length);
+  if(!lined.length){ st.textContent=`No ${HOT_LG==="all"?"":LEAGUE_NAME[HOT_LG]+" "}games with lines yet - lines load closer to game day.`; return; }
   /* built right here, not on a timer: a background tab throttles timers and the list would sit on "Searching" */
-  HOT=buildSlips(hotN);
+  lined.forEach(lg=>{ HOT.push(...buildSlips(hotN,lg)); });
   if(!HOT.length){ st.textContent="No slip can be built with the pick types turned on. Turn one back on, or clear N/A."; return; }
-  st.textContent=`The ${HOT.length===6?"six":HOT.length} ${hotN}-pick slips most likely to hit, from ${lined} ${name} games.`;
+  const from=lined.map(lg=>`${hotGames(lg).length} ${LEAGUE_NAME[lg]}`).join(" and ");
+  st.textContent=`The ${hotN}-pick slips most likely to hit, from ${from} games. Tap any pick to mark it N/A.`;
   HOT.forEach((s,i)=>{ const d=document.createElement("div"); d.className="hs"; out.appendChild(d); paintHot(d,s,i); });
 }
-/* repaint every ticket without a new search: the slip changed, or a ticket was opened */
-function paintHotAll(){ const out=document.getElementById("hotOut"); Array.from(out.children||[]).forEach((d,i)=>{ if(HOT[i]) paintHot(d,HOT[i],i); }); }
 const sameLegs=(a,b)=>a.length===b.length&&a.every(x=>b.some(y=>y.gi===x.gi&&y.type===x.type&&y.line===x.line));
-function windowOf(legs){
-  const gs=[...new Set(legs.map(l=>l.gi))].map(gi=>GAMES[gi]).sort((x,y)=>x.start.localeCompare(y.start)), a=gs[0], z=gs[gs.length-1];
-  const day=G=>DAYS[new Date(G.start).getDay()], tm=G=>new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
-  return a===z?`${day(a)} ${tm(a)}`:day(a)===day(z)?`${day(a)} ${tm(a)} to ${tm(z)}`:`${day(a)} ${tm(a)} to ${day(z)} ${tm(z)}`;
-}
 const tileHtml=team=>{ const c=teamColor(team), u=LOGOS[team];
   return `<span class="lg">${u?`<img src="${esc(u)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><i style="background:${c};display:none">${esc(initials(team))}</i>`:`<i style="background:${c}">${esc(initials(team))}</i>`}</span>`; };
 const legTile=(G,type)=>{ const t=legTeam(G,type); return t?tileHtml(t):`<span class="lg ou">O/U</span>`; };
-/* same-game pairs inside a slip - the only place Prohibited lives on the front door (ruling 1, 2026-09-21) */
+/* same-game pairs inside a slip - Prohibited lives here (rail, My Bet) and in the hot ticket's pick menu (hot.js) */
 function pairsHtml(legs,who){
   const by={}; legs.forEach(l=>{ (by[l.gi]=by[l.gi]||[]).push(l); });
   const logged=new Set(prohibLog().map(r=>r.key)), rows=[];
@@ -87,29 +83,6 @@ function pairsHtml(legs,who){
       rows.push(`<div class="pair"><span>Same-game pair${esc(lbl)}</span>${done?`<span class="logged">Logged as prohibited</span>`
         :`<button type="button" class="sec sm" data-ph="${who}" data-gi="${gi}" data-x="${x}" data-y="${y}">Prohibited</button>`}</div>`); } }
   return rows.join("");
-}
-/* Ruling 1 (2026-09-21): N/A is the ticket's edit button. Closed, a ticket shows its picks
-   and one small N/A in the corner. Open, each pick gets an N/A, same-game pairs get
-   Prohibited, and Done closes it. A pure function so the tests can read the HTML. */
-function hotTicketHtml(s,i){
-  const {joint}=slipProb(s.legs), editing=HOT_EDIT===i, inBet=sameLegs(s.legs,S.legs);
-  const picks=s.legs.map((l,k)=>{ const G=GAMES[l.gi];
-    return `<div class="pk">${legTile(G,l.type)}<div class="two"><div class="lbl">${esc(legLabel(G,l))}</div><div class="who">${esc(legWho(G,l))}</div></div><span class="pp">${pct(prob(l.gi,[l]))}</span>`
-      +(editing?`<button type="button" class="na" data-na="${i}" data-k="${k}" aria-label="My app does not offer ${legMarket(l.type)} on ${esc(G.away)} at ${esc(G.home)}">N/A</button>`:"")+`</div>`; }).join("");
-  return `<div class="hsTop"><span class="big">${pct(joint)}</span><span class="sub">all ${s.legs.length} hit</span>`
-    +`<button type="button" class="edit${editing?" on":""}" data-edit="${i}" aria-expanded="${editing}" aria-label="${editing?"Done":"Mark a pick my app does not offer"}">${editing?"Done":"N/A"}</button></div>`
-    +`<div class="pks${editing?" ed":""}">${picks}</div>`
-    +(editing?`<p class="hint">Tap N/A on any pick your app does not offer. The slips rebuild without it.</p>${pairsHtml(s.legs,"hot")}`:"")
-    +`<div class="when">${esc(windowOf(s.legs))}</div>`
-    +(inBet?`<div class="inbet">&#10003; In My Bet</div>`:`<button type="button" class="sec" data-use="${i}">Use this slip</button>`);
-}
-function paintHot(d,s,i){
-  d.classList.toggle("on",sameLegs(s.legs,S.legs));
-  d.innerHTML=hotTicketHtml(s,i);
-  d.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{ HOT_EDIT=HOT_EDIT===i?null:i; paintHotAll(); });
-  d.querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>{ setLegs(s.legs); HOT_EDIT=null; RAIL_EDIT=false; paintHotAll(); });
-  d.querySelectorAll("[data-na]").forEach(b=>b.onclick=()=>{ const l=s.legs[+b.dataset.k]; naMark(l.gi,l.type); });
-  d.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>{ const L=s.legs.filter(l=>l.gi===+b.dataset.gi); prohibAdd(GAMES[+b.dataset.gi],L[+b.dataset.x],L[+b.dataset.y]); paintHotAll(); });
 }
 
 /* ---- N/A: pick types the app doesn't offer, one game at a time. Keyed by game id so
@@ -124,7 +97,7 @@ const NA_PAIRS=[["homeML","awayML"],["homeSp","awaySp"],["over","under"]];
 function naMark(gi,type){
   NA_PAIRS.find(m=>m.includes(type)).forEach(t=>NA.add(naKey(gi,t)));
   S.legs=S.legs.filter(l=>!(l.gi===gi&&legMarket(l.type)===legMarket(type)));      /* the pick leaves the slip too */
-  naSave(); HOT_EDIT=null; renderHot(); render();
+  naSave(); renderHot(); render();
 }
 function naCount(){ return [...NA].filter(k=>BY_ID[k.split("|")[0]]!=null).length/2; }
 function naButtons(){
@@ -170,6 +143,7 @@ document.getElementById("prohibClear").onclick=()=>{
 };
 
 /* ---- wiring ---- */
+document.getElementById("tabHot").onclick=()=>show("hot");
 document.getElementById("tabNcaaf").onclick=()=>setLeague("ncaaf");
 document.getElementById("tabNfl").onclick=()=>setLeague("nfl");
 document.getElementById("tabCard").onclick=()=>show("card");
@@ -180,10 +154,12 @@ document.querySelector(".tabs").addEventListener("keydown",e=>{
   const k={ArrowRight:(i+1)%n,ArrowLeft:(i-1+n)%n,Home:0,End:n-1}[e.key];
   if(i<0||k===undefined) return; e.preventDefault(); t[k].click(); t[k].focus();
 });
-document.getElementById("otherBack").onclick=()=>show("slips");
+document.getElementById("otherBack").onclick=()=>show("hot");
 document.getElementById("fClear").onclick=()=>{ FILTERS[league]=defaultFilters(); reFilter(); };
 document.getElementById("backToSlips").onclick=()=>show("slips");
 document.querySelectorAll("#stake,#payout").forEach(i=>i.addEventListener("input",()=>{ setMoney(i.dataset.money,i.value.trim()); render(); }));
+document.querySelectorAll("#lgChips .chip").forEach(b=>b.onclick=()=>{
+  HOT_LG=b.dataset.lg; document.querySelectorAll("#lgChips .chip").forEach(x=>x.setAttribute("aria-pressed",x===b)); renderHot(); });
 (function chips(){
   const c=document.getElementById("chips");
   for(let n=2;n<=6;n++){ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=n; b.setAttribute("aria-pressed",n===hotN);
@@ -231,7 +207,7 @@ function init(){
   loadLeague();
   if(!count(league)&&count(league==="ncaaf"?"nfl":"ncaaf")) league=league==="ncaaf"?"nfl":"ncaaf";   // open on whichever league has games
   loadFilters(); populateFilterOptions();
-  NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); setFiltersOpen(false); renderHot(); render(); show("slips");
+  NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); setFiltersOpen(false); renderHot(); render(); show("hot");
 }
 /* ratings.js with a cache-buster, without document.write; works from file:// too */
 (function(){ const s=document.createElement("script"); s.src="ratings.js?v="+Date.now(); s.onload=init; s.onerror=init; document.head.appendChild(s); })();

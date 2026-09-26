@@ -9,15 +9,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="clover.css?v=20260926rb">
+<link rel="stylesheet" href="clover.css?v=20260926hs">
+<link rel="stylesheet" href="hot.css?v=20260926hs">
 </head>
 <body>
 
 <header><div class="hIn">
   <div class="brand"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="5.2"/><circle cx="16" cy="8" r="5.2"/><circle cx="8" cy="16" r="5.2"/><circle cx="16" cy="16" r="5.2"/></svg><h1>Clover</h1></div>
   <nav class="tabs" role="tablist">
-    <button class="tab" role="tab" id="tabNcaaf" aria-selected="true">NCAA Slips<span class="n" id="nNcaaf"></span></button>
-    <button class="tab" role="tab" id="tabNfl" aria-selected="false">NFL Slips<span class="n" id="nNfl"></span></button>
+    <button class="tab" role="tab" id="tabHot" aria-selected="true">Hot Slips</button>
+    <button class="tab" role="tab" id="tabNcaaf" aria-selected="false">NCAA<span class="n" id="nNcaaf"></span></button>
+    <button class="tab" role="tab" id="tabNfl" aria-selected="false">NFL<span class="n" id="nNfl"></span></button>
     <button class="tab" role="tab" id="tabCard" aria-selected="false">My Bet<span class="n" id="tabCount"></span></button>
     <button class="tab" role="tab" id="tabHistory" aria-selected="false">History</button>
   </nav>
@@ -27,18 +29,26 @@
 <div class="wrap" id="main">
 <div class="col">
 
-<!-- ================= FRONT DOOR ================= -->
-<section id="viewSlips" role="tabpanel">
+<!-- ================= HOT SLIPS (its own page since 2026-09-26, hot.js) ================= -->
+<section id="viewHot" role="tabpanel">
   <div class="hot">
     <div class="hHead"><h2>Hot slips</h2><p class="sub" id="hotStatus"></p></div>
     <div class="hCtl">
+      <div class="fld"><span class="sub">League</span><div class="chips" id="lgChips" role="group" aria-label="League">
+        <button type="button" class="chip" data-lg="all" aria-pressed="true">All</button>
+        <button type="button" class="chip" data-lg="ncaaf" aria-pressed="false">NCAA</button>
+        <button type="button" class="chip" data-lg="nfl" aria-pressed="false">NFL</button>
+      </div></div>
       <div class="fld"><span class="sub">Picks per slip</span><div class="chips" id="chips" role="group" aria-label="Number of picks"></div></div>
       <div class="fld"><span class="sub">Pick types my app offers</span><div class="chips" id="markets" role="group" aria-label="Pick types offered"></div></div>
       <div class="fld naWrap hidden" id="naWrap"><span class="sub" id="naTxt"></span><button type="button" class="sec" id="naClear">Clear N/A</button></div>
     </div>
     <div id="hotOut"></div>
   </div>
+</section>
 
+<!-- ================= THE BOARD: NCAA / NFL ================= -->
+<section id="viewSlips" role="tabpanel" class="hidden">
   <div class="gHead">
     <div><h2 id="gamesTitle">Games</h2><span class="sub" id="gamesCount"></span></div>
     <button type="button" class="sec" id="fToggle" aria-expanded="false" aria-controls="fPanel"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 3h12l-4.6 5.4v4.1l-2.8 1.3V8.4L2 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Filters <span class="sub" id="fState">none on</span></button>
@@ -74,7 +84,7 @@
       <div class="fld hidden" id="fDivWrap"><span class="sub">Division</span><div class="chips" id="fDivChips"></div></div>
       <button type="button" class="sec" id="fClear">Clear all filters</button>
     </div>
-    <p class="hint">Hot slips ignore Date and Game status. They always search every upcoming game.</p>
+    <p class="hint">These filters shape the board only. Hot Slips searches every upcoming game with lines.</p>
   </div>
   <div class="card board" id="games"></div>
   <div class="actions">
@@ -86,7 +96,7 @@
 <!-- ================= HISTORY (row 8) ================= -->
 <section id="viewOther" role="tabpanel" class="card other hidden">
   <p id="otherTxt"></p>
-  <button type="button" class="sec" id="otherBack">Back to slips</button>
+  <button type="button" class="sec" id="otherBack">Back to Hot Slips</button>
 </section>
 
 <!-- ================= MY BET, the full screen (row 6, mybet.js) ================= -->
@@ -136,13 +146,14 @@
 </aside>
 </div>
 
-<script src="preview1.js?v=20260926rb"></script>
-<script src="filters.js?v=20260926rb"></script>
-<script src="preview2.js?v=20260926rb"></script>
-<script src="rail.js?v=20260926rb"></script>
-<script src="mybet.js?v=20260926rb"></script>
-<script src="record.js?v=20260926rb"></script>
-<script src="ladder.js?v=20260926rb"></script>
-<script src="preview3.js?v=20260926rb"></script>
+<script src="preview1.js?v=20260926hs"></script>
+<script src="filters.js?v=20260926hs"></script>
+<script src="preview2.js?v=20260926hs"></script>
+<script src="rail.js?v=20260926hs"></script>
+<script src="mybet.js?v=20260926hs"></script>
+<script src="record.js?v=20260926hs"></script>
+<script src="ladder.js?v=20260926hs"></script>
+<script src="hot.js?v=20260926hs"></script>
+<script src="preview3.js?v=20260926hs"></script>
 </body>
 </html>

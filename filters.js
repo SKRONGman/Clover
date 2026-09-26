@@ -1,7 +1,7 @@
 /* ===================================================================
    FILTERS — Date, Game time (both leagues); Conference/FBS/FCS/Top25
-   (college); Conference/Division (NFL). Build your own obeys all of them.
-   Hot Slips ignore Date and Game status (see hotGames) and obey the rest.
+   (college); Conference/Division (NFL). They shape the board only;
+   Hot Slips ignore all of them since 2026-09-26 (see hotGames).
    =================================================================== */
 const TIME_BUCKETS={morning:h=>h<12, afternoon:h=>h>=12&&h<16, evening:h=>h>=16&&h<20, primetime:h=>h>=20};
 function defaultFilters(){ return {date:"today", time:"all", status:"upcoming", conf:"all", div:"all", fbs:false, fcs:false, top25:false}; }
@@ -78,15 +78,10 @@ function filterBlame(lg){
   return all?`Two or more filters are hiding them together. Clear all filters to see all ${all}.`:"Nothing matches even with every filter off.";
 }
 function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>onBoard(x.G)&&lgOf(x.G)===lg&&filterGame(x.G)); }
-/* Hot slips honour Game time / Conference / Division / Classification, but NEVER Date or
-   Game status - they always search all upcoming games, so a thin day can't starve the search. */
-function hotGames(lg){
-  const f=FILTERS[lg], saved={date:f.date,status:f.status};
-  f.date="all"; f.status="upcoming";
-  const out=GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg&&filterGame(x.G));
-  f.date=saved.date; f.status=saved.status;
-  return out;
-}
+/* Hot Slips ignore the board's filters altogether (Danny, 2026-09-26: the page has its own tab, so
+   a filter set on the NCAA or NFL tab would be invisible there). They search every upcoming game
+   with a table; N/A and the pick-type chips still apply, inside gameBlocks(). */
+function hotGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg); }
 function populateFilterOptions(){
   const lg=league, games=GAMES.filter(G=>onBoard(G)&&lgOf(G)===lg), f=FILTERS[lg];
   const lbl=d=>`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;
@@ -129,7 +124,7 @@ function populateFilterOptions(){
       wrap.querySelectorAll("[data-div]").forEach(btn=>btn.onclick=()=>{
         const cur=FILTERS.nfl.div;
         FILTERS.nfl.div = cur===btn.dataset.div ? "all" : btn.dataset.div;
-        saveFilters(); populateFilterOptions(); renderGames(); renderHot();
+        saveFilters(); populateFilterOptions(); renderGames();
       });
       wrap.dataset.built="1";
     }
@@ -149,7 +144,7 @@ function setFiltersOpen(open){
   document.getElementById("fToggle").setAttribute("aria-expanded",open);
 }
 document.getElementById("fToggle").onclick=()=>setFiltersOpen(!F_OPEN);
-const reFilter=()=>{saveFilters();populateFilterOptions();renderGames();renderHot();};
+const reFilter=()=>{saveFilters();populateFilterOptions();renderGames();};
 document.getElementById("fDate").onchange=e=>{FILTERS[league].date=e.target.value;reFilter();};
 document.getElementById("fTime").onchange=e=>{FILTERS[league].time=e.target.value;reFilter();};
 document.getElementById("fStatus").onchange=e=>{FILTERS[league].status=e.target.value;reFilter();};

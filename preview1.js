@@ -11,7 +11,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const LEAGUES=["ncaaf","nfl"], LEAGUE_NAME={ncaaf:"College",nfl:"NFL"};
 let league="ncaaf";
 const lgOf=G=>G.league||"ncaaf";
-const TABS={ncaaf:"slips",nfl:"slips",card:"card",history:"history"};
+const TABS={hot:"hot",ncaaf:"slips",nfl:"slips",card:"card",history:"history"};
 /* NFL names are long ("Kansas City Chiefs"); where space is tight use "Chiefs" */
 const shortName=(G,t)=>lgOf(G)==="nfl"?((t===G.home?G.home_short:G.away_short)||t):t;
 /* the board's short name on a narrow screen: CFBD's / ESPN's abbreviation ("MTSU", "KC"),
@@ -207,14 +207,15 @@ function payoutFor(){ return S.pays!=null&&S.pays>1 ? {dec:S.pays} : null; }
 /* ===================================================================
    RENDER
    =================================================================== */
-let view="slips";
-/* four tabs: NCAA Slips / NFL Slips share the front door; History (row 8) opens a placeholder
-   card until it ships. Build has no tab (2026-09-24): building happens on the board, with the
-   ladder in the side column. The side column rides along on every view; on the full My Bet
-   screen it holds only the ladder (row 6), since the rail would repeat the screen itself. */
+let view="hot";
+/* five tabs: Hot Slips is its own page (2026-09-26); NCAA / NFL share the board; History (row 8)
+   opens a placeholder card until it ships. Build has no tab (2026-09-24): building happens on the
+   board, with the ladder in the side column. The side column rides along on every view; on the
+   full My Bet screen it holds only the ladder (row 6), since the rail would repeat the screen itself. */
 const COMING={history:"History is row 8 of the build order - it is not built yet."};
 function show(v){
   view=v;
+  document.getElementById("viewHot").classList.toggle("hidden",v!=="hot");
   document.getElementById("viewSlips").classList.toggle("hidden",v!=="slips");
   document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
   document.getElementById("viewOther").classList.toggle("hidden",!COMING[v]);

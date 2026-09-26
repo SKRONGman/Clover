@@ -1,0 +1,31 @@
+/* Clover - Hot Slips page: the v3 ticket (2026-09-26). Colors and buttons come from clover.css. */
+/* the ticket (v3, 2026-09-26): one strip per slip - chance box + Use this slip on the left, one
+   small table per pick to the right. Rows are buttons: a tap opens the pick's N/A menu. */
+#hotOut{display:flex;flex-direction:column;gap:16px}
+.hs{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:stretch;gap:16px;min-width:0}
+.hs.on{border:1.5px solid var(--acc)}
+.v3side{display:flex;flex-direction:column;gap:8px;flex:none;width:128px}
+.v3side .sec{width:100%;padding:0 8px;font-size:14px}
+.v3head{display:flex;align-items:center;justify-content:center;flex-grow:1;min-height:56px;background:var(--sel);border:1px solid var(--acc);border-radius:8px}
+.v3head .big{font-size:38px;line-height:42px;color:var(--acc)}
+.pks3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;flex-grow:1;min-width:0}
+.pks3.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pks3.n4,.pks3.n5,.pks3.n6{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pk2{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;min-width:0}
+.pk2 .r{display:flex;align-items:center;gap:8px;min-height:44px;width:100%;padding:0 10px 0 8px;border:0;border-radius:0;text-align:left;font-size:14px;font-weight:600;color:var(--muted)}
+.pk2 .r+.r{border-top:1px solid var(--line)}
+.pk2 .r.h{min-height:28px;justify-content:space-between;background:var(--bg);font-size:12px;font-weight:500;padding-left:10px}
+.pk2 .r:not(.h):hover,.pk2 .r:not(.h):focus-visible{box-shadow:inset 0 0 0 1px var(--acc);outline:0}
+.pk2 .nm{flex-grow:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk2 .ln{flex:none;font-size:13px;font-variant-numeric:tabular-nums}
+.pk2 .p{flex:none;min-width:40px;text-align:right;font-variant-numeric:tabular-nums}
+.pk2 .r.on{background:var(--sel);box-shadow:inset 3px 0 0 var(--acc);color:var(--text);font-weight:700}
+.pk2 .r.on .p{color:var(--acc)}
+.pk2 .r.on:hover,.pk2 .r.on:focus-visible{box-shadow:inset 3px 0 0 var(--acc),inset 0 0 0 1px var(--acc)}
+.pop{position:absolute;z-index:5;inset:0;background:var(--card);padding:6px 10px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.pop .hint{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pop .sec,.pop .ghost{min-height:36px;font-size:13px;padding:0 10px}
+.pop .pair{border:0;padding:0;font-size:12px}
+.pop .pair .logged{min-height:36px}
+@media(max-width:1180px){.hs{flex-wrap:wrap}.pks3{order:3;flex-basis:100%}.v3side{width:100%;flex-direction:row}.v3side .sec{width:auto}}
+@media(max-width:700px){.pks3,.pks3.n2,.pks3.n4,.pks3.n5,.pks3.n6{grid-template-columns:1fr}}
