@@ -129,6 +129,7 @@ try{
   js("renderHot()"); flush();
   if(js("HOT.length")){
     const closed=js("hotTicketHtml(HOT[0],0)"), open=js("HOT_EDIT=0; hotTicketHtml(HOT[0],0)"); js("HOT_EDIT=null");
+    check(js("HOT.every((h,i)=>{ const x=hotTicketHtml(h,i); return h.legs.every(l=>x.includes(esc(legWho(GAMES[l.gi],l)))); })"),"every hot-slip pick must name its game (a total alone says nothing)");
     check((closed.match(/>N\/A</g)||[]).length===1&&!/Prohibited/.test(closed),"a closed ticket must show exactly one N/A and no Prohibited");
     check((open.match(/>N\/A</g)||[]).length===js("HOT[0].legs.length")&&/Done/.test(open),"an opened ticket must show N/A beside every pick and Done");
     const pi=js("HOT.findIndex(s=>new Set(s.legs.map(l=>l.gi)).size<s.legs.length)");

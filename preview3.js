@@ -94,7 +94,7 @@ function pairsHtml(legs,who){
 function hotTicketHtml(s,i){
   const {joint}=slipProb(s.legs), editing=HOT_EDIT===i, inBet=sameLegs(s.legs,S.legs);
   const picks=s.legs.map((l,k)=>{ const G=GAMES[l.gi];
-    return `<div class="pk">${legTile(G,l.type)}<span class="lbl">${esc(legLabel(G,l))}</span><span class="pp">${pct(prob(l.gi,[l]))}</span>`
+    return `<div class="pk">${legTile(G,l.type)}<div class="two"><div class="lbl">${esc(legLabel(G,l))}</div><div class="who">${esc(legWho(G,l))}</div></div><span class="pp">${pct(prob(l.gi,[l]))}</span>`
       +(editing?`<button type="button" class="na" data-na="${i}" data-k="${k}" aria-label="My app does not offer ${legMarket(l.type)} on ${esc(G.away)} at ${esc(G.home)}">N/A</button>`:"")+`</div>`; }).join("");
   return `<div class="hsTop"><span class="big">${pct(joint)}</span><span class="sub">all ${s.legs.length} hit</span>`
     +`<button type="button" class="edit${editing?" on":""}" data-edit="${i}" aria-expanded="${editing}" aria-label="${editing?"Done":"Mark a pick my app does not offer"}">${editing?"Done":"N/A"}</button></div>`
