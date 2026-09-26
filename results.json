@@ -394,5 +394,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401862779,
+  "league": "ncaaf",
+  "start": "2026-09-25T20:00+00:00",
+  "home": "Temple",
+  "away": "Army",
+  "hp": 17.0,
+  "ap": 21.0,
+  "spread": 3.5,
+  "total": 48.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4088,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5912,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 3.5,
+    "p": 0.5014,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -3.5,
+    "p": 0.4986,
+    "result": "hit"
+   },
+   "over": {
+    "line": 48.5,
+    "p": 0.4834,
+    "result": "miss"
+   },
+   "under": {
+    "line": 48.5,
+    "p": 0.5166,
+    "result": "hit"
+   }
+  }
  }
 ]
