@@ -482,5 +482,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401862778,
+  "league": "ncaaf",
+  "start": "2026-09-25T23:00+00:00",
+  "home": "UAB",
+  "away": "Navy",
+  "hp": 24.0,
+  "ap": 20.0,
+  "spread": 6.5,
+  "total": 50.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3448,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6552,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 6.5,
+    "p": 0.5055,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -6.5,
+    "p": 0.4945,
+    "result": "miss"
+   },
+   "over": {
+    "line": 50.5,
+    "p": 0.4834,
+    "result": "miss"
+   },
+   "under": {
+    "line": 50.5,
+    "p": 0.5166,
+    "result": "hit"
+   }
+  }
  }
 ]
