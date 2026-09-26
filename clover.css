@@ -179,7 +179,17 @@ span.lnB{border:0}
 .mbForm .go{margin-left:auto;display:flex;gap:8px}
 .mbForm .primary{width:auto;padding:0 24px}
 .primary:disabled{opacity:.45}
-.placed{margin-top:18px;padding:14px 16px;border-radius:8px;background:var(--sel);border:1.5px solid var(--acc);display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.placed{margin-top:18px;padding:14px 16px;border-radius:8px;background:var(--sel);border:1.5px solid var(--acc);display:grid;gap:12px}
+.placed .row{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.placed .acts{display:flex;gap:8px;flex-wrap:wrap}
+.placed .primary{width:auto;padding:0 24px}
+.placed .acts:empty{display:none}
+.placed .check{color:var(--acc);font-weight:800;margin-right:4px}
+.placed.err{background:#2E2224;border-color:var(--terr)}
+.placed.void{background:var(--card);border:1.5px dashed var(--muted)}
+.signin{display:grid;gap:8px;padding-top:12px;border-top:1px solid #2E5A43}
+.signin .line{display:flex;gap:8px;flex-wrap:wrap}
+.signin input{flex:1 1 240px;width:auto;min-width:0;min-height:48px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:0 12px;color:var(--text);font:inherit}
 .placed.hidden{display:none}
 .placed b{display:block;margin-bottom:2px}
 .stamp{margin:0;font-size:14px;font-weight:600;color:var(--acc)}
