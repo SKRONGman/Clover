@@ -66,3 +66,7 @@ History only, newest first. Starts at row 2 (2026-09-20) because `CHANGELOG.md` 
 - **Checks:** page wiring, plus six smoke checks (6 slips from a full slate, none at 0%, order, overlap, no verdict before a payout, default view never empty, one-game slate). Two were proven by breaking the code on purpose. `smoke.js` now loads whatever `index.html` loads.
 - **Push order** that kept the live page working through eight single-file pushes is written into `DECISIONS.md` > Deploying changes. One red Checks run in the middle was expected (`36ee95d`).
 - **Finished-game contrast:** pick text was effectively 1.77:1 (78% card fade x 60% disabled fade), score chips 2.46:1, Final chip 3.99:1. Fixed the same night after Danny OK'd a before/after mockup: both fades removed, same grey look in solid colors, text `--done:#4F5C57` (5.4:1 on the grey chip, 6.5:1 on paper). Locked cells on My Bet and hot slips got the same treatment.
+
+## 2026-09-26 (afternoon) — reconcile and housekeeping
+- Reconciled STATUS.md against the repo, Supabase, `health.json` and the live page. Row 7's live test happened on its own: bet #1 saved 11:24 AM CT, closing numbers on 2 of 3 picks at the 1:13 PM refresh. Option B verified live.
+- `DECISIONS.md` split: "Deploying changes" -> `DEPLOY.md`, now with the plain `git push` route. Rulings of 2026-09-26 added (no kickoff guard on Save bet; backfill of past bets). `README.md` brought current. Nine stale doc copies deleted from the claude.ai project.

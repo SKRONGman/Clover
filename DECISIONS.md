@@ -1,6 +1,6 @@
 # Clover — decisions
 
-Rules, settled findings and rulings. Read after `STATUS.md`. If an ask conflicts with anything here, say so before building.
+Rules, settled findings and rulings. Read after `STATUS.md`. If an ask conflicts with anything here, say so before building. How to push is in `DEPLOY.md` (moved 2026-09-26, size limit).
 Each block says where it came from. Blocks marked *verbatim* were moved word for word from `STATUS.md` on 2026-09-20.
 
 ## What Clover is (rewritten 2026-09-20 with Danny)
@@ -15,7 +15,7 @@ How Clover thinks, in the words agreed with Danny:
 ## Rulings of 2026-09-20
 1. **No verdict on a made-up payout.** Hot Slips show the chance only. The verdict and a "needs X%, has Y%" line appear after the real payout is typed. The verdict scale itself is unchanged.
 2. **History grades, it never steers.** Every placed bet is graded. Any day with a bet gets a recap at four levels: the slip, each pick (which one sank it, by how many points), the price (did the bet beat the closing line), and running habits (pick type, slip size, Danny vs. Jaclyn). Each pick is sorted good bet / bad bet separately from good luck / bad luck. **History never changes the suggested slips.**
-2b. **The written recap is automatic**, produced overnight on Actions with a paid Anthropic API key that Danny creates and stores as a GitHub secret. The numbers also live in a History tab.
+2b. **The written recap is automatic**, produced overnight on Actions with a paid Anthropic API key that Danny creates and stores as a GitHub secret. The numbers also live in a History tab. **Deferred 2026-09-26 (Danny):** History ships numbers-only until the key exists; the ruling stands.
 3. ~~Bets are saved to the shared Google Sheet~~ **Superseded 2026-09-25 (Danny): bets live in Supabase** - see the rulings of 2026-09-25. Still true from this ruling: browser-only storage is out, because Actions cannot see a browser.
 4. **N/A stays exactly as it is.** One tap hides one pick type for one game and resets when the game ends. No standing hide rules, no cutoff slider. Heavy-favorite slips will keep topping Hot Slips; that is accepted.
 5. **Apps in use: Underdog, PrizePicks, Kalshi.** Underdog is the main target (typed payout). Kalshi prices are in the odds feed (`us_ex`), so auto-filled Kalshi payouts are possible at the cost of a second region per pull — parked with multi-book. PrizePicks is believed to be player props only (unverified) — no help until the props phase.
@@ -31,6 +31,10 @@ Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and tw
 5. **GitHub grades** (proposed in the mockup, approved with it): same `grade_leg` as `results.json`. Beat the close = the closing chance at your line is higher than the chance when saved. Slip = won / lost / push once every pick is graded.
 6. **Void, never delete** (approved with the mockup). Voided bets are skipped by grading and History.
 - **Open (asked 2026-09-25, Danny unsure):** how Underdog pays a slip with a pushed pick. Until known a no-miss slip with a push is graded "push".
+
+## Rulings of 2026-09-26
+1. **Save bet never refuses a started game** (Danny). The record is of a bet already placed in the app, so when it is saved is almost irrelevant - bet #1 was placed in Underdog just before kickoff and recorded just after. No kickoff guard, no warning. A pick recorded after its kickoff simply has no closing number (its table is gone); History shows it as "no close" and `beat_close` stays null.
+2. **Past bets get backfilled** (Danny, 2026-09-26): he supplies them in chat; Claude writes them to Supabase through the connector. Clover's chance at placement comes from the refresh commit nearest the placement time (every refresh is a commit), never typed by hand.
 
 ## Rulings of 2026-09-24 (row 6, from the approved mockup https://claude.ai/artifact/7VoHDPSoVXQ4oWpqefsVT1)
 1. **"I placed this" is a stamp, not a lock** (Danny). It records who, the payout, the time, the chance and the picks; picks stay editable, and the stamp says so when they change. Saving it anywhere is row 7.
@@ -92,23 +96,3 @@ Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and tw
 
 ### Filters: which ones Hot Slips obey
 Confirmed 2026-09-19; the table moved word for word to `DESIGN.md` on 2026-09-25 (size limit). Still in force: Hot Slips ignore Date and Game status (upcoming only) and obey every other filter.
-
-### Deploying changes (updated 2026-09-20)
-Claude has **direct GitHub read/write** via the GitHub connector (authenticated as SKRONGman) and pushes straight to `main`. **Never ask Danny to run git or a terminal.** Three hard limits, all confirmed by hitting them:
-- **The write tool takes file contents inline** — it cannot read from Claude's workspace. Anything over roughly **25 KB must be split into multiple files** or it truncates mid-call, and a truncated file still commits successfully and silently breaks the app. That is why the page is four scripts (`preview1.js`, `filters.js`, `preview2.js`, `preview3.js`) plus `clover.css`, and why `refresh.py` is six modules. **Every code file is now pushable** (split 2026-09-20); `ci/checks.py` fails any hand-edited file at 24.8 KB.
-- **`.github/workflows/` is refused with 403** — "Resource not accessible by integration". The connector token lacks the `workflow` scope, and no phrasing gets around it. Workflow edits are a manual upload, every time.
-- **Claude cannot trigger or read GitHub Actions runs**, and cannot read or set Secrets. Running a refresh is Danny. **But the committed output is better evidence than the log anyway** — `ratings.js` and `results.json` are in the repo after every run, and Claude can read and analyse them directly. Do that before asking Danny for a log.
-- **Run `python ci/checks.py` before every push; don't push on a failure.**
-- **Always verify a push.** `git clone` the repo into the workspace (public read works from the sandbox), edit and test there, push via the connector, then compare `git hash-object <file>` with the blob `sha` the push returns (same bytes = same sha), or `git fetch` and md5. Finish by running the checks on a fresh clone. Used on every file shipped 2026-09-20. **Verification is not a formality — it caught a dropped settled rule in the first STATUS.md push of 2026-09-19.**
-- **One file per push means the page passes through mixed states.** Push order that keeps the live page working: new files first, then the scripts that only *use* new things, `index.html`, and last the script that *removes* things. Expect one red Checks run in the middle.
-- **Test the page headlessly before pushing.** A Node stub of `document`/`localStorage` plus the real `ratings.js` runs `init()` and every render path in about a second, and catches exactly the class of bug that shipped tonight.
-- **Supabase (since 2026-09-25):** Claude creates tables, rules and SQL through the Supabase connector (must be on for the chat). The sandbox cannot reach `*.supabase.co` directly, so the page's calls are tested against a fake (`ci/smoke_record.js`) and live through the built-in browser. Secrets `SUPABASE_URL` + `SUPABASE_SECRET_KEY` are Danny's to set.
-- Claude **cannot reach `skrongman.github.io`** from its sandbox (egress allowlist). **Since 2026-09-24 the desktop app's built-in browser can** (Danny allowed the site for it) whenever this chat is linked to his computer; otherwise Danny checks.
-- The write tool turns `\uXXXX` escapes in a file into the characters themselves, so that push's sha will not match `git hash-object`. Same code; take GitHub's copy locally and move on (hit on `rail.js`, 2026-09-24).
-- **File deletions require Danny's approval** in the UI; Claude's delete call is refused without it.
-- The connector must be toggled on for each chat session, not just authorized at the account level.
-- Anything that needs CFBD / ESPN / the-odds-api.com runs on Actions only.
-- **Added 2026-09-20 — Claude in Chrome closes three of those gaps when Danny's Chrome is open with the extension connected:** Claude can open the live page and check it; can read Actions run logs and re-run a failed job from the run page; and, with Danny's go after he has reviewed the file, can create or edit files under `.github/workflows/` through GitHub's web editor. Each site needs Danny's one-time permission click. **Keep the Chrome window in front** — in a hidden window clicks and screenshots fail and page timers stall. Claude never enters, creates or deletes credentials; Secrets and tokens stay Danny's.
-- **GitHub emails every failed run to Danny's Gmail**, and Claude can read Gmail. Check there first when a refresh looks stale.
-- **Workflow files stay thin** — a workflow only calls a script Claude can push (`ci/checks.py`), so the 403 matters once per workflow, not once per change.
-- **Keep every pushed file under 20 KB.** `STATUS.md` was split into three files on 2026-09-20 for this reason.

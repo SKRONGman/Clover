@@ -1,8 +1,8 @@
 # Clover — project status
 
-Last updated: 2026-09-26 (reconciled 2:30 PM CT). **Rows 1-7 are live, the rail is option B (verified live). Row 7's live test is two-thirds done: saving and closing numbers are proven on a real bet; grading lands after tonight's finals. Next: row 8 (History), the last row - but read "Before row 8" first.**
+Last updated: 2026-09-26 (reconciled 2:30 PM CT; housekeeping done 3:15 PM CT). **Rows 1-7 are live, the rail is option B (verified live). Row 7's live test is two-thirds done: saving and closing numbers are proven on a real bet; grading lands after tonight's finals. Next: row 8 (History), the last row - but read "Before row 8" first.**
 
-**Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then `DESIGN.md` (the look, for any screen work), then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
+**Read order for a new chat:** this file, then `DECISIONS.md` (rules, settled findings, rulings), then `DESIGN.md` (the look, for any screen work), then `DEPLOY.md` before any push, then the end-state doc. `CHANGELOG.md` and `CHANGELOG-2.md` (row 2 onward) are history — read them only when you need the why.
 - End-state doc (living; holds the full build order): https://claude.ai/code/artifact/4ca60202-44b4-46b4-bf77-db047f25ef2f
 - The look for every screen from row 4 on: **"A. Board, dark"** - https://claude.ai/artifact/S5HiPEgQ8Kys9uuApeKoTq . Rules and colors are in `DESIGN.md`.
 
@@ -33,17 +33,18 @@ Kick off the next chat with **"Row 8: History"** - its first step is reading bet
 7. **The bet record - BUILT 2026-09-25, LIVE 2026-09-26.** Supabase, email sign-in, Save bet / Void, closing chance at the pick's own line, grading on GitHub. Saving and closing numbers proven on bet #1; grading checked after its games go final. Open: how Underdog pays a slip with a pushed pick (graded "push" until answered).
 8. **History.** Record, beat-the-close, Clover's accuracy, Danny vs. Jaclyn. The overnight AI recap is deferred (open item below); build so it can be added later without rework.
 
-## Before row 8 - housekeeping found in the 2026-09-26 reconcile
-1. **`DECISIONS.md` is 19,931 bytes** - 69 bytes under the 20 KB rule, and row 8 will add rulings. Split it first (move "Deploying changes" to its own `DEPLOY.md`), and while moving it record what changed 2026-09-25: with the repo added to the chat's sources (`add_repo`, push access) Claude pushes with plain `git push` - no 25 KB inline limit, no per-file pushes, and deletions no longer need the connector. Untested by that route: `.github/workflows/`. The 20 KB house rule stays (readability, and the connector is still the fallback).
-2. **`refresh.py` is 19,968 bytes** - split it at its next change, not before. `calibrate.py` (24,698, research-only) has 102 bytes left before `ci/checks.py` fails it; fold the split into the unused-imports leftover from row 1.
-3. **Stale page data can save a started game** (bet #1, pick 1). Proposed, not decided: Save bet refuses any pick whose kickoff is past by the device clock, and says which one. Mock it up with row 8 or as its own small change.
-4. **Bets saved before option B have null `stake`/`payout`** (bet #1). History must show them without a stake (pays-per-$1 only).
-5. **`README.md` is stale**: says `preview1-3.js`, lists neither `bets.py` nor the five newer page scripts, and its read order omits `DESIGN.md` / `CHANGELOG-2.md`. Ten-minute fix; fold into row 8's doc pass.
-6. **Ruling 2b (2026-09-20) in `DECISIONS.md`** still reads as if the overnight recap ships next; add "deferred 2026-09-26" when the file is split (no room now).
-7. **The claude.ai project's 9 uploaded docs** (`claude/STATUS.md` of 09-13, `claude/INSTRUCTIONS.md`, `claude/sim.py`, `refresh.py`, `index.html`, ...) are stale copies of repo files; the GitHub sync already provides the live ones. Danny's call: delete them so no chat reads an old `STATUS.md`.
+## Housekeeping from the 2026-09-26 reconcile - done the same day, Danny OK'd each
+- `DECISIONS.md` split: "Deploying changes" is now `DEPLOY.md`, with the plain `git push` route (since 2026-09-25) written up. `DECISIONS.md` 16.3 KB. Ruling 2b marked deferred. `README.md` brought current. The claude.ai project's 9 stale doc copies deleted (the GitHub sync provides the live files).
+- **Rulings of 2026-09-26** in `DECISIONS.md`: Save bet never refuses a started game (the record is of a bet already placed - no kickoff guard); past bets get backfilled from chat through the Supabase connector.
+- Still to do, in row 8: `refresh.py` (19,968 B) splits at its next change; `calibrate.py` has 102 B before checks fail it (fold in the unused-imports leftover); `CHANGELOG-2.md` is 18.8 KB, so row 8's history starts `CHANGELOG-3.md`.
+- **Row 8 must handle:** null `stake`/`payout` (bet #1, saved before option B), null `close_chance` (a pick recorded after kickoff, or one whose game never got a close), and backfilled bets (below).
+
+## Backfill of past bets (Danny, 2026-09-26: "later today")
+Danny sends each past bet in chat; Claude inserts `bets` + `picks` rows through the Supabase connector (`saved_by` = his email, `who` as stated). Useful per bet: date and rough time placed, who, the picks (team or side, spread/total number, over/under), stake and payout, and the result if known. Not needed from Danny: Clover's chance (read from the `ratings.js` in the refresh commit nearest the placement time - every refresh is a commit), scores (`results.json`, or that game's last commit on the slate), grades (`bets.py` grades open picks on the next refresh; bets older than `results.json` are graded by Claude with the same `grade_leg`). `bet_no` continues from 1.
 
 ## Waiting on Danny
-- **Row 7 setup: all done 2026-09-25.** `members` = riveramd@gmail.com + jaclynk094@gmail.com; Site URL / Redirect URL set; secrets `SUPABASE_URL` + `SUPABASE_SECRET_KEY` added by Danny; `refresh.yml` passes them (`538b1ef`, via Danny's Chrome, md5-verified). Left: read bet #1's grades after tonight's finals (Claude can do it through the Supabase connector).
+- **Row 7:** read bet #1's grades after tonight's finals (Claude, through the Supabase connector) - the last third of the live test. Setup was all done 2026-09-25 (`members` = both emails, Site/Redirect URLs, secrets `SUPABASE_URL` + `SUPABASE_SECRET_KEY`, `refresh.yml` passes them - `538b1ef`).
+- **Past bets** for the backfill (above).
 - **Open - overnight written recap (deferred by Danny 2026-09-26):** needs a paid Anthropic API account and key stored as GitHub secret `ANTHROPIC_API_KEY`. Not a blocker for row 8; History ships numbers-only until Danny adds the key. Ruling 2b of 2026-09-20 still stands, just later.
 - **Open:** how Underdog pays a slip when one pick pushes (Danny unsure, 2026-09-25) - graded "push" until known.
 
@@ -80,4 +81,4 @@ Player props (needs new math, not just new data) · multi-book and Kalshi prices
 - `health.json` — calls left, credits left, feeds down, today's alert state.
 - `calibrate.py`, `bayes.py` — research tools; `calibrate.py` imports `sim.py`.
 - `.github/workflows/refresh.yml` — the schedule; commits `ratings.js`, `ratings.json`, `results.json`, `cache_*.json` and `health.json`; boots the page against the fresh `ratings.js` before committing; last step is the health alarm. `.github/workflows/ci.yml` only runs `python ci/checks.py` on code pushes. `requirements.txt`: requests, numpy.
-- `STATUS.md`, `DECISIONS.md`, `CHANGELOG.md` + `CHANGELOG-2.md` — the project docs (split 2026-09-20). Keep each under 20 KB; new history goes in `CHANGELOG-2.md`. `DESIGN.md` (new 2026-09-21) holds the look, because `DECISIONS.md` is at 16.8 KB and the design rules would have pushed it to the limit.
+- `STATUS.md`, `DECISIONS.md`, `DESIGN.md` (the look, since 2026-09-21), `DEPLOY.md` (how to push, since 2026-09-26), `CHANGELOG.md` + `CHANGELOG-2.md` — the project docs. Keep each under 20 KB; new history goes in `CHANGELOG-2.md` until it is full, then `CHANGELOG-3.md`.
