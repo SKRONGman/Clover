@@ -9,7 +9,8 @@ ci/checks.py - Clover's safety net. One command, five checks:
                   stay under the limit so that can't happen quietly.
   2. stale words  wording the page must never say again.
   3. page wiring  every file index.html loads exists; every id the scripts ask for is on the page.
-  4. python       ci/test_refresh.py - feeds down, carry-forward, grading, sim tables.
+  4. python       ci/test_refresh.py - feeds down, carry-forward, grading, sim tables;
+                  ci/test_bets.py - closing prices and grades for saved bets.
   5. the page     ci/smoke.js - boots the real page code in Node against data built
                   by the real refresh code, and checks the page's % = Python's %.
 
@@ -33,7 +34,7 @@ MACHINE_WRITTEN = {"ratings.js"}            # refresh.py writes it; nobody pushe
 
 # Words the page must not say. All at 0 since the truth pass (row 2, 2026-09-20);
 # the number is how many are allowed and may only go DOWN.
-PAGE_FILES = ("index.html", "preview1.js", "filters.js", "preview2.js", "rail.js", "preview3.js")
+PAGE_FILES = ("index.html", "preview1.js", "filters.js", "preview2.js", "rail.js", "mybet.js", "record.js", "ladder.js", "preview3.js")
 STALE_WORDS = {"ESPN BET": 0, "Slips tab": 0, "See the Card": 0, "Not on my app": 0, "not on my app": 0,
                "not on your app": 0, "The Card": 0, "run refresh.py": 0, "every other Thursday": 0,
                "est. payout": 0, "typical pick'em payout": 0}
@@ -95,9 +96,13 @@ def check_wiring():
 
 
 def check_python():
-    r = subprocess.run([sys.executable, os.path.join(ROOT, "ci", "test_refresh.py")], capture_output=True, text=True)
-    print(r.stdout, end="")
-    return [] if r.returncode == 0 else ["python tests failed" + (": " + r.stderr.strip()[-400:] if r.stderr.strip() else "")]
+    bad = []
+    for t in ("test_refresh.py", "test_bets.py"):          # test_bets: the bet record's GitHub half (row 7)
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "ci", t)], capture_output=True, text=True)
+        print(r.stdout, end="")
+        if r.returncode:
+            bad.append(f"python tests failed ({t})" + (": " + r.stderr.strip()[-400:] if r.stderr.strip() else ""))
+    return bad
 
 
 def check_page():
