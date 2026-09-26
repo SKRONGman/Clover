@@ -29,7 +29,10 @@ const document={ getElementById:id=>byId[id]||(byId[id]=el()), createElement:t=>
 const sandbox={ document, console, atob, performance, Date, Math, JSON, Intl,
   localStorage:{getItem:k=>k in mem?mem[k]:null,setItem:(k,v)=>{mem[k]=String(v);},removeItem:k=>{delete mem[k];}},
   navigator:{clipboard:{writeText:()=>Promise.resolve()}}, setTimeout:f=>{timers.push(f);return timers.length;}, clearTimeout(){},
-  scrollTo(){}, addEventListener(){}, matchMedia:()=>({matches:false,addEventListener(){}}) };
+  scrollTo(){}, addEventListener(){}, matchMedia:()=>({matches:false,addEventListener(){}}),
+  /* row 7: the bet record talks to Supabase. FETCH is swapped per test; nothing leaves the machine. */
+  location:{hash:"",pathname:"/Clover/",search:""}, history:{replaceState(a,b,u){ sandbox.location.hash=""; }},
+  URLSearchParams, crypto:globalThis.crypto, fetch:(...a)=>sandbox.FETCH(...a), FETCH:()=>Promise.reject(new Error("offline")) };
 sandbox.window=sandbox;
 const ctx=vm.createContext(sandbox);
 const flush=()=>{ while(timers.length) timers.shift()(); };
@@ -88,9 +91,13 @@ try{
   check(/data-lad=/.test(byId.legs.innerHTML)&&/class="bc/.test(byId.legs.innerHTML)&&!/gcard|class="cell/.test(byId.legs.innerHTML),"My Bet: picks must be board rows (boardRow), not the old grid");
   check(js("typeof legGroups")==="undefined"&&js("typeof cellFor")==="undefined","the old third drawing of a game must be gone");
   js(`placeSlip();`); flush();
-  check(js("!!S.placed&&S.placed.who===S.who&&S.placed.pays===11")&&!byId.placedBox.classList.contains("hidden")&&/Placed ·/.test(byId.placedTxt.textContent),"I placed this: the stamp must show who, the payout and the time");
+  check(js("!!S.placed&&S.placed.who===S.who&&S.placed.pays===11")&&!byId.placedBox.classList.contains("hidden")&&/Placed ·/.test(byId.placedBox.innerHTML),"I placed this: the stamp must show who, the payout and the time");
+  check(/data-rec="save"/.test(byId.placedBox.innerHTML)&&js("/^[0-9a-f-]{36}$/.test(S.placed.id)&&S.placed.picks.length===S.legs.length"),"row 7: a fresh stamp carries an id, its picks, and a Save bet button");
+  check(js(`S.placed.picks.every(p=>p.chance>=0&&p.chance<=1&&p.game_id&&p.kickoff&&(p.type.endsWith("ML")?p.line===null:typeof p.line==="number"))`),"row 7: every saved pick needs a game, a kickoff, a chance and its own line");
+  check(js(`S.placed.picks.filter(p=>p.type==="homeSp").every(p=>p.market_line===GAMES[BY_ID[p.game_id]].spread)`),"row 7: a spread pick's market line must be the side's OWN number");
+  ctx.__rec=js("JSON.stringify(S.placed)");
   js(`toggleLeg(S.legs[S.legs.length-1].gi,S.legs[S.legs.length-1].type);`); flush();
-  check(js("!!S.placed")&&/changed since/.test(byId.placedSub.textContent),"a placed slip stays editable (stamp, not lock) and says when it changed");
+  check(js("!!S.placed")&&/changed since/.test(byId.placedBox.innerHTML),"a placed slip stays editable (stamp, not lock) and says when it changed");
   js(`S.placed=null; render();`); flush();
   js(`openLadder(S.legs[0].gi,S.legs[0].type);`); flush();
   check(js("!!LADDER")&&/<table class="ladder"/.test(byId.ladder.innerHTML)&&!byId.ladder.classList.contains("hidden")&&byId.rail.classList.contains("hidden")&&byId.ladHint.classList.contains("hidden"),"on the full My Bet screen the ladder must open in the side column, with the rail hidden");
@@ -178,5 +185,8 @@ try{
   ["Great","Good","Coin toss","Bad","Terrible"].forEach((w,i)=>check(words[i].includes(w),`grade(${[0.15,0.05,-0.05,-0.2,-0.21][i]}) should be ${w}, got ${words[i]}`));
 }catch(e){ fails.push("page threw: "+(e&&e.stack||e)); }
 
+(async()=>{
+try{ await require("./smoke_record.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("bet record threw: "+(e&&e.stack||e)); }
 if(fails.length){ console.log("  FAIL  page smoke test"); fails.forEach(f=>console.log("        "+f)); process.exit(1); }
-console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale, swap, N/A hidden until edit, moved flag rail-only at 3+, line-only at market)");
+console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale, swap, N/A hidden until edit, moved flag rail-only at 3+, line-only at market, bet record)");
+})();
