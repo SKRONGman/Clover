@@ -60,7 +60,7 @@ class Feeds:
         if path == "/games":
             return Resp(200, [{"id": g["id"], "week": g["week"], "startDate": g["start"], "homeTeam": g["home"],
                                "awayTeam": g["away"], "homeClassification": "fbs", "awayClassification": "fbs",
-                               "completed": False, "neutralSite": False} for g in col])
+                               "completed": False, "neutralSite": False, "startTimeTBD": g["home"] == "Texas"} for g in col])
         if path == "/lines":
             return Resp(200, [{"id": g["id"], "lines": [{"provider": "DraftKings", "spread": g["spread"] - 1,
                                                           "overUnder": g["total"]}]} for g in col])
@@ -115,6 +115,7 @@ def test_healthy_run():
     tx = next(g for g in R["upcoming"] if g["home"] == "Texas")
     assert tx["spread"] == -7.5, "fresh college line should replace the old one"
     assert tx["home_rank"] == 3 and tx["sim"] and set(tx["p"]) == set(refresh.SIX)
+    assert tx["tbd"] is True and all(g["tbd"] is False for g in by_league(R, "ncaaf") if g["home"] != "Texas"), "CFBD's time-TBD flag must ride along"
     assert H["cfbd"]["left"] == 4321 and H["cfbd"]["left_source"] == "reported by CFBD"
     assert H["odds"]["left"] == 19950
     page = open(common.OUT_JS).read()

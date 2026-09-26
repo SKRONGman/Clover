@@ -27,14 +27,24 @@ def game(gid, league, home, away, spread, total, start, status="upcoming"):
     return g
 
 
+def next_saturday(now):
+    """Saturday 17:00 UTC, strictly ahead of now: the slate sits inside one Thu-Mon weekend, which is
+    what Hot Slips search (2026-09-26, option A), whatever day of the week the tests run on."""
+    d = now.replace(hour=17, minute=0, second=0, microsecond=0)
+    while d.weekday() != 5 or d <= now:
+        d += timedelta(days=1)
+    return d
+
+
 def previous_file(now=None):
     """What ratings.json looked like after the last good refresh."""
     now = now or now_utc()
-    up = [game(1000 + i, "ncaaf", h, a, sp, ou, now + timedelta(days=2, hours=i))
+    sat = next_saturday(now)
+    up = [game(1000 + i, "ncaaf", h, a, sp, ou, sat + timedelta(hours=i))
           for i, (h, a, sp, ou) in enumerate(COLLEGE)]
     # this one was "upcoming" an hour ago and has kicked off since
     up.append(game(1099, "ncaaf", "Rice", "Houston", 7.0, 49.5, now - timedelta(minutes=40)))
-    up += [game(f"nfl{i}", "nfl", h, a, sp, ou, now + timedelta(days=3, hours=i))
+    up += [game(f"nfl{i}", "nfl", h, a, sp, ou, sat + timedelta(days=1, hours=i))
            for i, (h, a, sp, ou) in enumerate(NFL)]
     good = iso(now - timedelta(hours=1))
     return {"generated": good, "season": 2026, "hfa_points": 2.4, "league": {"ppd": 2.2, "drives": 12.0},

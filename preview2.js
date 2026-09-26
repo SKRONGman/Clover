@@ -21,7 +21,7 @@ function teamCell(G,team){
 }
 /* day=true (the full My Bet screen): the slip spans days, so the time carries its weekday */
 function boardRow(G,gi,day){
-  const st=statusOf(G), when=(day?DAYS[new Date(G.start).getDay()]+" ":"")+new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+  const st=statusOf(G), when=(day?DAYS[kickDate(G).getDay()]+" ":"")+kickTime(G);
   const tag=st==="final"?`<span class="fin">Final</span>`:st==="live"?`<span class="fin live">Live</span>`:"";
   /* the Lines button opens the ladder for this game (row 5); a game that has kicked off has no table to ladder */
   const lad=st==="upcoming"?`<button type="button" class="lnB" data-lad="${gi}" aria-label="Every line for ${esc(shortName(G,G.away))} at ${esc(shortName(G,G.home))}"><span>Lines</span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h12M2 8h12M2 13h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>`:`<span class="lnB"></span>`;

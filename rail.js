@@ -38,8 +38,8 @@ function pickShort(G,l){
 }
 /* kickoff at its shortest: 09/26 11a, 09/26 230p */
 function kickShort(G){
-  const d=new Date(G.start), h=d.getHours(), m=d.getMinutes(), p=n=>String(n).padStart(2,"0");
-  return `${p(d.getMonth()+1)}/${p(d.getDate())} ${h%12||12}${m?p(m):""}${h<12?"a":"p"}`;
+  const d=kickDate(G), h=d.getHours(), m=d.getMinutes(), p=n=>String(n).padStart(2,"0");
+  return `${p(d.getMonth()+1)}/${p(d.getDate())} ${G.tbd?"TBD":`${h%12||12}${m?p(m):""}${h<12?"a":"p"}`}`;
 }
 /* the two sides the editor offers for this pick's market */
 function sidesOf(G,type){

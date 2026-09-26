@@ -36,10 +36,10 @@ The look and the screen rules for every screen from row 4 on. Decided 2026-09-21
 #### The Hot Slips page (Decided 2026-09-26 evening; mockup https://claude.ai/artifact/BemZVPCCov9ftUrCBLSpt4 , v3)
 - Heading, one line of status, then League (All · NCAA · NFL) · Picks per slip · Pick types · Clear N/A in one row. Tickets one per row, full width: college's six, then the NFL's, no heading between. The rail stays on the right.
 - **Ticket (`hot.js`, `hot.css`):** left, a 128px column - the slip's chance in a `--sel` box with `--acc` text, "Use this slip" (or "In My Bet") under it, the box stretching so the column matches the tables' height. Right, one table per pick in a grid (3 across; 2-pick slips 2 across; 4-6 wrap): header row kickoff · To Win / Spread / Total, then two 44px rows - logo, feed abbreviation (full name on hover), the number for spreads (`-3.5`) and totals (`O 57.5` / `U 57.5`), the chance. The favored team first (better chance first for a total); the pick's row is `--sel` with a 3px `--acc` bar and its chance in `--acc`; the other row is muted.
-- **Tap a row** (rows are buttons) and the table becomes the pick's menu: its label, "N/A - not offered", Prohibited for a same-game pair, Cancel. Under 1180px the left column goes above the tables; under 700px the tables stack.
+- **Tap a row** (rows are buttons) and the table becomes the pick's menu: its label, "N/A - not offered", Prohibited for a same-game pair, Cancel. The header's kickoff is `Sat 9/26 8:00 PM`, or `Sat 10/3 TBD` when the feed has no time yet (everywhere on the page: `kickDate()` / `kickTime()` in `preview1.js`). Under 1180px the left column goes above the tables; under 700px the tables stack.
 
 #### Filters: which ones Hot Slips obey — CONFIRMED 2026-09-19, SUPERSEDED 2026-09-26 evening
-**Now: Hot Slips ignore every filter below** - the page has its own tab, so a filter set on the board would be invisible there (`hotGames()` takes every upcoming game with a table; pick-type chips and N/A still apply). The table stays for the record.
+**Now: Hot Slips ignore every filter below** - the page has its own tab, so a filter set on the board would be invisible there. `hotGames()` takes every game **this weekend** (the board's Thu-Mon window, rolling forward Monday night; ruling 6 of 2026-09-26 evening) with a table; pick-type chips and N/A still apply. The table stays for the record.
 
 | Filter | Build Your Own | Hot Slips |
 | --- | --- | --- |

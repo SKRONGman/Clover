@@ -61,12 +61,13 @@ function renderHot(){
   const out=document.getElementById("hotOut"), st=document.getElementById("hotStatus");
   out.innerHTML=""; HOT=[]; HOT_MENU=null;
   const lgs=LEAGUES.filter(lg=>HOT_LG==="all"||lg===HOT_LG), lined=lgs.filter(lg=>hotGames(lg).length);
-  if(!lined.length){ st.textContent=`No ${HOT_LG==="all"?"":LEAGUE_NAME[HOT_LG]+" "}games with lines yet - lines load closer to game day.`; return; }
+  const none=lgs.filter(lg=>!hotGames(lg).length).map(lg=>`No ${LEAGUE_NAME[lg]} games left this weekend with lines.`).join(" ");
+  if(!lined.length){ st.textContent=none; return; }
   /* built right here, not on a timer: a background tab throttles timers and the list would sit on "Searching" */
   lined.forEach(lg=>{ HOT.push(...buildSlips(hotN,lg)); });
   if(!HOT.length){ st.textContent="No slip can be built with the pick types turned on. Turn one back on, or clear N/A."; return; }
   const from=lined.map(lg=>`${hotGames(lg).length} ${LEAGUE_NAME[lg]}`).join(" and ");
-  st.textContent=`The ${hotN}-pick slips most likely to hit, from ${from} games. Tap any pick to mark it N/A.`;
+  st.textContent=`The ${hotN}-pick slips most likely to hit, from ${from} games this weekend. Tap any pick to mark it N/A.${none?" "+none:""}`;
   HOT.forEach((s,i)=>{ const d=document.createElement("div"); d.className="hs"; out.appendChild(d); paintHot(d,s,i); });
 }
 const sameLegs=(a,b)=>a.length===b.length&&a.every(x=>b.some(y=>y.gi===x.gi&&y.type===x.type&&y.line===x.line));

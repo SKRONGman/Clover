@@ -209,6 +209,7 @@ def pull_upcoming(season):
             "league": "ncaaf",
             "week": pick(g, "week", default=0),
             "start": start.isoformat(timespec="minutes"),
+            "tbd": bool(pick(g, "start_time_tbd", "startTimeTBD", default=False)),   # kickoff not announced: start is CFBD's 04:00 UTC stand-in
             "home": pick(g, "home_team", "homeTeam"),
             "away": pick(g, "away_team", "awayTeam"),
             "fcs": hc != "fbs" or ac != "fbs",   # FBS-vs-FCS (pure FCS-vs-FCS was never pulled)

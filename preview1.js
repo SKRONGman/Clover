@@ -169,7 +169,11 @@ function legTeam(G,type){ return type==="homeML"||type==="homeSp"?G.home:type===
 function legWho(G,l){ const t=legTeam(G,l.type); return t===null?`${shortName(G,G.away)} @ ${shortName(G,G.home)}`:t===G.home?`vs ${shortName(G,G.away)}`:`at ${shortName(G,G.home)}`; }
 function legMarket(type){ return hasLine(type)?(type==="over"||type==="under"?"Total":"Spread"):"Winner"; }
 function legSide(type){ return type==="homeML"||type==="homeSp"?"home":type==="awayML"||type==="awaySp"?"away":type; }
-function whenShort(G){ const d=new Date(G.start); return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`; }
+/* kickoff not announced yet (G.tbd, from CFBD): start is a 04:00 UTC stand-in on the game's date, which
+   reads as the evening before in Texas. Take the day from the date part, and say TBD instead of a time. */
+const kickDate=G=>G.tbd?new Date(G.start.slice(0,10)+"T12:00:00"):new Date(G.start);
+const kickTime=G=>G.tbd?"TBD":new Date(G.start).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+function whenShort(G){ const d=kickDate(G); return `${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${kickTime(G)}`; }
 function initials(t){ return t.split(/\s+/).map(w=>w[0]).join("").replace(/[^A-Za-z]/g,"").slice(0,3).toUpperCase(); }
 /* ===================================================================
    STATE — one slip, shared by every screen. Legs are keyed by game id

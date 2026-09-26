@@ -27,8 +27,8 @@ function hotRows(G,gi,l){
   return homeFirst?[home,away]:[away,home];
 }
 function hotGameHtml(s,l,i,k){
-  const G=GAMES[l.gi], d=new Date(G.start), open=HOT_MENU&&HOT_MENU.i===i&&HOT_MENU.k===k;
-  const when=`${DAYS[d.getDay()]} ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`;
+  const G=GAMES[l.gi], d=kickDate(G), open=HOT_MENU&&HOT_MENU.i===i&&HOT_MENU.k===k;
+  const when=`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()} ${kickTime(G)}`;
   const rows=hotRows(G,l.gi,l).map(r=>`<button type="button" class="r${r.on?" on":""}" data-menu="${i}:${k}" aria-expanded="${open}" aria-label="${esc(legLabel(G,r.leg))} - ${pct(r.p)}. Open this pick's menu">`
     +`${tileHtml(r.t)}<span class="nm" title="${esc(r.t)}">${esc(r.abbr)}</span>${r.num?`<span class="ln">${esc(r.num)}</span>`:""}<span class="p">${pct(r.p)}</span></button>`).join("");
   const menu=open?`<div class="pop"><p class="hint">${esc(legLabel(G,l))}</p>`

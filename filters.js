@@ -15,7 +15,7 @@ function loadFilters(){
 }
 function saveFilters(){ try{localStorage.setItem("cloverFilters",JSON.stringify(FILTERS));}catch(e){} }
 function dateKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
-function gameDateKey(G){ return dateKey(new Date(G.start)); }
+function gameDateKey(G){ return dateKey(kickDate(G)); }
 /* the Thu-Mon window we're either in, or heading into next (Tue/Wed = between weekends).
    Since 2026-09-24 (row 5): a window we are in rolls forward once no game left in it has yet
    to kick off - Monday at 8 PM, after MNF kicks off, "This weekend" means the coming one, not
@@ -79,9 +79,10 @@ function filterBlame(lg){
 }
 function filteredGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>onBoard(x.G)&&lgOf(x.G)===lg&&filterGame(x.G)); }
 /* Hot Slips ignore the board's filters altogether (Danny, 2026-09-26: the page has its own tab, so
-   a filter set on the NCAA or NFL tab would be invisible there). They search every upcoming game
-   with a table; N/A and the pick-type chips still apply, inside gameBlocks(). */
-function hotGames(lg){ return GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg); }
+   a filter set on the NCAA or NFL tab would be invisible there) and search THIS WEEKEND only (Danny,
+   2026-09-26 evening, option A): the board's Thu-Mon window, which rolls forward Monday night. Every
+   game in it with a table; N/A and the pick-type chips still apply, inside gameBlocks(). */
+function hotGames(lg){ const win=weekendWindow(); return GAMES.map((G,gi)=>({G,gi})).filter(x=>x.G.sim&&lgOf(x.G)===lg&&gameInWeekend(x.G,win)); }
 function populateFilterOptions(){
   const lg=league, games=GAMES.filter(G=>onBoard(G)&&lgOf(G)===lg), f=FILTERS[lg];
   const lbl=d=>`${DAYS[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;

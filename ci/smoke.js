@@ -50,15 +50,15 @@ try{
   check(live||worst[1]>=30,"expected at least 30 priced picks, saw "+worst[1]);
   check(worst[0]<=0.00006,"page % differs from Python's by "+worst[0]);
 
-  /* 2. a game that has kicked off is not priceable */
+  /* 2. kicked off = not priceable */
   check(js(`GAMES.filter(G=>new Date(G.start)<Date.now()).every(G=>!G.sim&&statusOf(G)!=="upcoming")`),"a kicked-off game still has a table");
 
-  /* 3. the alert Danny asked for */
+  /* 3. the API ISSUE alert */
   const tag=byId.ratingsTag.textContent;
   if(js("!!(R&&R.stale)")) check(/API ISSUE/.test(tag)&&byId.ratingsTag.classList.contains("stale"),"stale data but no API ISSUE alert: "+tag);
   else check(!/API ISSUE/.test(tag),"API ISSUE shown on healthy data");
 
-  /* 4. hot slips, both leagues, every size (the League chip picks the league, 2026-09-26) */
+  /* 4. hot slips, both leagues, every size (the League chip picks the league) */
   for(const lg of ["ncaaf","nfl"]){ js(`HOT_LG="${lg}"`); flush();
     for(let N=2;N<=6;N++){ js(`hotN=${N}; renderHot()`); flush();
       check(js(`HOT.every(s=>s.league==="${lg}"&&s.legs.every(l=>lgOf(GAMES[l.gi])==="${lg}"))`),`${lg} ${N}-pick: a hot slip from the other league`);
@@ -70,33 +70,32 @@ try{
       check(js(`HOT.every((a,i)=>HOT.every((b,j)=>j<=i||[...a.keys].filter(k=>b.keys.has(k)).length<=${half}))`),`${lg} ${N}-pick: two hot slips share more than half their picks`);
       if(js(`hotGames("${lg}").length`)>=12) check(js("HOT.length")===6,`${lg} ${N}-pick: ${js("HOT.length")} slips from a full slate, expected 6`); }
     js("hotN=3; renderHot()"); flush(); check(live||js("HOT.length>0&&slipProb(HOT[0].legs).joint>0.1"),lg+": no believable 3-pick hot slip"); }
-  /* "All" (the default): college's top six, then the NFL's; never a mixed slip */
+  /* "All": college's six, then the NFL's; never a mixed slip */
   js(`HOT_LG="all"; renderHot()`); flush();
   if(js(`hotGames("ncaaf").length>=12&&hotGames("nfl").length>=12`)) check(js("HOT.length")===12&&js(`HOT.slice(0,6).every(s=>s.league==="ncaaf")&&HOT.slice(6).every(s=>s.league==="nfl")`),"All: expected six college slips then six NFL slips");
   check(js("HOT.every(s=>new Set(s.legs.map(l=>lgOf(GAMES[l.gi]))).size===1)"),"a hot slip must never mix leagues");
+  check(js("(()=>{ const w=weekendWindow(); return HOT.every(s=>s.legs.every(l=>gameInWeekend(GAMES[l.gi],w))); })()"),"hot slips must stay inside this weekend (option A, 2026-09-26)");
+  check(js(`(()=>{ const G={start:"2026-10-03T04:00+00:00",tbd:true}; return /TBD/.test(whenShort(G))&&/TBD/.test(kickShort(G))&&kickDate(G).getDate()===3&&kickDate(G).getDay()===6; })()`),"a kickoff-TBD game must read as its date and TBD, never the 04:00 UTC stand-in");
   /* hot slips ignore every board filter (2026-09-26) */
   const nBefore=js(`hotGames("ncaaf").length`);
   js(`FILTERS.ncaaf.conf="SEC"; FILTERS.ncaaf.time="morning"; FILTERS.ncaaf.status="final";`);
   check(js(`hotGames("ncaaf").length`)===nBefore,"hot slips must ignore the board's filters");
   js(`FILTERS.ncaaf=defaultFilters();`);
 
-  /* 5. build a slip by hand, open My Bet, type a payout, open the line sheet */
+  /* 5. a slip by hand, My Bet, a payout, the ladder */
   if(js("GAMES.filter(G=>G.sim).length")>=3){
   js(`(()=>{ const pick=GAMES.map((G,gi)=>gi).filter(gi=>GAMES[gi].sim).slice(0,3);
       toggleLeg(pick[0],"homeSp"); toggleLeg(pick[0],"over"); toggleLeg(pick[1],"awayML"); toggleLeg(pick[2],"under"); render(); })()`); flush();
   check(js("S.legs.length")===4,"slip should hold 4 picks");
   const sp=js("slipProb(S.legs)"); check(sp.joint>0&&sp.joint<1&&sp.groups.length===3,"slip chance out of range");
   check(js("S.legs.find(l=>l.type==='homeSp').line===GAMES[S.legs[0].gi].spread"),"spread must be the side's OWN number");
-  /* ruling 1: no verdict, anywhere (full screen or rail), until a real payout is typed */
+  /* ruling 1: no verdict anywhere until a real payout is typed */
   js(`S.pays=null; show("card"); render();`); flush();
   const words=/Great|Good|Coin toss|Bad|Terrible|est\./;
   const railNoLabels=()=>byId.rail.innerHTML.replace(/Good Bet Minimum|Coin Toss Line/g,"");   /* the rail labels its numbers with verdict words */
   check(byId.verdict.textContent===""&&!words.test(railNoLabels())&&!words.test(byId.why.textContent)&&byId.needV.textContent==="—"&&byId.place.disabled,"a verdict (or Needs, or I placed this) is showing before any payout was typed");
   js(`S.pays=11; render();`); flush();
   check(words.test(byId.verdict.textContent)&&words.test(railNoLabels())&&/Coin Toss Line<\/span><b>\d/.test(byId.rail.innerHTML),"no verdict after a payout was typed");
-  /* row 5 (2026-09-24): the ladder replaces the line sheet - one drawing, in the side column
-     (on the full My Bet screen too since row 6). Tapping a rung holds that line. */
-  /* row 6 (2026-09-24): the full My Bet screen - needs vs has, the numbers, the stress grid, the stamp */
   check(/^\d/.test(byId.needV.textContent)&&/to break even at \$11\.00/.test(byId.needS.textContent),"My Bet: Needs must show once a payout is typed");
   check((byId.sGrid.innerHTML.match(/class="c[ "]/g)||[]).length===49&&/Solid|Mostly holds|Shaky/.test(byId.sWord.textContent),"My Bet: the stress grid must draw 49 squares and one word");
   check(/data-lad=/.test(byId.legs.innerHTML)&&/class="bc/.test(byId.legs.innerHTML)&&!/gcard|class="cell/.test(byId.legs.innerHTML),"My Bet: picks must be board rows (boardRow), not the old grid");
@@ -136,8 +135,7 @@ try{
   /* 4: tapping the other side swaps the pick - one pick per pick type per game */
   js(`toggleLeg(${gi},"over"); toggleLeg(${gi},"under"); toggleLeg(${gi},"homeSp"); toggleLeg(${gi},"awaySp"); toggleLeg(${gi},"homeML");`); flush();
   check(js("S.legs.length")===3&&js(`S.legs.map(l=>l.type).sort().join()`)==="awaySp,homeML,under","swap rule: expected under+awaySp+homeML, got "+js("S.legs.map(l=>l.type).join()"));
-  /* the v3 ticket (2026-09-26): no N/A button; a tap on a pick opens its menu (N/A, Prohibited for a
-     same-game pair). Every pick draws both teams, the favored one first, the pick lit. */
+  /* the v3 ticket (2026-09-26): no N/A button; tap a pick for its menu. Both teams drawn, favored first, the pick lit. */
   js("HOT_LG='all'; renderHot()"); flush();
   if(js("HOT.length")){
     const closed=js("hotTicketHtml(HOT[0],0)"), open=js("HOT_MENU={i:0,k:0}; hotTicketHtml(HOT[0],0)"); js("HOT_MENU=null");
@@ -147,7 +145,8 @@ try{
     check(js("HOT.every((h,i)=>(hotTicketHtml(h,i).match(/class=\"r on\"/g)||[]).length===h.legs.length)"),"every pick's table must light exactly one row");
     check(js(`HOT.every(h=>h.legs.every(l=>{ const G=GAMES[l.gi], rows=hotRows(G,l.gi,l); return legMarket(l.type)==="Total"?rows[0].p>=rows[1].p:(rows[0].t===G.home)===(prob(l.gi,[{type:"homeML",line:0}])>=0.5); }))`),"the favored team (better chance, for a total) must be the top row");
     const pi=js("HOT.findIndex(s=>new Set(s.legs.map(l=>l.gi)).size<s.legs.length)");
-    if(pi>=0) check(/Prohibited|Logged as prohibited/.test(js(`HOT_MENU={i:${pi},k:0}; hotTicketHtml(HOT[${pi}],${pi})`)),"a pick menu on a same-game pair must offer Prohibited");
+    if(pi>=0){ const pk=js(`HOT[${pi}].legs.findIndex((l,k,L)=>L.some((o,j)=>j!==k&&o.gi===l.gi))`);
+      check(/Prohibited|Logged as prohibited/.test(js(`HOT_MENU={i:${pi},k:${pk}}; hotTicketHtml(HOT[${pi}],${pi})`)),"a pick menu on a same-game pair must offer Prohibited"); }
     js("HOT_MENU=null");
   }
   const rail0=js("RAIL_EDIT=false; renderRail(); document.getElementById('rail').innerHTML");
@@ -204,5 +203,5 @@ try{
 try{ await require("./smoke_rail.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("rail threw: "+(e&&e.stack||e)); }
 try{ await require("./smoke_record.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("bet record threw: "+(e&&e.stack||e)); }
 if(fails.length){ console.log("  FAIL  page smoke test"); fails.forEach(f=>console.log("        "+f)); process.exit(1); }
-console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues, default day, one-game slate, slip, My Bet, line sheet, verdict scale, swap, N/A hidden until edit, moved flag rail-only at 3+, line-only at market, bet record, rail option B)");
+console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues this weekend, TBD kickoffs, tap-to-N/A tickets, default day, one-game slate, slip, My Bet, ladder, verdict scale, swap, moved flag rail-only at 3+, line-only at market, bet record, rail option B)");
 })();

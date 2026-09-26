@@ -30,7 +30,7 @@ module.exports=async function railTests({ctx,sandbox,byId,js,flush,check,live}){
 
   /* the row: O 65.5 | AWY @ HOM / MM/DD 11a | % | x */
   check(new RegExp(`class="ou"[^>]*>O ${js(`GAMES[${a}].total`)}<`).test(byId.rail.innerHTML),"rail: a total pick reads 'O <line>'");
-  check(/<span>\d\d\/\d\d \d{1,4}[ap]<\/span>/.test(byId.rail.innerHTML),"rail: kickoff as 09/26 11a");
+  check(/<span>\d\d\/\d\d (\d{1,4}[ap]|TBD)<\/span>/.test(byId.rail.innerHTML),"rail: kickoff as 09/26 11a (or TBD when not announced)");
   /* the editor: Over -> Under and a new number, priced from the table */
   const T=js(`GAMES[${a}].total`);
   js(`openPick(${a},"over"); pickSide("under");`); line.value=String(T+3); js("commitPick()"); flush();
