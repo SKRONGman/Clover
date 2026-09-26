@@ -4,7 +4,8 @@
    - Has / Needs / Verdict at one size, with a bar showing the gap
    - the numbers in the order of the verdict's math: pays, fair pay,
      back on average, per $1
-   - "I placed this" is a stamp, not a lock (Danny, 2026-09-24)
+   - "I placed this" is a stamp, not a lock (Danny, 2026-09-24); saving
+     it is record.js (row 7)
    - picks are the board's own rows (boardRow), filtered to the slip;
      the ladder opens in the side column. One drawing of a game.
    - "How solid is it": the 49-version stress check as a grid + one word
@@ -105,21 +106,17 @@ function renderCard(){
   if(!stress.includes("sgrid")) setT("sWord","");
   /* the stamp: "I placed this" marks the slip; it never locks it */
   const P=S.placed, go=document.getElementById("place");
-  go.disabled=!n||!pay||!live.length; go.classList.toggle("hidden",!!P&&P.sig===slipSig(S.legs));   /* picks changed: place the new slip */
-  document.getElementById("placedBox").classList.toggle("hidden",!P);
-  if(P){
-    const t=new Date(P.at).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"});
-    setT("placedTxt",`Placed · ${P.who} · ${money(P.pays)} on $1 · ${t}`);
-    setT("placedSub",P.sig===slipSig(S.legs)?`Placed at ${pct1(P.p)}. Stamp only, so you can still change picks. Saving it to your Sheet comes in row 7.`:"Picks changed since you placed it. Unmark it, or place the new slip.");
-  }
+  go.disabled=!n||!pay||!live.length; go.classList.toggle("hidden",!!P&&!P.voided&&P.sig===slipSig(S.legs));   /* picks changed or voided: place the new slip */
+  renderStamp();                                           /* record.js: stamp, Save bet, sign-in, void */
 }
 function placeSlip(){
   const pay=payoutFor(); if(!S.legs.length||!pay) return;
-  S.placed={who:S.who,pays:pay.dec,at:new Date().toISOString(),sig:slipSig(S.legs),p:slipProb(splitLegs(S.legs).live).joint};
-  render();
+  const live=splitLegs(S.legs).live;
+  /* id made here, so a retried save can never make a second copy (row 7); picks frozen as they were at the stamp */
+  S.placed={id:newId(),who:S.who,pays:pay.dec,at:new Date().toISOString(),sig:slipSig(S.legs),p:slipProb(live).joint,picks:snapPicks(live)};
+  REC.ui=""; render();
 }
 document.getElementById("place").onclick=placeSlip;
-document.getElementById("unplace").onclick=()=>{ S.placed=null; render(); };
 document.getElementById("mbEdit").onclick=()=>{ MB_EDIT=!MB_EDIT; renderCard(); };
-document.getElementById("clearSlip").onclick=()=>{ S.legs=[]; S.pays=null; S.placed=null; MB_EDIT=false; render(); };
+document.getElementById("clearSlip").onclick=()=>{ S.legs=[]; S.pays=null; S.placed=null; REC.ui=""; MB_EDIT=false; render(); };
 document.querySelectorAll("#whoChips [data-who]").forEach(b=>{ b.onclick=()=>{ S.who=b.dataset.who; render(); }; });
