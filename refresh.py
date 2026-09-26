@@ -31,6 +31,7 @@ import common
 import cfbd
 import nfl
 import odds
+import bets           # row 7: the bet record (Supabase), GitHub side
 from common import OUT, OUT_JS, OUT_RESULTS, DAYS_AHEAD, RECENT_HOURS, atomic_write, parse_dt, now_utc
 from ratings_math import HFA_POINTS, fit, fit_pace, games_played, blend, project, backtest
 
@@ -301,11 +302,13 @@ def write_upcoming(R, alt_lines=False, full=False):
     pre = [g for g in up if g.get("status", "upcoming") == "upcoming"]
     print(f"Playing out {sum(1 for g in pre if g.get('spread') is not None and g.get('total') is not None)} "
           f"upcoming games {sim.SIMS:,} times each…")
-    freeze_probs(pre, sim.attach_sims(pre))
+    grids = sim.attach_sims(pre)
+    freeze_probs(pre, grids)
     for g in up:
         if g.get("status", "upcoming") != "upcoming":
             g.pop("sim", None)       # ~5 KB a game, and the final score answers everything it could
     record_results(up)
+    bets.run(pre, grids, up, grade_leg, now.isoformat())   # row 7: closing numbers + grades for saved bets
     R.pop("hot", None)                 # hot slips are built in the page now (so feedback can reshuffle them)
     R["sim"] = {"sd": sim.SD_BY_LEAGUE, "margin_sd": sim.MARGIN_SD_BY_LEAGUE, "n": sim.SIMS}
 
