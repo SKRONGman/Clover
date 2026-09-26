@@ -28,6 +28,10 @@ The look and the screen rules for every screen from row 4 on. Decided 2026-09-21
 ## The bet record on My Bet (row 7, 2026-09-25)
 - **Decided** (mockup https://claude.ai/artifact/SSRQRBwgm5aBZYk49jE1Gk): the stamp box under the bet card carries every state - Placed (Unmark + **Save bet**), first save on a device (email box + "Email me a link"), Check your email, Saved · Bet #N (+ Void), Voided (dashed border), Couldn't save (red border + Try again). Never says Saved until Supabase confirms. "Copy row for the log" is gone.
 
+## The My Bet rail, option B (2026-09-26)
+- **Decided** (Danny picked B, mockup https://claude.ai/artifact/RnyCzSaKPXVSAz1ps5gSXr ): whose bet on top; rows = pick ("O 65.5", "PITT -10.5", "PITT ML") left, game stacked in grey 13px (AWY @ HOM / 09/26 11a, shortest time), %, x; the pick and the %s at 16px bold like Analytics. Tapping the pick edits side + number. Analytics = Markov Prediction / Coin Toss Line / Good Bet Minimum + verdict word. Bet Amount + Pays Out, "Returns $X per $1" (not "ROI"). Save Bet at the bottom.
+- **Decided:** whole numbers allowed (a tie pushes); typed lines within ±10 of market.
+
 ## Moved from `DECISIONS.md` on 2026-09-25, word for word
 #### Filters: which ones Hot Slips obey — CONFIRMED 2026-09-19
 The old rule ("all filters apply to both") is **split**. Hot Slips always search all **upcoming** games so a thin Thursday or a bowl-season Tuesday can't starve the search (`hotGames()`).
