@@ -1,23 +1,23 @@
 {
- "updated": "2026-09-27T16:11:44+00:00",
+ "updated": "2026-09-27T16:25:30+00:00",
  "cfbd": {
   "month": "2026-09",
-  "calls_counted": 259,
+  "calls_counted": 263,
   "counting_since": "2026-09-21T02:17+00:00",
   "calls_this_run": 4,
-  "left": 4744,
+  "left": 4740,
   "left_source": "reported by CFBD",
   "left_asof": "2026-09-27T15:11+00:00",
   "limit": 5000,
   "last_error": null
  },
  "odds": {
-  "left": 19656,
-  "left_asof": "2026-09-27T16:11+00:00",
+  "left": 19654,
+  "left_asof": "2026-09-27T16:25+00:00",
   "last_error": null
  },
  "bets": {
-  "at": "2026-09-27T16:11:44.103722+00:00",
+  "at": "2026-09-27T16:25:30.402058+00:00",
   "error": "HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"message\":\"Invalid API key\",\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Su"
  },
  "stale": {},
