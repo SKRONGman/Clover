@@ -128,6 +128,10 @@ def test_a_failed_run_lands_in_health_json():
     fake = FakeSupabase([], fail=True)
     with_fake(fake, lambda: bets.run(up, grids, up, grade_leg, NOW))
     assert "ConnectionError" in common.RUN["bets"]["error"]
+    assert common.RUN["bets"]["key"] == {"prefix": "sb_secret_", "length": 14, "whitespace_stripped": False, "url_host": "x.supabase.co"}, common.RUN["bets"]["key"]
+    os.environ.update(SUPABASE_URL="https://x.supabase.co", SUPABASE_SECRET_KEY=" sb_secret_test\n")
+    assert bets._cfg()[1] == "sb_secret_test" and bets.key_shape("sb_secret_test")["whitespace_stripped"], "a pasted key with whitespace around it must still work"
+    os.environ.pop("SUPABASE_URL"); os.environ.pop("SUPABASE_SECRET_KEY")
     H = common.write_health({})
     assert H["bets"]["error"] and any("bet record" in a for a in H["alerts"]) and H["alert_now"]
     # a refused PATCH names the status and Supabase's answer

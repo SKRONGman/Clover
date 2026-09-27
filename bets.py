@@ -34,8 +34,17 @@ TIMEOUT = 20
 
 
 def _cfg():
-    url, key = os.environ.get("SUPABASE_URL", "").rstrip("/"), os.environ.get("SUPABASE_SECRET_KEY", "")
+    """Whitespace around a pasted secret is the classic GitHub-secret slip: strip it."""
+    url, key = os.environ.get("SUPABASE_URL", "").strip().rstrip("/"), os.environ.get("SUPABASE_SECRET_KEY", "").strip()
     return (url, key) if url and key else (None, None)
+
+
+def key_shape(key):
+    """What the run was given, without giving it away: "sb_secret_…" + length. A new-format
+    key is sb_secret_<22>_<8> = 41 characters; a legacy service_role JWT starts with eyJ."""
+    raw = os.environ.get("SUPABASE_SECRET_KEY", "")
+    return {"prefix": key[:10] if key.startswith("sb_") else key[:3], "length": len(key),
+            "whitespace_stripped": len(raw) != len(key), "url_host": (os.environ.get("SUPABASE_URL", "").strip().split("//")[-1].split("/")[0])}
 
 
 def _headers(key):
@@ -161,4 +170,4 @@ def run(pre, grids, up, grade_leg, now_iso):
         common.RUN["bets"] = {"at": now_iso, "open": len(picks), "closed": len(closes), "graded": len(grades), "settled": done, "error": None}
     except Exception as e:                        # never stop a refresh over the bet record - but say so in health.json
         print(f"  bets: skipped this run ({type(e).__name__}: {str(e)[:200]})")
-        common.RUN["bets"] = {"at": now_iso, "error": f"{type(e).__name__}: {str(e)[:200]}"}
+        common.RUN["bets"] = {"at": now_iso, "error": f"{type(e).__name__}: {str(e)[:200]}", "key": key_shape(key)}
