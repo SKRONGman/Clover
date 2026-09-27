@@ -45,6 +45,12 @@ Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and tw
 6. **Hot Slips search this weekend only** (Danny picked A of A this weekend / B nearest game day / C all upcoming, after next week's games surfaced once Saturday's had kicked off). The window is the board's Thu-Mon one, rolling forward Monday night (`weekendWindow()`); a league with nothing left says so. Narrows the 2026-09-19 "all upcoming games" rule.
 7. **A kickoff CFBD has not announced shows its date and "TBD"**, never the feed's 04:00 UTC stand-in (which read as Friday 11 PM in Texas). `cfbd.py` carries `start_time_tbd` as `tbd`; the board, rail, ladder and hot tickets read it.
 
+## Rulings of 2026-09-26, night (row 8 History, from the approved mockup https://claude.ai/artifact/PufiYFbfdgymMATGfNsYfh )
+1. **History is a ledger; tap a bet for its card** (Danny picked C of A cards / B ledger / C ledger + tap). Newest first. Whose (All · Danny · Jaclyn) and League chips; voided bets hidden until "Show voided", then greyed.
+2. **Good bet / bad bet is sorted at the slip level** (Danny picked A): the verdict at placement crossed with the result - "Good bet · bad luck", "Bad bet · got lucky", "Coin toss · won". Per pick: hit / miss, the final and the points by, beat the close. The per-pick yardstick (each pick against its share of the needed chance) was offered and declined.
+3. **Clover reviews every game it scored** (Danny: "we'll only track mine and Jaclyn's bet history, but Clover should review all games scored and learn from it"): `R.scorecard` boils `results.json` down to chance bands -> hit rate, per league, next to a tile for their own graded picks. It is a report card: the sim's widths still change only on `calibrate.py --tails` evidence (finding 2), and History never steers the slips (ruling 2 of 2026-09-20).
+4. Numbers only for now (2b stands); the card shows a bet's written recap once `bets.recap` exists.
+
 ## Rulings of 2026-09-24 (row 6, from the approved mockup https://claude.ai/artifact/7VoHDPSoVXQ4oWpqefsVT1)
 1. **"I placed this" is a stamp, not a lock** (Danny). It records who, the payout, the time, the chance and the picks; picks stay editable, and the stamp says so when they change. Saving it anywhere is row 7.
 2. **"How solid is it" = the 49-version grid + one word** (Danny picked C of A grid+sentence / B sentence / C grid+word). Solid / Mostly holds / Shaky; no sentence.
@@ -102,6 +108,4 @@ Also decided 2026-09-20: screens, one bet record, the "Proposed" tag rule and tw
 - Wants Clover built to a professional-grade product standard — sleek, efficient, accurate.
 - **Parked:** a standing rule that recurring, well-defined tasks get reviewed as Cowork background candidates. Danny added it 2026-09-19 then parked it until the redesign shipped. Revisit when he raises it.
 - **Superseded 2026-09-20:** "Rookie weekend gamblers" and "professional-grade for strangers" are replaced by *personal use for Danny and Jaclyn*. "Simple beats complete" and "likes 3-pick slips" stand. "One word" is replaced by full numbers with the verdict among them.
-
-### Filters: which ones Hot Slips obey
-Confirmed 2026-09-19; the table moved word for word to `DESIGN.md` on 2026-09-25 (size limit). **Superseded 2026-09-26 evening (ruling 3): Hot Slips ignore every board filter.**
+- Filters vs Hot Slips: the 2026-09-19 table is in `DESIGN.md`; superseded 2026-09-26 evening (Hot Slips ignore every board filter).
