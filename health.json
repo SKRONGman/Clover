@@ -1,28 +1,28 @@
 {
- "updated": "2026-09-27T16:25:30+00:00",
+ "updated": "2026-09-27T16:30:26+00:00",
  "cfbd": {
   "month": "2026-09",
-  "calls_counted": 263,
+  "calls_counted": 267,
   "counting_since": "2026-09-21T02:17+00:00",
   "calls_this_run": 4,
-  "left": 4740,
+  "left": 4736,
   "left_source": "reported by CFBD",
   "left_asof": "2026-09-27T15:11+00:00",
   "limit": 5000,
   "last_error": null
  },
  "odds": {
-  "left": 19654,
-  "left_asof": "2026-09-27T16:25+00:00",
+  "left": 19652,
+  "left_asof": "2026-09-27T16:30+00:00",
   "last_error": null
  },
  "bets": {
-  "at": "2026-09-27T16:25:30.402058+00:00",
-  "error": "HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"message\":\"Invalid API key\",\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Su"
+  "at": "2026-09-27T16:30:26.369711+00:00",
+  "error": "HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Supabase project.\",\"message\":\""
  },
  "stale": {},
  "alerts": [
-  "the bet record could not be updated: HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"message\":\"Invalid API key\",\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Su"
+  "the bet record could not be updated: HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Supabase project.\",\"message\":\""
  ],
  "alert_now": false,
  "alerted_on": "2026-09-27"
