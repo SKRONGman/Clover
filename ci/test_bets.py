@@ -62,7 +62,7 @@ def slate():
     up = [{"id": 11, "league": "ncaaf", "status": "upcoming", "spread": -7.0, "total": 52.5}]
     grids = {0: sim.game_grid(52.5, 7.0, seed=1)}
     with open("results.json", "w") as f:
-        json.dump([{"id": "nfl9", "hp": 20, "ap": 17, "spread": -3.0, "total": 44.5}], f)
+        json.dump([{"id": "nfl9", "hp": 20.0, "ap": 17.0, "spread": -3.0, "total": 44.5}], f)   # CFBD-style floats
     return up, grids
 
 
@@ -99,6 +99,8 @@ def test_final_grades_picks_and_settles_the_slip():
     got = dict(fake.patches)
     assert got["picks?id=eq.3"] == {"hp": 20, "ap": 17, "result": "hit", "beat_close": False}
     assert got["picks?id=eq.4"] == {"hp": 20, "ap": 17, "result": "hit", "beat_close": True}
+    assert type(got["picks?id=eq.3"]["hp"]) is int and json.dumps(got["picks?id=eq.3"]["ap"]) == "17", \
+        "scores must go to Supabase as whole numbers - 20.0 is refused by the integer columns (2026-09-26)"
     assert got["bets?id=eq.b"] == {"slip_result": "won", "graded_at": NOW}
     assert all("voided_at=is.null" in u for u in fake.gets), "voided bets are never closed or graded"
 

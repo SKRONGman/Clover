@@ -83,12 +83,15 @@ def closing_updates(picks, pre, grids):
 
 def finals(up, results):
     """{game id: (home pts, away pts)} from this run's finals and results.json
-    (NFL games drop off the slate once final; results.json keeps them)."""
-    out = {str(r.get("id")): (r["hp"], r["ap"]) for r in results
+    (NFL games drop off the slate once final; results.json keeps them).
+    Whole numbers: CFBD scores arrive as 59.0, and Postgres refuses "59.0" for
+    the integer hp / ap columns - that 400 silently blocked every grade on
+    2026-09-26 (bet #1). Found in row 8."""
+    out = {str(r.get("id")): (int(r["hp"]), int(r["ap"])) for r in results
            if r.get("hp") is not None and r.get("ap") is not None}
     for g in up:
         if g.get("status") == "final" and g.get("hp") is not None and g.get("ap") is not None:
-            out[str(g.get("id"))] = (g["hp"], g["ap"])
+            out[str(g.get("id"))] = (int(g["hp"]), int(g["ap"]))
     return out
 
 
