@@ -21,6 +21,7 @@ NOW = "2026-09-27T01:00:00+00:00"
 class Resp:
     def __init__(self, code, data=None):
         self.status_code, self._data = code, data
+        self.text = json.dumps(data) if data is not None else ""
 
     def json(self):
         return self._data
@@ -117,6 +118,30 @@ def test_supabase_down_never_stops_a_refresh():
     fake = FakeSupabase([], fail=True)
     with_fake(fake, lambda: bets.run(up, grids, up, grade_leg, NOW))   # must not raise
     assert not fake.patches
+
+
+def test_a_failed_run_lands_in_health_json():
+    """Row 8: a bet record that cannot be updated is a dead feed - health.json says so and the
+    daily alarm fires (bet #1 sat ungraded for hours on 2026-09-26 with the reason only in a log)."""
+    import common
+    up, grids = slate()
+    fake = FakeSupabase([], fail=True)
+    with_fake(fake, lambda: bets.run(up, grids, up, grade_leg, NOW))
+    assert "ConnectionError" in common.RUN["bets"]["error"]
+    H = common.write_health({})
+    assert H["bets"]["error"] and any("bet record" in a for a in H["alerts"]) and H["alert_now"]
+    # a refused PATCH names the status and Supabase's answer
+    picks = [{"id": 3, "bet_id": "b", "game_id": "nfl9", "type": "homeSp", "line": -2.5, "chance": 0.5, "close_chance": None, "result": None}]
+    fake = FakeSupabase(picks)
+    fake.patch = lambda url, headers=None, data=None, timeout=None: Resp(400, {"message": "invalid input syntax for type integer"})
+    with_fake(fake, lambda: bets.run(up, grids, up, grade_leg, NOW))
+    assert "PATCH" in common.RUN["bets"]["error"] and "400" in common.RUN["bets"]["error"] and "integer" in common.RUN["bets"]["error"]
+    # a good run reports what it did, and clears the alarm
+    fake = FakeSupabase(picks, [{"id": "b", "picks": [{"result": "hit"}]}])
+    with_fake(fake, lambda: bets.run(up, grids, up, grade_leg, NOW))
+    assert common.RUN["bets"] == {"at": NOW, "open": 1, "closed": 0, "graded": 1, "settled": 1, "error": None}
+    assert not any("bet record" in a for a in common.write_health({})["alerts"])
+    common.RUN["bets"] = None
 
 
 def main():

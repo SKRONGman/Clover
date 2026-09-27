@@ -27,6 +27,8 @@ import json
 
 import requests
 
+import common
+
 OUT_RESULTS = "results.json"
 TIMEOUT = 20
 
@@ -43,16 +45,22 @@ def _headers(key):
     return h
 
 
+def _raise(r, what):
+    """HTTPError that says what Supabase answered, not just the code - it lands in health.json."""
+    if r.status_code >= 400:
+        raise requests.HTTPError(f"{what} -> {r.status_code} {r.text[:160]}")
+
+
 def _get(url, key, path):
     r = requests.get(url + path, headers=_headers(key), timeout=TIMEOUT)
-    r.raise_for_status()
+    _raise(r, "GET " + path[:60])
     return r.json()
 
 
 def _patch(url, key, path, body):
     r = requests.patch(url + path, headers=dict(_headers(key), Prefer="return=minimal"),
                        data=json.dumps(body), timeout=TIMEOUT)
-    r.raise_for_status()
+    _raise(r, "PATCH " + path[:60])
 
 
 def own_market(g, typ):
@@ -123,6 +131,7 @@ def run(pre, grids, up, grade_leg, now_iso):
     url, key = _cfg()
     if not url:
         print("  bets: no Supabase secrets - skipped")
+        common.RUN["bets"] = {"at": now_iso, "skipped": "no Supabase secrets on this run", "error": None}
         return
     try:
         results = []
@@ -149,5 +158,7 @@ def run(pre, grids, up, grade_leg, now_iso):
                     _patch(url, key, f"/rest/v1/bets?id=eq.{b['id']}", {"slip_result": res, "graded_at": now_iso})
                     done += 1
         print(f"  bets: {len(picks)} open pick(s), {len(closes)} closing price(s), {len(grades)} graded, {done} slip(s) settled")
-    except Exception as e:                        # never stop a refresh over the bet record
+        common.RUN["bets"] = {"at": now_iso, "open": len(picks), "closed": len(closes), "graded": len(grades), "settled": done, "error": None}
+    except Exception as e:                        # never stop a refresh over the bet record - but say so in health.json
         print(f"  bets: skipped this run ({type(e).__name__}: {str(e)[:200]})")
+        common.RUN["bets"] = {"at": now_iso, "error": f"{type(e).__name__}: {str(e)[:200]}"}

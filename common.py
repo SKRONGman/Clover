@@ -75,7 +75,8 @@ def atomic_write(path, text):
 # ----------------------------------------------------------------------
 # What happened during THIS run. cfbd.py and odds.py write into it as they go.
 RUN = {"cfbd_calls": 0, "cfbd_left_reported": None, "cfbd_error": None,
-       "odds_left": None, "odds_error": None}
+       "odds_left": None, "odds_error": None,
+       "bets": None}          # bets.py's report for this run (row 8): what it did, or why it could not
 
 
 def load_health():
@@ -116,8 +117,11 @@ def write_health(stale, now=None):
         o["left"] = RUN["odds_left"]
         o["left_asof"] = now.isoformat(timespec="minutes")
     o["last_error"] = RUN["odds_error"]
+    b = RUN["bets"] or H.get("bets") or {}
 
     alerts = []
+    if b.get("error"):
+        alerts.append(f"the bet record could not be updated: {b['error']}")
     for lg, s in sorted((stale or {}).items()):
         name = "College" if lg == "ncaaf" else "NFL"
         alerts.append(f"{name} lines are stale since {s.get('since')}: {s.get('reason')}")
@@ -128,7 +132,7 @@ def write_health(stale, now=None):
 
     today = now.strftime("%Y-%m-%d")
     alert_now = bool(alerts) and H.get("alerted_on") != today
-    H = {"updated": now.isoformat(timespec="seconds"), "cfbd": c, "odds": o,
+    H = {"updated": now.isoformat(timespec="seconds"), "cfbd": c, "odds": o, "bets": b,
          "stale": stale or {}, "alerts": alerts, "alert_now": alert_now,
          "alerted_on": today if alert_now else H.get("alerted_on")}
     atomic_write(OUT_HEALTH, json.dumps(H, indent=1) + "\n")
