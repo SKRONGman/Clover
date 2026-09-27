@@ -3474,5 +3474,181 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": "0339a0e41bcee12820eb3e64bb5fadb4",
+  "league": "nfl",
+  "start": "2026-09-27T17:02+00:00",
+  "home": "Miami Dolphins",
+  "away": "Kansas City Chiefs",
+  "hp": 10.0,
+  "ap": 24.0,
+  "spread": 10.0,
+  "total": 45.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.1796,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.8204,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 10.0,
+    "p": 0.5007,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -10.0,
+    "p": 0.4993,
+    "result": "hit"
+   },
+   "over": {
+    "line": 45.5,
+    "p": 0.4899,
+    "result": "miss"
+   },
+   "under": {
+    "line": 45.5,
+    "p": 0.5101,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": "1f3cfd315a24d1a7dd5859a8e6b88e18",
+  "league": "nfl",
+  "start": "2026-09-27T17:02+00:00",
+  "home": "Jacksonville Jaguars",
+  "away": "New England Patriots",
+  "hp": 35.0,
+  "ap": 6.0,
+  "spread": -3.0,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.6044,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.3956,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -3.0,
+    "p": 0.5003,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 3.0,
+    "p": 0.4997,
+    "result": "miss"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.4859,
+    "result": "miss"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.5141,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": "555afd4a27aaa392662881cffa8f2eef",
+  "league": "nfl",
+  "start": "2026-09-27T17:02+00:00",
+  "home": "New York Giants",
+  "away": "Tennessee Titans",
+  "hp": 12.0,
+  "ap": 7.0,
+  "spread": -2.5,
+  "total": 37.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5719,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4281,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -2.5,
+    "p": 0.5039,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 2.5,
+    "p": 0.4961,
+    "result": "miss"
+   },
+   "over": {
+    "line": 37.5,
+    "p": 0.4709,
+    "result": "miss"
+   },
+   "under": {
+    "line": 37.5,
+    "p": 0.5291,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": "17a730b7d399feeab6a78c30767c29d2",
+  "league": "nfl",
+  "start": "2026-09-27T17:03+00:00",
+  "home": "Indianapolis Colts",
+  "away": "Houston Texans",
+  "hp": 19.0,
+  "ap": 17.0,
+  "spread": 1.5,
+  "total": 41.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4543,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5457,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 1.5,
+    "p": 0.5024,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -1.5,
+    "p": 0.4976,
+    "result": "miss"
+   },
+   "over": {
+    "line": 41.5,
+    "p": 0.4864,
+    "result": "miss"
+   },
+   "under": {
+    "line": 41.5,
+    "p": 0.5136,
+    "result": "hit"
+   }
+  }
  }
 ]
