@@ -1,0 +1,55 @@
+# One-time pull of last season's NFL player-prop lines (DraftKings, 10 minutes
+# before kickoff) for the props phase. Research only - the page never reads it.
+# Spends ODDS_KEY credits: at most ~17,100, and props_backtest.py stops for good
+# with 1,500 credits left so the live refresh never runs dry. Safe to re-run:
+# games already pulled are skipped.
+#
+# Runs once by itself when this file is added. After that, only by hand:
+# Actions -> "Props backtest" -> "Run workflow".
+
+name: Props backtest
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/props-backtest.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: props-backtest
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262        # v4.4.0 (pinned)
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065    # v5.6.0 (pinned)
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Pull last season's props
+        env:
+          ODDS_KEY: ${{ secrets.ODDS_KEY }}
+        run: python props_backtest.py
+
+      - name: Save what was pulled (even if the run stopped early)
+        if: always()
+        run: |
+          git config user.name "refresh-bot"
+          git config user.email "refresh-bot@users.noreply.github.com"
+          git add props_hist_2025.json || true
+          if git diff --cached --quiet; then
+            echo "No change."
+          else
+            git commit -m "Props backtest: 2025 NFL player props ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            for i in 1 2 3; do git pull --rebase origin main && git push && break; sleep 5; done
+          fi
