@@ -97,7 +97,7 @@ def check_wiring():
 
 def check_python():
     bad = []
-    for t in ("test_refresh.py", "test_bets.py"):          # test_bets: the bet record's GitHub half (row 7)
+    for t in ("test_refresh.py", "test_bets.py", "test_props.py"):   # test_bets: the bet record (row 7); test_props: props backtest pull
         r = subprocess.run([sys.executable, os.path.join(ROOT, "ci", t)], capture_output=True, text=True)
         print(r.stdout, end="")
         if r.returncode:
