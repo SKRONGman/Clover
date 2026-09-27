@@ -9,8 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="clover.css?v=20260926wk">
-<link rel="stylesheet" href="hot.css?v=20260926wk">
+<link rel="stylesheet" href="clover.css?v=20260926h8">
+<link rel="stylesheet" href="hot.css?v=20260926h8">
+<link rel="stylesheet" href="history.css?v=20260926h8">
 </head>
 <body>
 
@@ -93,10 +94,23 @@
   </div>
 </section>
 
-<!-- ================= HISTORY (row 8) ================= -->
-<section id="viewOther" role="tabpanel" class="card other hidden">
-  <p id="otherTxt"></p>
-  <button type="button" class="sec" id="otherBack">Back to Hot Slips</button>
+<!-- ================= HISTORY (row 8, history.js) ================= -->
+<section id="viewHistory" role="tabpanel" class="hidden">
+  <div class="hHead"><h2>History</h2><p class="sub" id="histStatus"></p></div>
+  <div class="hCtl">
+    <div class="fld"><span class="sub">Whose</span><div class="chips" id="histWho" role="group" aria-label="Whose bets">
+      <button type="button" class="chip" data-who="all" aria-pressed="true">All</button>
+      <button type="button" class="chip" data-who="Danny" aria-pressed="false">Danny</button>
+      <button type="button" class="chip" data-who="Jaclyn" aria-pressed="false">Jaclyn</button>
+    </div></div>
+    <div class="fld"><span class="sub">League</span><div class="chips" id="histLg" role="group" aria-label="League">
+      <button type="button" class="chip" data-lg="all" aria-pressed="true">All</button>
+      <button type="button" class="chip" data-lg="ncaaf" aria-pressed="false">NCAA</button>
+      <button type="button" class="chip" data-lg="nfl" aria-pressed="false">NFL</button>
+    </div></div>
+    <div class="fld"><span class="sub">Voided bets</span><div class="chips"><button type="button" class="chip" id="histVoid" aria-pressed="false">Show voided</button></div></div>
+  </div>
+  <div id="histOut"></div>
 </section>
 
 <!-- ================= MY BET, the full screen (row 6, mybet.js) ================= -->
@@ -146,14 +160,15 @@
 </aside>
 </div>
 
-<script src="preview1.js?v=20260926wk"></script>
-<script src="filters.js?v=20260926wk"></script>
-<script src="preview2.js?v=20260926wk"></script>
-<script src="rail.js?v=20260926wk"></script>
-<script src="mybet.js?v=20260926wk"></script>
-<script src="record.js?v=20260926wk"></script>
-<script src="ladder.js?v=20260926wk"></script>
-<script src="hot.js?v=20260926wk"></script>
-<script src="preview3.js?v=20260926wk"></script>
+<script src="preview1.js?v=20260926h8"></script>
+<script src="filters.js?v=20260926h8"></script>
+<script src="preview2.js?v=20260926h8"></script>
+<script src="rail.js?v=20260926h8"></script>
+<script src="mybet.js?v=20260926h8"></script>
+<script src="record.js?v=20260926h8"></script>
+<script src="ladder.js?v=20260926h8"></script>
+<script src="hot.js?v=20260926h8"></script>
+<script src="history.js?v=20260926h8"></script>
+<script src="preview3.js?v=20260926h8"></script>
 </body>
 </html>

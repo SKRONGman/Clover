@@ -24,7 +24,6 @@ Only numpy. Pure conjugate updates, so it's fast: ~1 ms per sweep.
 """
 
 import numpy as np
-from collections import defaultdict
 
 SWEEPS = 1500
 BURN = 500

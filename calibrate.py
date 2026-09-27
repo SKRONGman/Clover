@@ -22,11 +22,9 @@ Writes calibration.json next to this file. Needs refresh.py in the same folder
 and CFBD_KEY set, same as refresh.py.
 """
 
-import sys
 import json
 import math
 import argparse
-from collections import defaultdict
 
 import numpy as np
 

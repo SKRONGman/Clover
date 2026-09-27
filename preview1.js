@@ -212,19 +212,18 @@ function payoutFor(){ return S.pays!=null&&S.pays>1 ? {dec:S.pays} : null; }
    RENDER
    =================================================================== */
 let view="hot";
-/* five tabs: Hot Slips is its own page (2026-09-26); NCAA / NFL share the board; History (row 8)
-   opens a placeholder card until it ships. Build has no tab (2026-09-24): building happens on the
-   board, with the ladder in the side column. The side column rides along on every view; on the
+/* five tabs: Hot Slips is its own page (2026-09-26); NCAA / NFL share the board; History (row 8,
+   history.js) reads the saved bets when opened. Build has no tab (2026-09-24): building happens on
+   the board, with the ladder in the side column. The side column rides along on every view; on the
    full My Bet screen it holds only the ladder (row 6), since the rail would repeat the screen itself. */
-const COMING={history:"History is row 8 of the build order - it is not built yet."};
 function show(v){
   view=v;
   document.getElementById("viewHot").classList.toggle("hidden",v!=="hot");
   document.getElementById("viewSlips").classList.toggle("hidden",v!=="slips");
   document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
-  document.getElementById("viewOther").classList.toggle("hidden",!COMING[v]);
-  document.getElementById("otherTxt").textContent=COMING[v]||"";
+  document.getElementById("viewHistory").classList.toggle("hidden",v!=="history");
   document.getElementById("rail").classList.toggle("hidden",v==="card");
+  if(v==="history") loadHistory();
   /* roving tabindex: only the selected tab is in the Tab order; arrow keys move between them (preview3.js) */
   for(const k in TABS){ const t=document.getElementById("tab"+k[0].toUpperCase()+k.slice(1)), on=TABS[k]===v&&(TABS[k]!=="slips"||k===league);
     t.setAttribute("aria-selected",on); t.tabIndex=on?0:-1; }

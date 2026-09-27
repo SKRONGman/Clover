@@ -11,6 +11,7 @@ refresh.py - builds ratings.js / ratings.json for Clover. Runs on GitHub Actions
 
 This file is the conductor. The players:
     cfbd.py          college slate, lines, scores, logos, AP poll (CollegeFootballData)
+    grading.py       the one grader: results.json, the frozen percentages, the scorecard
     nfl.py           NFL slate, lines, scores (the-odds-api; ESPN is blocked on Actions)
     odds.py          the-odds-api helper + DraftKings alternate lines
     ratings_math.py  research-only team ratings
@@ -32,88 +33,13 @@ import cfbd
 import nfl
 import odds
 import bets           # row 7: the bet record (Supabase), GitHub side
-from common import OUT, OUT_JS, OUT_RESULTS, DAYS_AHEAD, RECENT_HOURS, atomic_write, parse_dt, now_utc
+from common import OUT, OUT_JS, DAYS_AHEAD, RECENT_HOURS, atomic_write, parse_dt, now_utc
+from grading import SIX, leg_line, freeze_probs, grade_leg, record_results, scorecard   # noqa: F401 (tests + calibrate use these)
 from ratings_math import HFA_POINTS, fit, fit_pace, games_played, blend, project, backtest
 
 # calibrate.py does `import refresh as R` and uses these names. Keep them reachable.
 from cfbd import BOOKS, SEASON, PRIOR_SEASON, get, pull_games, pull_drive_counts   # noqa: F401
 from common import pick                                                           # noqa: F401
-
-
-# The six picks the page offers on every game, in one place.
-SIX = ("homeML", "awayML", "homeSp", "awaySp", "over", "under")
-
-
-def leg_line(g, typ):
-    """The number that pick is taken at. Always the side's OWN number."""
-    if typ in ("over", "under"):
-        return g.get("total")
-    if typ == "homeSp":
-        return g.get("spread")
-    if typ == "awaySp":
-        return -g["spread"] if g.get("spread") is not None else None
-    return 0
-
-
-def freeze_probs(games, grids):
-    """Save each game's six percentages onto the game itself. While a game is
-    upcoming the page reads these straight off its table; once it is over the
-    table is thrown away and these are all that's left - which is exactly what
-    you need to ask later whether Clover's 47% picks really land 47% of the time."""
-    for gi, g in enumerate(games):
-        grid = grids.get(gi)
-        if grid is None:
-            continue
-        g["p"] = {t: round(grid.prob([(t, leg_line(g, t))]), 4) for t in SIX}
-
-
-def grade_leg(typ, line, hp, ap):
-    """hit / miss / push, from the final score. Same rule as the page's legVal."""
-    t, m = hp + ap, hp - ap
-    v = {"over": t - line, "under": line - t, "homeSp": m + line,
-         "awaySp": line - m, "homeML": m, "awayML": -m}[typ]
-    return "push" if v == 0 else ("hit" if v > 0 else "miss")
-
-
-def record_results(up):
-    """Append every newly-finished game to results.json: what Clover said about
-    each of the six picks, and what actually happened. Never shipped to the page -
-    this is the calibration record, and it has to outlive ratings.json, which is
-    overwritten every refresh."""
-    rows = []
-    if os.path.exists(OUT_RESULTS):
-        try:
-            with open(OUT_RESULTS) as f:
-                rows = json.load(f)
-        except (ValueError, OSError):
-            rows = []
-    seen = {str(r.get("id")) for r in rows}
-    added = 0
-    for g in up:
-        if g.get("status") != "final" or str(g.get("id")) in seen:
-            continue
-        hp, ap = g.get("hp"), g.get("ap")
-        if hp is None or ap is None or g.get("spread") is None or g.get("total") is None:
-            continue
-        p = g.get("p") or {}
-        if not p:
-            continue        # never priced before kickoff: nothing to calibrate (Danny dropped 67 such rows 2026-09-24)
-        rows.append({
-            "id": g.get("id"),
-            "league": g.get("league", "ncaaf"),
-            "start": g.get("start"),
-            "home": g.get("home"), "away": g.get("away"),
-            "hp": hp, "ap": ap,
-            "spread": g.get("spread"), "total": g.get("total"), "book": g.get("book"),
-            "picks": {t: {"line": leg_line(g, t), "p": p.get(t),
-                          "result": grade_leg(t, leg_line(g, t), hp, ap)}
-                      for t in SIX},
-        })
-        added += 1
-    if added:
-        rows.sort(key=lambda r: (r.get("start") or "", str(r.get("id"))))
-        atomic_write(OUT_RESULTS, json.dumps(rows, indent=1))
-    print(f"  results.json: {added} newly finished game(s) graded, {len(rows)} on file")
 
 
 def note_opening(g, old):
@@ -307,7 +233,7 @@ def write_upcoming(R, alt_lines=False, full=False):
     for g in up:
         if g.get("status", "upcoming") != "upcoming":
             g.pop("sim", None)       # ~5 KB a game, and the final score answers everything it could
-    record_results(up)
+    R["scorecard"] = scorecard(record_results(up))    # row 8: History's "Clover's accuracy on every game"
     bets.run(pre, grids, up, grade_leg, now.isoformat())   # row 7: closing numbers + grades for saved bets
     R.pop("hot", None)                 # hot slips are built in the page now (so feedback can reshuffle them)
     R["sim"] = {"sd": sim.SD_BY_LEAGUE, "margin_sd": sim.MARGIN_SD_BY_LEAGUE, "n": sim.SIMS}

@@ -1,0 +1,64 @@
+/* Clover - History tab (row 8, 2026-09-26). Colors and buttons come from clover.css.
+   Mockup: https://claude.ai/artifact/PufiYFbfdgymMATGfNsYfh - the ledger, tap a row for its card. */
+#viewHistory{display:flex;flex-direction:column;gap:16px}
+#histOut{display:flex;flex-direction:column;gap:16px}
+#histOut .card{padding:14px 16px}
+#histOut h3{font-size:16px;margin:0 0 6px}
+#histOut table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+#histOut th{font-size:12px;font-weight:500;color:var(--muted);text-align:left;padding:6px 10px;white-space:nowrap}
+#histOut td{padding:6px 10px;border-top:1px solid var(--line);font-size:14px;vertical-align:middle}
+#histOut td.r,#histOut th.r{text-align:right}
+#histOut .dim{color:var(--muted)}
+#histOut .hit{color:var(--acc);font-weight:700}#histOut .miss{color:var(--bad);font-weight:700}#histOut .push{color:var(--coin);font-weight:700}
+/* the four tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.tile .k{color:var(--muted);font-size:13px}
+.tile .v{font-size:28px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .v.txt{font-size:21px;padding-top:5px;white-space:normal}
+.tile .v.good{color:var(--acc)}.tile .v.bad{color:var(--bad)}
+.tile .s{color:var(--muted);font-size:13px}
+/* the ledger */
+.ledger .hscroll{overflow-x:auto;margin:-4px -6px 0}
+.ledger table.hl td{height:44px;white-space:nowrap}
+.ledger tr.lr{cursor:pointer}
+.ledger tr.lr:hover td,.ledger tr.lr:focus-visible td{background:var(--bg)}
+.ledger tr.lr:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.ledger tr.lr.on td{border-bottom:0;background:var(--bg)}
+.ledger tr.void td{color:var(--muted)}
+.ledger td.no{font-weight:700;font-size:15px}
+.ledger td .g{display:block;color:var(--muted);font-size:12px;font-weight:500}
+.ledger table.hl td.picks{white-space:normal;min-width:180px;width:99%;line-height:1.5;color:var(--muted);font-size:13px}
+.ledger td.picks b{color:var(--text);font-size:14px}
+.ledger tr.void td.picks b{color:var(--muted)}
+.ledger .rw{font-weight:700}.rw.won{color:var(--acc)}.rw.lost{color:var(--bad)}.rw.open{color:var(--coin)}.rw.push{color:var(--coin)}.rw.void{color:var(--muted)}
+.ledger td.res small{color:var(--muted);font-size:12px}
+/* the opened card under a row */
+.ledger tr.lc>td{padding:0 0 12px;border-top:0}
+.ledger .bet{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg)}
+.ledger .bet.won{border-color:var(--acc)}.ledger .bet.lost{border-color:var(--bad)}.ledger .bet.void{border-style:dashed;color:var(--muted)}
+.ledger .bp th{background:var(--card)}
+.ledger .bp td{height:44px;white-space:nowrap}
+.ledger .bp td.pk{font-weight:700;font-size:15px}
+.ledger .bp td.pk .g{white-space:normal}
+.ledger .bp td.r,.ledger .bp td.ck{white-space:normal;min-width:120px}
+.ledger .bp td .g{display:block;color:var(--muted);font-size:12px;font-weight:500}
+.ledger .bp td.r .g{white-space:nowrap}
+.ledger .bf{display:flex;gap:20px;flex-wrap:wrap;align-items:center;padding:10px 12px;border-top:1px solid var(--line);font-size:14px}
+.ledger .bf b{font-size:16px}
+.ledger .bf .hm{margin-left:auto;font-size:16px;font-weight:700}
+.ledger .sort{padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px;border:1px solid var(--line);color:var(--muted)}
+.ledger .sort.good{background:var(--sel);border-color:var(--acc);color:var(--acc)}
+.ledger .sort.bad{border-color:var(--bad);color:var(--bad)}
+.ledger .sort.toss{border-color:var(--coin);color:var(--coin)}
+.ledger .recap{margin:0;padding:10px 12px;border-top:1px solid var(--line);font-size:14px;line-height:1.5}
+.ledger .bet .hint{padding:8px 12px;border-top:1px solid var(--line)}
+/* habits + scorecard side by side */
+.h2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+#histOut .hb td{height:36px;white-space:nowrap}
+/* sign in */
+.signCard{display:grid;gap:8px}
+.signCard .signin{border-top:0;padding-top:0}
+.signCard .sec{justify-self:start}
+@media(max-width:1000px){.tiles{grid-template-columns:1fr 1fr}.h2col{grid-template-columns:1fr}}
+@media(max-width:520px){.tiles{grid-template-columns:1fr}}

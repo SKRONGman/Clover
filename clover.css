@@ -59,8 +59,6 @@ h1{font-size:26px;font-stretch:112%;letter-spacing:-.01em}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 .two>div{display:flex;flex-direction:column;gap:16px}
 .actions{display:flex;gap:10px;flex-wrap:wrap}
-.other{display:flex;flex-direction:column;gap:16px;align-items:flex-start;padding:24px}
-.other p{margin:0}
 @media(max-width:960px){.wrap{grid-template-columns:1fr;padding:16px}#side{position:static}.hIn{padding:0 16px;gap:16px;height:auto;flex-wrap:wrap}.tabs{gap:16px}.two{grid-template-columns:1fr}}
 
 /* ---------- hot slips ---------- */

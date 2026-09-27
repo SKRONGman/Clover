@@ -155,7 +155,6 @@ document.querySelector(".tabs").addEventListener("keydown",e=>{
   const k={ArrowRight:(i+1)%n,ArrowLeft:(i-1+n)%n,Home:0,End:n-1}[e.key];
   if(i<0||k===undefined) return; e.preventDefault(); t[k].click(); t[k].focus();
 });
-document.getElementById("otherBack").onclick=()=>show("hot");
 document.getElementById("fClear").onclick=()=>{ FILTERS[league]=defaultFilters(); reFilter(); };
 document.getElementById("backToSlips").onclick=()=>show("slips");
 document.querySelectorAll("#stake,#payout").forEach(i=>i.addEventListener("input",()=>{ setMoney(i.dataset.money,i.value.trim()); render(); }));
@@ -208,7 +207,7 @@ function init(){
   loadLeague();
   if(!count(league)&&count(league==="ncaaf"?"nfl":"ncaaf")) league=league==="ncaaf"?"nfl":"ncaaf";   // open on whichever league has games
   loadFilters(); populateFilterOptions();
-  NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); setFiltersOpen(false); renderHot(); render(); show("hot");
+  NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); setFiltersOpen(false); wireHistory(); renderHot(); render(); show("hot");
 }
 /* ratings.js with a cache-buster, without document.write; works from file:// too */
 (function(){ const s=document.createElement("script"); s.src="ratings.js?v="+Date.now(); s.onload=init; s.onerror=init; document.head.appendChild(s); })();

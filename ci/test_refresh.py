@@ -200,6 +200,25 @@ def test_results_are_append_only():
     assert not [r for r in json.load(open(common.OUT_RESULTS)) if r["id"] == 8], "unpriced games are never recorded"
 
 
+def test_scorecard_bands_from_results():
+    """Row 8: History's "Clover said X% -> hit Y%" per chance band, pushes left out, per league."""
+    rows = [{"id": 1, "league": "ncaaf", "start": "2026-09-20T16:00+00:00",
+             "picks": {"homeML": {"p": 0.95, "result": "hit"}, "awayML": {"p": 0.05, "result": "miss"},
+                       "homeSp": {"p": 0.5, "result": "push"}, "awaySp": {"p": 0.5, "result": "push"},
+                       "over": {"p": 0.6, "result": "miss"}, "under": {"p": 0.4, "result": "hit"}}},
+            {"id": 2, "league": "nfl", "start": "2026-09-21T17:00+00:00",
+             "picks": {"over": {"p": 0.62, "result": "hit"}, "under": {"p": 0.38, "result": "miss"}}}]
+    sc = refresh.scorecard(rows)
+    assert sc["games"] == 2 and sc["since"] == "2026-09-20T16:00+00:00"
+    by = {(b["lo"], b["hi"]): b for b in sc["bands"]}
+    assert by[(0.9, 1.0)] == {"lo": 0.9, "hi": 1.0, "n": 1, "said": 0.95, "hit": 1.0}
+    assert by[(0.55, 0.7)]["n"] == 2 and by[(0.55, 0.7)]["hit"] == 0.5 and by[(0.55, 0.7)]["said"] == 0.61
+    assert by[(0.45, 0.55)]["n"] == 0 and by[(0.45, 0.55)]["hit"] is None, "pushes are neither hit nor miss"
+    assert sorted(sc["leagues"]) == ["ncaaf", "nfl"] and sum(b["n"] for b in sc["leagues"]["nfl"]) == 2
+    assert refresh.scorecard([]) == {"games": 0, "since": None, "bands": refresh.scorecard([])["bands"], "leagues": {}}
+    assert len(json.dumps(sc)) < 1500, "the scorecard must stay small - it ships in ratings.js"
+
+
 def test_opening_line_is_saved_once():
     """Ruling 2 of 2026-09-21: the first DraftKings line is kept for good."""
     prev = fixture.previous_file()

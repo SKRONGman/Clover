@@ -177,19 +177,6 @@ try{
   for(const lg of ["ncaaf","nfl"]){ js(`setLeague("${lg}")`); for(let N=2;N<=3;N++){ js(`hotN=${N}; renderHot()`); flush();
     check(js("HOT.every(s=>slipProb(s.legs).joint>0)"),`${lg} one-game slate, ${N}-pick: offered a slip that cannot hit`); } }
 
-  /* 5d. "This weekend" on a Monday night (row 5): the window rolls forward once no game left in it
-     has yet to kick off. Fake slate: one Monday-night game; the clock is Monday 6 PM, then 8 PM. */
-  {
-    const saved=js("GAMES"); const mon=new Date(2026,8,21,19,15);   /* Mon 2026-09-21 7:15 PM local */
-    const mk=st=>js(`GAMES=[{league:"nfl",start:${JSON.stringify(mon.toISOString())},status:"${st}",hp:0,ap:0,spread:-3,total:44,home:"A",away:"B",id:"w"}]`);
-    mk("upcoming"); const w1=js(`weekendWindow(new Date(2026,8,21,18,0))`);
-    check(w1.thu.getDate()===17&&w1.mon.getDate()===21,"weekend: Monday 6 PM with MNF still to come must stay on this weekend");
-    mk("live");     const w2=js(`weekendWindow(new Date(2026,8,21,20,0))`);
-    check(w2.thu.getDate()===24&&w2.mon.getDate()===28,"weekend: Monday 8 PM with MNF under way must roll to next weekend");
-    const w3=js(`weekendWindow(new Date(2026,8,23,12,0))`);
-    check(w3.thu.getDate()===24,"weekend: Wednesday must point at the coming weekend");
-    ctx.__saved=saved; js("GAMES=__saved");
-  }
   /* 5e. no Build tab, no old line sheet (row 5) */
   check(!/tabBuild/.test(INDEX)&&/id="ladder"/.test(INDEX)&&/ladder\.js/.test(INDEX),"index.html: Build tab gone, ladder card and ladder.js present");
   check(js("typeof openSheet")==="undefined","the old line sheet must be gone (ladder.js is the one drawing)");
@@ -200,8 +187,10 @@ try{
 }catch(e){ fails.push("page threw: "+(e&&e.stack||e)); }
 
 (async()=>{
+try{ await require("./smoke_weekend.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("weekend threw: "+(e&&e.stack||e)); }
 try{ await require("./smoke_rail.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("rail threw: "+(e&&e.stack||e)); }
 try{ await require("./smoke_record.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("bet record threw: "+(e&&e.stack||e)); }
+try{ await require("./smoke_history.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("history threw: "+(e&&e.stack||e)); }
 if(fails.length){ console.log("  FAIL  page smoke test"); fails.forEach(f=>console.log("        "+f)); process.exit(1); }
-console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues this weekend, TBD kickoffs, tap-to-N/A tickets, default day, one-game slate, slip, My Bet, ladder, verdict scale, swap, moved flag rail-only at 3+, line-only at market, bet record, rail option B)");
+console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues this weekend, TBD kickoffs, tap-to-N/A tickets, default day, one-game slate, slip, My Bet, ladder, verdict scale, swap, moved flag rail-only at 3+, line-only at market, bet record, rail option B, History)");
 })();
