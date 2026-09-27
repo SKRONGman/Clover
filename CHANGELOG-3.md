@@ -2,6 +2,11 @@
 
 History only, newest first. Starts 2026-09-26 evening because `CHANGELOG-2.md` reached the 20 KB house limit; row 2 to the option-B rail is there, row 1 in `CHANGELOG.md`. Keep this file under 20 KB too.
 
+## 2026-09-27 (afternoon, later) — Props step one tested against 2025 box scores (Danny)
+- `props_check.py` (research, run by hand) + `props_check_2025.json`: nflverse 2025 weekly player stats + snap counts (free) against every prop in `props_hist_2025.json`. Findings in `DECISIONS.md` 8; proposal in `RULINGS.md` (2026-09-27).
+- Grading rules used: D/ST lines skipped (562); a listed player with a snap but no stat row = 0 (1,068, mostly anytime TD); no snap = void (69); nicknames (Kenny/Kenneth, Cam/Cameron, Chig/Chigoziem, Drew/Andrew) matched on last name + first letters (215). An earlier pass without the nickname match wrongly zeroed those players - it made the under lean look bigger.
+- The 3 games missing from the pull are confirmed: nflverse has 285 games for 2025, the pull 282.
+
 ## 2026-09-27 (afternoon) — Props phase opened; the 2025 backtest pull (Danny)
 - **Scope first, no build:** Danny asked for the size and cost of adding player props. Findings: the-odds-api 20K plan already covers NFL props (event odds endpoint, cost = markets returned x regions; DK + `us_dfs` for Underdog/PrizePicks ~12 credits a game a pull) and historical props from 2023-05-03 at 10x. Live pulls a few times per game day fit the plan (~10-13K a month with college); hourly or full alternate ladders would not. Grading data: nflverse (free) for the NFL, CFBD for college.
 - **Danny picked:** option 3 (market-only first, a player sim later), NFL first, test on one season. Asked whether one season fits before the Oct 1 reset: yes - 19,648 left, ceiling ~17,100, and September's leftovers would not carry over (believed). Rulings in `RULINGS.md`.
