@@ -1,35 +1,31 @@
 {
- "updated": "2026-09-27T16:42:37+00:00",
+ "updated": "2026-09-27T16:51:48+00:00",
  "cfbd": {
   "month": "2026-09",
-  "calls_counted": 271,
+  "calls_counted": 275,
   "counting_since": "2026-09-21T02:17+00:00",
   "calls_this_run": 4,
-  "left": 4732,
+  "left": 4728,
   "left_source": "reported by CFBD",
   "left_asof": "2026-09-27T15:11+00:00",
   "limit": 5000,
   "last_error": null
  },
  "odds": {
-  "left": 19650,
-  "left_asof": "2026-09-27T16:42+00:00",
+  "left": 19648,
+  "left_asof": "2026-09-27T16:51+00:00",
   "last_error": null
  },
  "bets": {
-  "at": "2026-09-27T16:42:37.330419+00:00",
-  "error": "HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"message\":\"Invalid API key\",\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Su",
-  "key": {
-   "prefix": "sb_secret_",
-   "length": 41,
-   "whitespace_stripped": false,
-   "url_host": "ptictqwxdqfzykpgwiqf.supabase.co"
-  }
+  "at": "2026-09-27T16:51:48.245726+00:00",
+  "open": 7,
+  "closed": 0,
+  "graded": 7,
+  "settled": 2,
+  "error": null
  },
  "stale": {},
- "alerts": [
-  "the bet record could not be updated: HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"message\":\"Invalid API key\",\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Su"
- ],
+ "alerts": [],
  "alert_now": false,
  "alerted_on": "2026-09-27"
 }
