@@ -1,23 +1,29 @@
 {
- "updated": "2026-09-27T00:26:01+00:00",
+ "updated": "2026-09-27T00:53:04+00:00",
  "cfbd": {
   "month": "2026-09",
-  "calls_counted": 225,
+  "calls_counted": 229,
   "counting_since": "2026-09-21T02:17+00:00",
   "calls_this_run": 4,
-  "left": 4776,
+  "left": 4772,
   "left_source": "reported by CFBD",
   "left_asof": "2026-09-26T21:11+00:00",
   "limit": 5000,
   "last_error": null
  },
  "odds": {
-  "left": 19672,
-  "left_asof": "2026-09-27T00:26+00:00",
+  "left": 19670,
+  "left_asof": "2026-09-27T00:53+00:00",
   "last_error": null
  },
+ "bets": {
+  "at": "2026-09-27T00:53:04.311085+00:00",
+  "error": "HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"message\":\"Invalid API key\",\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Su"
+ },
  "stale": {},
- "alerts": [],
- "alert_now": false,
- "alerted_on": null
+ "alerts": [
+  "the bet record could not be updated: HTTPError: GET /rest/v1/picks?select=id,bet_id,game_id,type,line,chance,clo -> 401 {\"message\":\"Invalid API key\",\"hint\":\"Double check the provided API key for typos. This API key might also be owned by another Su"
+ ],
+ "alert_now": true,
+ "alerted_on": "2026-09-27"
 }
