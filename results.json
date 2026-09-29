@@ -3650,5 +3650,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": "47dc7baa254659f3beb2ed2b38c207b6",
+  "league": "nfl",
+  "start": "2026-09-29T00:16+00:00",
+  "home": "Chicago Bears",
+  "away": "Philadelphia Eagles",
+  "hp": 27.0,
+  "ap": 7.0,
+  "spread": 3.5,
+  "total": 42.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3858,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6142,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 3.5,
+    "p": 0.503,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -3.5,
+    "p": 0.497,
+    "result": "miss"
+   },
+   "over": {
+    "line": 42.5,
+    "p": 0.4914,
+    "result": "miss"
+   },
+   "under": {
+    "line": 42.5,
+    "p": 0.5087,
+    "result": "hit"
+   }
+  }
  }
 ]
