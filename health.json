@@ -1,23 +1,23 @@
 {
- "updated": "2026-09-29T04:19:28+00:00",
+ "updated": "2026-09-29T05:18:36+00:00",
  "cfbd": {
   "month": "2026-09",
-  "calls_counted": 357,
+  "calls_counted": 361,
   "counting_since": "2026-09-21T02:17+00:00",
-  "calls_this_run": 5,
-  "left": 4658,
+  "calls_this_run": 4,
+  "left": 4654,
   "left_source": "reported by CFBD",
   "left_asof": "2026-09-29T04:19+00:00",
   "limit": 5000,
   "last_error": null
  },
  "odds": {
-  "left": 2812,
-  "left_asof": "2026-09-29T04:19+00:00",
+  "left": 2810,
+  "left_asof": "2026-09-29T05:18+00:00",
   "last_error": null
  },
  "bets": {
-  "at": "2026-09-29T04:19:28.334077+00:00",
+  "at": "2026-09-29T05:18:36.033718+00:00",
   "open": 0,
   "closed": 0,
   "graded": 0,
