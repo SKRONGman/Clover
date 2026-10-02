@@ -3694,5 +3694,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401871049,
+  "league": "ncaaf",
+  "start": "2026-10-02T00:00+00:00",
+  "home": "New Mexico State",
+  "away": "Western Kentucky",
+  "hp": 34.0,
+  "ap": 13.0,
+  "spread": -1.5,
+  "total": 55.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5348,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4652,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -1.5,
+    "p": 0.4942,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 1.5,
+    "p": 0.5058,
+    "result": "miss"
+   },
+   "over": {
+    "line": 55.5,
+    "p": 0.4931,
+    "result": "miss"
+   },
+   "under": {
+    "line": 55.5,
+    "p": 0.5069,
+    "result": "hit"
+   }
+  }
  }
 ]
