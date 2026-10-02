@@ -3738,5 +3738,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401862786,
+  "league": "ncaaf",
+  "start": "2026-10-02T01:00+00:00",
+  "home": "Tulsa",
+  "away": "North Texas",
+  "hp": 44.0,
+  "ap": 45.0,
+  "spread": 3.0,
+  "total": 56.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4172,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5828,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 3.0,
+    "p": 0.4968,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -3.0,
+    "p": 0.5032,
+    "result": "miss"
+   },
+   "over": {
+    "line": 56.5,
+    "p": 0.4921,
+    "result": "hit"
+   },
+   "under": {
+    "line": 56.5,
+    "p": 0.5079,
+    "result": "miss"
+   }
+  }
  }
 ]
