@@ -3914,5 +3914,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401862787,
+  "league": "ncaaf",
+  "start": "2026-10-03T15:00+00:00",
+  "home": "Charlotte",
+  "away": "Memphis",
+  "hp": 8.0,
+  "ap": 59.0,
+  "spread": 20.5,
+  "total": 52.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.0916,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.9084,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 20.5,
+    "p": 0.5073,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -20.5,
+    "p": 0.4926,
+    "result": "hit"
+   },
+   "over": {
+    "line": 52.5,
+    "p": 0.4901,
+    "result": "hit"
+   },
+   "under": {
+    "line": 52.5,
+    "p": 0.5099,
+    "result": "miss"
+   }
+  }
  }
 ]
