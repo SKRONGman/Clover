@@ -3870,5 +3870,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401858476,
+  "league": "ncaaf",
+  "start": "2026-10-03T00:00+00:00",
+  "home": "Northwestern",
+  "away": "Penn State",
+  "hp": 34.0,
+  "ap": 13.0,
+  "spread": 2.5,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4337,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5663,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 2.5,
+    "p": 0.4972,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -2.5,
+    "p": 0.5028,
+    "result": "miss"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.4839,
+    "result": "hit"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.5161,
+    "result": "miss"
+   }
+  }
  }
 ]
