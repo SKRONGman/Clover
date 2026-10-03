@@ -3782,5 +3782,93 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401858245,
+  "league": "ncaaf",
+  "start": "2026-10-02T23:00+00:00",
+  "home": "Virginia Tech",
+  "away": "Pittsburgh",
+  "hp": 33.0,
+  "ap": 35.0,
+  "spread": -2.5,
+  "total": 53.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5694,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4306,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -2.5,
+    "p": 0.5023,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 2.5,
+    "p": 0.4976,
+    "result": "hit"
+   },
+   "over": {
+    "line": 53.5,
+    "p": 0.4875,
+    "result": "hit"
+   },
+   "under": {
+    "line": 53.5,
+    "p": 0.5124,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401871050,
+  "league": "ncaaf",
+  "start": "2026-10-02T23:00+00:00",
+  "home": "Delaware",
+  "away": "Liberty",
+  "hp": 14.0,
+  "ap": 30.0,
+  "spread": 7.0,
+  "total": 51.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.315,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.685,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 7.0,
+    "p": 0.5017,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -7.0,
+    "p": 0.4983,
+    "result": "hit"
+   },
+   "over": {
+    "line": 51.5,
+    "p": 0.4883,
+    "result": "miss"
+   },
+   "under": {
+    "line": 51.5,
+    "p": 0.5118,
+    "result": "hit"
+   }
+  }
  }
 ]
