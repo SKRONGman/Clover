@@ -6070,5 +6070,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401860921,
+  "league": "ncaaf",
+  "start": "2026-10-04T01:30+00:00",
+  "home": "Washington State",
+  "away": "Fresno State",
+  "hp": 6.0,
+  "ap": 26.0,
+  "spread": -1.5,
+  "total": 44.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5435,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4565,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -1.5,
+    "p": 0.5026,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 1.5,
+    "p": 0.4974,
+    "result": "hit"
+   },
+   "over": {
+    "line": 44.5,
+    "p": 0.4737,
+    "result": "miss"
+   },
+   "under": {
+    "line": 44.5,
+    "p": 0.5263,
+    "result": "hit"
+   }
+  }
  }
 ]
