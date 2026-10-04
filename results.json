@@ -6290,5 +6290,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": "c327223d76a3b7b0db8c6c104442f44b",
+  "league": "nfl",
+  "start": "2026-10-04T20:05+00:00",
+  "home": "Minnesota Vikings",
+  "away": "Miami Dolphins",
+  "hp": 15.0,
+  "ap": 10.0,
+  "spread": -10.0,
+  "total": 38.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.8216,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.1784,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -10.0,
+    "p": 0.504,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 10.0,
+    "p": 0.496,
+    "result": "hit"
+   },
+   "over": {
+    "line": 38.5,
+    "p": 0.4824,
+    "result": "miss"
+   },
+   "under": {
+    "line": 38.5,
+    "p": 0.5176,
+    "result": "hit"
+   }
+  }
  }
 ]
