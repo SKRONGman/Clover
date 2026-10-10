@@ -6774,5 +6774,93 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401856826,
+  "league": "ncaaf",
+  "start": "2026-10-10T02:15+00:00",
+  "home": "BYU",
+  "away": "Iowa State",
+  "hp": 24.0,
+  "ap": 10.0,
+  "spread": -11.5,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.7777,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.2223,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -11.5,
+    "p": 0.4954,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 11.5,
+    "p": 0.5047,
+    "result": "miss"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.4894,
+    "result": "miss"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.5107,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401862795,
+  "league": "ncaaf",
+  "start": "2026-10-10T16:00+00:00",
+  "home": "Army",
+  "away": "Tulane",
+  "hp": 20.0,
+  "ap": 17.0,
+  "spread": -3.5,
+  "total": 48.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5937,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4063,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -3.5,
+    "p": 0.5016,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 3.5,
+    "p": 0.4984,
+    "result": "hit"
+   },
+   "over": {
+    "line": 48.5,
+    "p": 0.4835,
+    "result": "miss"
+   },
+   "under": {
+    "line": 48.5,
+    "p": 0.5164,
+    "result": "hit"
+   }
+  }
  }
 ]
