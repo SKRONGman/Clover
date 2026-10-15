@@ -8886,5 +8886,93 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401871054,
+  "league": "ncaaf",
+  "start": "2026-10-14T23:30+00:00",
+  "home": "Missouri State",
+  "away": "Kennesaw State",
+  "hp": 24.0,
+  "ap": 21.0,
+  "spread": 3.0,
+  "total": 51.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4223,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5777,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 3.0,
+    "p": 0.5054,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -3.0,
+    "p": 0.4946,
+    "result": "miss"
+   },
+   "over": {
+    "line": 51.5,
+    "p": 0.4824,
+    "result": "miss"
+   },
+   "under": {
+    "line": 51.5,
+    "p": 0.5175,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401871068,
+  "league": "ncaaf",
+  "start": "2026-10-15T00:00+00:00",
+  "home": "Sam Houston",
+  "away": "Western Kentucky",
+  "hp": 3.0,
+  "ap": 16.0,
+  "spread": 1.5,
+  "total": 53.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4608,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5392,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 1.5,
+    "p": 0.5013,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -1.5,
+    "p": 0.4987,
+    "result": "hit"
+   },
+   "over": {
+    "line": 53.5,
+    "p": 0.486,
+    "result": "miss"
+   },
+   "under": {
+    "line": 53.5,
+    "p": 0.514,
+    "result": "hit"
+   }
+  }
  }
 ]
