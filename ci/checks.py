@@ -105,6 +105,44 @@ def check_python():
     return bad
 
 
+COMBO_GAMES = 6         # enough to exercise both leagues without slowing the run
+
+
+def combo_fixture(ratings_js, out_path):
+    """Price same-game slips in Python, straight off the tables the page will read, so
+    smoke.js can check its own prob() against them.
+
+    The six frozen percentages only ever cover ONE pick at the market line, and a single
+    pick can never have one leg push while another loses - which is exactly where the
+    page's lookup and sim.py parted ways until 2026-10-17. So: both sides of each market,
+    at the market line and the whole numbers either side of it (a whole line pushes on a
+    tie), in every same-game combination."""
+    import json as _json
+    import sim
+    txt = open(ratings_js, encoding="utf-8").read()
+    data = _json.loads(txt[txt.index("{"):txt.rindex("}") + 1])
+    rows, games = [], 0
+    for g in data.get("upcoming", []):
+        if not g.get("sim") or g.get("spread") is None or g.get("total") is None:
+            continue
+        grid = sim.Grid.decode(g["sim"])
+        W = [("homeML", 0), ("awayML", 0)]
+        P = [(t, ln + d) for d in (0, -0.5, 0.5)
+             for t, ln in (("homeSp", g["spread"]), ("awaySp", -g["spread"]))]
+        T = [(t, g["total"] + d) for d in (0, -0.5, 0.5) for t in ("over", "under")]
+        combos = ([[w, p] for w in W for p in P] + [[w, t] for w in W for t in T]
+                  + [[p, t] for p in P for t in T] + [[w, p, t] for w in W for p in P for t in T])
+        for legs in combos:
+            rows.append({"id": g["id"], "legs": [{"type": t, "line": ln} for t, ln in legs],
+                         "p": grid.prob(legs)})
+        games += 1
+        if games >= COMBO_GAMES:
+            break
+    with open(out_path, "w") as f:
+        _json.dump(rows, f)
+    return len(rows)
+
+
 def check_page():
     if not shutil.which("node"):
         return ["node is not installed - the page smoke test cannot run"]
@@ -119,18 +157,25 @@ def check_page():
                 test_refresh.run(cfbd_mode=mode)
         finally:
             os.chdir(here)
-        r = subprocess.run(["node", os.path.join(ROOT, "ci", "smoke.js"), ROOT, os.path.join(tmp, "ratings.js")],
-                           capture_output=True, text=True)
+        combos = os.path.join(tmp, "combos.json")
+        combo_fixture(os.path.join(tmp, "ratings.js"), combos)
+        r = subprocess.run(["node", os.path.join(ROOT, "ci", "smoke.js"), ROOT, os.path.join(tmp, "ratings.js"),
+                            "--combos=" + combos], capture_output=True, text=True)
         print(r.stdout, end="")
         if r.returncode:
             bad.append(f"page smoke test failed (feeds: {mode}) {r.stderr.strip()[-300:]}")
         shutil.rmtree(tmp, ignore_errors=True)
     live = os.path.join(ROOT, "ratings.js")         # and the data file that is actually live right now
     if os.path.exists(live):
-        r = subprocess.run(["node", os.path.join(ROOT, "ci", "smoke.js"), ROOT, live, "--live"], capture_output=True, text=True)
+        tmp = tempfile.mkdtemp()
+        combos = os.path.join(tmp, "combos.json")
+        combo_fixture(live, combos)
+        r = subprocess.run(["node", os.path.join(ROOT, "ci", "smoke.js"), ROOT, live, "--live",
+                            "--combos=" + combos], capture_output=True, text=True)
         print(r.stdout, end="")
         if r.returncode:
             bad.append("page smoke test failed on the LIVE ratings.js")
+        shutil.rmtree(tmp, ignore_errors=True)
     return bad
 
 

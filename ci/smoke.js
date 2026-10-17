@@ -50,6 +50,9 @@ try{
   check(live||worst[1]>=30,"expected at least 30 priced picks, saw "+worst[1]);
   check(worst[0]<=0.00006,"page % differs from Python's by "+worst[0]);
 
+  /* 1b. the same, on SAME-GAME slips - before test 5c strips the slate (smoke_combos.js) */
+  require("./smoke_combos.js")({sandbox,js,check,live});
+
   /* 2. kicked off = not priceable */
   check(js(`GAMES.filter(G=>new Date(G.start)<Date.now()).every(G=>!G.sim&&statusOf(G)!=="upcoming")`),"a kicked-off game still has a table");
 
@@ -192,5 +195,5 @@ try{ await require("./smoke_rail.js")({ctx,sandbox,byId,js,flush,check,live}); }
 try{ await require("./smoke_record.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("bet record threw: "+(e&&e.stack||e)); }
 try{ await require("./smoke_history.js")({ctx,sandbox,byId,js,flush,check,live}); }catch(e){ fails.push("history threw: "+(e&&e.stack||e)); }
 if(fails.length){ console.log("  FAIL  page smoke test"); fails.forEach(f=>console.log("        "+f)); process.exit(1); }
-console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, hot slips 2-6 both leagues this weekend, TBD kickoffs, tap-to-N/A tickets, default day, one-game slate, slip, My Bet, ladder, verdict scale, swap, moved flag rail-only at 3+, line-only at market, bet record, rail option B, History)");
+console.log("  ok    page smoke test"+(live?" on the live data file":"")+" (boot, lookups = Python, same-game slips = Python either way round, hot slips 2-6 both leagues this weekend, TBD kickoffs, tap-to-N/A tickets, default day, one-game slate, slip, My Bet, ladder, verdict scale, swap, moved flag rail-only at 3+, line-only at market, bet record, rail option B, History)");
 })();

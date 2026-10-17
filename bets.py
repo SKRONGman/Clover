@@ -158,14 +158,18 @@ def run(pre, grids, up, grade_leg, now_iso):
         grades = grade_updates(picks, finals(up, results), grade_leg)
         for pid, body in grades.items():
             _patch(url, key, f"/rest/v1/picks?id=eq.{pid}", body)
+        # Every run, not only runs that graded something. The query already asks for
+        # ungraded slips, so the sweep is cheap and repeating it changes nothing - but
+        # skipping it stranded a slip for good: if a run graded a bet's last pick and
+        # then died before the sweep, the next run's picks query no longer returns
+        # those picks (they have results), so the slip would never settle.
         done = 0
-        if grades:
-            bets = _get(url, key, "/rest/v1/bets?select=id,picks(result)&slip_result=is.null&voided_at=is.null")
-            for b in bets:
-                res = slip_result([p["result"] for p in b.get("picks", [])])
-                if res:
-                    _patch(url, key, f"/rest/v1/bets?id=eq.{b['id']}", {"slip_result": res, "graded_at": now_iso})
-                    done += 1
+        bets = _get(url, key, "/rest/v1/bets?select=id,picks(result)&slip_result=is.null&voided_at=is.null")
+        for b in bets:
+            res = slip_result([p["result"] for p in b.get("picks", [])])
+            if res:
+                _patch(url, key, f"/rest/v1/bets?id=eq.{b['id']}", {"slip_result": res, "graded_at": now_iso})
+                done += 1
         print(f"  bets: {len(picks)} open pick(s), {len(closes)} closing price(s), {len(grades)} graded, {done} slip(s) settled")
         common.RUN["bets"] = {"at": now_iso, "open": len(picks), "closed": len(closes), "graded": len(grades), "settled": done, "error": None}
     except Exception as e:                        # never stop a refresh over the bet record - but say so in health.json

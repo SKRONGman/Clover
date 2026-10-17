@@ -113,6 +113,25 @@ def test_slip_results():
     assert bets.slip_result(["hit", None]) is None and bets.slip_result([]) is None
 
 
+def test_a_slip_still_settles_on_a_later_run():
+    """The run that graded a bet's last pick died before it could settle the slip. The
+    next run has no open picks at all - those picks have results now - so the settle
+    sweep has to run anyway, or the slip stays open for good."""
+    up, grids = slate()
+    fake = FakeSupabase([], [{"id": "b", "picks": [{"result": "hit"}, {"result": "miss"}]}])
+    with_fake(fake, lambda: bets.run(up, grids, up, grade_leg, NOW))
+    assert dict(fake.patches)["bets?id=eq.b"] == {"slip_result": "lost", "graded_at": NOW}
+
+
+def test_a_half_graded_slip_is_left_alone():
+    """The other half of the same rule: a sweep that runs every time must not settle a
+    bet whose picks are still open."""
+    up, grids = slate()
+    fake = FakeSupabase([], [{"id": "b", "picks": [{"result": "hit"}, {"result": None}]}])
+    with_fake(fake, lambda: bets.run(up, grids, up, grade_leg, NOW))
+    assert not fake.patches
+
+
 def test_supabase_down_never_stops_a_refresh():
     up, grids = slate()
     fake = FakeSupabase([], fail=True)

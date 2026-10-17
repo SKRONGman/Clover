@@ -109,7 +109,11 @@ function prob(gi,legs,dt=0,dm=0){
   let win=0, push=0;
   for(let j=0;j<g.k;j++){
     const t=g.T[j]+dt, m=g.M[j]+dm; let ok=true, pu=false;
-    for(let x=0;x<legs.length;x++){ const v=legVal(legs[x].type,legs[x].line,t,m); if(v===0){pu=true;break;} if(v<0){ok=false;break;} }
+    /* a push on ANY leg throws the whole sim out of the denominator (sim.py does the
+       same: push |= v==0, then ok & ~push). So a losing leg must NOT end the loop -
+       a later leg may still push. Breaking there made the page disagree with Python
+       on same-game slips at whole-number lines, by as much as the tap order. */
+    for(let x=0;x<legs.length;x++){ const v=legVal(legs[x].type,legs[x].line,t,m); if(v===0){pu=true;break;} if(v<0) ok=false; }
     if(pu) push+=g.C[j]; else if(ok) win+=g.C[j];
   }
   const d=g.n-push; return d>0 ? win/d : 0;
