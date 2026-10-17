@@ -9854,5 +9854,313 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401862803,
+  "league": "ncaaf",
+  "start": "2026-10-17T17:00+00:00",
+  "home": "Temple",
+  "away": "Charlotte",
+  "hp": 31.0,
+  "ap": 38.0,
+  "spread": -19.5,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.9049,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.0951,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -19.5,
+    "p": 0.5022,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 19.5,
+    "p": 0.4978,
+    "result": "hit"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.4865,
+    "result": "hit"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.5134,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401866442,
+  "league": "ncaaf",
+  "start": "2026-10-17T17:00+00:00",
+  "home": "Buffalo",
+  "away": "Massachusetts",
+  "hp": 25.0,
+  "ap": 18.0,
+  "spread": -7.0,
+  "total": 42.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.6791,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.3209,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -7.0,
+    "p": 0.5005,
+    "result": "push"
+   },
+   "awaySp": {
+    "line": 7.0,
+    "p": 0.4995,
+    "result": "push"
+   },
+   "over": {
+    "line": 42.5,
+    "p": 0.4835,
+    "result": "hit"
+   },
+   "under": {
+    "line": 42.5,
+    "p": 0.5164,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401866443,
+  "league": "ncaaf",
+  "start": "2026-10-17T17:30+00:00",
+  "home": "Central Michigan",
+  "away": "Western Michigan",
+  "hp": 14.0,
+  "ap": 21.0,
+  "spread": 7.0,
+  "total": 42.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3263,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6737,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 7.0,
+    "p": 0.4983,
+    "result": "push"
+   },
+   "awaySp": {
+    "line": -7.0,
+    "p": 0.5017,
+    "result": "push"
+   },
+   "over": {
+    "line": 42.5,
+    "p": 0.4811,
+    "result": "miss"
+   },
+   "under": {
+    "line": 42.5,
+    "p": 0.5189,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401856721,
+  "league": "ncaaf",
+  "start": "2026-10-17T19:30+00:00",
+  "home": "Ole Miss",
+  "away": "Missouri",
+  "hp": 31.0,
+  "ap": 3.0,
+  "spread": -4.0,
+  "total": 58.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.602,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.398,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -4.0,
+    "p": 0.4947,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 4.0,
+    "p": 0.5053,
+    "result": "miss"
+   },
+   "over": {
+    "line": 58.5,
+    "p": 0.4878,
+    "result": "miss"
+   },
+   "under": {
+    "line": 58.5,
+    "p": 0.5122,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401858264,
+  "league": "ncaaf",
+  "start": "2026-10-17T19:30+00:00",
+  "home": "Virginia Tech",
+  "away": "Georgia Tech",
+  "hp": 34.0,
+  "ap": 24.0,
+  "spread": -9.5,
+  "total": 56.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.7409,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.2591,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -9.5,
+    "p": 0.5095,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 9.5,
+    "p": 0.4905,
+    "result": "miss"
+   },
+   "over": {
+    "line": 56.5,
+    "p": 0.4932,
+    "result": "hit"
+   },
+   "under": {
+    "line": 56.5,
+    "p": 0.5068,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401864524,
+  "league": "ncaaf",
+  "start": "2026-10-17T19:30+00:00",
+  "home": "Air Force",
+  "away": "UNLV",
+  "hp": 41.0,
+  "ap": 31.0,
+  "spread": 1.5,
+  "total": 48.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4603,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5397,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 1.5,
+    "p": 0.4977,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -1.5,
+    "p": 0.5023,
+    "result": "miss"
+   },
+   "over": {
+    "line": 48.5,
+    "p": 0.4798,
+    "result": "hit"
+   },
+   "under": {
+    "line": 48.5,
+    "p": 0.5202,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401866478,
+  "league": "ncaaf",
+  "start": "2026-10-17T19:30+00:00",
+  "home": "Miami (OH)",
+  "away": "Akron",
+  "hp": 34.0,
+  "ap": 14.0,
+  "spread": -9.5,
+  "total": 47.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.7421,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.2579,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -9.5,
+    "p": 0.5117,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 9.5,
+    "p": 0.4884,
+    "result": "miss"
+   },
+   "over": {
+    "line": 47.5,
+    "p": 0.4789,
+    "result": "hit"
+   },
+   "under": {
+    "line": 47.5,
+    "p": 0.5211,
+    "result": "miss"
+   }
+  }
  }
 ]
