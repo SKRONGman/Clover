@@ -30,7 +30,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FAIL_BYTES = 24800      # the largest file ever pushed intact was 24,767 bytes
 WARN_BYTES = 20000      # house rule: keep hand-edited files under 20 KB
 HAND_EDITED = (".py", ".js", ".html", ".md", ".yml", ".css", ".txt")
-MACHINE_WRITTEN = {"ratings.js"}            # refresh.py writes it; nobody pushes it by hand
+MACHINE_WRITTEN = {"ratings.js", "props.js"}   # refresh.py / props.py write these; nobody pushes them by hand
 
 # Words the page must not say. All at 0 since the truth pass (row 2, 2026-09-20);
 # the number is how many are allowed and may only go DOWN.

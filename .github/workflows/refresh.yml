@@ -6,6 +6,9 @@
 #   on market lines, so team ratings only matter for research - weekly is plenty)
 #   Lines only: every hour Thu-Mon, 15:00-05:00 UTC = 10am-midnight CDT
 #     (Monday added for Monday Night Football; college + NFL refresh together)
+#   NFL props: pulled by the same hourly job, only for games that have reached
+#     one of their own marks (first sight, ~2 h out, ~15 min out). ~6 credits a
+#     game a pull. props.py decides; the schedule just has to run.
 #   Alt lines (DraftKings alternate spreads/totals via the-odds-api.com,
 #   spends ODDS_KEY credits, ~2 per game): Thursdays 15:10 UTC = 10:10am CDT.
 #     College and NFL every week (NFL was every other week until 2026-09-20; the switch is in odds.py).
@@ -86,6 +89,27 @@ jobs:
           else
             git commit -m "Lines refresh ($(date -u +'%Y-%m-%d %H:%M UTC'), ${{ steps.mode.outputs.mode }})"
             git push || (git pull --rebase origin main && git push)    # someone pushed code mid-run: replay on top
+          fi
+
+      # NFL player props ride along with the lines (2026-10-18). They had their own
+      # hourly workflow for a day and GitHub never once ran it: scheduled runs on
+      # this repo are dropped and delayed heavily, and a second schedule competing
+      # with this one lost every time. This job demonstrably runs, so props use it.
+      # continue-on-error: a props failure must never cost us a lines refresh, the
+      # same rule as one dead feed never stopping the other league.
+      - name: NFL props (never blocks a lines refresh)
+        continue-on-error: true
+        env:
+          ODDS_KEY: ${{ secrets.ODDS_KEY }}
+        run: |
+          python props.py --pull
+          node ci/smoke_props.js .
+          git add props.js props_live.json || true
+          if git diff --cached --quiet; then
+            echo "No props change."
+          else
+            git commit -m "NFL props ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git push || (git pull --rebase origin main && git push)
           fi
 
       - name: Anything Danny should look at? (red run = GitHub emails him, once a day)

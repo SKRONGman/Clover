@@ -67,7 +67,13 @@ BAND = {"pass_yds": 40.0, "rush_yds": 20.0, "rec_yds": 20.0, "rec": 4.0, "pass_t
 STEP = 0.5
 
 PULL_MARKS = (120, 15)          # minutes before kickoff that a game is pulled
-MORNING_HOUR_UTC = 14           # the once-a-day sweep (9am CT)
+# Every mark fires at most once per game (props_live.json remembers which).
+# GitHub drops and delays scheduled runs badly (half of them, by hours, on this
+# repo), so the marks are deliberately forgiving: a game nobody has priced yet
+# is pulled the first time any run sees it, and a mark that was missed is still
+# taken late rather than skipped. Better a number 40 minutes before kickoff
+# than no number at all. LATE is how far past a mark a run may still claim it.
+LATE = 45
 
 
 # ---------------------------------------------------------------- odds math
@@ -179,15 +185,21 @@ def price_event(ev):
 
 # --------------------------------------------------------------- scheduling
 def due(kick, now, pulled):
-    """Is this game at one of its marks and not already pulled there?"""
+    """Which mark this game is owed right now, or None.
+
+    A kicked-off game is never pulled. A game nobody has priced is pulled on
+    sight ("first"), whenever a run happens to see it - that is what guarantees
+    every game gets at least one number even when most runs are dropped. After
+    that the marks are claimed nearest-kickoff-first, each at most once, and a
+    mark whose moment has passed is still taken (up to LATE minutes late)."""
     mins = (kick - now).total_seconds() / 60.0
     if mins < -5:
         return None
-    for mark in PULL_MARKS:
-        if mark - 30 <= mins <= mark + 30 and str(mark) not in pulled:
+    if not pulled:
+        return "first"
+    for mark in sorted(PULL_MARKS):                 # 15 before 120: freshest wins
+        if str(mark) not in pulled and mins <= mark + LATE:
             return str(mark)
-    if now.hour == MORNING_HOUR_UTC and "am" not in pulled and mins > max(PULL_MARKS):
-        return "am"
     return None
 
 
@@ -312,10 +324,18 @@ def selftest():
 
     # scheduling marks
     now = datetime(2026, 10, 18, 16, 0, tzinfo=timezone.utc)
-    ok(due(now + timedelta(minutes=120), now, []) == "120", "2-hour mark fires")
-    ok(due(now + timedelta(minutes=15), now, []) == "15", "15-minute mark fires")
-    ok(due(now + timedelta(minutes=15), now, ["15"]) is None, "a mark never fires twice")
-    ok(due(now - timedelta(hours=2), now, []) is None, "a kicked-off game is never pulled")
+    at = lambda m, done: due(now + timedelta(minutes=m), now, done)
+    ok(at(500, []) == "first", "a game nobody has priced is pulled on sight")
+    ok(at(500, ["first"]) is None, "a far-off game is not pulled again straight away")
+    ok(at(120, ["first"]) == "120", "the 2-hour mark fires")
+    ok(at(15, ["first", "120"]) == "15", "the 15-minute mark fires")
+    ok(at(15, ["first", "120", "15"]) is None, "a mark never fires twice")
+    ok(at(-120, []) is None, "a kicked-off game is never pulled")
+    # the delay tolerance that the dropped-schedule problem needs
+    ok(at(40, ["first", "120"]) == "15", "a late run still claims the 15-minute mark")
+    ok(at(95, ["first"]) == "120", "a run inside the window claims the 2-hour mark")
+    ok(at(300, ["first"]) is None, "the 2-hour mark is not claimed hours early")
+    ok(at(10, ["first"]) == "15", "a game whose 2-hour run was dropped still gets a late price")
 
     print("  props selftest:", "OK" if not bad else f"{bad} FAILED")
     return bad

@@ -54,7 +54,9 @@ function propRowHtml(g,r){
   const picked=PSLIP.find(x=>propKey(x)===k);
   const isTd=r.m==="any_td";
   const typed=picked?picked.num:null;
-  const shown=isTd?r.yes/1000:propChance(r,typed);
+  /* nothing typed = price the book's own line, which is the field's placeholder.
+     An empty Chance column would make the whole board read as dashes on open. */
+  const shown=isTd?r.yes/1000:propChance(r,typed==null?r.line:typed);
   const off=!isTd&&typed!=null&&shown==null;
   return `<tr class="prow${picked?" on":""}">`
     +`<td class="who">${esc(r.who)}</td>`
@@ -152,7 +154,9 @@ function propsInput(e){
     const num=parseFloat(t.value);
     const cell=t.closest("tr").querySelector(".pc");
     const p=propChance(f.r,num);
-    if(cell) cell.innerHTML=(t.value!==""&&p==null)?`<span class="warn">off the board</span>`:pct(p);
+    /* cleared the field: fall back to the book's line, same as the first draw */
+    const back=t.value===""?propChance(f.r,f.r.line):p;
+    if(cell) cell.innerHTML=(t.value!==""&&p==null)?`<span class="warn">off the board</span>`:pct(back);
     if(i>=0&&p!=null){ PSLIP[i].num=num; PSLIP[i].p=p;
       const host=document.querySelector(".pslip"); if(host) host.innerHTML=`<h3>Props slip</h3>${propSlipHtml()}`; }
     return;
