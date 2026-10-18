@@ -33,6 +33,24 @@ let PPAYOUT=null, PSTAKE=null;
 const propsData=()=>(window.PROPS&&window.PROPS.games)||[];
 const propKey=r=>`${r.gid}|${r.m}|${r.who}`;
 
+/* ------------------------------------------------- a finished game is gone */
+/* Danny, 2026-10-18: props may stay up after kickoff, but once the game is
+   OVER the card goes. Two signals, whichever lands first:
+     - the slate says final. props ids ARE the odds-api event ids, the same ids
+       the NFL slate carries, so a props game looks itself up in R.upcoming.
+       Exact, but only as fresh as the last refresh commit.
+     - kickoff + PROP_OVER_H hours. Needs no data and no refresh, so it still
+       clears the board on a night when nothing runs.
+   A game already graded has left the slate; the clock covers that too. */
+const PROP_OVER_H=4;
+function propGameOver(g,now){
+  const t=Date.parse(g.kick);
+  if(isFinite(t)&&(now||Date.now())-t>=PROP_OVER_H*3600e3) return true;
+  const slate=(window.R&&window.R.upcoming)||[];
+  const m=slate.find(x=>String(x.id)===String(g.id));
+  return !!(m&&m.status==="final");
+}
+
 /* The one lookup. Returns the over/yes chance at `num`, or null if the number
    is off the end of the ladder props.py shipped. No math, just an index. */
 function propChance(row,num){
@@ -56,21 +74,24 @@ function pslipSameGame(){
 }
 
 function propGames(){
-  const q=PQ.trim().toLowerCase();
-  return propsData().map(g=>{
+  const q=PQ.trim().toLowerCase(), now=Date.now();
+  return propsData().filter(g=>!propGameOver(g,now)).map(g=>{
     let rows=g.props||[];
     if(q) rows=rows.filter(r=>r.who.toLowerCase().includes(q));
     if(PON.size) rows=rows.filter(r=>PON.has(r.m));
     return {...g,props:rows};
   }).filter(g=>g.props.length);
 }
-const propTotal=()=>propsData().reduce((a,g)=>a+(g.props||[]).length,0);
+/* every game still on the board - finished ones are not "filtered out", they
+   are gone, so they must not be counted in the chips or the N-of-M line */
+const propLive=()=>{const now=Date.now();return propsData().filter(g=>!propGameOver(g,now));};
+const propTotal=()=>propLive().reduce((a,g)=>a+(g.props||[]).length,0);
 
 /* ------------------------------------------------------------- prop filters */
 /* every market actually in the file, known ones in PROP_ORDER, new ones after */
 function propMarkets(){
   const seen=[];
-  propsData().forEach(g=>(g.props||[]).forEach(r=>{ if(!seen.includes(r.m)) seen.push(r.m); }));
+  propLive().forEach(g=>(g.props||[]).forEach(r=>{ if(!seen.includes(r.m)) seen.push(r.m); }));
   return seen.sort((a,b)=>{const i=PROP_ORDER.indexOf(a),j=PROP_ORDER.indexOf(b);
     return (i<0?99:i)-(j<0?99:j)||a.localeCompare(b);});
 }
@@ -86,7 +107,7 @@ function propGroups(){
 /* how many props sit behind each chip, after the player search only */
 function propCounts(){
   const q=PQ.trim().toLowerCase(), c={};
-  propsData().forEach(g=>(g.props||[]).forEach(r=>{
+  propLive().forEach(g=>(g.props||[]).forEach(r=>{
     if(q&&!r.who.toLowerCase().includes(q)) return;
     c[r.m]=(c[r.m]||0)+1; }));
   return c;
@@ -191,7 +212,14 @@ function propSlipHtml(){
 function renderProps(){
   const host=document.getElementById("viewProps");
   if(!host) return;
-  const data=propsData();
+  const data=propLive();
+  if(window.PROPS&&propsData().length&&!data.length){
+    host.innerHTML=`<div class="phead"><h2>NFL Props</h2></div>`
+      +`<p class="hint">Every game Clover priced today is over. The next slate's props `
+      +`are pulled on game day — a morning sweep, then about two hours and about `
+      +`fifteen minutes before each kickoff.</p>`;
+    return;
+  }
   if(!window.PROPS||!data.length){
     host.innerHTML=`<p class="hint">No NFL props loaded yet. They are pulled on game day — `
       +`a morning sweep, then about two hours and about fifteen minutes before each kickoff.</p>`;
@@ -216,7 +244,7 @@ function renderProps(){
 
 /* ------------------------------------------------------------------ events */
 function propFind(k){
-  for(const g of propsData())
+  for(const g of propLive())
     for(const r of (g.props||[]))
       if(propKey({gid:g.id,m:r.m,who:r.who})===k) return {g,r};
   return null;

@@ -254,7 +254,10 @@ def run(plan_only=False):
                  pulled=now.isoformat(timespec="seconds"), props=price_event(body))
         g["marks"] = sorted(set(g["marks"] + [mark]))
 
-    cutoff = now - timedelta(hours=8)
+    # A finished game leaves the store. The page hides a card 4 hours after
+    # kickoff (PROP_OVER_H in props_tab.js); the store is kept a little looser
+    # so the page, not this file, is what decides what Danny sees.
+    cutoff = now - timedelta(hours=5)
     S["games"] = {i: g for i, g in S["games"].items()
                   if datetime.fromisoformat(g["kick"].replace("Z", "+00:00")) > cutoff}
     S["updated"] = now.isoformat(timespec="seconds")

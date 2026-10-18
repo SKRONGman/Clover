@@ -60,11 +60,14 @@ const flush = () => { while (timers.length) timers.shift()(); };
 
 /* A props file the test owns, so the checks below do not drift with the live
    slate. Shaped exactly as props.py writes it. */
+/* kickoff is an hour out, not a fixed date: since 2026-10-18 the page drops a
+   game once it is over, so a fixture frozen in the past would show nothing. */
+const KICK_AT = new Date(Date.now() + 60 * 60 * 1000);
 const FIXTURE = {
   updated: "2026-10-18T14:20:00+00:00",
   markets: ["pass_yds", "pass_tds", "rush_yds", "rec_yds", "rec", "any_td"],
   games: [{
-    id: "g1", kick: "2026-10-18T17:00:00Z", home: "Kansas City Chiefs",
+    id: "g1", kick: KICK_AT.toISOString(), home: "Kansas City Chiefs",
     away: "Los Angeles Chargers", pulled: "2026-10-18T14:20:00+00:00",
     props: [
       /* 41 rungs, 59.5 to 79.5 in halves; the book's own 69.5 sits at index 20 */
@@ -201,6 +204,33 @@ try {
   check(js("propGameHtml(propGames()[0])").includes("Isiah Pacheco"),
         "filtering to Touchdowns left the section shut");
   js("PON=new Set();PQ='';PSEC={};");
+
+  /* 11. a game that is over leaves the board (Danny, 2026-10-18). After kickoff
+         is fine; over is not. Two signals, whichever lands first. */
+  const KICK = KICK_AT.getTime();
+  js("window.R={upcoming:[]};");
+  check(js(`propGameOver(window.PROPS.games[0], ${KICK - 60e3})`) === false,
+        "a game was called over before kickoff");
+  check(js(`propGameOver(window.PROPS.games[0], ${KICK + 90 * 60e3})`) === false,
+        "a game in progress was dropped - after kickoff is allowed, over is not");
+  check(js(`propGameOver(window.PROPS.games[0], ${KICK + 5 * 3600e3})`) === true,
+        "a game five hours past kickoff was still on the board");
+  /* the slate's own final flag drops it sooner, without waiting on the clock */
+  js(`window.R={upcoming:[{id:"g1",status:"final"}]};`);
+  check(js(`propGameOver(window.PROPS.games[0], ${KICK + 90 * 60e3})`) === true,
+        "the slate said final and the card stayed up");
+  js(`window.R={upcoming:[{id:"g1",status:"live"}]};`);
+  check(js(`propGameOver(window.PROPS.games[0], ${KICK + 90 * 60e3})`) === false,
+        "a live game was dropped");
+  /* the counts follow the board, never the pulled file */
+  js(`window.R={upcoming:[{id:"g1",status:"final"}]};`);
+  check(js("propLive().length") === 0 && js("propTotal()") === 0,
+        "a finished game was still counted in the chips");
+  check(js("propGames().length") === 0, "a finished game still drew a card");
+  js("renderProps();");
+  check(String(byId.viewProps.innerHTML).includes("is over"),
+        "an all-finished board does not say why it is empty");
+  js("window.R={upcoming:[]};PON=new Set();PQ='';PSEC={};");
 
 } catch (e) {
   fails.push("threw: " + (e && e.stack || e));

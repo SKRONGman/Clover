@@ -211,13 +211,14 @@ function init(){
   NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); setFiltersOpen(false); wireHistory(); wireProps(); renderHot(); render(); show("hot");
 }
 /* NFL Props: one click and one input listener on the panel (props_tab.js draws it).
-   The player count in the tab is every prop currently priced. */
+   The player count in the tab is every prop still on the board - a game that is
+   over carries none (propTotal in props_tab.js). */
 function wireProps(){
   const v=document.getElementById("viewProps");
   if(!v) return;
   v.addEventListener("click",propsClick);
   v.addEventListener("input",propsInput);
-  const n=(window.PROPS&&window.PROPS.games||[]).reduce((a,g)=>a+(g.props||[]).length,0);
+  const n=propTotal();
   const tag=document.getElementById("nProps"); if(tag) tag.textContent=n?`${n}`:"";
 }
 
