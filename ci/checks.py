@@ -97,7 +97,9 @@ def check_wiring():
 
 def check_python():
     bad = []
-    for t in ("test_refresh.py", "test_bets.py", "test_props.py"):   # test_bets: the bet record (row 7); test_props: props backtest pull
+    for t in ("test_refresh.py", "test_bets.py", "test_props.py", "test_props_price.py"):
+        # test_bets: the bet record (row 7); test_props: the 2025 backtest pull;
+        # test_props_price: the prop pricer and the ladder the page indexes
         r = subprocess.run([sys.executable, os.path.join(ROOT, "ci", t)], capture_output=True, text=True)
         print(r.stdout, end="")
         if r.returncode:
@@ -170,6 +172,12 @@ def check_page():
         tmp = tempfile.mkdtemp()
         combos = os.path.join(tmp, "combos.json")
         combo_fixture(live, combos)
+        r = subprocess.run(["node", os.path.join(ROOT, "ci", "smoke_props.js"), ROOT],
+                           capture_output=True, text=True)
+        print(r.stdout, end="")
+        if r.returncode:
+            bad.append("props page test failed" + (": " + (r.stdout + r.stderr).strip()[-300:]))
+
         r = subprocess.run(["node", os.path.join(ROOT, "ci", "smoke.js"), ROOT, live, "--live",
                             "--combos=" + combos], capture_output=True, text=True)
         print(r.stdout, end="")

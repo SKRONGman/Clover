@@ -25,7 +25,17 @@ function el(tag){
 const byId={}, timers=[], mem={};
 const document={ getElementById:id=>byId[id]||(byId[id]=el()), createElement:t=>el(t), createTextNode:s=>({textContent:s}),
   querySelector:()=>el(), querySelectorAll:()=>[], addEventListener(){}, activeElement:null, body:el("body"),
-  head:{appendChild(s){ if(String(s.src).startsWith("ratings.js")){ vm.runInContext(fs.readFileSync(ratingsFile,"utf8"),ctx); s.onload(); } return s; }} };
+  /* preview3.js loads the two data files itself (props.js then ratings.js) and
+     calls init once both have answered. Feed it the same files the page would. */
+  head:{appendChild(s){
+    const name=String(s.src).split("?")[0];
+    try{
+      if(name==="ratings.js") vm.runInContext(fs.readFileSync(ratingsFile,"utf8"),ctx);
+      else if(name==="props.js") vm.runInContext(fs.readFileSync(path.join(root,"props.js"),"utf8"),ctx);
+      else return s;
+      s.onload();
+    }catch(e){ if(s.onerror) s.onerror(e); }
+    return s; }} };
 const sandbox={ document, console, atob, performance, Date, Math, JSON, Intl,
   localStorage:{getItem:k=>k in mem?mem[k]:null,setItem:(k,v)=>{mem[k]=String(v);},removeItem:k=>{delete mem[k];}},
   navigator:{clipboard:{writeText:()=>Promise.resolve()}}, setTimeout:f=>{timers.push(f);return timers.length;}, clearTimeout(){},

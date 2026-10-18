@@ -207,7 +207,24 @@ function init(){
   loadLeague();
   if(!count(league)&&count(league==="ncaaf"?"nfl":"ncaaf")) league=league==="ncaaf"?"nfl":"ncaaf";   // open on whichever league has games
   loadFilters(); populateFilterOptions();
-  NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); setFiltersOpen(false); wireHistory(); renderHot(); render(); show("hot");
+  NA=naLoad(); marketsLoad(); marketChips(); naButtons(); loadSlip(); prohibButtons(); setFiltersOpen(false); wireHistory(); wireProps(); renderHot(); render(); show("hot");
 }
+/* NFL Props: one click and one input listener on the panel (props_tab.js draws it).
+   The player count in the tab is every prop currently priced. */
+function wireProps(){
+  const v=document.getElementById("viewProps");
+  if(!v) return;
+  v.addEventListener("click",propsClick);
+  v.addEventListener("input",propsInput);
+  const n=(window.PROPS&&window.PROPS.games||[]).reduce((a,g)=>a+(g.props||[]).length,0);
+  const tag=document.getElementById("nProps"); if(tag) tag.textContent=n?`${n}`:"";
+}
+
 /* ratings.js with a cache-buster, without document.write; works from file:// too */
-(function(){ const s=document.createElement("script"); s.src="ratings.js?v="+Date.now(); s.onload=init; s.onerror=init; document.head.appendChild(s); })();
+(function(){
+  const t=Date.now(); let left=2;
+  const done=()=>{ if(!--left) init(); };
+  for(const f of ["props.js","ratings.js"]){
+    const s=document.createElement("script"); s.src=f+"?v="+t; s.onload=done; s.onerror=done; document.head.appendChild(s);
+  }
+})();

@@ -11,7 +11,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const LEAGUES=["ncaaf","nfl"], LEAGUE_NAME={ncaaf:"College",nfl:"NFL"};
 let league="ncaaf";
 const lgOf=G=>G.league||"ncaaf";
-const TABS={hot:"hot",ncaaf:"slips",nfl:"slips",card:"card",history:"history"};
+const TABS={hot:"hot",ncaaf:"slips",nfl:"slips",props:"props",card:"card",history:"history"};
 /* NFL names are long ("Kansas City Chiefs"); where space is tight use "Chiefs" */
 const shortName=(G,t)=>lgOf(G)==="nfl"?((t===G.home?G.home_short:G.away_short)||t):t;
 /* the board's short name on a narrow screen: CFBD's / ESPN's abbreviation ("MTSU", "KC"),
@@ -226,8 +226,11 @@ function show(v){
   document.getElementById("viewSlips").classList.toggle("hidden",v!=="slips");
   document.getElementById("viewCard").classList.toggle("hidden",v!=="card");
   document.getElementById("viewHistory").classList.toggle("hidden",v!=="history");
-  document.getElementById("rail").classList.toggle("hidden",v==="card");
+  document.getElementById("viewProps").classList.toggle("hidden",v!=="props");
+  /* props are their own slip, so the game rail has nothing to say on that tab */
+  document.getElementById("rail").classList.toggle("hidden",v==="card"||v==="props");
   if(v==="history") loadHistory();
+  if(v==="props") renderProps();
   /* roving tabindex: only the selected tab is in the Tab order; arrow keys move between them (preview3.js) */
   for(const k in TABS){ const t=document.getElementById("tab"+k[0].toUpperCase()+k.slice(1)), on=TABS[k]===v&&(TABS[k]!=="slips"||k===league);
     t.setAttribute("aria-selected",on); t.tabIndex=on?0:-1; }

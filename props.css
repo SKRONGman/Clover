@@ -1,0 +1,64 @@
+/* ===================================================================
+   NFL PROPS tab. Same board-dark look as every other screen (DESIGN.md):
+   the card surface, the lit pick, one accent. Desktop-first.
+   =================================================================== */
+#viewProps{max-width:1100px;margin:0 auto;padding:0 4px 48px}
+.phead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:18px 0 4px}
+.phead h2{margin:0;font-size:22px;letter-spacing:.01em}
+.phead .stamp{color:var(--muted);font-size:13px}
+#viewProps>.hint{color:var(--muted);margin:6px 0 14px;font-size:14px}
+.psearch{width:100%;max-width:320px;margin:0 0 18px;padding:9px 12px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit}
+.psearch:focus{outline:2px solid var(--acc);outline-offset:1px}
+
+.pgame{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px 4px;margin:0 0 16px}
+.pgame h3{margin:0 0 8px;font-size:15px;font-weight:600;display:flex;
+  justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pgame h3 .when{color:var(--muted);font-size:13px;font-weight:400}
+
+.ptab{width:100%;border-collapse:collapse;font-size:14px}
+.ptab th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;
+  text-transform:uppercase;letter-spacing:.05em;padding:4px 8px;border-bottom:1px solid var(--line)}
+.ptab td{padding:5px 8px;border-bottom:1px solid var(--line)}
+.ptab tr:last-child td{border-bottom:0}
+.prow.on{background:var(--sel)}
+.ptab .who{font-weight:500}
+.ptab .mk,.ptab .dk{color:var(--muted)}
+.ptab .pc{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;width:76px}
+.ptab .act{text-align:right;width:84px}
+.ptab .na{color:var(--muted)}
+.pnum{width:72px;padding:4px 7px;border-radius:6px;border:1px solid var(--line);
+  background:var(--bg);color:var(--text);font:inherit;text-align:right}
+.pnum:focus{outline:2px solid var(--acc);outline-offset:1px}
+.mini{padding:4px 11px;border-radius:6px;border:1px solid var(--line);
+  background:transparent;color:var(--text);font:inherit;font-size:13px;cursor:pointer}
+.mini:hover{border-color:var(--acc)}
+.mini.on{background:var(--acc);border-color:var(--acc);color:var(--onacc)}
+.warn{color:var(--coin);font-size:13px}
+
+.pslip{position:sticky;bottom:0;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:12px 14px;margin:20px 0 0}
+.pslip h3{margin:0 0 8px;font-size:15px}
+.plegs{list-style:none;margin:0 0 8px;padding:0}
+.plegs li{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}
+.plegs .mk,.plegs .ln{color:var(--muted);font-size:13px}
+.plegs .p{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
+.plegs .x{background:none;border:0;color:var(--muted);font-size:17px;cursor:pointer;padding:0 2px;line-height:1}
+.plegs .x:hover{color:var(--text)}
+.ptot{margin:8px 0;font-size:14px}
+.pslip .warn{display:block;margin:8px 0;line-height:1.45}
+.prow2{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}
+.prow2 label{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
+.prow2 input{width:88px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);
+  background:var(--bg);color:var(--text);font:inherit;text-align:right}
+.verdict{margin:10px 0;font-size:14px;line-height:1.5}
+.verdict .sub{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.verdict.pos b{color:var(--acc)}
+.verdict.mid b{color:var(--coin)}
+.verdict.neg b{color:var(--bad)}
+
+@media (max-width:760px){
+  .ptab .mk{display:none}
+  .pslip{position:static}
+}
