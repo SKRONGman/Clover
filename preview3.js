@@ -149,6 +149,7 @@ document.getElementById("tabNcaaf").onclick=()=>setLeague("ncaaf");
 document.getElementById("tabNfl").onclick=()=>setLeague("nfl");
 document.getElementById("tabCard").onclick=()=>show("card");
 document.getElementById("tabHistory").onclick=()=>show("history");
+document.getElementById("tabProps").onclick=()=>show("props");
 /* arrow keys on the tabs (row 6): Left/Right move and open, Home/End jump to the ends */
 document.querySelector(".tabs").addEventListener("keydown",e=>{
   const t=[...document.querySelectorAll(".tabs [role=tab]")], i=t.indexOf(document.activeElement), n=t.length;

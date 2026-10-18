@@ -52,6 +52,13 @@ try{
   for(const f of PAGE_JS) vm.runInContext(fs.readFileSync(path.join(root,f),"utf8"),ctx,{filename:f});
   flush();
   const n=js("GAMES.length"); check(live||n>0,"no games loaded");
+  /* every tab in TABS must actually be clickable: a tab wired into show() but never
+     given an onclick looks fine in every render test and is dead on the real page
+     (that shipped once, NFL Props, 2026-10-17). */
+  for(const k of js("Object.keys(TABS)")){
+    const id="tab"+k[0].toUpperCase()+k.slice(1);
+    check(typeof byId[id].onclick==="function", `${id} has no onclick - the tab is dead on the page`);
+  }
 
   /* 1. every % on the page is a table lookup - and it must equal what Python froze */
   const worst=js(`(()=>{ let w=0,c=0; GAMES.forEach((G,gi)=>{ if(!G.sim||!G.p) return;
