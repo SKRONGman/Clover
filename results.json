@@ -11526,5 +11526,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": "84aa9e190e625d7e9cd67e1f157a45b4",
+  "league": "nfl",
+  "start": "2026-10-18T17:03+00:00",
+  "home": "Indianapolis Colts",
+  "away": "Tennessee Titans",
+  "hp": 20.0,
+  "ap": 26.0,
+  "spread": -6.5,
+  "total": 44.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.7127,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.2873,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -6.5,
+    "p": 0.5013,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 6.5,
+    "p": 0.4986,
+    "result": "hit"
+   },
+   "over": {
+    "line": 44.5,
+    "p": 0.484,
+    "result": "hit"
+   },
+   "under": {
+    "line": 44.5,
+    "p": 0.516,
+    "result": "miss"
+   }
+  }
  }
 ]
