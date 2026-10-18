@@ -11,6 +11,18 @@
   border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit}
 .psearch:focus{outline:2px solid var(--acc);outline-offset:1px}
 
+/* Two-level prop-type filter: a group row, then the markets of the lit groups.
+   .chip comes from clover.css; only the rows and the half-lit state live here. */
+.pfilt{display:flex;flex-direction:column;gap:6px;margin:0 0 8px}
+.pfilt .chips.sub{padding-left:14px;border-left:2px solid var(--line)}
+.pfilt .chip{min-height:38px;padding:0 11px;font-size:14px;
+  display:inline-flex;align-items:center;gap:7px}
+.pfilt .chip .n{font-size:12px;color:var(--muted);font-weight:500;font-variant-numeric:tabular-nums}
+.pfilt .chip[aria-pressed="true"] .n{color:var(--acc)}
+.pfilt .chip.part{border-style:dashed}          /* some of the group, not all */
+.pfilt .chip:disabled{opacity:.42;cursor:default}
+.fcount{margin:0 0 14px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
 .pgame{background:var(--card);border:1px solid var(--line);border-radius:12px;
   padding:12px 14px 4px;margin:0 0 16px}
 .pgame h3{margin:0 0 8px;font-size:15px;font-weight:600;display:flex;
@@ -24,7 +36,18 @@
 .ptab tr:last-child td{border-bottom:0}
 .prow.on{background:var(--sel)}
 .ptab .who{font-weight:500}
-.ptab .mk,.ptab .dk{color:var(--muted)}
+.ptab .dk{color:var(--muted)}
+
+/* the prop type, as a heading inside the card (Danny's sketch, 2026-10-18) */
+.psec td{padding:0!important;border-bottom:1px solid var(--line)!important}
+.sech{display:flex;align-items:center;gap:8px;width:100%;min-height:40px;
+  padding:0 8px;border:0;border-radius:0;background:transparent;color:var(--acc);
+  font:inherit;font-size:13px;font-weight:700;letter-spacing:.04em;text-align:left;cursor:pointer}
+.sech:hover{background:var(--sel)}
+.sech .car{width:12px;color:var(--muted);font-size:11px}
+.sech .n{margin-left:auto;color:var(--muted);font-weight:500;
+  font-variant-numeric:tabular-nums;letter-spacing:0}
+.ptab tbody tr:first-child .sech{min-height:32px}
 .ptab .pc{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;width:76px}
 .ptab .act{text-align:right;width:84px}
 .ptab .na{color:var(--muted)}
@@ -58,7 +81,10 @@
 .verdict.mid b{color:var(--coin)}
 .verdict.neg b{color:var(--bad)}
 
+/* The prop type never hides: with prop-type chips on the screen, pass yds vs
+   pass TDs is the whole point. The table scrolls sideways instead. */
+.tscroll{overflow-x:auto}
+.ptab{min-width:520px}
 @media (max-width:760px){
-  .ptab .mk{display:none}
   .pslip{position:static}
 }

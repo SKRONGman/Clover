@@ -150,6 +150,58 @@ try {
   js("window.PROPS={updated:null,games:[],markets:[]};renderProps();");
   check(String(byId.viewProps.innerHTML).includes("game day"), "an empty props file does not explain itself");
 
+  /* 9. the two-level prop-type filter. One state (PON, the markets); the group
+        chips are derived from it, so the two rows can never disagree. */
+  js("window.PROPS=" + JSON.stringify(FIXTURE) + ";PQ='';PON=new Set();");
+  check(js("propGroups().map(g=>g.k).join(',')") === "recv,td",
+        "a group with no prop on the board was drawn, or one with props was not");
+  check(js("propGames()[0].props.length") === 3, "the board is filtered before any chip is tapped");
+  js("propGroupToggle('recv');");
+  check(js("[...PON].sort().join(',')") === "rec,rec_yds", "tapping a group did not light its markets");
+  check(js("propGames()[0].props.map(r=>r.m).sort().join(',')") === "rec,rec_yds",
+        "the board did not narrow to the lit group");
+  check(js("propFilterHtml()").includes('data-pm="rec_yds"'),
+        "a lit multi-market group did not open its second row");
+  js("PON.delete('rec');");
+  check(js("propFilterHtml()").includes('class="chip part"'), "a half-lit group is not marked");
+  js("propGroupToggle('recv');");
+  check(js("[...PON].sort().join(',')") === "rec,rec_yds", "a half-lit group did not fill");
+  js("propGroupToggle('recv');");
+  check(js("PON.size") === 0, "a full group did not clear");
+  /* a single-market group needs no second row - its own chip is the market */
+  js("propGroupToggle('td');");
+  check(!js("propFilterHtml()").includes('data-pm='), "a one-market group opened a pointless second row");
+  check(js("propGames()[0].props.length") === 1, "the Touchdowns chip did not narrow the board");
+  js("propGroupToggle('all');");
+  check(js("PON.size") === 0 && js("propGames()[0].props.length") === 3, "All did not clear the chips");
+  /* a market props.py ships that the page has never heard of must still show up */
+  const EXTRA = JSON.parse(JSON.stringify(FIXTURE));
+  EXTRA.games[0].props.push({ m: "player_sacks", who: "Nick Bolton", line: 0.5, dk: 150, lo: 0.5, step: 0.5, p: [380, 120] });
+  js("window.PROPS=" + JSON.stringify(EXTRA) + ";PON=new Set();");
+  check(js("propGroups().map(g=>g.k).join(',')").endsWith("other"), "an unknown market did not land in Other");
+  check(js("propGames()[0].props.length") === 4, "an unknown market fell off the board");
+  js("window.PROPS=" + JSON.stringify(FIXTURE) + ";PON=new Set();PQ='';PSEC={};");
+
+  /* 10. the prop type is a heading, and Anytime TD opens shut (Danny's sketch) */
+  let card = js("propGameHtml(propGames()[0])");
+  check(!card.includes('<th class="mk">') && !card.includes('<td class="mk">'),
+        "the Prop column is still being drawn per row");
+  check(card.includes("Receptions") && card.includes("Anytime TD"),
+        "a prop type heading is missing from the card");
+  check(card.includes("Rashee Rice"), "an open section did not draw its players");
+  check(!card.includes("Isiah Pacheco"), "Anytime TD did not open shut");
+  /* tapping the heading opens it, and tapping again shuts it */
+  js("PSEC['g1|any_td']=true;");
+  check(js("propGameHtml(propGames()[0])").includes("Isiah Pacheco"),
+        "tapping an Anytime TD heading did not open it");
+  js("PSEC={};PQ='Pacheco';");
+  check(js("propGameHtml(propGames()[0])").includes("Isiah Pacheco"),
+        "a search hit stayed hidden inside a shut heading");
+  js("PQ='';PON=new Set(['any_td']);");
+  check(js("propGameHtml(propGames()[0])").includes("Isiah Pacheco"),
+        "filtering to Touchdowns left the section shut");
+  js("PON=new Set();PQ='';PSEC={};");
+
 } catch (e) {
   fails.push("threw: " + (e && e.stack || e));
 } finally {
