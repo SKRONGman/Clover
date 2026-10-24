@@ -1,38 +1,31 @@
 {
- "updated": "2026-10-24T20:21:02+00:00",
+ "updated": "2026-10-24T22:56:34+00:00",
  "cfbd": {
   "month": "2026-10",
-  "calls_counted": 506,
+  "calls_counted": 510,
   "counting_since": "2026-10-01T15:13+00:00",
-  "calls_this_run": 0,
-  "left": 4549,
+  "calls_this_run": 4,
+  "left": 4545,
   "left_source": "reported by CFBD",
   "left_asof": "2026-10-24T17:53+00:00",
   "limit": 5000,
-  "last_error": "CFBD /games failed 3 times (ReadTimeout)"
+  "last_error": null
  },
  "odds": {
-  "left": 19054,
-  "left_asof": "2026-10-24T20:21+00:00",
+  "left": 19052,
+  "left_asof": "2026-10-24T22:56+00:00",
   "last_error": null
  },
  "bets": {
-  "at": "2026-10-24T20:21:02.616240+00:00",
-  "open": 22,
-  "closed": 5,
-  "graded": 0,
+  "at": "2026-10-24T22:56:34.540477+00:00",
+  "open": 19,
+  "closed": 2,
+  "graded": 10,
   "settled": 0,
   "error": null
  },
- "stale": {
-  "ncaaf": {
-   "since": "2026-10-24T17:53:38+00:00",
-   "reason": "CFBD /games failed 3 times (ReadTimeout)"
-  }
- },
- "alerts": [
-  "College lines are stale since 2026-10-24T17:53:38+00:00: CFBD /games failed 3 times (ReadTimeout)"
- ],
- "alert_now": true,
+ "stale": {},
+ "alerts": [],
+ "alert_now": false,
  "alerted_on": "2026-10-24"
 }
