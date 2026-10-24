@@ -27,6 +27,7 @@ on:
     - cron: "0 11 * * 2"                 # full refresh weekly, Tuesday 6am CDT
     - cron: "5 15-23 * * 1,4,5,6,0"      # lines hourly Thu-Mon daytime CDT
     - cron: "5 0-5 * * 1,2,5,6,0"        # ...continuing to midnight CDT (next day UTC)
+    - cron: "5 10-14 * * 0"              # Sunday morning, for the early NFL kickoffs
     - cron: "10 15 * * 4"                # alt lines, Thursday 10:10am CDT
 
 permissions:
