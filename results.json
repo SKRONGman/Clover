@@ -11922,5 +11922,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401858272,
+  "league": "ncaaf",
+  "start": "2026-10-24T02:30+00:00",
+  "home": "Stanford",
+  "away": "NC State",
+  "hp": 31.0,
+  "ap": 28.0,
+  "spread": 7.5,
+  "total": 54.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3063,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6937,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 7.5,
+    "p": 0.5023,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -7.5,
+    "p": 0.4976,
+    "result": "miss"
+   },
+   "over": {
+    "line": 54.5,
+    "p": 0.4843,
+    "result": "hit"
+   },
+   "under": {
+    "line": 54.5,
+    "p": 0.5158,
+    "result": "miss"
+   }
+  }
  }
 ]
