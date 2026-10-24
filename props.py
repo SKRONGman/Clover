@@ -75,6 +75,18 @@ PULL_MARKS = (120, 15)          # minutes before kickoff that a game is pulled
 # than no number at all. LATE is how far past a mark a run may still claim it.
 LATE = 45
 
+# A mark is claimed only by a pull that actually brought numbers back (2026-10-24).
+# The first-sight pull used to fire the moment a game appeared in /events - up to
+# eight days out, where DraftKings has posted no player props at all. It came back
+# empty, stored nothing, and still ticked the mark off, so the one rule meant to
+# guarantee every game at least one number was spent a week before it could work.
+# Now: a game with no props is "unpriced" however many times it has been tried,
+# and an empty answer never claims a mark or overwrites numbers already stored.
+# FIRST_WINDOW keeps that retry off the eight-days-out games (where the answer is
+# always empty) and FIRST_RETRY stops a run-every-hour from re-asking every hour.
+FIRST_WINDOW = 48 * 60          # minutes before kickoff that a first pull is worth trying
+FIRST_RETRY = 8 * 60            # minutes between first pulls while a game has no props
+
 
 # ---------------------------------------------------------------- odds math
 def implied(american):
@@ -184,23 +196,39 @@ def price_event(ev):
 
 
 # --------------------------------------------------------------- scheduling
-def due(kick, now, pulled):
-    """Which mark this game is owed right now, or None.
+def due(kick, now, g):
+    """Which mark this game is owed right now, or None. `g` is its store entry.
 
-    A kicked-off game is never pulled. A game nobody has priced is pulled on
-    sight ("first"), whenever a run happens to see it - that is what guarantees
-    every game gets at least one number even when most runs are dropped. After
-    that the marks are claimed nearest-kickoff-first, each at most once, and a
-    mark whose moment has passed is still taken (up to LATE minutes late)."""
+    A kicked-off game is never pulled. A game that has no numbers yet is pulled
+    on sight ("first") once it is inside FIRST_WINDOW of kickoff - that is what
+    guarantees every game gets at least one number even when most runs are
+    dropped - and it STAYS owed a first pull until one actually brings numbers
+    back, so an empty answer costs nothing but the call. Once it has numbers the
+    marks are claimed nearest-kickoff-first, each at most once, and a mark whose
+    moment has passed is still taken (up to LATE minutes late)."""
+    g = g or {}
     mins = (kick - now).total_seconds() / 60.0
     if mins < -5:
         return None
-    if not pulled:
-        return "first"
+    if not g.get("props"):
+        if mins > FIRST_WINDOW:                     # no book has posted props yet
+            return None
+        return "first" if _rested(g.get("tried"), now) else None
     for mark in sorted(PULL_MARKS):                 # 15 before 120: freshest wins
-        if str(mark) not in pulled and mins <= mark + LATE:
+        if str(mark) not in g.get("marks", []) and mins <= mark + LATE:
             return str(mark)
     return None
+
+
+def _rested(tried, now):
+    """True when the last empty first pull is far enough back to try again."""
+    if not tried:
+        return True
+    try:
+        ago = (now - datetime.fromisoformat(tried)).total_seconds() / 60.0
+    except (TypeError, ValueError):
+        return True
+    return ago >= FIRST_RETRY
 
 
 def load_store():
@@ -231,7 +259,7 @@ def run(plan_only=False):
     S = load_store()
     todo = []
     for e, k in events(now):
-        mark = due(k, now, S["games"].get(e["id"], {}).get("marks", []))
+        mark = due(k, now, S["games"].get(e["id"]))
         if mark:
             todo.append((e, k, mark))
     print(f"  props: {len(todo)} game(s) due "
@@ -251,7 +279,16 @@ def run(plan_only=False):
             continue
         g = S["games"].setdefault(e["id"], {"marks": []})
         g.update(kick=e["commence_time"], home=e["home_team"], away=e["away_team"],
-                 pulled=now.isoformat(timespec="seconds"), props=price_event(body))
+                 tried=now.isoformat(timespec="seconds"))
+        g.setdefault("props", [])
+        rows = price_event(body)
+        if not rows:
+            # The book has nothing yet (or dropped the market). Keep whatever is
+            # already stored and leave the mark unclaimed so a later run retries.
+            print(f"  props: no numbers yet for {e['away_team']} @ {e['home_team']}")
+            continue
+        g["props"] = rows
+        g["pulled"] = now.isoformat(timespec="seconds")
         g["marks"] = sorted(set(g["marks"] + [mark]))
 
     # A finished game leaves the store. The page hides a card 4 hours after
@@ -325,20 +362,39 @@ def selftest():
         p = implied(price)
         ok(p ** TD_POWER <= p + 1e-12, f"TD shave never raises ({price})")
 
-    # scheduling marks
+    # scheduling marks. P() is a game that HAS numbers; the bare dicts have none.
     now = datetime(2026, 10, 18, 16, 0, tzinfo=timezone.utc)
-    at = lambda m, done: due(now + timedelta(minutes=m), now, done)
-    ok(at(500, []) == "first", "a game nobody has priced is pulled on sight")
-    ok(at(500, ["first"]) is None, "a far-off game is not pulled again straight away")
-    ok(at(120, ["first"]) == "120", "the 2-hour mark fires")
-    ok(at(15, ["first", "120"]) == "15", "the 15-minute mark fires")
-    ok(at(15, ["first", "120", "15"]) is None, "a mark never fires twice")
-    ok(at(-120, []) is None, "a kicked-off game is never pulled")
+    at = lambda m, g: due(now + timedelta(minutes=m), now, g)
+    P = lambda *marks: {"marks": list(marks), "props": [{"m": "rec"}]}
+    ago = lambda mins: (now - timedelta(minutes=mins)).isoformat(timespec="seconds")
+
+    ok(at(500, {}) == "first", "a game nobody has priced is pulled on sight")
+    ok(at(500, P("first")) is None, "a far-off game is not pulled again straight away")
+    ok(at(120, P("first")) == "120", "the 2-hour mark fires")
+    ok(at(15, P("first", "120")) == "15", "the 15-minute mark fires")
+    ok(at(15, P("first", "120", "15")) is None, "a mark never fires twice")
+    ok(at(-120, {}) is None, "a kicked-off game is never pulled")
     # the delay tolerance that the dropped-schedule problem needs
-    ok(at(40, ["first", "120"]) == "15", "a late run still claims the 15-minute mark")
-    ok(at(95, ["first"]) == "120", "a run inside the window claims the 2-hour mark")
-    ok(at(300, ["first"]) is None, "the 2-hour mark is not claimed hours early")
-    ok(at(10, ["first"]) == "15", "a game whose 2-hour run was dropped still gets a late price")
+    ok(at(40, P("first", "120")) == "15", "a late run still claims the 15-minute mark")
+    ok(at(95, P("first")) == "120", "a run inside the window claims the 2-hour mark")
+    ok(at(300, P("first")) is None, "the 2-hour mark is not claimed hours early")
+    ok(at(10, P("first")) == "15", "a game whose 2-hour run was dropped still gets a late price")
+
+    # the 2026-10-24 bug: an empty answer must not spend the first mark
+    far = FIRST_WINDOW + 60
+    ok(at(far, {}) is None, "a game outside the window is not pulled at all")
+    ok(at(far, {"marks": ["first"], "props": [], "tried": ago(5)}) is None,
+       "an eight-days-out game is left alone")
+    ok(at(500, {"marks": ["first"], "props": [], "tried": ago(FIRST_RETRY + 1)}) == "first",
+       "a game still holding no numbers is owed another first pull")
+    ok(at(500, {"marks": ["first"], "props": [], "tried": ago(5)}) is None,
+       "...but not again straight away")
+    ok(at(500, {"marks": ["first"], "props": [], "tried": "not a date"}) == "first",
+       "an unreadable timestamp retries rather than sticking")
+    ok(at(100, {"marks": ["first", "120", "15"], "props": []}) == "first",
+       "every mark spent but no numbers: still owed a first pull")
+    ok(at(-120, {"marks": [], "props": [], "tried": ago(999)}) is None,
+       "a kicked-off game with no numbers is still never pulled")
 
     print("  props selftest:", "OK" if not bad else f"{bad} FAILED")
     return bad
