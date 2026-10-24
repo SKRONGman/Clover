@@ -11746,5 +11746,181 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401858271,
+  "league": "ncaaf",
+  "start": "2026-10-23T23:00+00:00",
+  "home": "Virginia",
+  "away": "Duke",
+  "hp": 16.0,
+  "ap": 19.0,
+  "spread": -2.5,
+  "total": 47.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5667,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4333,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -2.5,
+    "p": 0.503,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 2.5,
+    "p": 0.497,
+    "result": "hit"
+   },
+   "over": {
+    "line": 47.5,
+    "p": 0.4829,
+    "result": "miss"
+   },
+   "under": {
+    "line": 47.5,
+    "p": 0.5171,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401861965,
+  "league": "ncaaf",
+  "start": "2026-10-23T23:00+00:00",
+  "home": "UConn",
+  "away": "Massachusetts",
+  "hp": 35.0,
+  "ap": 16.0,
+  "spread": -12.5,
+  "total": 53.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.8021,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.1979,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -12.5,
+    "p": 0.5067,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 12.5,
+    "p": 0.4933,
+    "result": "miss"
+   },
+   "over": {
+    "line": 53.5,
+    "p": 0.4875,
+    "result": "miss"
+   },
+   "under": {
+    "line": 53.5,
+    "p": 0.5124,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401862808,
+  "league": "ncaaf",
+  "start": "2026-10-24T00:30+00:00",
+  "home": "Tulsa",
+  "away": "Army",
+  "hp": 35.0,
+  "ap": 38.0,
+  "spread": 1.5,
+  "total": 53.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4536,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5464,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 1.5,
+    "p": 0.4958,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -1.5,
+    "p": 0.5042,
+    "result": "hit"
+   },
+   "over": {
+    "line": 53.5,
+    "p": 0.487,
+    "result": "hit"
+   },
+   "under": {
+    "line": 53.5,
+    "p": 0.513,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401864525,
+  "league": "ncaaf",
+  "start": "2026-10-24T01:00+00:00",
+  "home": "Wyoming",
+  "away": "Air Force",
+  "hp": 28.0,
+  "ap": 14.0,
+  "spread": 6.0,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3432,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6568,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 6.0,
+    "p": 0.4991,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -6.0,
+    "p": 0.5009,
+    "result": "miss"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.488,
+    "result": "miss"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.512,
+    "result": "hit"
+   }
+  }
  }
 ]
