@@ -13814,5 +13814,93 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401864527,
+  "league": "ncaaf",
+  "start": "2026-10-25T02:00+00:00",
+  "home": "New Mexico",
+  "away": "North Dakota State",
+  "hp": 21.0,
+  "ap": 16.0,
+  "spread": -4.5,
+  "total": 39.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.6219,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.3781,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -4.5,
+    "p": 0.4898,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 4.5,
+    "p": 0.5102,
+    "result": "miss"
+   },
+   "over": {
+    "line": 39.5,
+    "p": 0.4835,
+    "result": "miss"
+   },
+   "under": {
+    "line": 39.5,
+    "p": 0.5164,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401856837,
+  "league": "ncaaf",
+  "start": "2026-10-25T02:15+00:00",
+  "home": "Utah",
+  "away": "Houston",
+  "hp": 21.0,
+  "ap": 13.0,
+  "spread": -6.5,
+  "total": 57.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.6783,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.3217,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -6.5,
+    "p": 0.5044,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 6.5,
+    "p": 0.4955,
+    "result": "miss"
+   },
+   "over": {
+    "line": 57.5,
+    "p": 0.4904,
+    "result": "miss"
+   },
+   "under": {
+    "line": 57.5,
+    "p": 0.5097,
+    "result": "hit"
+   }
+  }
  }
 ]
