@@ -13990,5 +13990,93 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401862812,
+  "league": "ncaaf",
+  "start": "2026-10-29T23:30+00:00",
+  "home": "North Texas",
+  "away": "Florida Atlantic",
+  "hp": 48.0,
+  "ap": 41.0,
+  "spread": -14.0,
+  "total": 77.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.8284,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.1716,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -14.0,
+    "p": 0.5082,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 14.0,
+    "p": 0.4918,
+    "result": "hit"
+   },
+   "over": {
+    "line": 77.5,
+    "p": 0.494,
+    "result": "hit"
+   },
+   "under": {
+    "line": 77.5,
+    "p": 0.506,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401869963,
+  "league": "ncaaf",
+  "start": "2026-10-29T23:30+00:00",
+  "home": "James Madison",
+  "away": "Troy",
+  "hp": 21.0,
+  "ap": 24.0,
+  "spread": -19.5,
+  "total": 51.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.8951,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.1049,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -19.5,
+    "p": 0.5034,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 19.5,
+    "p": 0.4965,
+    "result": "hit"
+   },
+   "over": {
+    "line": 51.5,
+    "p": 0.4882,
+    "result": "miss"
+   },
+   "under": {
+    "line": 51.5,
+    "p": 0.5118,
+    "result": "hit"
+   }
+  }
  }
 ]
