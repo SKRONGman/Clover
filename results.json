@@ -14166,5 +14166,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401866451,
+  "league": "ncaaf",
+  "start": "2026-10-31T02:30+00:00",
+  "home": "Sacramento State",
+  "away": "Kent State",
+  "hp": 31.0,
+  "ap": 10.0,
+  "spread": 7.0,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3095,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6905,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 7.0,
+    "p": 0.495,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -7.0,
+    "p": 0.505,
+    "result": "miss"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.4839,
+    "result": "miss"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.5161,
+    "result": "hit"
+   }
+  }
  }
 ]
