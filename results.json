@@ -14078,5 +14078,93 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401862813,
+  "league": "ncaaf",
+  "start": "2026-10-30T23:00+00:00",
+  "home": "Charlotte",
+  "away": "Tulane",
+  "hp": 31.0,
+  "ap": 38.0,
+  "spread": 8.5,
+  "total": 47.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.2861,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.7139,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 8.5,
+    "p": 0.502,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -8.5,
+    "p": 0.498,
+    "result": "miss"
+   },
+   "over": {
+    "line": 47.5,
+    "p": 0.4819,
+    "result": "hit"
+   },
+   "under": {
+    "line": 47.5,
+    "p": 0.5181,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401856844,
+  "league": "ncaaf",
+  "start": "2026-10-30T23:30+00:00",
+  "home": "UCF",
+  "away": "Baylor",
+  "hp": 9.0,
+  "ap": 41.0,
+  "spread": 2.5,
+  "total": 49.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4381,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5619,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 2.5,
+    "p": 0.5001,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -2.5,
+    "p": 0.4999,
+    "result": "hit"
+   },
+   "over": {
+    "line": 49.5,
+    "p": 0.4855,
+    "result": "hit"
+   },
+   "under": {
+    "line": 49.5,
+    "p": 0.5144,
+    "result": "miss"
+   }
+  }
  }
 ]
