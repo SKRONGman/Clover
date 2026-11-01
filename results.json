@@ -16146,5 +16146,137 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401860908,
+  "league": "ncaaf",
+  "start": "2026-11-01T02:00+00:00",
+  "home": "Boise State",
+  "away": "Texas State",
+  "hp": 46.0,
+  "ap": 45.0,
+  "spread": -10.5,
+  "total": 63.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.7609,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.2391,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -10.5,
+    "p": 0.502,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 10.5,
+    "p": 0.498,
+    "result": "hit"
+   },
+   "over": {
+    "line": 63.5,
+    "p": 0.496,
+    "result": "hit"
+   },
+   "under": {
+    "line": 63.5,
+    "p": 0.504,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401864530,
+  "league": "ncaaf",
+  "start": "2026-11-01T02:30+00:00",
+  "home": "UNLV",
+  "away": "Northern Illinois",
+  "hp": 31.0,
+  "ap": 24.0,
+  "spread": -21.5,
+  "total": 55.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.9282,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.0718,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -21.5,
+    "p": 0.5076,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 21.5,
+    "p": 0.4924,
+    "result": "hit"
+   },
+   "over": {
+    "line": 55.5,
+    "p": 0.4964,
+    "result": "miss"
+   },
+   "under": {
+    "line": 55.5,
+    "p": 0.5037,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401860924,
+  "league": "ncaaf",
+  "start": "2026-11-01T03:00+00:00",
+  "home": "Fresno State",
+  "away": "Oregon State",
+  "hp": 38.0,
+  "ap": 22.0,
+  "spread": 6.0,
+  "total": 57.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3498,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6502,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 6.0,
+    "p": 0.5002,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -6.0,
+    "p": 0.4998,
+    "result": "miss"
+   },
+   "over": {
+    "line": 57.5,
+    "p": 0.4894,
+    "result": "hit"
+   },
+   "under": {
+    "line": 57.5,
+    "p": 0.5106,
+    "result": "miss"
+   }
+  }
  }
 ]
