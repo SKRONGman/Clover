@@ -16410,5 +16410,93 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401862817,
+  "league": "ncaaf",
+  "start": "2026-11-06T00:30+00:00",
+  "home": "Florida Atlantic",
+  "away": "UTSA",
+  "hp": 60.0,
+  "ap": 29.0,
+  "spread": 7.0,
+  "total": 72.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3167,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6833,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 7.0,
+    "p": 0.4955,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -7.0,
+    "p": 0.5045,
+    "result": "miss"
+   },
+   "over": {
+    "line": 72.5,
+    "p": 0.5,
+    "result": "hit"
+   },
+   "under": {
+    "line": 72.5,
+    "p": 0.5,
+    "result": "miss"
+   }
+  }
+ },
+ {
+  "id": 401869964,
+  "league": "ncaaf",
+  "start": "2026-11-06T01:00+00:00",
+  "home": "Southern Miss",
+  "away": "James Madison",
+  "hp": 23.0,
+  "ap": 54.0,
+  "spread": 13.5,
+  "total": 58.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.1808,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.8192,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 13.5,
+    "p": 0.4908,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -13.5,
+    "p": 0.5092,
+    "result": "hit"
+   },
+   "over": {
+    "line": 58.5,
+    "p": 0.4914,
+    "result": "hit"
+   },
+   "under": {
+    "line": 58.5,
+    "p": 0.5086,
+    "result": "miss"
+   }
+  }
  }
 ]
