@@ -16674,5 +16674,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401856855,
+  "league": "ncaaf",
+  "start": "2026-11-07T03:15+00:00",
+  "home": "Arizona",
+  "away": "TCU",
+  "hp": 29.0,
+  "ap": 28.0,
+  "spread": -7.0,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.6779,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.3221,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -7.0,
+    "p": 0.494,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 7.0,
+    "p": 0.506,
+    "result": "hit"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.4884,
+    "result": "hit"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.5116,
+    "result": "miss"
+   }
+  }
  }
 ]
