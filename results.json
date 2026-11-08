@@ -18744,6 +18744,50 @@
   }
  },
  {
+  "id": 401856856,
+  "league": "ncaaf",
+  "start": "2026-11-08T02:30+00:00",
+  "home": "Texas Tech",
+  "away": "West Virginia",
+  "hp": 53.0,
+  "ap": 48.0,
+  "spread": -16.5,
+  "total": 66.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.8579,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.1421,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -16.5,
+    "p": 0.5071,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 16.5,
+    "p": 0.4929,
+    "result": "hit"
+   },
+   "over": {
+    "line": 66.5,
+    "p": 0.4994,
+    "result": "hit"
+   },
+   "under": {
+    "line": 66.5,
+    "p": 0.5007,
+    "result": "miss"
+   }
+  }
+ },
+ {
   "id": 401860913,
   "league": "ncaaf",
   "start": "2026-11-08T02:30+00:00",
@@ -18784,6 +18828,138 @@
     "line": 43.5,
     "p": 0.5242,
     "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401864532,
+  "league": "ncaaf",
+  "start": "2026-11-08T02:30+00:00",
+  "home": "UTEP",
+  "away": "Hawai'i",
+  "hp": 14.0,
+  "ap": 17.0,
+  "spread": 7.0,
+  "total": 48.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3208,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6792,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 7.0,
+    "p": 0.5022,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -7.0,
+    "p": 0.4978,
+    "result": "miss"
+   },
+   "over": {
+    "line": 48.5,
+    "p": 0.4858,
+    "result": "miss"
+   },
+   "under": {
+    "line": 48.5,
+    "p": 0.5142,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401860912,
+  "league": "ncaaf",
+  "start": "2026-11-08T03:30+00:00",
+  "home": "Oregon State",
+  "away": "Texas State",
+  "hp": 21.0,
+  "ap": 42.0,
+  "spread": -5.5,
+  "total": 71.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.6429,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.3571,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -5.5,
+    "p": 0.501,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 5.5,
+    "p": 0.499,
+    "result": "hit"
+   },
+   "over": {
+    "line": 71.5,
+    "p": 0.4965,
+    "result": "miss"
+   },
+   "under": {
+    "line": 71.5,
+    "p": 0.5035,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": 401864535,
+  "league": "ncaaf",
+  "start": "2026-11-08T03:30+00:00",
+  "home": "UNLV",
+  "away": "Wyoming",
+  "hp": 35.0,
+  "ap": 41.0,
+  "spread": -3.5,
+  "total": 49.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5913,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4087,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -3.5,
+    "p": 0.4965,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 3.5,
+    "p": 0.5036,
+    "result": "hit"
+   },
+   "over": {
+    "line": 49.5,
+    "p": 0.4874,
+    "result": "hit"
+   },
+   "under": {
+    "line": 49.5,
+    "p": 0.5126,
+    "result": "miss"
    }
   }
  }
