@@ -21734,5 +21734,93 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": 401856887,
+  "league": "ncaaf",
+  "start": "2026-11-15T18:00+00:00",
+  "home": "Oklahoma",
+  "away": "Ole Miss",
+  "hp": 24.0,
+  "ap": 17.0,
+  "spread": -2.5,
+  "total": 48.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5614,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4386,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -2.5,
+    "p": 0.4983,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 2.5,
+    "p": 0.5018,
+    "result": "miss"
+   },
+   "over": {
+    "line": 48.5,
+    "p": 0.4902,
+    "result": "miss"
+   },
+   "under": {
+    "line": 48.5,
+    "p": 0.5098,
+    "result": "hit"
+   }
+  }
+ },
+ {
+  "id": "7627192fd89b05120ab6c712aa23fd81",
+  "league": "nfl",
+  "start": "2026-11-15T21:25+00:00",
+  "home": "Dallas Cowboys",
+  "away": "San Francisco 49ers",
+  "hp": 40.0,
+  "ap": 46.0,
+  "spread": 4.5,
+  "total": 55.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.3449,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.6551,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": 4.5,
+    "p": 0.4986,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": -4.5,
+    "p": 0.5013,
+    "result": "hit"
+   },
+   "over": {
+    "line": 55.5,
+    "p": 0.4898,
+    "result": "hit"
+   },
+   "under": {
+    "line": 55.5,
+    "p": 0.5102,
+    "result": "miss"
+   }
+  }
  }
 ]
