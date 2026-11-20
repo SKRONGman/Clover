@@ -21910,5 +21910,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401862830,
+  "league": "ncaaf",
+  "start": "2026-11-20T00:30+00:00",
+  "home": "Temple",
+  "away": "Rice",
+  "hp": 27.0,
+  "ap": 31.0,
+  "spread": -2.5,
+  "total": 51.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.5666,
+    "result": "miss"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.4334,
+    "result": "hit"
+   },
+   "homeSp": {
+    "line": -2.5,
+    "p": 0.5056,
+    "result": "miss"
+   },
+   "awaySp": {
+    "line": 2.5,
+    "p": 0.4944,
+    "result": "hit"
+   },
+   "over": {
+    "line": 51.5,
+    "p": 0.4831,
+    "result": "hit"
+   },
+   "under": {
+    "line": 51.5,
+    "p": 0.5169,
+    "result": "miss"
+   }
+  }
  }
 ]
