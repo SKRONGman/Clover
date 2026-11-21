@@ -21954,5 +21954,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401856869,
+  "league": "ncaaf",
+  "start": "2026-11-20T23:00+00:00",
+  "home": "UCF",
+  "away": "Iowa State",
+  "hp": 48.0,
+  "ap": 17.0,
+  "spread": 1.5,
+  "total": 50.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.4596,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.5404,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": 1.5,
+    "p": 0.5023,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": -1.5,
+    "p": 0.4977,
+    "result": "miss"
+   },
+   "over": {
+    "line": 50.5,
+    "p": 0.4803,
+    "result": "hit"
+   },
+   "under": {
+    "line": 50.5,
+    "p": 0.5198,
+    "result": "miss"
+   }
+  }
  }
 ]
