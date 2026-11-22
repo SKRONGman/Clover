@@ -24770,5 +24770,49 @@
     "result": "hit"
    }
   }
+ },
+ {
+  "id": "403a88701352da05b0710a9e883b803e",
+  "league": "nfl",
+  "start": "2026-11-22T18:02+00:00",
+  "home": "Kansas City Chiefs",
+  "away": "Arizona Cardinals",
+  "hp": 34.0,
+  "ap": 7.0,
+  "spread": -15.5,
+  "total": 40.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.916,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.084,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -15.5,
+    "p": 0.5087,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 15.5,
+    "p": 0.4913,
+    "result": "miss"
+   },
+   "over": {
+    "line": 40.5,
+    "p": 0.4802,
+    "result": "hit"
+   },
+   "under": {
+    "line": 40.5,
+    "p": 0.5199,
+    "result": "miss"
+   }
+  }
  }
 ]
