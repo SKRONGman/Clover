@@ -24814,5 +24814,49 @@
     "result": "miss"
    }
   }
+ },
+ {
+  "id": 401856879,
+  "league": "ncaaf",
+  "start": "2026-11-27T01:00+00:00",
+  "home": "Texas Tech",
+  "away": "TCU",
+  "hp": 48.0,
+  "ap": 27.0,
+  "spread": -14.0,
+  "total": 46.5,
+  "book": "DraftKings",
+  "picks": {
+   "homeML": {
+    "line": 0,
+    "p": 0.8309,
+    "result": "hit"
+   },
+   "awayML": {
+    "line": 0,
+    "p": 0.1691,
+    "result": "miss"
+   },
+   "homeSp": {
+    "line": -14.0,
+    "p": 0.4946,
+    "result": "hit"
+   },
+   "awaySp": {
+    "line": 14.0,
+    "p": 0.5054,
+    "result": "miss"
+   },
+   "over": {
+    "line": 46.5,
+    "p": 0.4829,
+    "result": "hit"
+   },
+   "under": {
+    "line": 46.5,
+    "p": 0.5171,
+    "result": "miss"
+   }
+  }
  }
 ]
